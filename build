@@ -1,0 +1,4 @@
+rm 0-thesis.aux 0-thesis.bbl 0-thesis.bcf 0-thesis.blg 0-thesis.log 0-thesis.pdf 0-thesis.run.xml 0-thesis.toc
+pdflatex 0-thesis.tex
+biber 0-thesis
+pdflatex 0-thesis.tex
