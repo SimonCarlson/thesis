@@ -1,0 +1,77 @@
+\documentclass{kththesis}
+
+\usepackage{csquotes} % Recommended by biblatex
+\usepackage{biblatex}
+\usepackage{subfiles} % To segment the thesis
+\addbibresource{references.bib} % The file containing our references, in BibTeX format
+
+
+\title{Software and Firmware Updates for Internet of Things}
+\alttitle{Detta är den svenska översättningen av titeln}
+\author{Simon Carlson}
+\email{scarlso@kth.se}
+\supervisor{Amir Payberah}
+\examiner{Elena Dubrova}
+\programme{Master in Information Technology}
+\school{School of Computer Science and Communication}
+\date{\today}
+
+
+\begin{document}
+
+% Frontmatter includes the titlepage, abstracts and table-of-contents
+\frontmatter
+
+\titlepage
+
+\begin{abstract}
+  English abstract goes here.
+
+  
+\end{abstract}
+
+
+\begin{otherlanguage}{swedish}
+  \begin{abstract}
+    Svensk sammanfattning här.
+  \end{abstract}
+\end{otherlanguage}
+
+
+\tableofcontents
+
+
+% Mainmatter is where the actual contents of the thesis goes
+\mainmatter
+
+% We use the \emph{biblatex} package to handle our references.  We therefore use the
+% command \texttt{parencite} to get a reference in parenthesis, like this
+% \parencite{heisenberg2015}.  It is also possible to include the author
+% as part of the sentence using \texttt{textcite}, like talking about
+% the work of \textcite{einstein2016}.
+
+\chapter{Introduction}
+\subfile{1-introduction}
+
+
+\chapter{Theoretic Background}
+\subfile{2-theoretic-background}
+
+\chapter{Design?/Communication}
+
+\chapter{Update Mechanism}
+
+\chapter{Evaluation and Results}
+
+\chapter{Discussion}
+
+
+
+
+\printbibliography[heading=bibintoc] % Print the bibliography (and make it appear in the table of contents)
+
+\appendix
+
+\chapter{Appendix Title}
+
+\end{document}
