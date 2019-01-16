@@ -8,9 +8,27 @@
 \subsection{DTLS}
 
 \section{SUIT}
-\subsection{Information Model}
+The IETF SUIT (Software Updates for Internet of Things) working group aims to define a firmware 
+update solution that is interoperable and non-proprietary \parencite{suit}. The solution shall 
+be usable on Class 1 devices as defined in RFC 7228. These devices feature ~10 KiB of RAM and 
+~100 KiB code size, which makes it suitable for this thesis \parencite{rfc7228}. The solution 
+may be applied to more powerful devices. The working group does not however try to define 
+new transport or discovery mechanism, making their proposal angostic of any particular 
+technology. As of writing, they have published two documents concerning the architecture of 
+such a firmware update mechanism and the information model of the needed manifest.
 
 \subsection{Architecture}
+There is an Internet Draft by the SUIT group focusing on the firmware update architecture 
+\parencite{suit-architecture}. This draft describes the goals and requirements of the 
+architecture, although makes no mention of any particular technology. The overarching goals 
+of the update process is to thwart any attempts to flash unauthorized, possibly malicious 
+firmware images as well as protecting the firmware image's confidentiality. These goals 
+greatly reduces the possibility of an attacker either getting control over a device or 
+reverse engineering a malicious but valid firmware image as an attempt to mount an attack.
+
+
+
+\subsection{Information Model}
 
 \section{Contiki-NG}
 
