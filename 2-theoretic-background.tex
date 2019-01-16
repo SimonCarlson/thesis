@@ -4,8 +4,11 @@
 
 \section{Network Stack}
 \subsection{CoAP}
+% Mention blocks and observe options
 
 \subsection{DTLS}
+
+\section{Hardware/Firefly}
 
 \section{SUIT}
 The IETF SUIT (Software Updates for Internet of Things) working group aims to define a firmware 
@@ -23,10 +26,50 @@ There is an Internet Draft by the SUIT group focusing on the firmware update arc
 architecture, although makes no mention of any particular technology. The overarching goals 
 of the update process is to thwart any attempts to flash unauthorized, possibly malicious 
 firmware images as well as protecting the firmware image's confidentiality. These goals 
-greatly reduces the possibility of an attacker either getting control over a device or 
+reduces the possibility of an attacker either getting control over a device or 
 reverse engineering a malicious but valid firmware image as an attempt to mount an attack.
 
-
+The draft \parencite{suit-architecture} presents ten qualitative requirements:
+\begin{itemize}
+    \item Agnostic to how firmware images are distributed:\\
+            As this thesis aims to implement a prototype of an update mechanism, 
+            some choices about technology has to be done. This will realistically mean 
+            only a subset of the SUIT standard will be implemented as certain parts of the 
+            standard is not applicable. The proposed network stack uses UDP, DTLS, and CoAP 
+            for transportation and the target devices are Firefly devices running Contiki-NG.
+    \item Friendly to broadcast delivery:\\
+            Broadcasting not be of main concern in this thesis.
+    \item Use state-of-the-art security mechanisms:\\
+            The SUIT standard assumes a PKI is in place. RISE has previously developed a PKI
+            suitable for IoT, this PKI is an underlying assumption for the thesis. The PKI 
+            will allow for signing of the update manifest and firmware image.
+    \item Rollback attacks must be prevented:\\
+            The manifest will contain metadata such as monotonically increasing sequence 
+            numbers and best-before timestamps to avoid rollback attacks.
+    \item High reliability:\\
+            This is an implementation requirement and depends heavily on the hardware of the 
+            target device.
+    \item Operate with a small bootloader:\\
+            This is also an implementation requirement.
+    \item Small parser:\\
+            It must be easy to parse the fields of the update manifest as large parser can 
+            get quite complex. The validation of the manifest will happen on the constrained 
+            devices which further motivates a small parser and thus less complex manifests.
+    \item Minimal impact on existing firmware formats:\\
+            The update mechanism itself must not require any changes to existing firmware 
+            formats.
+    \item Robust permissions:\\
+            This requirement is directed towards the administration of firmware updates and 
+            how different roles interact with the devices. The thesis will not consider any 
+            infrastructure outside of transporting manifest and image, as well as applying 
+            the update, but will consider authorisation of parties through techniques like 
+            signing.
+    \item Operating modes:\\
+            The draft presents three broad modes of updates: client-initiated updates, 
+            server-initiated updates, and hybrid updates, where hybrids are mechanisms 
+            that require interaction between the device and firmware provider before 
+            updating. The thesis will look into all three of these broad classes.
+\end{itemize}
 
 \subsection{Information Model}
 
