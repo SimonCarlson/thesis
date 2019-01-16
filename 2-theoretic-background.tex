@@ -17,8 +17,8 @@ be usable on Class 1 devices as defined in RFC 7228. These devices feature ~10 K
 ~100 KiB code size, which makes it suitable for this thesis \parencite{rfc7228}. The solution 
 may be applied to more powerful devices. The working group does not however try to define 
 new transport or discovery mechanism, making their proposal angostic of any particular 
-technology. As of writing, they have published two documents concerning the architecture of 
-such a firmware update mechanism and the information model of the needed manifest.
+technology. As of writing, they have published two documents concerning the architecture and 
+information model of a firmware update mechanism.
 
 \subsection{Architecture}
 There is an Internet Draft by the SUIT group focusing on the firmware update architecture 
@@ -29,7 +29,15 @@ firmware images as well as protecting the firmware image's confidentiality. Thes
 reduces the possibility of an attacker either getting control over a device or 
 reverse engineering a malicious but valid firmware image as an attempt to mount an attack.
 
-The draft \parencite{suit-architecture} presents ten qualitative requirements:
+In order to accept an image and update itself, a device must be presented with certain 
+information. Several decisions must be made before updating and the information comes in 
+form of a manifest. The next section will describe the requirements posted upon this 
+manifest in more detail. This manifest helps the device to make important decisions such as 
+if it trusts the author of the new image, if the image is intact, if the image is applicable,
+where the image should be stored and so on. This in turns means the device also has to trust 
+the manifest itself, and that both manifest and update image must be distributed in a safe and 
+trusted architecture. The draft \parencite{suit-architecture} presents ten qualitative 
+requirements this architecture should have:
 \begin{itemize}
     \item Agnostic to how firmware images are distributed:\\
             As this thesis aims to implement a prototype of an update mechanism, 
@@ -70,6 +78,27 @@ The draft \parencite{suit-architecture} presents ten qualitative requirements:
             that require interaction between the device and firmware provider before 
             updating. The thesis will look into all three of these broad classes.
 \end{itemize}
+    
+% Firmware server?
+An example architecture encompassing a device, a firmware update author, a firmware server,
+a network operator and a device operator is presented in the draft. The author and the device 
+ineract with the firmware server in order to communicate firmware updates and possibly 
+manifests. This communication of the device as well as the updating itself is the concern 
+of this thesis. The draft also presents device management for the device operator so that 
+it is possible to track the state of updates in a network. Device management is considered 
+out of scope for this thesis.
+
+The distribution of manifest and firmware image is also discussed, with a couple of options 
+being possible. The manifest and image can be distributed together to a firmware server. 
+The device then recieves the manifest either via pulling or pushing and can then download
+the image. Alternatively, the manifest itself can be directly sent to the device without a 
+need of a firmware server, while the firmware image is put on the firmware server. After the 
+device has receieved the lone manifest through some method, the firmware can be downloaded 
+from the firmware server. The SUIT architecture does not enforce a specific method to be used 
+when delivering the manifest and firmware, but states that an update mechanism must support 
+both types.
+
+% TODO: Images showing the differences of distribution
 
 \subsection{Information Model}
 
