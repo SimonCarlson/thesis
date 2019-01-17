@@ -5,7 +5,30 @@
 \section{Network Stack}
 % Talk about differences between traditional stacks and IoT stacks
 \subsection{UDP}
-% Talk about motivations for UDP, present the header
+UDP is a stateless and asynchronous transfer protocol for IP \parencite{rfc768}. It does not provide any 
+reliability mechanisms but is instead a best-effort protocol. It also does not guarantee 
+delivery of messages. For general purposes in unconstrained environments TCP is usually the 
+favored transport protocol, but in environments where resources are scarce and networks 
+unreliable, a stateful protocol like TCP could face issues. Since TCP wants to ensure packet 
+delivery, it will retransmit packages generating a lot of traffic and processing required for 
+a receiver. Also, if the connection is too shaky TCP will not work at all since it can no 
+longer guarantee the packets arrive. The best-effort approach of UDP is favorable in these
+situations, in addition to UDP being a lightweight protocol.
+
+Figure \ref{fig:udp} shows the UDP header format. The source port is optional, the length denotes 
+the length of the datagram (including the header), and the checksum is calculated on a pseudo-header
+constructed from both the IP header, UDP header, and data.
+
+\begin{figure}
+    \begin{bytefield}[bitformatting=\small, bitwidth=1.1em]{32}        
+        \bitheader{0-31}\\
+        \bitbox{16}{Source port} & \bitbox{16}{Destination port}\\
+        \bitbox{16}{Length} & \bitbox{16}{Checksum}\\
+        \bitbox[tlb]{32}{Data octets $\dots$}\\
+    \end{bytefield}
+    \caption{The UDP header format.}
+    \label{fig:udp}
+\end{figure}
 
 \subsection{DTLS}
 % Mention records, their structure, and how to avoid IP-fragmentation
