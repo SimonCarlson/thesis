@@ -4,16 +4,27 @@
 
 \section{Background}
 % Explain what IoT is
+Internet of Things, or IoT, is the notion of connecting physical objects to the world-spanning 
+Internet in order to facilitate services and communication both machine-to-human and 
+machine-to-machine. By having everything connected, from everyday appliances to vehicles to 
+critical parts of infrastructure, computers will be ubiquitous and the Internet of Things 
+realized. The benefits from the IoT can range from quality of life services, such as controlling 
+lights and thermostats from afar, to data gathering through wireless sensor networks, to 
+enabling life critical operations such as monitoring a pacemaker. IoT is a broad definition 
+and fits many different devices in many different environment, what they all have in common 
+is that they are physical and connected devices.
 
-% TODO: Expand. Talk about the issues of having unsecured IoT devices, why it might matter
-% because of future expansion. Finish of with the adoptiation part for a more concrete
-% example
-According to Bain \& Company, the largest barrier for Internet of Things (IoT) adoptation is security concerns,
-and customers would buy an average of 70\% more IoT devices if they were secured \parencite{ali_bosche_ford_2018}. 
-Security in IoT devices today is either based on static PINS and passwords or is nonexistent. Security 
-researchers have proposed solutions in the form of intrusion detection systems and secure 
-communication protocols, but the currently rely on symmetric cryptography. This makes the 
-proposed solutions unfeasible for use in IoT. 
+In recent years the general public has become increasingly aware of digital attacks and 
+intrustions affecting their day to day lives. In 2016 the DNS provider Dyn was attacked 
+by a botnet consisting of heterogenous IoT devices infected by the Mirai malware. Devices 
+such as printers and baby monitors were leveraged to launch an attack on Dyn's services which 
+affected sites like Airbnb, Amazon, and CNN \parencite{perlroth_2016}. Cardiac devices implanted in patients were also
+discovered to be unsafe, with hackers being able to deplete the batteries of pacemakers 
+prematurely \parencite{hern_2017}. These cases and many others make it clear that security in IoT is a big deal.
+According to Bain \& Company, the largest barrier for Internet of Things (IoT) adoptation 
+is security concerns, and customers would buy an average of 70\% more IoT devices if they 
+were secured \parencite{ali_bosche_ford_2018}. Despite security being today lacking in IoT, the 
+field is expected to grow rapidly and an increase in unsecured devices could spell disaster.
 
 \section{Problem Statement}
 There is a need for secure software and firmware updates for IoT devices as vulnerabilities 
@@ -72,15 +83,10 @@ will not be concerned about device management.
 
 \section{Outline}
 % TODO: Fix wonky formatting when beginning new lines. Better to write it into a coherent piece
-Chapter two describes the theoretical background needed to understand the results of the thesis.\newline
-
-Chapter three describes the design of the communication protocols used in the update mechanism.\\
-
-Chapter four describes how the update mechanism works and how devices can upgrade their images.\\
-
-Chapter five evaluates the developed updating mechanism and presents the results.\\
-
-Chapter six ends the report with a discussion about the update mechanism and its results.\\
-
+Chapter two describes the theoretical background needed to understand the results of the thesis.
+Chapter three describes the design of the communication protocols used in the update mechanism.
+Chapter four describes how the update mechanism works and how devices can upgrade their images.
+Chapter five evaluates the developed updating mechanism and presents the results.
+Chapter six ends the report with a discussion about the update mechanism and its results.
 
 \end{document}
