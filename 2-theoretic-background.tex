@@ -2,7 +2,7 @@
 
 \begin{document}
 
-\section{Network Stack}
+\section{IoT Network Stack}
 % Talk about differences between traditional stacks and IoT stacks
 \subsection{UDP}
 UDP is a stateless and asynchronous transfer protocol for IP \parencite{rfc768}. It does not provide any 
@@ -31,7 +31,70 @@ constructed from both the IP header, UDP header, and data.
 \end{figure}
 
 \subsection{DTLS}
-% Mention records, their structure, and how to avoid IP-fragmentation
+DTLS is a protocol which adds privacy to datagram protocols like UDP \parencite{rfc6347}. The protocol is designed 
+to prevent eavesdropping, tampering, or message forgery. DTLS is based on TLS, a similar 
+protocol for stateful protocols such as TCP, which would not work well on unreliable networks.
+The main issues with using TLS over unreliable networks is that TLS decryption is dependant 
+on previous packets, meaning decryption of a packet would fail if the previous packet was 
+not received, as well as the TLS handshake procedure assumes all handshake messages are 
+delivered reliably.
+
+DTLS solves this by banning stream ciphers, effectively making decryption an independent 
+operation between packets, as well as adding explicit sequence numbers. Furthermore, DTLS 
+supports packet retransmission, reordering, as well as fragmenting DTLS handshake messages 
+into several DTLS records. These mechanisms makes the handshake process feasible over 
+unreliable networks. By splitting messages into different DTLS records, fragmentation at the 
+IP level can be avoided since a DTLS record is guaranteed to fit an IP datagram.
+
+Listing \ref{lst:dtls-plain} shows the DTLS record structure. It contains a TLS 1.2 type field, 
+a version field which for DTLS 1.2 is 254.253, an epoch counter that is incremented for 
+each cipher state change, an increasing sequence number (unique to each epoch), a length 
+field and a fragment field containing the application data \parencite{rfc5246}.
+
+\lstset{language=C}
+\begin{lstlisting}[caption={The DTLS plaintext record structure.}, label={lst:dtls-plain}]
+    struct {
+        ContentType type;
+        ProtocolVersion version;
+        uint16 epoch;
+        uint48 sequence_number;
+        uint16 length;
+        opaque fragment[DTLSPlaintext.length];
+    } DTLSPlaintext;
+\end{lstlisting}
+
+\begin{lstlisting}[caption={The DTLS ciphertext record structure.}, label={lst:dtls-cipher}]
+    struct {
+        ContentType type;
+        ProtocolVersion version;
+        uint16 epoch;
+        uint48 sequence_number;
+        uint16 length;
+        select (CipherSpec.cipher_type) {
+            case block: GenericBlockCipher;
+            case aead: GenericAEADCipher;
+        } fragment;
+    } DTLSCiphertext;
+\end{lstlisting}
+
+TLS records are compressed and then encrypted, the same holds for DTLS. When initating 
+contact, a compression algorithm is chosen. The DTLSPlaintext is then compressed into a 
+DTLSCompressed record, with similar structure to Listing \ref{lst:dtls-plain} except the 
+fragment being indexed by DTLSCompressed.length instead. The compressed record is 
+encrypted into a DTLSCiphertext record whose structure is shown in Listing \ref{lst:dtls-cipher}.
+Note that since DTLS disallows stream ciphers they are not an option in the encrypted fragment,
+whereas in TLS they are.
+
+In order to communicate via TLS and DTLS, a handshake has to be carried out. The handshake 
+establishes parameters such as protocol version, cryptographic algorithms, and shared 
+secrets. The TLS handshake involves hello messages for establishing algorithms, exchanging 
+random values, and checking for earlier sessions. Then cryptographic parameters are shared in 
+order to agree on a shared premaster secret. The parties authenticate each other via public 
+key encryption, generate a shared master secret based on the premaster secret, and finally 
+verifies that their peer has the correct security parameters. The DTLS handshake adds to this 
+a stateless cookie exchange to prevent DoS attacks, some modifications to the handshake 
+header to make communication over UDP possible, and retransmission timers since the communication 
+is unreliable. Otherwise the DTLS handshake is as the TLS handshake.
 
 \subsection{CoAP}
 CoAP is a web transfer protocol designed to be used by constrained devices over networks with 
