@@ -3,7 +3,28 @@
 \begin{document}
 
 \section{IoT Network Stack}
-% Talk about differences between traditional stacks and IoT stacks
+Network protocols in IoT networks operate under different circumstances compared to traditional 
+computer networks. Networks in IoT are defined by their low power requirements, low reliability, 
+and low computational performance on edge devices. This posts some constraints on the protocols 
+used as they must be suitable for use in IoT networks. One of the most widely used network 
+protocol stacks today in traditional networks is the TCP/IP stack. It uses TCP as a transportation 
+protocol, usually with TLS, and a common application layer protocol is HTTP. TCP is however 
+poorly suited for IoT networks as it is a connection based, stateful protocol which tries to 
+ensure the guaranteed delivery of packets in the correct order. There is also advanced congestion 
+control mechanisms in TCP which are hard to apply on low-bandwitch, unreliable networks.
+
+% Picture comparing network stacks?
+
+IoT networks on the other hand often utilize UDP for transport. UDP is also an IP-based protocol 
+which gives some interoperability with traditional networks while performing better in IoT 
+contexts. HTTP can be used over UDP for the application layer, but as HTTP is encoded in 
+human readable plaintext it is unecessarily wordy and not optimal. Instead, CoAP is a common 
+protocol for the application layer in IoT networks. This chapter briefly explains UDP, DTLS, 
+and CoAP and explains why they are suitable for IoT networks. Furthermore, the hardware that 
+will be used throughout the thesis is introduced alongside the Contiki-NG operating system. 
+Additionally, the SUIT standard developed by the IETF is introduced together with the PKI 
+that will be used with SUIT.
+
 \subsection{UDP}
 UDP is a stateless and asynchronous transfer protocol for IP \parencite{rfc768}. It does not provide any 
 reliability mechanisms but is instead a best-effort protocol. It also does not guarantee 
