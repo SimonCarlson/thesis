@@ -28,6 +28,46 @@
 	abstract =	{The Internet Protocol Suite is increasingly used on small devices with severe constraints on power, memory, and processing resources, creating constrained-node networks. This document provides a number of basic terms that have been useful in the standardization work for constrained-node networks.},
 }
 
+@misc{rfc7252,
+	series =	{Request for Comments},
+	number =	7252,
+	howpublished =	{RFC 7252},
+	publisher =	{RFC Editor},
+	doi =		{10.17487/RFC7252},
+	url =		{https://rfc-editor.org/rfc/rfc7252.txt},
+    author =	{Zach Shelby and Klaus Hartke and Carsten Bormann},
+	title =		{{The Constrained Application Protocol (CoAP)}},
+	pagetotal =	112,
+	year =		2014,
+	month =		jun,
+	abstract =	{The Constrained Application Protocol (CoAP) is a specialized web transfer protocol for use with constrained nodes and constrained (e.g., low-power, lossy) networks. The nodes often have 8-bit microcontrollers with small amounts of ROM and RAM, while constrained networks such as IPv6 over Low-Power Wireless Personal Area Networks (6LoWPANs) often have high packet error rates and a typical throughput of 10s of kbit/s. The protocol is designed for machine- to-machine (M2M) applications such as smart energy and building automation. CoAP provides a request/response interaction model between application endpoints, supports built-in discovery of services and resources, and includes key concepts of the Web such as URIs and Internet media types. CoAP is designed to easily interface with HTTP for integration with the Web while meeting specialized requirements such as multicast support, very low overhead, and simplicity for constrained environments.},
+}
+
+@misc{rfc7959,
+	series =	{Request for Comments},
+	number =	7959,
+	howpublished =	{RFC 7959},
+	publisher =	{RFC Editor},
+	doi =		{10.17487/RFC7959},
+	url =		{https://rfc-editor.org/rfc/rfc7959.txt},
+    author =	{Carsten Bormann and Zach Shelby},
+	title =		{{Block-Wise Transfers in the Constrained Application Protocol (CoAP)}},
+	pagetotal =	37,
+	year =		2016,
+	month =		aug,
+	abstract =	{The Constrained Application Protocol (CoAP) is a RESTful transfer protocol for constrained nodes and networks. Basic CoAP messages work well for small payloads from sensors and actuators; however, applications will need to transfer larger payloads occasionally -- for instance, for firmware updates. In contrast to HTTP, where TCP does the grunt work of segmenting and resequencing, CoAP is based on datagram transports such as UDP or Datagram Transport Layer Security (DTLS). These transports only offer fragmentation, which is even more problematic in constrained nodes and networks, limiting the maximum size of resource representations that can practically be transferred. Instead of relying on IP fragmentation, this specification extends basic CoAP with a pair of "Block" options for transferring multiple blocks of information from a resource representation in multiple request-response pairs. In many important cases, the Block options enable a server to be truly stateless: the server can handle each block transfer separately, with no need for a connection setup or other server-side memory of previous block transfers. Essentially, the Block options provide a minimal way to transfer larger representations in a block-wise fashion. A CoAP implementation that does not support these options generally is limited in the size of the representations that can be exchanged, so there is an expectation that the Block options will be widely used in CoAP implementations. Therefore, this specification updates RFC 7252.},
+}
+
+
+@book{rest,
+  title={Architectural styles and the design of network-based software architectures},
+  author={Fielding, Roy T and Taylor, Richard N},
+  volume={7},
+  year={2000},
+  publisher={University of California, Irvine Irvine, USA}
+}
+
+
 @techreport{suit-architecture,
 	number =	{draft-ietf-suit-architecture-02},
 	type =		{Internet-Draft},

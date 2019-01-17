@@ -3,12 +3,84 @@
 \begin{document}
 
 \section{Network Stack}
-\subsection{CoAP}
-% Mention blocks and observe options
-% Mention header structure and how a manifest payload can be worked into CoAP
+% Talk about differences between traditional stacks and IoT stacks
+\subsection{UDP}
+% Talk about motivations for UDP, present the header
 
 \subsection{DTLS}
 % Mention records, their structure, and how to avoid IP-fragmentation
+
+\subsection{CoAP}
+CoAP is a web transfer protocol designed to be used by constrained devices over networks with 
+low throughput and possibly high unreliability for machine-to-machine communication 
+\parencite{rfc7252}. While designed for constrained networks, a design feature of CoAP is 
+how it is easily interfaced with HTTP so that communication over traditional networks can be 
+proxied. Furthermore CoAP is a REST based protocol utilizing application endpoints, a subset 
+of standardised request/response codes, URIs, and MIME types \parencite{rest}. Additionally 
+CoAP offers features such as multicast support, asynchronous messages, low header overhead, 
+and UDP and DTLS bindings which are all suitable for constrained environments.
+
+As CoAP is usually implemented on top of UDP, communication is stateless and asynchronous. 
+For this reason CoAP defines four message types: Confirmable, Non-confirmable, Acknowledgement,
+and Reset. These message types are combined with a subset of HTTP method codes. Confirmable 
+messages must be answered with a corresponding Acknowledgement, this provides one form of 
+reliability over an otherwise unreliable channel. Non-confirmable messages do not require an 
+Acknowledgement and thus act asynchronously. Reset messages are used when a recipient is 
+unable to process a Non-confirmable message. Confirmable, Non-confirmable, and Acknowledgement
+messages all use Message IDs in order to detect duplicate messages in case of retransmission.
+
+Since CoAP is based on unreliable means of transport, there are some lightweight reliability 
+and congestion control mechanics in CoAP. Message IDs allows for detection of duplicate 
+messages and tokens allow asynchronous requests and responses be paired correctly. There is 
+also a retransmission mechanic with an exponential back-off timer for Confirmable messages so 
+that lost Acknowledgements does not cause a flood of retransmissions.
+
+A feature of CoAPs messaging model is the piggybacked respones. If a response to a 
+Confirmable or Non-confirmable request is immediately available and fits in the Acknowledgement,
+the response itself can be delivered with the Acknowledgement. If the response is not available, 
+a recepient can respond with an empty Acknowledgement and later send a Confirmable message 
+containing the response. Requests use the GET, PUT, POST, and DELETE methods in a manner that 
+is very similar but not identical to HTTP.
+
+Figure \ref{fig:coap} shows the CoAP message format. The 2-bit version (Ver) field indicates 
+the CoAP version, which at time of writing is 1 (01 in binary). The 2-bit type (T) field 
+determines the type of message (Confirmable, Non-confirmable, Acknowledgement, Reset). 
+Token length (TKL) indicates the length of the Token field which can vary between zero to 
+eight bytes. The 8-bit code field carries which method code the message carries and can be further 
+broken into a 3-bit class and 5-bit detail. The class can indicate a request (0), a success 
+response (2), a client error response (4), or a server error response(5), with the detail 
+further specifying the status of the message. The message ID is a 16-bit integer used to 
+detect duplicate message and to match Acknowledgement or Resets with their initiating 
+requests.
+
+Following the header is the zero to eight bit Token value, which in turn is follow by zero 
+or more Options. Lastly is the optional payload, which if present is prefixed by a payload 
+marker (0xFF). The length of the payload is dependant on the carrying protocol, which in this 
+thesis will be DTLS. The length of the payload is calculated depending on the size of the 
+CoAP header, token, and options as well as maximum DTLS record size.
+
+% Mention header structure
+\begin{figure}
+    \begin{bytefield}[bitformatting={\small}, bitwidth=1.1em]{32}
+        \bitheader{0-31}\\
+        \bitbox{2}{Ver} & \bitbox{2}{T} & \bitbox{4}{TKL} & \bitbox{8}{Code}
+        & \bitbox{16}{Message ID}\\
+        \bitbox[ltb]{32}{Token (if any, TKL bytes) $\dots$}\\
+        \bitbox[ltb]{32}{Options (if any) $\dots$}\\
+        \bitbox{8}{1 1 1 1 1 1 1 1} & \bitbox[ltb]{24}{Payload (if any) $\dots$}
+    \end{bytefield}
+    \caption{The CoAP message format.}
+    \label{fig:coap}
+\end{figure}
+
+Since firmware images can be relatively large their size needs to be handled during transportation.
+UDP and DTLS only supports fragmentation which can be problematic in unreliable networks. To 
+remedy this CoAP supports block-wise transfers \parencite{rfc7959}. A Block option is 
+present which allows stateless transfer of a large file separated in different blocks. 
+Each block can be individually retransmitted and by using monotonically increasing block 
+numbers, the blocks can be reassembled. The size of blocks can also be negotiated between 
+server and client meaning they can always find a suitable block size, making the mechanism 
+quite flexible.
 
 \section{Hardware/Firefly}
 % Talk to Joel
