@@ -634,6 +634,43 @@ base on which to design a secure update mechanism for IoT.
 \label{ssec:contiki-ng}
 % Mention primitives such as processes, timers, network stack For details on image
 % flipping/bootloaders, Niclas should know
+Contiki-NG is an open-source operating system for resource constrained IoT devices based
+on the Contiki operating system \parencite{contiki-ng-github}, \parencite{contiki-github}.
+Contiki-NG focuses on low-power communication and standard protocols and comes with
+IPv6/LoWPAN, DTLS, and CoAP implementations which makes it a suitable operating system for
+this thesis. Furthermore, Contiki-NG is open source and licensed under the permissive BSD
+3-Clause license and targets a wide variety of boards which makes it align with SUITs goal
+of creating an open standard for updating IoT devices.
+
+\subsection{Processes, events, and memory management}
+\label{ssec:process-event-memory}
+Contiki-NG has a process abstraction which is built on lightweight protothreads
+\parencite{protothreads}. A process is declared through a PROCESS macro and can be
+automatically started after system boot or when a specific module is loaded. User-space
+processes are run in a cooperative manner while kernel-space processes can preempt
+user-space processes. Contiki-NGs execution model is event based, meaning processes often
+yield execution until they are informed a certain event has taken place, upon which they
+can act. Examples of events are timers expiring, a process being polled, or a network
+packet arriving. 
+
+Contiki-NG provides to memory allocators in addition to using static memory. They are
+called MEMB and HeapMem and are semi-dynamic and dynamic, respectively. MEMB provides ways
+to manage memory blocks. The memory blocks are allocated on static memory as arrays of
+constant sized objects. After a memory block has been declared, it is initialized after
+which objects can be allocated memory from the block. All objects allocated through the
+same block have the same size. Blocks can be freed, and it is possible to check whether a
+pointer resides within a certain memory block or not.
+
+HeapMem solves the issue of dynamically allocating objects of varying sizes during runtime
+in Contiki-NG. It can be used on a variety of hardware platforms, something a standard C
+malloc implementation could struggle with. To allocate memory on the heap, the number of
+bytes to allocate must be provided and a pointer to a contiguous piece of memory is
+returned (if there is enough contiguous memory). Memory can be reallocated and deallocated
+such as using a normal malloc.
+
+\subsection{Networking in Contiki-NG}
+\label{ssec:networking-contiki}
+
 
 \section{PKI?}
 \label{ssec:pki}
