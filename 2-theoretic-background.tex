@@ -1,44 +1,57 @@
  \documentclass[0-thesis.tex]{subfiles}
 
 \begin{document}
+This chapter presents the theoretical background needed to understand the thesis. Section
+\ref{sec:network} introduces the networks protocols used and motivates their use over
+other protocols in an IoT context. Section \ref{sec:hardware} presents the target hardware
+for this thesis. The following section, Section \ref{sec:suit} presents and explains the
+SUIT architecture and information model and their respective requirements as formulated by
+the IETF. Section \ref{ssec:contiki-ng} presents the Contiki-NG operating system which the
+updating mechanism will be developed for, and finally \ref{ssec:pki} introduces the PKI
+which is an underlying assumption for the thesis.
 
 \section{IoT Network Stack}
-Network protocols in IoT networks operate under different circumstances compared to traditional 
-computer networks. Networks in IoT are defined by their low power requirements, low reliability, 
-and low computational performance on edge devices. This posts some constraints on the protocols 
-used as they must be suitable for use in IoT networks. One of the most widely used network 
-protocol stacks today in traditional networks is the TCP/IP stack. It uses TCP as a transportation 
-protocol, usually with TLS, and a common application layer protocol is HTTP. TCP is however 
-poorly suited for IoT networks as it is a connection based, stateful protocol which tries to 
-ensure the guaranteed delivery of packets in the correct order. There is also advanced congestion 
-control mechanisms in TCP which are hard to apply on low-bandwitch, unreliable networks.
+\label{sec:network}
+Network protocols in IoT networks operate under different circumstances compared to
+traditional computer networks. Networks in IoT are defined by their low power
+requirements, low reliability, and low computational performance on edge devices. This
+posts some constraints on the protocols used as they must be suitable for use in IoT
+networks. One of the most widely used network protocol stacks today in traditional
+networks is the TCP/IP stack. It uses TCP as a transportation protocol, usually with TLS
+for security, and a common application layer protocol is HTTP. TCP is however poorly
+suited for IoT networks as it is a connection based, stateful protocol which tries to
+ensure the guaranteed delivery of packets in the correct order. There is also advanced
+congestion control mechanisms in TCP which are hard to apply on low-bandwitch, unreliable
+networks.
+
+IoT networks on the other hand often utilize UDP for transport. UDP is also an IP-based
+protocol which grants some interoperability with traditional networks while performing
+better in IoT contexts. As TLS is based on the same assumptions TCP does it is unsuitable
+for UDP networks. Instead there is DTLS, which is a version of TLS enhanced for use in
+datagram oriented protocols such as UDP. HTTP can be used over UDP for the application
+layer, but as HTTP is encoded in human readable plaintext it is unecessarily wordy and not
+optimal for constrained networks. Instead, CoAP is a common protocol for the application
+layer in IoT networks. This chapter briefly explains UDP, DTLS, and CoAP and explains why
+they are suitable for IoT networks.
 
 % Picture comparing network stacks?
 
-IoT networks on the other hand often utilize UDP for transport. UDP is also an IP-based protocol 
-which gives some interoperability with traditional networks while performing better in IoT 
-contexts. HTTP can be used over UDP for the application layer, but as HTTP is encoded in 
-human readable plaintext it is unecessarily wordy and not optimal. Instead, CoAP is a common 
-protocol for the application layer in IoT networks. This chapter briefly explains UDP, DTLS, 
-and CoAP and explains why they are suitable for IoT networks. Furthermore, the hardware that 
-will be used throughout the thesis is introduced alongside the Contiki-NG operating system. 
-Additionally, the SUIT standard developed by the IETF is introduced together with the PKI 
-that will be used with SUIT.
-
 \subsection{UDP}
-UDP is a stateless and asynchronous transfer protocol for IP \parencite{rfc768}. It does not provide any 
-reliability mechanisms but is instead a best-effort protocol. It also does not guarantee 
-delivery of messages. For general purposes in unconstrained environments TCP is usually the 
-favored transport protocol, but in environments where resources are scarce and networks 
-unreliable, a stateful protocol like TCP could face issues. Since TCP wants to ensure packet 
-delivery, it will retransmit packages generating a lot of traffic and processing required for 
-a receiver. Also, if the connection is too shaky TCP will not work at all since it can no 
-longer guarantee the packets arrive. The best-effort approach of UDP is favorable in these
-situations, in addition to UDP being a lightweight protocol.
+\label{ssec:udp}
+UDP is a stateless and asynchronous transfer protocol for IP \parencite{rfc768}. It does
+not provide any reliability mechanisms but is instead a best-effort protocol. It also does
+not guarantee delivery of messages. For general purposes in unconstrained environments TCP
+is usually the favored transport protocol as it is robust and reliable, but in
+environments where resources are scarce and networks unreliable, a stateful protocol like
+TCP could face issues. Since TCP wants to ensure packet delivery, it will retransmit
+packages generating a lot of traffic and processing required for a receiver. Also, if the
+connection is too unstable TCP will not work at all since it can no longer guarantee the
+packets arrive. The best-effort approach of UDP is favorable in these situations, in
+addition to UDP being a lightweight protocol.
 
-Figure \ref{fig:udp} shows the UDP header format. The source port is optional, the length denotes 
-the length of the datagram (including the header), and the checksum is calculated on a pseudo-header
-constructed from both the IP header, UDP header, and data.
+Figure \ref{fig:udp-header} shows the UDP header format. The source port is optional, the
+length denotes the length of the datagram (including the header), and the checksum is
+calculated on a pseudo-header constructed from both the IP header, UDP header, and data.
 
 \begin{figure}
     \begin{bytefield}[bitformatting=\small, bitwidth=1.1em]{32}        
@@ -48,29 +61,30 @@ constructed from both the IP header, UDP header, and data.
         \bitbox[tlb]{32}{Data octets $\dots$}\\
     \end{bytefield}
     \caption{The UDP header format.}
-    \label{fig:udp}
+    \label{fig:udp-header}
 \end{figure}
 
 \subsection{DTLS}
-DTLS is a protocol which adds privacy to datagram protocols like UDP \parencite{rfc6347}. The protocol is designed 
-to prevent eavesdropping, tampering, or message forgery. DTLS is based on TLS, a similar 
-protocol for stateful protocols such as TCP, which would not work well on unreliable networks.
-The main issues with using TLS over unreliable networks is that TLS decryption is dependant 
-on previous packets, meaning decryption of a packet would fail if the previous packet was 
-not received, as well as the TLS handshake procedure assumes all handshake messages are 
-delivered reliably.
+\label{ssec:dtls}
+DTLS is a protocol which adds privacy to datagram protocols like UDP \parencite{rfc6347}.
+The protocol is designed to prevent eavesdropping, tampering, or message forgery. DTLS is
+based on TLS, a similar protocol for stateful protocols such as TCP, which would not work
+well on unreliable networks. The main issues with using TLS over unreliable networks is
+that TLS decryption is dependant on previous packets, meaning decryption of a packet would
+fail if the previous packet was not received, as well as the TLS handshake procedure
+assumes all handshake messages are delivered reliably.
 
-DTLS solves this by banning stream ciphers, effectively making decryption an independent 
-operation between packets, as well as adding explicit sequence numbers. Furthermore, DTLS 
-supports packet retransmission, reordering, as well as fragmenting DTLS handshake messages 
-into several DTLS records. These mechanisms makes the handshake process feasible over 
-unreliable networks. By splitting messages into different DTLS records, fragmentation at the 
-IP level can be avoided since a DTLS record is guaranteed to fit an IP datagram.
+DTLS solves this by banning stream ciphers, effectively making decryption an independent
+operation between packets, as well as adding explicit sequence numbers. Furthermore, DTLS
+supports packet retransmission, reordering, as well as fragmenting DTLS handshake messages
+into several DTLS records. These mechanisms makes the handshake process feasible over
+unreliable networks. By splitting messages into different DTLS records, fragmentation at
+the IP level can be avoided since a DTLS record is guaranteed to fit an IP datagram.
 
-Listing \ref{lst:dtls-plain} shows the DTLS record structure. It contains a TLS 1.2 type field, 
-a version field which for DTLS 1.2 is 254.253, an epoch counter that is incremented for 
-each cipher state change, an increasing sequence number (unique to each epoch), a length 
-field and a fragment field containing the application data \parencite{rfc5246}.
+Listing \ref{lst:dtls-plain} shows the DTLS record structure. It contains a TLS 1.2 type
+field, a version field which for DTLS 1.2 is 254.253, an epoch counter that is incremented
+for each cipher state change, an increasing sequence number (unique to each epoch), a
+length field and a fragment field containing the application data \parencite{rfc5246}.
 
 \lstset{language=C}
 \begin{lstlisting}[caption={The DTLS plaintext record structure.}, label={lst:dtls-plain}]
@@ -98,73 +112,77 @@ field and a fragment field containing the application data \parencite{rfc5246}.
     } DTLSCiphertext;
 \end{lstlisting}
 
-TLS records are compressed and then encrypted, the same holds for DTLS. When initating 
-contact, a compression algorithm is chosen. The DTLSPlaintext is then compressed into a 
-DTLSCompressed record, with similar structure to Listing \ref{lst:dtls-plain} except the 
-fragment being indexed by DTLSCompressed.length instead. The compressed record is 
-encrypted into a DTLSCiphertext record whose structure is shown in Listing \ref{lst:dtls-cipher}.
-Note that since DTLS disallows stream ciphers they are not an option in the encrypted fragment,
-whereas in TLS they are.
+TLS records are compressed and then encrypted, the same holds for DTLS. When initating
+contact, a compression algorithm is chosen. The DTLSPlaintext is then compressed into a
+DTLSCompressed record, with similar structure to Listing \ref{lst:dtls-plain} except the
+fragment being indexed by DTLSCompressed.length instead. The compressed record is
+encrypted into a DTLSCiphertext record whose structure is shown in Listing
+\ref{lst:dtls-cipher}. Note that since DTLS disallows stream ciphers they are not an
+option in the encrypted fragment, whereas in TLS they are.
 
-In order to communicate via TLS and DTLS, a handshake has to be carried out. The handshake 
-establishes parameters such as protocol version, cryptographic algorithms, and shared 
-secrets. The TLS handshake involves hello messages for establishing algorithms, exchanging 
-random values, and checking for earlier sessions. Then cryptographic parameters are shared in 
-order to agree on a shared premaster secret. The parties authenticate each other via public 
-key encryption, generate a shared master secret based on the premaster secret, and finally 
-verifies that their peer has the correct security parameters. The DTLS handshake adds to this 
-a stateless cookie exchange to prevent DoS attacks, some modifications to the handshake 
-header to make communication over UDP possible, and retransmission timers since the communication 
-is unreliable. Otherwise the DTLS handshake is as the TLS handshake.
+In order to communicate via TLS and DTLS, a handshake has to be carried out. The handshake
+establishes parameters such as protocol version, cryptographic algorithms, and shared
+secrets. The TLS handshake involves hello messages for establishing algorithms, exchanging
+random values, and checking for earlier sessions. Then cryptographic parameters are shared
+in order to agree on a shared premaster secret. The parties authenticate each other via
+public key encryption, generate a shared master secret based on the premaster secret, and
+finally verifies that their peer has the correct security parameters. The DTLS handshake
+adds to this a stateless cookie exchange to prevent DoS attacks, some modifications to the
+handshake header to make communication over UDP possible, and retransmission timers since
+the communication is unreliable. Otherwise the DTLS handshake is as the TLS handshake.
 
 \subsection{CoAP}
-CoAP is a web transfer protocol designed to be used by constrained devices over networks with 
-low throughput and possibly high unreliability for machine-to-machine communication 
-\parencite{rfc7252}. While designed for constrained networks, a design feature of CoAP is 
-how it is easily interfaced with HTTP so that communication over traditional networks can be 
-proxied. Furthermore CoAP is a REST based protocol utilizing application endpoints, a subset 
-of standardised request/response codes, URIs, and MIME types \parencite{rest}. Additionally 
-CoAP offers features such as multicast support, asynchronous messages, low header overhead, 
-and UDP and DTLS bindings which are all suitable for constrained environments.
+\label{ssec:coap}
+CoAP is a web transfer protocol designed to be used by constrained devices over networks
+with low throughput and possibly high unreliability for machine-to-machine communication
+\parencite{rfc7252}. While designed for constrained networks, a design feature of CoAP is
+how it is easily interfaced with HTTP so that communication over traditional networks can
+be proxied. Furthermore CoAP is a REST based protocol utilizing application endpoints, a
+subset of standardised request/response codes, URIs, and MIME types \parencite{rest}.
+Additionally CoAP offers features such as multicast support, asynchronous messages, low
+header overhead, and UDP and DTLS bindings which are all suitable for constrained
+environments.
 
-As CoAP is usually implemented on top of UDP, communication is stateless and asynchronous. 
-For this reason CoAP defines four message types: Confirmable, Non-confirmable, Acknowledgement,
-and Reset. These message types are combined with a subset of HTTP method codes. Confirmable 
-messages must be answered with a corresponding Acknowledgement, this provides one form of 
-reliability over an otherwise unreliable channel. Non-confirmable messages do not require an 
-Acknowledgement and thus act asynchronously. Reset messages are used when a recipient is 
-unable to process a Non-confirmable message. Confirmable, Non-confirmable, and Acknowledgement
-messages all use Message IDs in order to detect duplicate messages in case of retransmission.
+As CoAP is usually implemented on top of UDP, communication is stateless and asynchronous.
+For this reason CoAP defines four message types: Confirmable, Non-confirmable,
+Acknowledgement, and Reset. These message types are combined with a subset of HTTP method
+codes. Confirmable messages must be answered with a corresponding Acknowledgement, this
+provides one form of reliability over an otherwise unreliable channel. Non-confirmable
+messages do not require an Acknowledgement and thus act asynchronously. Reset messages are
+used when a recipient is unable to process a Non-confirmable message. Confirmable,
+Non-confirmable, and Acknowledgement messages all use Message IDs in order to detect
+duplicate messages in case of retransmission.
 
-Since CoAP is based on unreliable means of transport, there are some lightweight reliability 
-and congestion control mechanics in CoAP. Message IDs allows for detection of duplicate 
-messages and tokens allow asynchronous requests and responses be paired correctly. There is 
-also a retransmission mechanic with an exponential back-off timer for Confirmable messages so 
-that lost Acknowledgements does not cause a flood of retransmissions.
+Since CoAP is based on unreliable means of transport, there are some lightweight
+reliability and congestion control mechanics in CoAP. Message IDs allows for detection of
+duplicate messages and tokens allow asynchronous requests and responses be paired
+correctly. There is also a retransmission mechanic with an exponential back-off timer for
+Confirmable messages so that lost Acknowledgements does not cause a flood of
+retransmissions.
 
-A feature of CoAPs messaging model is the piggybacked respones. If a response to a 
-Confirmable or Non-confirmable request is immediately available and fits in the Acknowledgement,
-the response itself can be delivered with the Acknowledgement. If the response is not available, 
-a recepient can respond with an empty Acknowledgement and later send a Confirmable message 
-containing the response. Requests use the GET, PUT, POST, and DELETE methods in a manner that 
-is very similar but not identical to HTTP.
+A feature of CoAPs messaging model is the piggybacked respones. If a response to a
+Confirmable or Non-confirmable request is immediately available and fits in the
+Acknowledgement, the response itself can be delivered with the Acknowledgement. If the
+response is not available, a recepient can respond with an empty Acknowledgement and later
+send a Confirmable message containing the response. Requests use the GET, PUT, POST, and
+DELETE methods in a manner that is very similar but not identical to HTTP.
 
-Figure \ref{fig:coap} shows the CoAP message format. The 2-bit version (Ver) field indicates 
-the CoAP version, which at time of writing is 1 (01 in binary). The 2-bit type (T) field 
-determines the type of message (Confirmable, Non-confirmable, Acknowledgement, Reset). 
-Token length (TKL) indicates the length of the Token field which can vary between zero to 
-eight bytes. The 8-bit code field carries which method code the message carries and can be further 
-broken into a 3-bit class and 5-bit detail. The class can indicate a request (0), a success 
-response (2), a client error response (4), or a server error response(5), with the detail 
-further specifying the status of the message. The message ID is a 16-bit integer used to 
-detect duplicate message and to match Acknowledgement or Resets with their initiating 
-requests.
+Figure \ref{fig:coap} shows the CoAP message format. The 2-bit version (Ver) field
+indicates the CoAP version, which at time of writing is 1 (01 in binary). The 2-bit type
+(T) field determines the type of message (Confirmable, Non-confirmable, Acknowledgement,
+Reset). Token length (TKL) indicates the length of the Token field which can vary between
+zero to eight bytes. The 8-bit code field carries which method code the message carries
+and can be further broken into a 3-bit class and 5-bit detail. The class can indicate a
+request (0), a success response (2), a client error response (4), or a server error
+response(5), with the detail further specifying the status of the message. The message ID
+is a 16-bit integer used to detect duplicate message and to match Acknowledgement or
+Resets with their initiating requests.
 
-Following the header is the zero to eight bit Token value, which in turn is follow by zero 
-or more Options. Lastly is the optional payload, which if present is prefixed by a payload 
-marker (0xFF). The length of the payload is dependant on the carrying protocol, which in this 
-thesis will be DTLS. The length of the payload is calculated depending on the size of the 
-CoAP header, token, and options as well as maximum DTLS record size.
+Following the header is the zero to eight bit Token value, which in turn is follow by zero
+or more Options. Lastly is the optional payload, which if present is prefixed by a payload
+marker (0xFF). The length of the payload is dependant on the carrying protocol, which in
+this thesis will be DTLS. The length of the payload is calculated depending on the size of
+the CoAP header, token, and options as well as maximum DTLS record size.
 
 % Mention header structure
 \begin{figure}
@@ -180,248 +198,216 @@ CoAP header, token, and options as well as maximum DTLS record size.
     \label{fig:coap}
 \end{figure}
 
-Since firmware images can be relatively large their size needs to be handled during transportation.
-UDP and DTLS only supports fragmentation which can be problematic in unreliable networks. To 
-remedy this CoAP supports block-wise transfers \parencite{rfc7959}. A Block option is 
-present which allows stateless transfer of a large file separated in different blocks. 
-Each block can be individually retransmitted and by using monotonically increasing block 
-numbers, the blocks can be reassembled. The size of blocks can also be negotiated between 
-server and client meaning they can always find a suitable block size, making the mechanism 
-quite flexible.
+Since firmware images can be relatively large their size needs to be handled during
+transportation. UDP and DTLS only supports fragmentation which can be problematic in
+unreliable networks. To remedy this CoAP supports block-wise transfers
+\parencite{rfc7959}. A Block option is present which allows stateless transfer of a large
+file separated in different blocks. Each block can be individually retransmitted and by
+using monotonically increasing block numbers, the blocks can be reassembled. The size of
+blocks can also be negotiated between server and client meaning they can always find a
+suitable block size, making the mechanism quite flexible.
 
 \section{Hardware/Firefly}
+\label{sec:hardware}
 % Talk to Joel
 
 \section{SUIT}
-The IETF SUIT (Software Updates for Internet of Things) working group aims to define a firmware 
-update solution that is interoperable and non-proprietary \parencite{suit}. The solution shall 
-be usable on Class 1 devices as defined in RFC 7228. These devices feature ~10 KiB of RAM and 
-~100 KiB code size, which makes it suitable for this thesis \parencite{rfc7228}. The solution 
-may be applied to more powerful devices. The working group does not however try to define 
-new transport or discovery mechanism, making their proposal angostic of any particular 
-technology. As of writing, they have published two documents concerning the architecture and 
-information model of a firmware update mechanism.
+\label{sec:suit}
+The IETF SUIT (Software Updates for Internet of Things) working group aims to define a
+firmware update solution that is interoperable and non-proprietary \parencite{suit}. The
+solution shall be usable on Class 1 devices as defined in RFC 7228. These devices feature
+~10 KiB of RAM and ~100 KiB code size, which makes it suitable for this thesis
+\parencite{rfc7228}. The solution may be applied to more powerful devices. The working
+group does not however try to define new transport or discovery mechanism, making their
+proposal angostic of any particular technology. As of writing, they have published two
+documents concerning the architecture and information model of a firmware update
+mechanism.
 
 \subsection{Architecture}
-There is an Internet Draft by the SUIT group focusing on the firmware update architecture 
-\parencite{suit-architecture}. This draft describes the goals and requirements of the 
-architecture, although makes no mention of any particular technology. The overarching goals 
-of the update process is to thwart any attempts to flash unauthorized, possibly malicious 
-firmware images as well as protecting the firmware image's confidentiality. These goals 
-reduces the possibility of an attacker either getting control over a device or 
+\label{ssec:architecture}
+There is an Internet Draft by the SUIT group focusing on the firmware update architecture
+\parencite{suit-architecture}. This draft describes the goals and requirements of the
+architecture, although makes no mention of any particular technology. The overarching
+goals of the update process is to thwart any attempts to flash unauthorized, possibly
+malicious firmware images as well as protecting the firmware image's confidentiality.
+These goals reduces the possibility of an attacker either getting control over a device or
 reverse engineering a malicious but valid firmware image as an attempt to mount an attack.
 
-In order to accept an image and update itself, a device must be presented with certain 
-information. Several decisions must be made before updating and the information comes in 
-form of a manifest. The next section will describe the requirements posted upon this 
-manifest in more detail. This manifest helps the device to make important decisions such as 
-if it trusts the author of the new image, if the image is intact, if the image is applicable,
-where the image should be stored and so on. This in turns means the device also has to trust 
-the manifest itself, and that both manifest and update image must be distributed in a safe and 
-trusted architecture. The draft \parencite{suit-architecture} presents ten qualitative 
-requirements this architecture should have:
+In order to accept an image and update itself, a device must be presented with certain
+information. Several decisions must be made before updating and the information comes in
+form of a manifest. The next section will describe the requirements posted upon this
+manifest in more detail. This manifest helps the device to make important decisions such
+as if it trusts the author of the new image, if the image is intact, if the image is
+applicable, where the image should be stored and so on. This in turns means the device
+also has to trust the manifest itself, and that both manifest and update image must be
+distributed in a safe and trusted architecture. The draft \parencite{suit-architecture}
+presents ten qualitative requirements this architecture should have:
 \begin{itemize}
     \item Agnostic to how firmware images are distributed:\\
-            As this thesis aims to implement a prototype of an update mechanism, 
-            some choices about technology has to be done. This will realistically mean 
-            only a subset of the SUIT standard will be implemented as certain parts of the 
-            standard is not applicable. The proposed network stack uses UDP, DTLS, and CoAP 
-            for transportation and the target devices are Firefly devices running Contiki-NG.
+            As this thesis aims to implement a prototype of an update mechanism, some
+            choices about technology has to be done. This will realistically mean only a
+            subset of the SUIT standard will be implemented as certain parts of the
+            standard is not applicable. The proposed network stack uses UDP, DTLS, and
+            CoAP for transportation and the target devices are Firefly devices running
+            Contiki-NG.
     \item Friendly to broadcast delivery:\\
             Broadcasting will not be of main concern in this thesis.
     \item Use state-of-the-art security mechanisms:\\
-            The SUIT standard assumes a PKI is in place. RISE has previously developed a PKI
-            suitable for IoT, this PKI is an underlying assumption for the thesis. The PKI 
-            will allow for signing of the update manifest and firmware image.
+            The SUIT standard assumes a PKI is in place. RISE has previously developed a
+            PKI suitable for IoT, this PKI is an underlying assumption for the thesis. The
+            PKI will allow for signing of the update manifest and firmware image.
     \item Rollback attacks must be prevented:\\
-            The manifest will contain metadata such as monotonically increasing sequence 
+            The manifest will contain metadata such as monotonically increasing sequence
             numbers and best-before timestamps to avoid rollback attacks.
     \item High reliability:\\
-            This is an implementation requirement and depends heavily on the hardware of the 
-            target device. % Mention possibilities for the specific bootloader of Firefly?
+            This is an implementation requirement and depends heavily on the hardware of
+            the target device. % Mention possibilities for the specific bootloader of
+            Firefly?
     \item Operate with a small bootloader:\\
             This is also an implementation requirement. % Same as above?
     \item Small parser:\\
-            It must be easy to parse the fields of the update manifest as large parser can 
-            get quite complex. Validation of the manifest will happen on the constrained 
-            devices which further motivates a small parser and thus less complex manifests.
+            It must be easy to parse the fields of the update manifest as large parser can
+            get quite complex. Validation of the manifest will happen on the constrained
+            devices which further motivates a small parser and thus less complex
+            manifests.
     \item Minimal impact on existing firmware formats:\\
-            The update mechanism itself must not require any changes to existing firmware 
+            The update mechanism itself must not require any changes to existing firmware
             formats. % Expand?
     \item Robust permissions:\\
-            This requirement is directed towards the administration of firmware updates and 
-            how different roles interact with the devices. The thesis will not consider any 
-            infrastructure outside of transporting manifest and image and  applying 
-            the update, but will consider authorisation of parties through techniques like 
-            signing.
+            This requirement is directed towards the administration of firmware updates
+            and how different roles interact with the devices. The thesis will not
+            consider any infrastructure outside of transporting manifest and image and
+            applying the update, but will consider authorisation of parties through
+            techniques like signing.
     \item Operating modes:\\
-            The draft presents three broad modes of updates: client-initiated updates, 
-            server-initiated updates, and hybrid updates, where hybrids are mechanisms 
-            that require interaction between the device and firmware provider before 
+            The draft presents three broad modes of updates: client-initiated updates,
+            server-initiated updates, and hybrid updates, where hybrids are mechanisms
+            that require interaction between the device and firmware provider before
             updating. The thesis will look into all three of these broad classes.
 \end{itemize}
 
-An example architecture encompassing a device, a firmware update author, a firmware server,
-a network operator and a device operator is presented in the draft. The author and the device 
-ineract with the firmware server in order to communicate firmware updates and possibly 
-manifests. The communication of the device as well as the updating itself is the concern 
-of this thesis. The draft also presents device management for the device operator so that 
-it is possible to track the state of updates in a network. Device management is considered 
-out of scope for this thesis.
+An example architecture encompassing a device, a firmware update author, a firmware
+server, a network operator and a device operator is presented in the draft. The author and
+the device ineract with the firmware server in order to communicate firmware updates and
+possibly manifests. The communication of the device as well as the updating itself is the
+concern of this thesis. The draft also presents device management for the device operator
+so that it is possible to track the state of updates in a network. Device management is
+considered out of scope for this thesis.
 
-The distribution of manifest and firmware image is also discussed, with a couple of options 
-being possible. The manifest and image can be distributed together to a firmware server. 
-The device then recieves the manifest either via pulling or pushing and can subsequently download
-the image. Alternatively, the manifest itself can be directly sent to the device without a 
-need of a firmware server, while the firmware image is put on the firmware server. After the 
-device has receieved the lone manifest through some method, the firmware can be downloaded 
-from the firmware server. The SUIT architecture does not enforce a specific method to be used 
-when delivering the manifest and firmware, but states that an update mechanism must support 
-both types.
+The distribution of manifest and firmware image is also discussed, with a couple of
+options being possible. The manifest and image can be distributed together to a firmware
+server. The device then recieves the manifest either via pulling or pushing and can
+subsequently download the image. Alternatively, the manifest itself can be directly sent
+to the device without a need of a firmware server, while the firmware image is put on the
+firmware server. After the device has receieved the lone manifest through some method, the
+firmware can be downloaded from the firmware server. The SUIT architecture does not
+enforce a specific method to be used when delivering the manifest and firmware, but states
+that an update mechanism must support both types.
 
 % TODO: Images showing the differences of distribution
 
 \subsection{Information Model}
-The corresponding Internet Draft for the information model presents the information needed 
-in the manifest to secure a firmware update mechanism \parencite{suit-information-model}. 
-It also presents threats, classifies them according to the STRIDE model \parencite{stride}, 
-and presents security requirements that map to the threats. Furthermore it presents use 
-cases and maps usability requirements to the use cases. Finally it presents the proposed 
-elements of the manifest. Since the thesis makes a choice about specific technologies to 
-use, not all use cases, usability requirements, and manifest elements are deemed necessary. 
-The threats and security requirements however are. Note that the information model does not 
-discuss threats outside of transporting the updates, such as physical attacks.
+\label{ssec:information-model}
+The corresponding Internet Draft for the information model presents the information needed
+in the manifest to secure a firmware update mechanism \parencite{suit-information-model}.
+It also presents threats, classifies them according to the STRIDE model
+\parencite{stride}, and presents security requirements that map to the threats.
+Furthermore it presents use cases and maps usability requirements to the use cases.
+Finally it presents the proposed elements of the manifest. Since the thesis makes a choice
+about specific technologies to use, not all use cases, usability requirements, and
+manifest elements are deemed necessary. The threats and security requirements however are.
+Note that the information model does not discuss threats outside of transporting the
+updates, such as physical attacks.
 
-Table \ref{tab:threats-to-requirements} shows how the security threats map to security 
-requirements along with a brief description of each threat and their class. All threats, 
-MFT1 - MFT12, are considered relevant for this project and are what the SUIT information model 
-attempts to prevent. The security requirements, with brief descriptions, and how they map to 
-the manifest elements can be found in Table \ref{tab:requirements-to-elements}. Finally, 
-Table \ref{tab:elements-to-requirements} shows the proposed manifest elements, their status, 
-and which security requirements each element implements.
+Table \ref{tab:threats-to-requirements} shows how the security threats map to security
+requirements along with a brief description of each threat and their class. All threats,
+MFT1 - MFT12, are considered relevant for this project and are what the SUIT information
+model attempts to prevent. The security requirements, with brief descriptions, and how
+they map to the manifest elements can be found in Table
+\ref{tab:requirements-to-elements}. Finally, Table \ref{tab:elements-to-requirements}
+shows the proposed manifest elements, their status, and which security requirements each
+element implements.
 
 \begin{longtable}[]{@{}llll@{}}
     \caption{Mapping security threats to security requirements.}
     \label{tab:threats-to-requirements}\\
     \toprule
-    \begin{minipage}[b]{0.08\columnwidth}\raggedright\strut
-    Threat\strut
-    \end{minipage} & \begin{minipage}[b]{0.44\columnwidth}\raggedright\strut
-    Description\strut
-    \end{minipage} & \begin{minipage}[b]{0.30\columnwidth}\raggedright\strut
-    Threat Model\strut
-    \end{minipage} & \begin{minipage}[b]{0.20\columnwidth}\raggedright\strut
-    Mitigated By\strut
-    \end{minipage}\tabularnewline
+    \begin{minipage}[b]{0.08\columnwidth}\raggedright\strut Threat\strut \end{minipage} &
+    \begin{minipage}[b]{0.44\columnwidth}\raggedright\strut Description\strut
+    \end{minipage} & \begin{minipage}[b]{0.30\columnwidth}\raggedright\strut Threat
+    Model\strut \end{minipage} & \begin{minipage}[b]{0.20\columnwidth}\raggedright\strut
+    Mitigated By\strut \end{minipage}\tabularnewline
     \midrule
     \endhead
-    \begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
-    MFT1\strut
-    \end{minipage} & \begin{minipage}[t]{0.44\columnwidth}\raggedright\strut
-    Old Firmware\strut
-    \end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
-    Elevation of Privilege\strut
-    \end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright\strut
-    MFSR1\strut
+    \begin{minipage}[t]{0.05\columnwidth}\raggedright\strut MFT1\strut \end{minipage} &
+    \begin{minipage}[t]{0.44\columnwidth}\raggedright\strut Old Firmware\strut
+    \end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut Elevation of
+    Privilege\strut \end{minipage} &
+    \begin{minipage}[t]{0.09\columnwidth}\raggedright\strut MFSR1\strut
     \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
-    MFT2\strut
-    \end{minipage} & \begin{minipage}[t]{0.44\columnwidth}\raggedright\strut
-    Mismatched Firmware\strut
-    \end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
-    Denial of Service\strut
-    \end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright\strut
-    MFSR2\strut
+    \begin{minipage}[t]{0.05\columnwidth}\raggedright\strut MFT2\strut \end{minipage} &
+    \begin{minipage}[t]{0.44\columnwidth}\raggedright\strut Mismatched Firmware\strut
+    \end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut Denial of
+    Service\strut \end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright\strut
+    MFSR2\strut \end{minipage}\tabularnewline
+    \begin{minipage}[t]{0.05\columnwidth}\raggedright\strut MFT3\strut \end{minipage} &
+    \begin{minipage}[t]{0.44\columnwidth}\raggedright\strut Offline device + old
+    firmware\strut \end{minipage} &
+    \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut Elevation of Privilege\strut
+    \end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright\strut MFSR3\strut
     \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
-    MFT3\strut
-    \end{minipage} & \begin{minipage}[t]{0.44\columnwidth}\raggedright\strut
-    Offline device + old firmware\strut
-    \end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
-    Elevation of Privilege\strut
-    \end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright\strut
-    MFSR3\strut
+    \begin{minipage}[t]{0.05\columnwidth}\raggedright\strut MFT4\strut \end{minipage} &
+    \begin{minipage}[t]{0.44\columnwidth}\raggedright\strut The target device
+    misinterprets the type of payload\strut \end{minipage} &
+    \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut Denial of Service\strut
+    \end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright\strut MFSRa\strut
     \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
-    MFT4\strut
-    \end{minipage} & \begin{minipage}[t]{0.44\columnwidth}\raggedright\strut
-    The target device misinterprets the type of payload\strut
-    \end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
-    Denial of Service\strut
-    \end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright\strut
-    MFSRa\strut
+    \begin{minipage}[t]{0.05\columnwidth}\raggedright\strut MFT5\strut \end{minipage} &
+    \begin{minipage}[t]{0.44\columnwidth}\raggedright\strut The target device installs the
+    payload to the wrong location\strut \end{minipage} &
+    \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut Denial of Service\strut
+    \end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright\strut MFSR4b\strut
     \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
-    MFT5\strut
-    \end{minipage} & \begin{minipage}[t]{0.44\columnwidth}\raggedright\strut
-    The target device installs the payload to the wrong location\strut
-    \end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
-    Denial of Service\strut
-    \end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright\strut
-    MFSR4b\strut
+    \begin{minipage}[t]{0.05\columnwidth}\raggedright\strut MFT6\strut \end{minipage} &
+    \begin{minipage}[t]{0.44\columnwidth}\raggedright\strut Redirection\strut
+    \end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut Denial of
+    Service\strut \end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright\strut
+    MFSR4c\strut \end{minipage}\tabularnewline
+    \begin{minipage}[t]{0.05\columnwidth}\raggedright\strut MFT7\strut \end{minipage} &
+    \begin{minipage}[t]{0.44\columnwidth}\raggedright\strut Payload Verification on
+    Boot\strut \end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
+    Elevation of Privilege\strut \end{minipage} &
+    \begin{minipage}[t]{0.09\columnwidth}\raggedright\strut MFSR4d\strut
     \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
-    MFT6\strut
-    \end{minipage} & \begin{minipage}[t]{0.44\columnwidth}\raggedright\strut
-    Redirection\strut
-    \end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
-    Denial of Service\strut
-    \end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright\strut
-    MFSR4c\strut
+    \begin{minipage}[t]{0.05\columnwidth}\raggedright\strut MFT8\strut \end{minipage} &
+    \begin{minipage}[t]{0.44\columnwidth}\raggedright\strut Unauthenticated Updates\strut
+    \end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut Elevation of
+    Privilege\strut \end{minipage} &
+    \begin{minipage}[t]{0.09\columnwidth}\raggedright\strut MFSR5\strut
     \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
-    MFT7\strut
-    \end{minipage} & \begin{minipage}[t]{0.44\columnwidth}\raggedright\strut
-    Payload Verification on Boot\strut
-    \end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
-    Elevation of Privilege\strut
-    \end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright\strut
-    MFSR4d\strut
+    \begin{minipage}[t]{0.05\columnwidth}\raggedright\strut MFT9\strut \end{minipage} &
+    \begin{minipage}[t]{0.44\columnwidth}\raggedright\strut Unexpected Precursor
+    Image\strut \end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
+    Denial of Service\strut \end{minipage} &
+    \begin{minipage}[t]{0.09\columnwidth}\raggedright\strut MFSR4e\strut
     \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
-    MFT8\strut
-    \end{minipage} & \begin{minipage}[t]{0.44\columnwidth}\raggedright\strut
-    Unauthenticated Updates\strut
-    \end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
-    Elevation of Privilege\strut
-    \end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright\strut
-    MFSR5\strut
+    \begin{minipage}[t]{0.05\columnwidth}\raggedright\strut MFT10\strut \end{minipage} &
+    \begin{minipage}[t]{0.44\columnwidth}\raggedright\strut Unqualified Firmware\strut
+    \end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut Denial of
+    Service, Elevation of Privilege\strut \end{minipage} &
+    \begin{minipage}[t]{0.09\columnwidth}\raggedright\strut MFSR6, MFSR8\strut
     \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
-    MFT9\strut
-    \end{minipage} & \begin{minipage}[t]{0.44\columnwidth}\raggedright\strut
-    Unexpected Precursor Image\strut
-    \end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
-    Denial of Service\strut
-    \end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright\strut
-    MFSR4e\strut
+    \begin{minipage}[t]{0.05\columnwidth}\raggedright\strut MFT11\strut \end{minipage} &
+    \begin{minipage}[t]{0.44\columnwidth}\raggedright\strut Reverse Engineering Of
+    Firmware Image for Vulnerability Analysis\strut \end{minipage} &
+    \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut All classes\strut
+    \end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright\strut MFSR7\strut
     \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
-    MFT10\strut
-    \end{minipage} & \begin{minipage}[t]{0.44\columnwidth}\raggedright\strut
-    Unqualified Firmware\strut
-    \end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
-    Denial of Service, Elevation of Privilege\strut
-    \end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright\strut
-    MFSR6, MFSR8\strut
-    \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
-    MFT11\strut
-    \end{minipage} & \begin{minipage}[t]{0.44\columnwidth}\raggedright\strut
-    Reverse Engineering Of Firmware Image for Vulnerability Analysis\strut
-    \end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
-    All classes\strut
-    \end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright\strut
-    MFSR7\strut
-    \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
-    MFT12\strut
-    \end{minipage} & \begin{minipage}[t]{0.44\columnwidth}\raggedright\strut
-    Overriding Critical Manifest Elements\strut
-    \end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
-    Elevation of Privilege\strut
-    \end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright\strut
-    MFSR8\strut
+    \begin{minipage}[t]{0.05\columnwidth}\raggedright\strut MFT12\strut \end{minipage} &
+    \begin{minipage}[t]{0.44\columnwidth}\raggedright\strut Overriding Critical Manifest
+    Elements\strut \end{minipage} &
+    \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut Elevation of Privilege\strut
+    \end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright\strut MFSR8\strut
     \end{minipage}\tabularnewline
     \bottomrule
 \end{longtable}
@@ -430,133 +416,92 @@ and which security requirements each element implements.
     \caption{Mapping security requirements to manifest elements.}
     \label{tab:requirements-to-elements}\\
     \toprule
-    \begin{minipage}[b]{0.16\columnwidth}\raggedright\strut
-    Security Requirement\strut
+    \begin{minipage}[b]{0.16\columnwidth}\raggedright\strut Security Requirement\strut
     \end{minipage} & \begin{minipage}[b]{0.29\columnwidth}\raggedright\strut
-    Description\strut
-    \end{minipage} & \begin{minipage}[b]{0.34\columnwidth}\raggedright\strut
-    Implemented By\strut
+    Description\strut \end{minipage} &
+    \begin{minipage}[b]{0.34\columnwidth}\raggedright\strut Implemented By\strut
     \end{minipage} & \begin{minipage}[b]{0.10\columnwidth}\raggedright\strut
-    Mitigates\strut
-    \end{minipage}\tabularnewline
+    Mitigates\strut \end{minipage}\tabularnewline
     \midrule
     \endhead
-    \begin{minipage}[t]{0.16\columnwidth}\raggedright\strut
-    MFSR1\strut
-    \end{minipage} & \begin{minipage}[t]{0.29\columnwidth}\raggedright\strut
-    Monotonic Sequence Numbers\strut
-    \end{minipage} & \begin{minipage}[t]{0.34\columnwidth}\raggedright\strut
-    Monotonic Sequence Number\strut
-    \end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright\strut
-    MFT1\strut
+    \begin{minipage}[t]{0.16\columnwidth}\raggedright\strut MFSR1\strut \end{minipage} &
+    \begin{minipage}[t]{0.29\columnwidth}\raggedright\strut Monotonic Sequence
+    Numbers\strut \end{minipage} & \begin{minipage}[t]{0.34\columnwidth}\raggedright\strut
+    Monotonic Sequence Number\strut \end{minipage} &
+    \begin{minipage}[t]{0.10\columnwidth}\raggedright\strut MFT1\strut
     \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.16\columnwidth}\raggedright\strut
-    MFSR2\strut
-    \end{minipage} & \begin{minipage}[t]{0.29\columnwidth}\raggedright\strut
-    Vendor and Device-type Identifiers\strut
-    \end{minipage} & \begin{minipage}[t]{0.34\columnwidth}\raggedright\strut
-    Vendor ID Condition, Class ID Condition\strut
-    \end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright\strut
-    MFT2\strut
+    \begin{minipage}[t]{0.16\columnwidth}\raggedright\strut MFSR2\strut \end{minipage} &
+    \begin{minipage}[t]{0.29\columnwidth}\raggedright\strut Vendor and Device-type
+    Identifiers\strut \end{minipage} &
+    \begin{minipage}[t]{0.34\columnwidth}\raggedright\strut Vendor ID Condition, Class ID
+    Condition\strut \end{minipage} &
+    \begin{minipage}[t]{0.10\columnwidth}\raggedright\strut MFT2\strut
     \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.16\columnwidth}\raggedright\strut
-    MFSR3\strut
-    \end{minipage} & \begin{minipage}[t]{0.29\columnwidth}\raggedright\strut
-    Best-Before Timestamps\strut
-    \end{minipage} & \begin{minipage}[t]{0.34\columnwidth}\raggedright\strut
-    Best-Before timestamp condition\strut
-    \end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright\strut
-    MFT3\strut
+    \begin{minipage}[t]{0.16\columnwidth}\raggedright\strut MFSR3\strut \end{minipage} &
+    \begin{minipage}[t]{0.29\columnwidth}\raggedright\strut Best-Before Timestamps\strut
+    \end{minipage} & \begin{minipage}[t]{0.34\columnwidth}\raggedright\strut Best-Before
+    timestamp condition\strut \end{minipage} &
+    \begin{minipage}[t]{0.10\columnwidth}\raggedright\strut MFT3\strut
     \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.16\columnwidth}\raggedright\strut
-    MFSR4a\strut
-    \end{minipage} & \begin{minipage}[t]{0.29\columnwidth}\raggedright\strut
-    Authenticated Payload Type\strut
-    \end{minipage} & \begin{minipage}[t]{0.34\columnwidth}\raggedright\strut
-    Payload Format, Storage Location\strut
-    \end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright\strut
-    MFT4\strut
+    \begin{minipage}[t]{0.16\columnwidth}\raggedright\strut MFSR4a\strut \end{minipage} &
+    \begin{minipage}[t]{0.29\columnwidth}\raggedright\strut Authenticated Payload
+    Type\strut \end{minipage} & \begin{minipage}[t]{0.34\columnwidth}\raggedright\strut
+    Payload Format, Storage Location\strut \end{minipage} &
+    \begin{minipage}[t]{0.10\columnwidth}\raggedright\strut MFT4\strut
     \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.16\columnwidth}\raggedright\strut
-    MFSR4b\strut
-    \end{minipage} & \begin{minipage}[t]{0.29\columnwidth}\raggedright\strut
-    Authenticated Storage Location\strut
-    \end{minipage} & \begin{minipage}[t]{0.34\columnwidth}\raggedright\strut
-    Storage Location\strut
-    \end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright\strut
-    MFT5\strut
+    \begin{minipage}[t]{0.16\columnwidth}\raggedright\strut MFSR4b\strut \end{minipage} &
+    \begin{minipage}[t]{0.29\columnwidth}\raggedright\strut Authenticated Storage
+    Location\strut \end{minipage} &
+    \begin{minipage}[t]{0.34\columnwidth}\raggedright\strut Storage Location\strut
+    \end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright\strut MFT5\strut
     \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.16\columnwidth}\raggedright\strut
-    MFSR4c\strut
-    \end{minipage} & \begin{minipage}[t]{0.29\columnwidth}\raggedright\strut
-    Authenticated Remote Resource Location\strut
-    \end{minipage} & \begin{minipage}[t]{0.34\columnwidth}\raggedright\strut
-    URIs\strut
-    \end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright\strut
-    MFT6\strut
+    \begin{minipage}[t]{0.16\columnwidth}\raggedright\strut MFSR4c\strut \end{minipage} &
+    \begin{minipage}[t]{0.29\columnwidth}\raggedright\strut Authenticated Remote Resource
+    Location\strut \end{minipage} &
+    \begin{minipage}[t]{0.34\columnwidth}\raggedright\strut URIs\strut \end{minipage} &
+    \begin{minipage}[t]{0.10\columnwidth}\raggedright\strut MFT6\strut
     \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.16\columnwidth}\raggedright\strut
-    MFSR4d\strut
-    \end{minipage} & \begin{minipage}[t]{0.29\columnwidth}\raggedright\strut
-    Secure Boot\strut
-    \end{minipage} & \begin{minipage}[t]{0.34\columnwidth}\raggedright\strut
-    Payload Digest, Size\strut
-    \end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright\strut
-    MFT7\strut
+    \begin{minipage}[t]{0.16\columnwidth}\raggedright\strut MFSR4d\strut \end{minipage} &
+    \begin{minipage}[t]{0.29\columnwidth}\raggedright\strut Secure Boot\strut
+    \end{minipage} & \begin{minipage}[t]{0.34\columnwidth}\raggedright\strut Payload
+    Digest, Size\strut \end{minipage} &
+    \begin{minipage}[t]{0.10\columnwidth}\raggedright\strut MFT7\strut
     \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.16\columnwidth}\raggedright\strut
-    MFSR4e\strut
-    \end{minipage} & \begin{minipage}[t]{0.29\columnwidth}\raggedright\strut
-    Authenticated precursor images\strut
-    \end{minipage} & \begin{minipage}[t]{0.34\columnwidth}\raggedright\strut
-    Precursor Image Digest Condition\strut
-    \end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright\strut
-    MFT9\strut
+    \begin{minipage}[t]{0.16\columnwidth}\raggedright\strut MFSR4e\strut \end{minipage} &
+    \begin{minipage}[t]{0.29\columnwidth}\raggedright\strut Authenticated precursor
+    images\strut \end{minipage} & \begin{minipage}[t]{0.34\columnwidth}\raggedright\strut
+    Precursor Image Digest Condition\strut \end{minipage} &
+    \begin{minipage}[t]{0.10\columnwidth}\raggedright\strut MFT9\strut
     \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.16\columnwidth}\raggedright\strut
-    MFSR4f\strut
-    \end{minipage} & \begin{minipage}[t]{0.29\columnwidth}\raggedright\strut
-    Authenticated Vendor and Class IDs\strut
-    \end{minipage} & \begin{minipage}[t]{0.34\columnwidth}\raggedright\strut
-    Vendor ID Condition, Class ID Condition\strut
-    \end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright\strut
-    MFT2\strut
+    \begin{minipage}[t]{0.16\columnwidth}\raggedright\strut MFSR4f\strut \end{minipage} &
+    \begin{minipage}[t]{0.29\columnwidth}\raggedright\strut Authenticated Vendor and Class
+    IDs\strut \end{minipage} & \begin{minipage}[t]{0.34\columnwidth}\raggedright\strut
+    Vendor ID Condition, Class ID Condition\strut \end{minipage} &
+    \begin{minipage}[t]{0.10\columnwidth}\raggedright\strut MFT2\strut
     \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.16\columnwidth}\raggedright\strut
-    MFSR5\strut
-    \end{minipage} & \begin{minipage}[t]{0.29\columnwidth}\raggedright\strut
-    Cryptographic Authenticity\strut
-    \end{minipage} & \begin{minipage}[t]{0.34\columnwidth}\raggedright\strut
-    Signature, Payload Digest\strut
-    \end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright\strut
-    MFT8\strut
+    \begin{minipage}[t]{0.16\columnwidth}\raggedright\strut MFSR5\strut \end{minipage} &
+    \begin{minipage}[t]{0.29\columnwidth}\raggedright\strut Cryptographic
+    Authenticity\strut \end{minipage} &
+    \begin{minipage}[t]{0.34\columnwidth}\raggedright\strut Signature, Payload
+    Digest\strut \end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright\strut
+    MFT8\strut \end{minipage}\tabularnewline
+    \begin{minipage}[t]{0.16\columnwidth}\raggedright\strut MFSR6\strut \end{minipage} &
+    \begin{minipage}[t]{0.29\columnwidth}\raggedright\strut Rights Require
+    Authenticity\strut \end{minipage} &
+    \begin{minipage}[t]{0.34\columnwidth}\raggedright\strut Signature\strut \end{minipage}
+    & \begin{minipage}[t]{0.10\columnwidth}\raggedright\strut MFT10\strut
     \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.16\columnwidth}\raggedright\strut
-    MFSR6\strut
-    \end{minipage} & \begin{minipage}[t]{0.29\columnwidth}\raggedright\strut
-    Rights Require Authenticity\strut
-    \end{minipage} & \begin{minipage}[t]{0.34\columnwidth}\raggedright\strut
-    Signature\strut
-    \end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright\strut
-    MFT10\strut
+    \begin{minipage}[t]{0.16\columnwidth}\raggedright\strut MFSR7\strut \end{minipage} &
+    \begin{minipage}[t]{0.29\columnwidth}\raggedright\strut Firmware Encryption\strut
+    \end{minipage} & \begin{minipage}[t]{0.34\columnwidth}\raggedright\strut Content Key
+    Distribution Method\strut \end{minipage} &
+    \begin{minipage}[t]{0.10\columnwidth}\raggedright\strut MFT11\strut
     \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.16\columnwidth}\raggedright\strut
-    MFSR7\strut
-    \end{minipage} & \begin{minipage}[t]{0.29\columnwidth}\raggedright\strut
-    Firmware Encryption\strut
-    \end{minipage} & \begin{minipage}[t]{0.34\columnwidth}\raggedright\strut
-    Content Key Distribution Method\strut
-    \end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright\strut
-    MFT11\strut
-    \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.16\columnwidth}\raggedright\strut
-    MFSR8\strut
-    \end{minipage} & \begin{minipage}[t]{0.29\columnwidth}\raggedright\strut
-    Access Control Lists\strut
-    \end{minipage} & \begin{minipage}[t]{0.34\columnwidth}\raggedright\strut
-    Client-side code (not specified in manifest)\strut
-    \end{minipage} & \begin{minipage}[t]{0.10\columnwidth}\raggedright\strut
-    MFT10, MFT12\strut
+    \begin{minipage}[t]{0.16\columnwidth}\raggedright\strut MFSR8\strut \end{minipage} &
+    \begin{minipage}[t]{0.29\columnwidth}\raggedright\strut Access Control Lists\strut
+    \end{minipage} & \begin{minipage}[t]{0.34\columnwidth}\raggedright\strut Client-side
+    code (not specified in manifest)\strut \end{minipage} &
+    \begin{minipage}[t]{0.10\columnwidth}\raggedright\strut MFT10, MFT12\strut
     \end{minipage}\tabularnewline
     \bottomrule
 \end{longtable}
@@ -565,172 +510,129 @@ and which security requirements each element implements.
     \caption{Manifest elements, their status, and which security requirements they implement.}
     \label{tab:elements-to-requirements}\\
     \toprule
-    \begin{minipage}[b]{0.32\columnwidth}\raggedright\strut
-    Manifest Element\strut
-    \end{minipage} & \begin{minipage}[b]{0.36\columnwidth}\raggedright\strut
-    Status\strut
-    \end{minipage} & \begin{minipage}[b]{0.23\columnwidth}\raggedright\strut
-    Implements Requirements\strut
-    \end{minipage}\tabularnewline
+    \begin{minipage}[b]{0.32\columnwidth}\raggedright\strut Manifest Element\strut
+    \end{minipage} & \begin{minipage}[b]{0.36\columnwidth}\raggedright\strut Status\strut
+    \end{minipage} & \begin{minipage}[b]{0.23\columnwidth}\raggedright\strut Implements
+    Requirements\strut \end{minipage}\tabularnewline
     \midrule
     \endhead
-    \begin{minipage}[t]{0.32\columnwidth}\raggedright\strut
-    Version identifier\strut
+    \begin{minipage}[t]{0.32\columnwidth}\raggedright\strut Version identifier\strut
     \end{minipage} & \begin{minipage}[t]{0.36\columnwidth}\raggedright\strut
-    MANDATORY\strut
-    \end{minipage} & \begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+    MANDATORY\strut \end{minipage} &
+    \begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
     \strut
     \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.32\columnwidth}\raggedright\strut
-    Monotonic Sequence Number\strut
-    \end{minipage} & \begin{minipage}[t]{0.36\columnwidth}\raggedright\strut
-    MANDATORY\strut
-    \end{minipage} & \begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
-    MFSR1\strut
+    \begin{minipage}[t]{0.32\columnwidth}\raggedright\strut Monotonic Sequence
+    Number\strut \end{minipage} & \begin{minipage}[t]{0.36\columnwidth}\raggedright\strut
+    MANDATORY\strut \end{minipage} &
+    \begin{minipage}[t]{0.23\columnwidth}\raggedright\strut MFSR1\strut
     \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.32\columnwidth}\raggedright\strut
-    Precursor Image Digest Condition\strut
-    \end{minipage} & \begin{minipage}[t]{0.36\columnwidth}\raggedright\strut
-    MANDATORY (for differential updates)\strut
-    \end{minipage} & \begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
-    MFSR4e\strut
+    \begin{minipage}[t]{0.32\columnwidth}\raggedright\strut Precursor Image Digest
+    Condition\strut \end{minipage} &
+    \begin{minipage}[t]{0.36\columnwidth}\raggedright\strut MANDATORY (for differential
+    updates)\strut \end{minipage} &
+    \begin{minipage}[t]{0.23\columnwidth}\raggedright\strut MFSR4e\strut
     \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.32\columnwidth}\raggedright\strut
-    Payload Format\strut
+    \begin{minipage}[t]{0.32\columnwidth}\raggedright\strut Payload Format\strut
     \end{minipage} & \begin{minipage}[t]{0.36\columnwidth}\raggedright\strut
-    MANDATORY\strut
-    \end{minipage} & \begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
-    MFSR4a, MFUR5\strut
+    MANDATORY\strut \end{minipage} &
+    \begin{minipage}[t]{0.23\columnwidth}\raggedright\strut MFSR4a, MFUR5\strut
     \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.32\columnwidth}\raggedright\strut
-    Storage Location\strut
+    \begin{minipage}[t]{0.32\columnwidth}\raggedright\strut Storage Location\strut
     \end{minipage} & \begin{minipage}[t]{0.36\columnwidth}\raggedright\strut
-    MANDATORY\strut
-    \end{minipage} & \begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
-    MFSR4b\strut
+    MANDATORY\strut \end{minipage} &
+    \begin{minipage}[t]{0.23\columnwidth}\raggedright\strut MFSR4b\strut
     \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.32\columnwidth}\raggedright\strut
-    Payload Digest\strut
+    \begin{minipage}[t]{0.32\columnwidth}\raggedright\strut Payload Digest\strut
     \end{minipage} & \begin{minipage}[t]{0.36\columnwidth}\raggedright\strut
-    MANDATORY\strut
-    \end{minipage} & \begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
-    MFSR4d, MFUR8\strut
+    MANDATORY\strut \end{minipage} &
+    \begin{minipage}[t]{0.23\columnwidth}\raggedright\strut MFSR4d, MFUR8\strut
     \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.32\columnwidth}\raggedright\strut
-    Size\strut
+    \begin{minipage}[t]{0.32\columnwidth}\raggedright\strut Size\strut \end{minipage} &
+    \begin{minipage}[t]{0.36\columnwidth}\raggedright\strut MANDATORY\strut \end{minipage}
+    & \begin{minipage}[t]{0.23\columnwidth}\raggedright\strut MFSR4d\strut
+    \end{minipage}\tabularnewline
+    \begin{minipage}[t]{0.32\columnwidth}\raggedright\strut Signature\strut \end{minipage}
+    & \begin{minipage}[t]{0.36\columnwidth}\raggedright\strut MANDATORY\strut
+    \end{minipage} & \begin{minipage}[t]{0.23\columnwidth}\raggedright\strut MFSR5, MFSR6,
+    MFUR6\strut \end{minipage}\tabularnewline
+    \begin{minipage}[t]{0.32\columnwidth}\raggedright\strut Dependencies\strut
     \end{minipage} & \begin{minipage}[t]{0.36\columnwidth}\raggedright\strut
-    MANDATORY\strut
-    \end{minipage} & \begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
-    MFSR4d\strut
+    MANDATORY\strut \end{minipage} &
+    \begin{minipage}[t]{0.23\columnwidth}\raggedright\strut MFUR3\strut
     \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.32\columnwidth}\raggedright\strut
-    Signature\strut
+    \begin{minipage}[t]{0.32\columnwidth}\raggedright\strut Content Key Distribution
+    Method\strut \end{minipage} & \begin{minipage}[t]{0.36\columnwidth}\raggedright\strut
+    MANDATORY (for encrypted payloads)\strut \end{minipage} &
+    \begin{minipage}[t]{0.23\columnwidth}\raggedright\strut MFSR7\strut
+    \end{minipage}\tabularnewline
+    \begin{minipage}[t]{0.32\columnwidth}\raggedright\strut Vendor ID Condition\strut
     \end{minipage} & \begin{minipage}[t]{0.36\columnwidth}\raggedright\strut
-    MANDATORY\strut
-    \end{minipage} & \begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
-    MFSR5, MFSR6, MFUR6\strut
+    OPTIONAL\strut \end{minipage} &
+    \begin{minipage}[t]{0.23\columnwidth}\raggedright\strut MFSR2, MFSR4f\strut
     \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.32\columnwidth}\raggedright\strut
-    Dependencies\strut
+    \begin{minipage}[t]{0.32\columnwidth}\raggedright\strut Class ID Condition\strut
     \end{minipage} & \begin{minipage}[t]{0.36\columnwidth}\raggedright\strut
-    MANDATORY\strut
-    \end{minipage} & \begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
-    MFUR3\strut
+    OPTIONAL\strut \end{minipage} &
+    \begin{minipage}[t]{0.23\columnwidth}\raggedright\strut MFSR2, MFSR4f\strut
     \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.32\columnwidth}\raggedright\strut
-    Content Key Distribution Method\strut
+    \begin{minipage}[t]{0.32\columnwidth}\raggedright\strut Required Image Version
+    List\strut \end{minipage} & \begin{minipage}[t]{0.36\columnwidth}\raggedright\strut
+    OPTIONAL\strut \end{minipage} &
+    \begin{minipage}[t]{0.23\columnwidth}\raggedright\strut MFUR7\strut
+    \end{minipage}\tabularnewline
+    \begin{minipage}[t]{0.32\columnwidth}\raggedright\strut Best-Before Timestamp
+    Condition\strut \end{minipage} &
+    \begin{minipage}[t]{0.36\columnwidth}\raggedright\strut OPTIONAL\strut \end{minipage}
+    & \begin{minipage}[t]{0.23\columnwidth}\raggedright\strut MFSR3\strut
+    \end{minipage}\tabularnewline
+    \begin{minipage}[t]{0.32\columnwidth}\raggedright\strut Component Identifier\strut
     \end{minipage} & \begin{minipage}[t]{0.36\columnwidth}\raggedright\strut
-    MANDATORY (for encrypted payloads)\strut
-    \end{minipage} & \begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
-    MFSR7\strut
+    OPTIONAL\strut \end{minipage} &
+    \begin{minipage}[t]{0.23\columnwidth}\raggedright\strut MFUR3\strut
     \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.32\columnwidth}\raggedright\strut
-    Vendor ID Condition\strut
+    \begin{minipage}[t]{0.32\columnwidth}\raggedright\strut URIs\strut \end{minipage} &
+    \begin{minipage}[t]{0.36\columnwidth}\raggedright\strut OPTIONAL\strut \end{minipage}
+    & \begin{minipage}[t]{0.23\columnwidth}\raggedright\strut MFSR4c\strut
+    \end{minipage}\tabularnewline
+    \begin{minipage}[t]{0.32\columnwidth}\raggedright\strut Directives\strut
     \end{minipage} & \begin{minipage}[t]{0.36\columnwidth}\raggedright\strut
-    OPTIONAL\strut
-    \end{minipage} & \begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
-    MFSR2, MFSR4f\strut
+    OPTIONAL\strut \end{minipage} &
+    \begin{minipage}[t]{0.23\columnwidth}\raggedright\strut MFUR1\strut
     \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.32\columnwidth}\raggedright\strut
-    Class ID Condition\strut
-    \end{minipage} & \begin{minipage}[t]{0.36\columnwidth}\raggedright\strut
-    OPTIONAL\strut
-    \end{minipage} & \begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
-    MFSR2, MFSR4f\strut
+    \begin{minipage}[t]{0.32\columnwidth}\raggedright\strut Aliases\strut \end{minipage} &
+    \begin{minipage}[t]{0.36\columnwidth}\raggedright\strut OPTIONAL\strut \end{minipage}
+    & \begin{minipage}[t]{0.23\columnwidth}\raggedright\strut MFUR2\strut
     \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.32\columnwidth}\raggedright\strut
-    Required Image Version List\strut
-    \end{minipage} & \begin{minipage}[t]{0.36\columnwidth}\raggedright\strut
-    OPTIONAL\strut
-    \end{minipage} & \begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
-    MFUR7\strut
-    \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.32\columnwidth}\raggedright\strut
-    Best-Before Timestamp Condition\strut
-    \end{minipage} & \begin{minipage}[t]{0.36\columnwidth}\raggedright\strut
-    OPTIONAL\strut
-    \end{minipage} & \begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
-    MFSR3\strut
-    \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.32\columnwidth}\raggedright\strut
-    Component Identifier\strut
-    \end{minipage} & \begin{minipage}[t]{0.36\columnwidth}\raggedright\strut
-    OPTIONAL\strut
-    \end{minipage} & \begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
-    MFUR3\strut
-    \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.32\columnwidth}\raggedright\strut
-    URIs\strut
-    \end{minipage} & \begin{minipage}[t]{0.36\columnwidth}\raggedright\strut
-    OPTIONAL\strut
-    \end{minipage} & \begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
-    MFSR4c\strut
-    \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.32\columnwidth}\raggedright\strut
-    Directives\strut
-    \end{minipage} & \begin{minipage}[t]{0.36\columnwidth}\raggedright\strut
-    OPTIONAL\strut
-    \end{minipage} & \begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
-    MFUR1\strut
-    \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.32\columnwidth}\raggedright\strut
-    Aliases\strut
-    \end{minipage} & \begin{minipage}[t]{0.36\columnwidth}\raggedright\strut
-    OPTIONAL\strut
-    \end{minipage} & \begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
-    MFUR2\strut
-    \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.32\columnwidth}\raggedright\strut
-    Processing Steps\strut
+    \begin{minipage}[t]{0.32\columnwidth}\raggedright\strut Processing Steps\strut
     \end{minipage} & \begin{minipage}[t]{0.36\columnwidth}\raggedright\strut
     \strut
-    \end{minipage} & \begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
-    MFUR6\strut
+    \end{minipage} & \begin{minipage}[t]{0.23\columnwidth}\raggedright\strut MFUR6\strut
     \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.32\columnwidth}\raggedright\strut
-    XIP Address\strut
+    \begin{minipage}[t]{0.32\columnwidth}\raggedright\strut XIP Address\strut
     \end{minipage} & \begin{minipage}[t]{0.36\columnwidth}\raggedright\strut
     \strut
-    \end{minipage} & \begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
-    MFUR8\strut
+    \end{minipage} & \begin{minipage}[t]{0.23\columnwidth}\raggedright\strut MFUR8\strut
     \end{minipage}\tabularnewline
     \bottomrule
 \end{longtable}
 
-To summarize, the SUIT information model proposes to use a signed manifest that is distributed 
-to each device in need of an update. The device then processes the manifest in order to determine 
-if the update is trusted, suitable, up to date, with many other optional elements such as if 
-other precursor images, special processing steps, or new URIs to fetch the images are needed. 
-The model does not make assumptions about technology which is one of the reasons there are 
-optional elements, not all of them are applicable to all solutions. Nevertheless, the architecture 
-and information model together provides a solid base on which to design a secure update 
-mechanism for IoT.
+To summarize, the SUIT information model proposes to use a signed manifest that is
+distributed to each device in need of an update. The device then processes the manifest in
+order to determine if the update is trusted, suitable, up to date, with many other
+optional elements such as if other precursor images, special processing steps, or new URIs
+to fetch the images are needed. The model does not make assumptions about technology which
+is one of the reasons there are optional elements, not all of them are applicable to all
+solutions. Nevertheless, the architecture and information model together provides a solid
+base on which to design a secure update mechanism for IoT.
 
 \section{Contiki-NG}
-% Mention primitives such as processes, timers, network stack
-% For details on image flipping/bootloaders, Niclas should know
+\label{ssec:contiki-ng}
+% Mention primitives such as processes, timers, network stack For details on image
+% flipping/bootloaders, Niclas should know
 
 \section{PKI?}
+\label{ssec:pki}
 % Talk to Sam or Shahid
 
 \end{document}
