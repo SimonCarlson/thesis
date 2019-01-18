@@ -645,8 +645,8 @@ of creating an open standard for updating IoT devices.
 \subsection{Processes, events, and memory management}
 \label{ssec:process-event-memory}
 Contiki-NG has a process abstraction which is built on lightweight protothreads
-\parencite{protothreads}. A process is declared through a PROCESS macro and can be
-automatically started after system boot or when a specific module is loaded. User-space
+\parencite{protothreads}. A process is declared through a \texttt{PROCESS} macro and can
+be automatically started after system boot or when a specific module is loaded. User-space
 processes are run in a cooperative manner while kernel-space processes can preempt
 user-space processes. Contiki-NGs execution model is event based, meaning processes often
 yield execution until they are informed a certain event has taken place, upon which they
@@ -654,19 +654,47 @@ can act. Examples of events are timers expiring, a process being polled, or a ne
 packet arriving. 
 
 Contiki-NG provides to memory allocators in addition to using static memory. They are
-called MEMB and HeapMem and are semi-dynamic and dynamic, respectively. MEMB provides ways
-to manage memory blocks. The memory blocks are allocated on static memory as arrays of
-constant sized objects. After a memory block has been declared, it is initialized after
-which objects can be allocated memory from the block. All objects allocated through the
-same block have the same size. Blocks can be freed, and it is possible to check whether a
-pointer resides within a certain memory block or not.
+called \texttt{MEMB} and \texttt{HeapMem} and are semi-dynamic and dynamic, respectively.
+\texttt{MEMB} provides ways to manage memory blocks. The memory blocks are allocated on
+static memory as arrays of constant sized objects. After a memory block has been declared,
+it is initialized after which objects can be allocated memory from the block. All objects
+allocated through the same block have the same size. Blocks can be freed, and it is
+possible to check whether a pointer resides within a certain memory block or not.
 
-HeapMem solves the issue of dynamically allocating objects of varying sizes during runtime
-in Contiki-NG. It can be used on a variety of hardware platforms, something a standard C
-malloc implementation could struggle with. To allocate memory on the heap, the number of
-bytes to allocate must be provided and a pointer to a contiguous piece of memory is
-returned (if there is enough contiguous memory). Memory can be reallocated and deallocated
-such as using a normal malloc.
+\texttt{HeapMem} solves the issue of dynamically allocating objects of varying sizes
+during runtime in Contiki-NG. It can be used on a variety of hardware platforms, something
+a standard C malloc implementation could struggle with. To allocate memory on the heap,
+the number of bytes to allocate must be provided and a pointer to a contiguous piece of
+memory is returned (if there is enough contiguous memory). Memory can be reallocated and
+deallocated such as using a normal malloc.
+
+\subsection{Timers}
+\label{ssec:timers}
+Contiki-NG provides different timers used by both the kernel and user-space applications.
+The timers are based on the clock module which is responsible for handling system time.
+The definition of system time is platform dependent.
+
+The different timers and their usages are:
+\begin{itemize}
+    \item \texttt{timer}: a timer without built-in notification.
+    \item \texttt{stimer}: counts in seconds and has a long wrapping period.
+    \item \texttt{etimer}: schedules events to processes. Since events in Contiki-NG
+            can put yielding processes in the execution state, \texttt{etimer} can be
+            used to periodically schedule code by setting up an \texttt{etimer} to
+            signal a specific event when it expires then waiting on that event
+    \item \texttt{ctimer}: schedules calls to a callback function. \texttt{ctimer}
+            works in similar ways to etimer but with callbacks to callback functions
+            instead of events.
+    \item \texttt{rtimer}: schedules real-time tasks. Since real-time tasks face
+            different requirements than normal tasks, rtimer uses a higher resolution
+            clock. Real-time tasks preempt normal execution so that the real-time task can
+            execute immediately. This mean there are constraints on what can be done in
+            real-time tasks as many functions cannot handle preemption.
+\end{itemize}
+
+\texttt{timer}, \texttt{stimer}, and \texttt{rtimer} as stated to be safe from
+interrupts whileetimer and ctimer are unsafe. All timers are declared using a timer
+struct, which is also how the timer is interacted with.
 
 \subsection{Networking in Contiki-NG}
 \label{ssec:networking-contiki}
