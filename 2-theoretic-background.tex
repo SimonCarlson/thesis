@@ -68,11 +68,11 @@ calculated on a pseudo-header constructed from both the IP header, UDP header, a
 \label{ssec:dtls}
 DTLS is a protocol which adds privacy to datagram protocols like UDP \parencite{rfc6347}.
 The protocol is designed to prevent eavesdropping, tampering, or message forgery. DTLS is
-based on TLS, a similar protocol for stateful protocols such as TCP, which would not work
-well on unreliable networks. The main issues with using TLS over unreliable networks is
-that TLS decryption is dependant on previous packets, meaning decryption of a packet would
-fail if the previous packet was not received, as well as the TLS handshake procedure
-assumes all handshake messages are delivered reliably.
+based on TLS, a similar protocol for stateful transport protocols such as TCP, which would
+not work well on unreliable networks. The main issues with using TLS over unreliable
+networks is that TLS decryption is dependant on previous packets, meaning decryption of a
+packet would fail if the previous packet was not received, as well as the TLS handshake
+procedure assumes all handshake messages are delivered reliably.
 
 DTLS solves this by banning stream ciphers, effectively making decryption an independent
 operation between packets, as well as adding explicit sequence numbers. Furthermore, DTLS
@@ -80,11 +80,14 @@ supports packet retransmission, reordering, as well as fragmenting DTLS handshak
 into several DTLS records. These mechanisms makes the handshake process feasible over
 unreliable networks. By splitting messages into different DTLS records, fragmentation at
 the IP level can be avoided since a DTLS record is guaranteed to fit an IP datagram.
+% Why is avoiding IP-level fragmentation wanted?
 
 Listing \ref{lst:dtls-plain} shows the DTLS record structure. It contains a TLS 1.2 type
 field, a version field which for DTLS 1.2 is 254.253, an epoch counter that is incremented
 for each cipher state change, an increasing sequence number (unique to each epoch), a
 length field and a fragment field containing the application data \parencite{rfc5246}.
+These fields, with the exception of the epoch and sequence number, are the same 
+as in TLS 1.2 \parencite{rfc6347}.
 
 \lstset{language=C}
 \begin{lstlisting}[caption={The DTLS plaintext record structure.}, label={lst:dtls-plain}]
@@ -114,11 +117,10 @@ length field and a fragment field containing the application data \parencite{rfc
 
 TLS records are compressed and then encrypted, the same holds for DTLS. When initating
 contact, a compression algorithm is chosen. The DTLSPlaintext is then compressed into a
-DTLSCompressed record, with similar structure to Listing \ref{lst:dtls-plain} except the
-fragment being indexed by DTLSCompressed.length instead. The compressed record is
-encrypted into a DTLSCiphertext record whose structure is shown in Listing
-\ref{lst:dtls-cipher}. Note that since DTLS disallows stream ciphers they are not an
-option in the encrypted fragment, whereas in TLS they are.
+DTLSCompressed record, with similar structure to Listing \ref{lst:dtls-plain}.The
+compressed record is encrypted into a DTLSCiphertext record whose structure is shown in
+Listing \ref{lst:dtls-cipher}. Note that since DTLS disallows stream ciphers they are not
+an option in the encrypted fragment, whereas in TLS they are.
 
 In order to communicate via TLS and DTLS, a handshake has to be carried out. The handshake
 establishes parameters such as protocol version, cryptographic algorithms, and shared
@@ -133,11 +135,11 @@ the communication is unreliable. Otherwise the DTLS handshake is as the TLS hand
 
 \subsection{CoAP}
 \label{ssec:coap}
-CoAP is a web transfer protocol designed to be used by constrained devices over networks
+CoAP is an application layer protocol designed to be used by constrained devices over networks
 with low throughput and possibly high unreliability for machine-to-machine communication
 \parencite{rfc7252}. While designed for constrained networks, a design feature of CoAP is
 how it is easily interfaced with HTTP so that communication over traditional networks can
-be proxied. Furthermore CoAP is a REST based protocol utilizing application endpoints, a
+be proxied. Furthermore, CoAP is a REST based protocol utilizing application endpoints, a
 subset of standardised request/response codes, URIs, and MIME types \parencite{rest}.
 Additionally CoAP offers features such as multicast support, asynchronous messages, low
 header overhead, and UDP and DTLS bindings which are all suitable for constrained
@@ -174,12 +176,12 @@ Reset). Token length (TKL) indicates the length of the Token field which can var
 zero to eight bytes. The 8-bit code field carries which method code the message carries
 and can be further broken into a 3-bit class and 5-bit detail. The class can indicate a
 request (0), a success response (2), a client error response (4), or a server error
-response(5), with the detail further specifying the status of the message. The message ID
+response (5), with the detail further specifying the status of the message. The message ID
 is a 16-bit integer used to detect duplicate message and to match Acknowledgement or
 Resets with their initiating requests.
 
 Following the header is the zero to eight bit Token value, which in turn is follow by zero
-or more Options. Lastly is the optional payload, which if present is prefixed by a payload
+or more Options. Lastly comes the optional payload, which if present is prefixed by a payload
 marker (0xFF). The length of the payload is dependant on the carrying protocol, which in
 this thesis will be DTLS. The length of the payload is calculated depending on the size of
 the CoAP header, token, and options as well as maximum DTLS record size.
@@ -201,11 +203,11 @@ the CoAP header, token, and options as well as maximum DTLS record size.
 Since firmware images can be relatively large their size needs to be handled during
 transportation. UDP and DTLS only supports fragmentation which can be problematic in
 unreliable networks. To remedy this CoAP supports block-wise transfers
-\parencite{rfc7959}. A Block option is present which allows stateless transfer of a large
-file separated in different blocks. Each block can be individually retransmitted and by
-using monotonically increasing block numbers, the blocks can be reassembled. The size of
-blocks can also be negotiated between server and client meaning they can always find a
-suitable block size, making the mechanism quite flexible.
+\parencite{rfc7959}. A Block option allows stateless transfer of a large file separated in
+different blocks. Each block can be individually retransmitted and by using monotonically
+increasing block numbers, the blocks can be reassembled. The size of blocks can also be
+negotiated between server and client meaning they can always find a suitable block size,
+making the mechanism quite flexible.
 
 \section{Hardware/Firefly}
 \label{sec:hardware}
@@ -236,7 +238,7 @@ reverse engineering a malicious but valid firmware image as an attempt to mount 
 In order to accept an image and update itself, a device must be presented with certain
 information. Several decisions must be made before updating and the information comes in
 form of a manifest. The next section will describe the requirements posted upon this
-manifest in more detail. This manifest helps the device to make important decisions such
+manifest in more detail. The manifest helps the device make important decisions such
 as if it trusts the author of the new image, if the image is intact, if the image is
 applicable, where the image should be stored and so on. This in turns means the device
 also has to trust the manifest itself, and that both manifest and update image must be
@@ -249,7 +251,7 @@ presents ten qualitative requirements this architecture should have:
             subset of the SUIT standard will be implemented as certain parts of the
             standard is not applicable. The proposed network stack uses UDP, DTLS, and
             CoAP for transportation and the target devices are Firefly devices running
-            Contiki-NG.
+            the Contiki-NG operating system.
     \item Friendly to broadcast delivery:\\
             Broadcasting will not be of main concern in this thesis.
     \item Use state-of-the-art security mechanisms:\\
@@ -261,8 +263,7 @@ presents ten qualitative requirements this architecture should have:
             numbers and best-before timestamps to avoid rollback attacks.
     \item High reliability:\\
             This is an implementation requirement and depends heavily on the hardware of
-            the target device. % Mention possibilities for the specific bootloader of
-            Firefly?
+            the target device. % Mention possibilities for the specific bootloader of Firefly?
     \item Operate with a small bootloader:\\
             This is also an implementation requirement. % Same as above?
     \item Small parser:\\
@@ -271,14 +272,14 @@ presents ten qualitative requirements this architecture should have:
             devices which further motivates a small parser and thus less complex
             manifests.
     \item Minimal impact on existing firmware formats:\\
-            The update mechanism itself must not require any changes to existing firmware
-            formats. % Expand?
+            The update mechanism itself must not make assumptions of the current format of
+            firmware images, but be able to support different types of firmware images.
     \item Robust permissions:\\
             This requirement is directed towards the administration of firmware updates
             and how different roles interact with the devices. The thesis will not
             consider any infrastructure outside of transporting manifest and image and
-            applying the update, but will consider authorisation of parties through
-            techniques like signing.
+            applying the update such as device management, but will consider authorisation
+            of parties through techniques like signing.
     \item Operating modes:\\
             The draft presents three broad modes of updates: client-initiated updates,
             server-initiated updates, and hybrid updates, where hybrids are mechanisms
@@ -310,14 +311,14 @@ that an update mechanism must support both types.
 \label{ssec:information-model}
 The corresponding Internet Draft for the information model presents the information needed
 in the manifest to secure a firmware update mechanism \parencite{suit-information-model}.
-It also presents threats, classifies them according to the STRIDE model
-\parencite{stride}, and presents security requirements that map to the threats.
-Furthermore it presents use cases and maps usability requirements to the use cases.
-Finally it presents the proposed elements of the manifest. Since the thesis makes a choice
-about specific technologies to use, not all use cases, usability requirements, and
-manifest elements are deemed necessary. The threats and security requirements however are.
-Note that the information model does not discuss threats outside of transporting the
-updates, such as physical attacks.
+It also presents threats, classifies them according to the STRIDE model, and presents
+security requirements that map to the threats \parencite{stride}. Furthermore it presents
+use cases and maps usability requirements to the use cases. Finally it presents the
+proposed elements of the manifest. Since the thesis makes a choice about specific
+technologies to use, not all use cases, usability requirements, and manifest elements are
+deemed necessary. The threats and security requirements however are. Note that the
+information model does not discuss threats outside of transporting the updates, such as
+physical attacks.
 
 Table \ref{tab:threats-to-requirements} shows how the security threats map to security
 requirements along with a brief description of each threat and their class. All threats,
@@ -616,6 +617,9 @@ element implements.
     \end{minipage}\tabularnewline
     \bottomrule
 \end{longtable}
+
+% Which manifest elements are deemed most useful/needed? Is this a question for the design
+% part of the thesis?
 
 To summarize, the SUIT information model proposes to use a signed manifest that is
 distributed to each device in need of an update. The device then processes the manifest in
