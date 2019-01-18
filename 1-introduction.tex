@@ -7,7 +7,7 @@
 Internet of Things, or IoT, is the notion of connecting physical objects to the world-spanning 
 Internet in order to facilitate services and communication both machine-to-human and 
 machine-to-machine. By having everything connected, from everyday appliances to vehicles to 
-critical parts of infrastructure, computers will be ubiquitous and the Internet of Things 
+critical parts of infrastructure, computing will be ubiquitous and the Internet of Things 
 realized. The benefits from the IoT can range from quality of life services, such as controlling 
 lights and thermostats from afar, to data gathering through wireless sensor networks, to 
 enabling life critical operations such as monitoring a pacemaker. IoT is a broad definition 
@@ -21,29 +21,33 @@ such as printers and baby monitors were leveraged to launch an attack on Dyn's s
 affected sites like Airbnb, Amazon, and CNN \parencite{perlroth_2016}. Cardiac devices implanted in patients were also
 discovered to be unsafe, with hackers being able to deplete the batteries of pacemakers 
 prematurely \parencite{hern_2017}. These cases and many others make it clear that security in IoT is a big deal.
+
 According to Bain \& Company, the largest barrier for Internet of Things (IoT) adoptation 
 is security concerns, and customers would buy an average of 70\% more IoT devices if they 
-were secured \parencite{ali_bosche_ford_2018}. Despite security being today lacking in IoT, the 
+were secured \parencite{ali_bosche_ford_2018}. Despite security being lacking today in IoT, the 
 field is expected to grow rapidly and an increase in unsecured devices could spell disaster.
+Securing IoT equipment such as printers, baby monitors, and pacemakers is imperative to 
+prevent future attacks. But what about the devices currently employed without security? They 
+need to be updated and patched in order to fix these vulnerabilities, a non-trivial task.
 
 \section{Problem Statement}
 There is a need for secure software and firmware updates for IoT devices as vulnerabilities 
-must be patched. For battery powered, remote IoT devices with long lifespans (exceeding five years) 
-these patches must be applied over long distances and possibly unreliable communication channels.
-There are non-open, proprietary solutions developed for specific devices but no open and 
-interoperable standard. The IETF SUIT working group aims to define an architecture for such a 
-mechanism without defining new transport or discovery mechanisms \parencite{suit}. By expanding upon the work of 
-the SUIT group, a standardized update mechanism suitable for battery powered, constrained, and remote 
-IoT devices can be developed.
+must be patched. For many IoT devices this mean patches must be applied over long
+distances and possibly unreliable communication channels as sending a technician to each and 
+every device is unfeasible. There are non-open, proprietary solutions developed for specific
+devices but no open and interoperable standard. The IETF SUIT working group aims to define an
+architecture for such a mechanism without defining new transport or discovery mechanisms 
+\parencite{suit}. By expanding upon the work of the SUIT group, a standardized update
+mechanism suitable for battery powered, constrained, and remote IoT devices can be developed.
 
 \subsection{Problem}
-The thesis project will examine the architecture proposed by SUIT in order to create and evaluate an 
+The thesis project will examine the architecture and information model proposed by SUIT in order to create and evaluate an 
 updating mechanism for battery powered, constrained, and remote IoT devices with a life span 
 exceeding five years. The update mechanism can be considered as two parts, communication and upgrading.
 Communication will happen over unreliable channels and the payloads must arrive intact and untampered 
 with. The upgrade mechanism itself must ensure integrity of the target image and safely perform the 
 upgrade with a limited amount of memory. The thesis will examine the update mechanism from the viewpoint 
-of IoT devices running the Contiki-NG operating system on 32-bit ARM Cortex M3 proceeeors. A suitable 
+of IoT devices running the Contiki-NG operating system on 32-bit ARM Cortex M3 processors. A suitable 
 public key infrastructure developed by RISE will also be an underlying assumption for the work. The thesis 
 aims to investigate the problem "How can the SUIT architecture be used to provide secure software and firmware 
 update for the Internet of Things?".
@@ -75,17 +79,19 @@ are not applied in a safe and secure manner, the updating mechanism itself might
 These risks are serious and could pose ethical dilemmas depending on what the IoT device is used for.
 
 \section{Scope}
-The updating mechanism can be split into three rough parts: the actual updating or flipping of 
+The updating mechanism can be roughlt split into three parts: the actual updating or flipping of 
 images on the device, the transportation of the new image, and managing a heterogenous network
-of devices needed different updates at different times. This thesis will only look at the first 
+of devices needing different updates at different times. This thesis will only look at the first 
 two parts, updating a firmware image on the device and transportation of the image. The thesis 
 will not be concerned about device management.
 
 \section{Outline}
 % TODO: Fix wonky formatting when beginning new lines. Better to write it into a coherent piece
 Chapter two describes the theoretical background needed to understand the results of the thesis.
+This includes the network protocols, hardware, operating system, and PKI being used in the thesis.
 Chapter three describes the design of the communication protocols used in the update mechanism.
-Chapter four describes how the update mechanism works and how devices can upgrade their images.
+Chapter four describes how the local update mechanism works and how devices can upgrade their 
+images.
 Chapter five evaluates the developed updating mechanism and presents the results.
 Chapter six ends the report with a discussion about the update mechanism and its results.
 
