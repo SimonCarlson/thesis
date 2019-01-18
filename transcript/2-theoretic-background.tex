@@ -7,8 +7,8 @@ other protocols in an IoT context. Section \ref{sec:hardware} presents the targe
 for this thesis. The following section, Section \ref{sec:suit} presents and explains the
 SUIT architecture and information model and their respective requirements as formulated by
 the IETF. Section \ref{ssec:contiki-ng} presents the Contiki-NG operating system which the
-updating mechanism will be developed for, and finally \ref{ssec:pki} introduces the PKI
-which is an underlying assumption for the thesis.
+updating mechanism will be developed for, and finally \ref{ssec:pki} introduces EST-CoAP
+which is a protocol for public key certificate distribution. 
 
 \section{IoT Network Stack}
 \label{sec:network}
@@ -31,8 +31,10 @@ for UDP networks. Instead there is DTLS, which is a version of TLS enhanced for 
 datagram oriented protocols such as UDP. HTTP can be used over UDP for the application
 layer, but as HTTP is encoded in human readable plaintext it is unecessarily wordy and not
 optimal for constrained networks. Instead, CoAP is a common protocol for the application
-layer in IoT networks. This chapter briefly explains UDP, DTLS, and CoAP and explains why
-they are suitable for IoT networks.
+layer in IoT networks. Subsection \ref{ssec:udp} explains UDP and why UDP is preferable in
+IoT networks. Subsection \ref{ssec:dtls} briefly explains TLS, why it is unsuitable for
+IoT networks, the differences between TLS and DTLS and why DTLS is used. Lastly subsection
+\ref{ssec:coap} describes the CoAP protocol.
 
 % Picture comparing network stacks?
 
@@ -221,9 +223,9 @@ solution shall be usable on Class 1 devices as defined in RFC 7228. These device
 ~10 KiB of RAM and ~100 KiB code size, which makes it suitable for this thesis
 \parencite{rfc7228}. The solution may be applied to more powerful devices. The working
 group does not however try to define new transport or discovery mechanism, making their
-proposal angostic of any particular technology. As of writing, they have published two
-documents concerning the architecture and information model of a firmware update
-mechanism.
+proposal angostic of any particular technology. Subsection \ref{ssec:architecture}
+presents the SUIT architecture and subsection \ref{ssec:information-model} presents the
+SUIT information model.
 
 \subsection{Architecture}
 \label{ssec:architecture}
@@ -642,7 +644,14 @@ this thesis. Furthermore, Contiki-NG is open source and licensed under the permi
 3-Clause license and targets a wide variety of boards which makes it align with SUITs goal
 of creating an open standard for updating IoT devices.
 
-\subsection{Processes, events, and memory management}
+Subsection \ref{ssec:process-event-memory} explains processes, events, and memory
+management in Contiki-NG. These internals are heavily based on the previous Contiki
+operating system and much of the information is gathered from there. Subsection
+\ref{ssec:timers} presents the different timers available in Contiki-NG and their
+different usages. Finally, subsection \ref{ssec:networking-contiki} presents part of the
+network protocol stack that is implemented in standard Contiki-NG.
+
+\subsection{Processes, Events, And Memory Management}
 \label{ssec:process-event-memory}
 Contiki-NG has a process abstraction which is built on lightweight protothreads
 \parencite{protothreads}. A process is declared through a \texttt{PROCESS} macro and can
@@ -696,7 +705,7 @@ The different timers and their usages are:
 while \texttt{etimer} and \texttt{ctimer} are unsafe. All timers are declared using a timer
 struct, which is also how the timer is interacted with.
 
-\subsection{Networking in Contiki-NG}
+\subsection{Networking Protocols in Contiki-NG}
 \label{ssec:networking-contiki}
 Contiki-NG features a IPv6 network stack designed for unreliable, low-power IoT networks.
 There are many protocols implemented in the stack, this thesis will look at UDP and CoAP
