@@ -31,12 +31,27 @@ for UDP networks. Instead there is DTLS, which is a version of TLS enhanced for 
 datagram oriented protocols such as UDP. HTTP can be used over UDP for the application
 layer, but as HTTP is encoded in human readable plaintext it is unecessarily wordy and not
 optimal for constrained networks. Instead, CoAP is a common protocol for the application
-layer in IoT networks. Subsection \ref{ssec:udp} explains UDP and why UDP is preferable in
+layer in IoT networks. Figure \ref{fig:stack-comparison} shows the equivalent protocols
+for IoT network stacks versus traditional network stacks. 
+
+In this chapter, subsection \ref{ssec:udp} explains UDP and why UDP is preferable in
 IoT networks. Subsection \ref{ssec:dtls} briefly explains TLS, why it is unsuitable for
 IoT networks, the differences between TLS and DTLS and why DTLS is used. Lastly subsection
 \ref{ssec:coap} describes the CoAP protocol.
 
 % Picture comparing network stacks?
+\begin{figure}
+    \begin{bytefield}[bitformatting=\small, bitwidth=1.1em]{30}
+        \bitbox[]{12}{IoT stack} & \bitbox[]{4}{} & \bitbox[]{12}{Traditional stack}\\
+        \bitbox{12}{CoAP(s)} & \bitbox[]{4}{$\Longleftrightarrow$} \bitbox{12}{HTTP(S)}\\
+        \bitbox{6}{UDP} & \bitbox{6}{DTLS} & \bitbox[]{4}{$\Longleftrightarrow$} \bitbox{6}{TCP} & \bitbox{6}{TLS}\\
+        \bitbox{12}{IPv6} & \bitbox[]{4}{$\Longleftrightarrow$} \bitbox{12}{IPv4 or IPv6}\\
+        \bitbox{6}{IEEE 802.15.4} & \bitbox{6}{6LoWPAN} & \bitbox[]{4}{$\Longleftrightarrow$} \bitbox{12}{IEEE 802.15.4}\\
+        \bitbox{12}{IEEE 802.15.4} & \bitbox[]{4}{$\Longleftrightarrow$} \bitbox{12}{IEEE 802.15.4}\\
+    \end{bytefield}
+    \caption{Comparison of network stacks between IoT networks and traditional networks.}
+    \label{fig:stack-comparison}
+\end{figure}
 
 \subsection{UDP}
 \label{ssec:udp}
