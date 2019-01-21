@@ -614,7 +614,9 @@ EST-coaps is a protocol for certificate enrollment in constrained environments u
 \parencite{est-coaps}. By allowing IoT devices to enroll for certificates, assymetric
 encryption can be used even in a constrained environment. EST-coaps is heavily based on
 EST which was developed for traditional, less constrained networks and is thus unsuitable
-\parencite{rfc7030}. EST-coaps retains much of the functionality and structure of EST but
-modifies it slightly to work over CoAP, DTLS, and UDP instead of HTTP, TLS, and TCP.
+to be used with the SUIT standard \parencite{rfc7030}. EST-coaps retains much of the
+functionality and structure of EST but modifies it slightly to work over CoAP, DTLS, and
+UDP instead of HTTP, TLS, and TCP, for instance by making use of CoAPs block requests and
+responses to remedy the relatively large sizes of certificates.
 
 \end{document}
