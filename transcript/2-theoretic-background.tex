@@ -39,7 +39,6 @@ IoT networks. Subsection \ref{ssec:dtls} briefly explains TLS, why it is unsuita
 IoT networks, the differences between TLS and DTLS and why DTLS is used. Lastly subsection
 \ref{ssec:coap} describes the CoAP protocol.
 
-% Picture comparing network stacks?
 \begin{figure}
     \begin{bytefield}[bitformatting=\small, bitwidth=1.1em]{30}
         \bitbox[]{12}{IoT stack} & \bitbox[]{4}{} & \bitbox[]{12}{Traditional stack}\\
@@ -97,7 +96,7 @@ supports packet retransmission, reordering, as well as fragmenting DTLS handshak
 into several DTLS records. These mechanisms makes the handshake process feasible over
 unreliable networks. By splitting messages into different DTLS records, fragmentation at
 the IP level can be avoided since a DTLS record is guaranteed to fit an IP datagram.
-% Why is avoiding IP-level fragmentation wanted?
+% TODO: Why is avoiding IP-level fragmentation wanted?
 
 Listing \ref{lst:dtls-plain} shows the DTLS record structure. It contains a TLS 1.2 type
 field, a version field which for DTLS 1.2 is 254.253, an epoch counter that is incremented
@@ -203,7 +202,6 @@ marker (0xFF). The length of the payload is dependant on the carrying protocol, 
 this thesis will be DTLS. The length of the payload is calculated depending on the size of
 the CoAP header, token, and options as well as maximum DTLS record size.
 
-% Mention header structure
 \begin{figure}
     \begin{bytefield}[bitformatting={\small}, bitwidth=1.1em]{32}
         \bitheader{0-31}\\
@@ -228,7 +226,7 @@ making the mechanism quite flexible.
 
 \section{Hardware/Firefly}
 \label{sec:hardware}
-% Talk to Joel
+% TODO: Talk to Joel
 
 \section{SUIT}
 \label{sec:suit}
@@ -280,9 +278,9 @@ presents ten qualitative requirements this architecture should have:
             numbers and best-before timestamps to avoid rollback attacks.
     \item High reliability:\\
             This is an implementation requirement and depends heavily on the hardware of
-            the target device. % Mention possibilities for the specific bootloader of Firefly?
+            the target device. % TODO: Mention possibilities for the specific bootloader of Firefly?
     \item Operate with a small bootloader:\\
-            This is also an implementation requirement. % Same as above?
+            This is also an implementation requirement. % TODO: Same as above?
     \item Small parser:\\
             It must be easy to parse the fields of the update manifest as large parser can
             get quite complex. Validation of the manifest will happen on the constrained
@@ -341,7 +339,6 @@ The proposed manifest elements and their brief motivations can be seen in Table
 \ref{tab:manifest-elements}. For more detailed motivations and requirements, refer to
 \parencite{suit-information-model}.
 
-% Table with manifest elements, their status, brief notes
 \begin{longtable}[]{@{}lll@{}}
     \caption{The proposed manifest elements of the SUIT information model.}
     \label{tab:manifest-elements}\\
@@ -513,7 +510,7 @@ The proposed manifest elements and their brief motivations can be seen in Table
     \bottomrule
 \end{longtable}
 
-% Which manifest elements are deemed most useful/needed? Is this a question for the design
+% TODO: Which manifest elements are deemed most useful/needed? Is this a question for the design
 % part of the thesis?
 
 To summarize, the SUIT information model proposes to use a signed manifest that is
@@ -527,8 +524,7 @@ base on which to design a secure update mechanism for IoT.
 
 \section{Contiki-NG}
 \label{ssec:contiki-ng}
-% Mention primitives such as processes, timers, network stack For details on image
-% flipping/bootloaders, Niclas should know
+% TODO: For details on image flipping/bootloaders, talk to Niclas
 Contiki-NG is an open-source operating system for resource constrained IoT devices based
 on the Contiki operating system \parencite{contiki-ng-github}, \parencite{contiki-github}.
 Contiki-NG focuses on low-power communication and standard protocols and comes with
