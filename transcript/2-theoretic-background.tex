@@ -180,7 +180,8 @@ reliability and congestion control mechanics in CoAP. Message IDs allows for det
 duplicate messages and tokens allow asynchronous requests and responses be paired
 correctly. There is also a retransmission mechanic with an exponential back-off timer for
 Confirmable messages so that lost Acknowledgements does not cause a flood of
-retransmissions.
+retransmissions. There is also an option in CoAP for clients to observe, or subscribe, to
+a resource and be notified by the server when that resource changes.
 
 A feature of CoAPs messaging model is the piggybacked respones. If a response to a
 Confirmable or Non-confirmable request is immediately available and fits in the
