@@ -95,8 +95,12 @@ operation between packets, as well as adding explicit sequence numbers. Furtherm
 supports packet retransmission, reordering, as well as fragmenting DTLS handshake messages
 into several DTLS records. These mechanisms makes the handshake process feasible over
 unreliable networks. By splitting messages into different DTLS records, fragmentation at
-the IP level can be avoided since a DTLS record is guaranteed to fit an IP datagram.
-% TODO: Why is avoiding IP-level fragmentation wanted?
+the IP level can be avoided since a DTLS record is guaranteed to fit an IP datagram. IP
+fragmentation is problematic is low-performing networks since if a single fragment of an
+IP packet is dropped all fragments of that packet must be retransmitted. Since DTLS is
+designed to correctly handle reordering and retransmission in lossy networks, splitting
+messages into several DTLS records is no problem, and if one record is lost only that
+record needs to be retransmitted
 
 Listing \ref{lst:dtls-plain} shows the DTLS record structure. It contains a TLS 1.2 type
 field, a version field which for DTLS 1.2 is 254.253, an epoch counter that is incremented
