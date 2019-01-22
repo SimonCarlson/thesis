@@ -426,7 +426,7 @@ The proposed manifest elements and their brief motivations can be seen in Table
     \end{minipage} & \begin{minipage}[t]{0.26\columnwidth}\raggedright\strut
     Mandatory (for differential updates)\strut
     \end{minipage} & \begin{minipage}[t]{0.60\columnwidth}\raggedright\strut
-    If a precursor image is required, this digest condition is needed\strut
+    If a precursor image is required, the digest condition of that image is needed\strut
     \end{minipage}\tabularnewline
     \begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
     Content Key Distribution Method\strut
@@ -631,8 +631,14 @@ functionality and structure of EST but modifies it slightly to work over CoAP, D
 UDP instead of HTTP, TLS, and TCP, for instance by making use of CoAPs block requests and
 responses to remedy the relatively large sizes of certificates.
 
-\section{Hardware/Firefly}
+\section{Firefly}
 \label{sec:hardware}
-% TODO: Talk to Joel
+Zolertia Firefly is the targeted board for this thesis. It is a breakout board designed
+for IoT application development and is supported by Contiki-NG. The board sports an ARM
+Cortex-M3 with 512 KB flash and 32 KB RAM, making it more powerful than the Class 1
+devices the SUIT standard targets. This is not an issue but should be kept in mind as less
+capable devices are supposed to be able to use an update mechanism complying with SUIT.
+Furthermore the board supports IEEE 802.15.4 communication in the 2.4 GHz band and SHA2
+hardware encryption \parencite{firefly-datasheet}.
 
 \end{document}
