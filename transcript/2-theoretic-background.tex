@@ -14,25 +14,28 @@ which is a protocol for public key certificate distribution.
 \label{sec:network}
 Network protocols in IoT networks operate under different circumstances compared to
 traditional computer networks. Networks in IoT are defined by their low power
-requirements, low reliability, and low computational performance on edge devices. This
-posts some constraints on the protocols used as they must be suitable for use in IoT
-networks. One of the most widely used network protocol stacks today in traditional
-networks is the TCP/IP stack. It uses TCP as a transportation protocol, usually with TLS
-for security, and a common application layer protocol is HTTP. TCP is however poorly
-suited for IoT networks as it is a connection based, stateful protocol which tries to
-ensure the guaranteed delivery of packets in the correct order. There is also advanced
-congestion control mechanisms in TCP which are hard to apply on low-bandwitch, unreliable
-networks.
+requirements, low reliability, and low computational performance on edge devices whereas
+traditional networks enjoy high reliability, high throughput, and high computational
+performance. This posts some constraints on the protocols used in IoT as they must
+properly handle these characteristics.
 
-IoT networks on the other hand often utilize UDP for transport. UDP is also an IP-based
-protocol which grants some interoperability with traditional networks while performing
-better in IoT contexts. As TLS is based on the same assumptions TCP does it is unsuitable
-for UDP networks. Instead there is DTLS, which is a version of TLS enhanced for use in
-datagram oriented protocols such as UDP. HTTP can be used over UDP for the application
-layer, but as HTTP is encoded in human readable plaintext it is unecessarily wordy and not
-optimal for constrained networks. Instead, CoAP is a common protocol for the application
-layer in IoT networks. Figure \ref{fig:stack-comparison} shows the equivalent protocols
-for IoT network stacks versus traditional network stacks. 
+One of the most widely used network protocol stacks today in traditional networks is the
+TCP/IP stack. It uses TCP as a transportation protocol, usually with TLS for security, and
+a common application layer protocol is HTTP. TCP is however poorly suited for IoT networks
+as it is a connection based, stateful protocol which tries to ensure the guaranteed
+delivery of packets in the correct order. There is also advanced congestion control
+mechanisms in TCP which are hard to apply on low-bandwitch, unreliable networks. IoT
+networks on the other hand often utilize UDP for transport. UDP is also an IP-based
+protocol but it connectionless and less reliable than TCP, performing on a best-effort
+level instead. Despite being less reliable, UDP often performs better in IoT contexts. As
+TLS is based on the same assumptions TCP it is unsuitable for UDP networks. 
+
+UDP networks are instead secured by DTLS, which is a version of TLS enhanced for use in
+datagram oriented protocols. HTTP can be used over UDP for the application layer, but as
+HTTP is encoded in human readable plaintext it is unecessarily wordy and not optimal for
+constrained networks. Instead, CoAP is a common protocol for the application layer in IoT
+networks. Figure \ref{fig:stack-comparison} shows the equivalent protocols for IoT network
+stacks versus traditional network stacks. 
 
 In this chapter, subsection \ref{ssec:udp} explains UDP and why UDP is preferable in
 IoT networks. Subsection \ref{ssec:dtls} briefly explains TLS, why it is unsuitable for
@@ -62,7 +65,7 @@ environments where resources are scarce and networks unreliable, a stateful prot
 TCP could face issues. Since TCP wants to ensure packet delivery, it will retransmit
 packages generating a lot of traffic and processing required for a receiver. Also, if the
 connection is too unstable TCP will not work at all since it can no longer guarantee the
-packets arrive. The best-effort approach of UDP is favorable in these situations, in
+packets arrival. The best-effort approach of UDP is favorable in these situations, in
 addition to UDP being a lightweight protocol.
 
 Figure \ref{fig:udp-header} shows the UDP header format. The source port is optional, the
@@ -85,10 +88,11 @@ calculated on a pseudo-header constructed from both the IP header, UDP header, a
 DTLS is a protocol which adds privacy to datagram protocols like UDP \parencite{rfc6347}.
 The protocol is designed to prevent eavesdropping, tampering, or message forgery. DTLS is
 based on TLS, a similar protocol for stateful transport protocols such as TCP, which would
-not work well on unreliable networks. The main issues with using TLS over unreliable
-networks is that TLS decryption is dependant on previous packets, meaning decryption of a
-packet would fail if the previous packet was not received, as well as the TLS handshake
-procedure assumes all handshake messages are delivered reliably.
+not work well on unreliable networks as previously discussed. The main issues with using
+TLS over unreliable networks is that TLS decryption is dependant on previous packets,
+meaning the decryption of a packet would fail if the previous packet was not received. In
+addition, the TLS handshake procedure assumes all handshake messages are delivered
+reliably which is not the case in IoT networks.
 
 DTLS solves this by banning stream ciphers, effectively making decryption an independent
 operation between packets, as well as adding explicit sequence numbers. Furthermore, DTLS
@@ -97,10 +101,10 @@ into several DTLS records. These mechanisms makes the handshake process feasible
 unreliable networks. By splitting messages into different DTLS records, fragmentation at
 the IP level can be avoided since a DTLS record is guaranteed to fit an IP datagram. IP
 fragmentation is problematic is low-performing networks since if a single fragment of an
-IP packet is dropped all fragments of that packet must be retransmitted. Since DTLS is
-designed to correctly handle reordering and retransmission in lossy networks, splitting
-messages into several DTLS records is no problem, and if one record is lost only that
-record needs to be retransmitted
+IP packet is dropped all fragments of that packet must be retransmitted and should thus be
+avoided. Since DTLS is designed to correctly handle reordering and retransmission in lossy
+networks, splitting messages into several DTLS records is no problem, and if one record is
+lost only that record needs to be retransmitted
 
 Listing \ref{lst:dtls-plain} shows the DTLS record structure. It contains a TLS 1.2 type
 field, a version field which for DTLS 1.2 is 254.253, an epoch counter that is incremented
@@ -155,40 +159,34 @@ the communication is unreliable. Otherwise the DTLS handshake is as the TLS hand
 
 \subsection{CoAP}
 \label{ssec:coap}
-CoAP is an application layer protocol designed to be used by constrained devices over networks
-with low throughput and possibly high unreliability for machine-to-machine communication
-\parencite{rfc7252}. While designed for constrained networks, a design feature of CoAP is
-how it is easily interfaced with HTTP so that communication over traditional networks can
-be proxied. Furthermore, CoAP is a REST based protocol utilizing application endpoints, a
-subset of standardised request/response codes, URIs, and MIME types \parencite{rest}.
-Additionally CoAP offers features such as multicast support, asynchronous messages, low
-header overhead, and UDP and DTLS bindings which are all suitable for constrained
-environments.
+CoAP is an application layer protocol designed to be used by constrained devices over
+networks with low throughput and possibly high unreliability for machine-to-machine
+communication \parencite{rfc7252}. While designed for constrained networks, a design
+feature of CoAP is how it is easily interfaced with HTTP so that communication over
+traditional networks can be proxied. CoAP uses a request/response model similar to HTTP
+with method codes and request methods that are easily mapped to HTTP. Furthermore CoAP is
+a RESTful protocol utilizing concepts such as endpoints, resources, and URIs. Additionally
+CoAP offers features such as multicast support, asynchronous messages, low header
+overhead, and UDP and DTLS bindings which are all suitable for constrained environments.
 
 As CoAP is usually implemented on top of UDP, communication is stateless and asynchronous.
 For this reason CoAP defines four message types: Confirmable, Non-confirmable,
-Acknowledgement, and Reset. These message types are combined with a subset of HTTP method
-codes. Confirmable messages must be answered with a corresponding Acknowledgement, this
-provides one form of reliability over an otherwise unreliable channel. Non-confirmable
-messages do not require an Acknowledgement and thus act asynchronously. Reset messages are
-used when a recipient is unable to process a Non-confirmable message. Confirmable,
-Non-confirmable, and Acknowledgement messages all use Message IDs in order to detect
-duplicate messages in case of retransmission.
+Acknowledgement, and Reset. Confirmable messages must be answered with a corresponding
+Acknowledgement, this provides one form of reliability over an otherwise unreliable
+channel. Non-confirmable messages do not require an Acknowledgement and thus act
+asynchronously. Reset messages are used when a recipient is unable to process a
+Non-confirmable message. Confirmable, Non-confirmable, and Acknowledgement messages all
+use Message IDs in order to detect duplicate messages in case of retransmission.
 
 Since CoAP is based on unreliable means of transport, there are some lightweight
 reliability and congestion control mechanics in CoAP. Message IDs allows for detection of
 duplicate messages and tokens allow asynchronous requests and responses be paired
 correctly. There is also a retransmission mechanic with an exponential back-off timer for
 Confirmable messages so that lost Acknowledgements does not cause a flood of
-retransmissions. There is also an option in CoAP for clients to observe, or subscribe, to
-a resource and be notified by the server when that resource changes.
-
-A feature of CoAPs messaging model is the piggybacked respones. If a response to a
-Confirmable or Non-confirmable request is immediately available and fits in the
-Acknowledgement, the response itself can be delivered with the Acknowledgement. If the
-response is not available, a recepient can respond with an empty Acknowledgement and later
-send a Confirmable message containing the response. Requests use the GET, PUT, POST, and
-DELETE methods in a manner that is very similar but not identical to HTTP.
+retransmissions. Additionally, CoAP features piggybacked responses, meaning a response can
+be sent in the Acknowledgement of a Confirmable or Non-Confirmable request if the response
+fits and is available right away. This also reduces the amount of messages sent by the
+protocol.
 
 Figure \ref{fig:coap} shows the CoAP message format. The 2-bit version (Ver) field
 indicates the CoAP version, which at time of writing is 1 (01 in binary). The 2-bit type
@@ -202,10 +200,12 @@ is a 16-bit integer used to detect duplicate message and to match Acknowledgemen
 Resets with their initiating requests.
 
 Following the header is the zero to eight bit Token value, which in turn is follow by zero
-or more Options. Lastly comes the optional payload, which if present is prefixed by a payload
-marker (0xFF). The length of the payload is dependant on the carrying protocol, which in
-this thesis will be DTLS. The length of the payload is calculated depending on the size of
-the CoAP header, token, and options as well as maximum DTLS record size.
+or more Options. One of the options offered is the observe options, which allows a client
+to notified by the server when a particular resource changes. Lastly comes the optional
+payload, which if present is prefixed by a payload marker (0xFF). The length of the
+payload is dependant on the carrying protocol, which in this thesis will be DTLS. The
+length of the payload is calculated depending on the size of the CoAP header, token, and
+options as well as maximum DTLS record size.
 
 \begin{figure}
     \begin{bytefield}[bitformatting={\small}, bitwidth=1.1em]{32}
@@ -221,13 +221,12 @@ the CoAP header, token, and options as well as maximum DTLS record size.
 \end{figure}
 
 Since firmware images can be relatively large their size needs to be handled during
-transportation. UDP and DTLS only supports fragmentation which can be problematic in
-unreliable networks. To remedy this CoAP supports block-wise transfers
-\parencite{rfc7959}. A Block option allows stateless transfer of a large file separated in
-different blocks. Each block can be individually retransmitted and by using monotonically
-increasing block numbers, the blocks can be reassembled. The size of blocks can also be
-negotiated between server and client meaning they can always find a suitable block size,
-making the mechanism quite flexible.
+transportation, which can be done via block-wise transfers \parencite{rfc7959}. A Block
+option allows stateless transfer of a large file separated in different blocks. Each block
+can be individually retransmitted and by using monotonically increasing block numbers, the
+blocks can be reassembled. The size of blocks can also be negotiated between server and
+client meaning they can always find a suitable block size, making the mechanism quite
+flexible.
 
 \section{SUIT}
 \label{sec:suit}
@@ -541,7 +540,7 @@ operating system and much of the information is gathered from there. Subsection
 different usages. Finally, subsection \ref{ssec:networking-contiki} presents part of the
 network protocol stack that is implemented in standard Contiki-NG.
 
-\subsection{Processes, Events, And Memory Management}
+\subsection{Processes, Events, and Memory Management}
 \label{ssec:process-event-memory}
 Contiki-NG has a process abstraction which is built on lightweight protothreads
 \parencite{protothreads}. A process is declared through a \texttt{PROCESS} macro and can
