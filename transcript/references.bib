@@ -1,12 +1,12 @@
-@article{ericsson-mobility-report,
-  title={Ericsson mobility report},
-  author={Jonsson, Peter and Carson, Stephen and Lindberg, Per and Öhman, Kati and Sorlie,
-  Ida and Queirós, Ricardo and Muller, Frank and Englund, Lisa and Arvedson, Mats and
-  Carlsson, Anders},
-  year={2018},
-  month=nov
+@misc{ericsson-mobility-report,
+	title={Ericsson mobility report},
+	author={Jonsson, Peter and Carson, Stephen and Lindberg, Per and Öhman, Kati and Sorlie,
+	Ida and Queirós, Ricardo and Muller, Frank and Englund, Lisa and Arvedson, Mats and
+	Carlsson, Anders},
+	url={https://www.ericsson.com/assets/local/mobility-report/documents/2018/ericsson-mobility-report-november-2018.pdf},
+	year={2018},
+	month=nov
 }
-
 
 @misc{hern_2017, 
 	title={Hacking risk leads to recall of 500,000 pacemakers due to patient death fears}, 
@@ -31,19 +31,19 @@
 }
 
 @misc{ali_bosche_ford_2018, 
-    title={Cybersecurity Is the Key to Unlocking Demand in the Internet of Things}, 
-    url={https://www.bain.com/insights/cybersecurity-is-the-key-to-unlocking-demand-in-the-internet-of-things/}, 
-    journal={Bain Brief - Bain & Company}, 
-    author={Ali, Syed and Bosche, Ann and Ford, Frank}, 
-    year={2018}, 
-    month=oct,
+	title={Cybersecurity Is the Key to Unlocking Demand in the Internet of Things}, 
+	url={https://www.bain.com/insights/cybersecurity-is-the-key-to-unlocking-demand-in-the-internet-of-things/}, 
+	journal={Bain Brief - Bain & Company}, 
+	author={Ali, Syed and Bosche, Ann and Ford, Frank}, 
+	year={2018}, 
+	month=oct,
 	urldate={2018-12-10}
 }
 
 @misc{suit, 
-    title={Software Updates for Internet of Things (suit)}, 
-    url={https://datatracker.ietf.org/wg/suit/about/}, 
-    journal={Software Updates for Internet of Things (suit) },
+	title={Software Updates for Internet of Things (suit)}, 
+	url={https://datatracker.ietf.org/wg/suit/about/}, 
+	journal={Software Updates for Internet of Things (suit) },
 	urldate={2019-01-16}
 }
 
@@ -54,7 +54,7 @@
 	publisher =	{RFC Editor},
 	doi =		{10.17487/RFC7228},
 	url =		{https://rfc-editor.org/rfc/rfc7228.txt},
-    author =	{Carsten Bormann and Mehmet Ersue and Ari Keränen},
+	author =	{Carsten Bormann and Mehmet Ersue and Ari Keränen},
 	title =		{{Terminology for Constrained-Node Networks}},
 	pagetotal =	17,
 	year =		2014,
@@ -69,7 +69,7 @@
 	publisher =	{RFC Editor},
 	doi =		{10.17487/RFC0768},
 	url =		{https://rfc-editor.org/rfc/rfc768.txt},
-    author =	{Jon Postel},
+	author =	{Jon Postel},
 	title =		{{User Datagram Protocol}},
 	pagetotal =	3,
 	year =		1980,
@@ -84,7 +84,7 @@
 	publisher =	{RFC Editor},
 	doi =		{10.17487/RFC6347},
 	url =		{https://rfc-editor.org/rfc/rfc6347.txt},
-    author =	{Eric Rescorla and Nagendra Modadugu},
+	author =	{Eric Rescorla and Nagendra Modadugu},
 	title =		{{Datagram Transport Layer Security Version 1.2}},
 	pagetotal =	32,
 	year =		2012,
@@ -99,7 +99,7 @@
 	publisher =	{RFC Editor},
 	doi =		{10.17487/RFC5246},
 	url =		{https://rfc-editor.org/rfc/rfc5246.txt},
-    author =	{Eric Rescorla and Tim Dierks},
+	author =	{Eric Rescorla and Tim Dierks},
 	title =		{{The Transport Layer Security (TLS) Protocol Version 1.2}},
 	pagetotal =	104,
 	year =		2008,
@@ -114,7 +114,7 @@
 	publisher =	{RFC Editor},
 	doi =		{10.17487/RFC7252},
 	url =		{https://rfc-editor.org/rfc/rfc7252.txt},
-    author =	{Zach Shelby and Klaus Hartke and Carsten Bormann},
+	author =	{Zach Shelby and Klaus Hartke and Carsten Bormann},
 	title =		{{The Constrained Application Protocol (CoAP)}},
 	pagetotal =	112,
 	year =		2014,
@@ -129,7 +129,7 @@
 	publisher =	{RFC Editor},
 	doi =		{10.17487/RFC7959},
 	url =		{https://rfc-editor.org/rfc/rfc7959.txt},
-    author =	{Carsten Bormann and Zach Shelby},
+	author =	{Carsten Bormann and Zach Shelby},
 	title =		{{Block-Wise Transfers in the Constrained Application Protocol (CoAP)}},
 	pagetotal =	37,
 	year =		2016,
@@ -137,15 +137,13 @@
 	abstract =	{The Constrained Application Protocol (CoAP) is a RESTful transfer protocol for constrained nodes and networks. Basic CoAP messages work well for small payloads from sensors and actuators; however, applications will need to transfer larger payloads occasionally -- for instance, for firmware updates. In contrast to HTTP, where TCP does the grunt work of segmenting and resequencing, CoAP is based on datagram transports such as UDP or Datagram Transport Layer Security (DTLS). These transports only offer fragmentation, which is even more problematic in constrained nodes and networks, limiting the maximum size of resource representations that can practically be transferred. Instead of relying on IP fragmentation, this specification extends basic CoAP with a pair of "Block" options for transferring multiple blocks of information from a resource representation in multiple request-response pairs. In many important cases, the Block options enable a server to be truly stateless: the server can handle each block transfer separately, with no need for a connection setup or other server-side memory of previous block transfers. Essentially, the Block options provide a minimal way to transfer larger representations in a block-wise fashion. A CoAP implementation that does not support these options generally is limited in the size of the representations that can be exchanged, so there is an expectation that the Block options will be widely used in CoAP implementations. Therefore, this specification updates RFC 7252.},
 }
 
-
 @book{rest,
-  title={Architectural styles and the design of network-based software architectures},
-  author={Fielding, Roy T and Taylor, Richard N},
-  volume={7},
-  year={2000},
-  publisher={University of California, Irvine Irvine, USA}
+	title={Architectural styles and the design of network-based software architectures},
+	author={Fielding, Roy T and Taylor, Richard N},
+	volume={7},
+	year={2000},
+	publisher={University of California, Irvine Irvine, USA}
 }
-
 
 @techreport{suit-architecture,
 	number =	{draft-ietf-suit-architecture-02},
@@ -154,7 +152,7 @@
 	publisher =	{Internet Engineering Task Force},
 	note =		{Work in Progress},
 	url =		{https://datatracker.ietf.org/doc/html/draft-ietf-suit-architecture-02},
-    author =	{Brendan Moran and Milosch Meriac and Hannes Tschofenig and David Brown},
+	author =	{Brendan Moran and Milosch Meriac and Hannes Tschofenig and David Brown},
 	title =		{{A Firmware Update Architecture for Internet of Things Devices}},
 	pagetotal =	22,
 	year =		2019,
@@ -163,7 +161,6 @@
 	abstract =	{Vulnerabilities with Internet of Things (IoT) devices have raised the need for a solid and secure firmware update mechanism that is also suitable for constrained devices. Incorporating such update mechanism to fix vulnerabilities, to update configuration settings as well as adding new functionality is recommended by security experts. This document lists requirements and describes an architecture for a firmware update mechanism suitable for IoT devices. The architecture is agnostic to the transport of the firmware images and associated meta-data. This version of the document assumes asymmetric cryptography and a public key infrastructure. Future versions may also describe a symmetric key approach for very constrained devices.},
 }
 
-
 @techreport{suit-information-model,
 	number =	{draft-ietf-suit-information-model-02},
 	type =		{Internet-Draft},
@@ -171,7 +168,7 @@
 	publisher =	{Internet Engineering Task Force},
 	note =		{Work in Progress},
 	url =		{https://datatracker.ietf.org/doc/html/draft-ietf-suit-information-model-02},
-    author =	{Brendan Moran and Hannes Tschofenig and Henk Birkholz},
+	author =	{Brendan Moran and Hannes Tschofenig and Henk Birkholz},
 	title =		{{Firmware Updates for Internet of Things Devices - An Information Model for Manifests}},
 	pagetotal =	32,
 	year =		2019,
@@ -179,8 +176,6 @@
 	day =		18,
 	abstract =	{Vulnerabilities with Internet of Things (IoT) devices have raised the need for a solid and secure firmware update mechanism that is also suitable for constrained devices. Incorporating such update mechanism to fix vulnerabilities, to update configuration settings as well as adding new functionality is recommended by security experts. One component of such a firmware update is the meta-data, or manifest, that describes the firmware image(s) and offers appropriate protection. This document describes all the information that must be present in the manifest.},
 }
-
-
 
 @misc{stride, 
 	title={The STRIDE Threat Model}, 
@@ -193,43 +188,43 @@
 }
 
 @misc{contiki-ng-github,
-  author = {contiki-ng},
-  title = {Contiki-NG},
-  year = {2019},
-  publisher = {GitHub},
-  journal = {GitHub repository},
-  howpublished = {\url{https://github.com/contiki-ng/contiki-ng}},
-  commit = {9ac015013e709afb889c4e5d23c8f596499778ad},
-  urldate={2019-01-18}
+	author = {contiki-ng},
+	title = {Contiki-NG},
+	year = {2019},
+	publisher = {GitHub},
+	journal = {GitHub repository},
+	url={https://github.com/contiki-ng/contiki-ng},
+	commit = {9ac015013e709afb889c4e5d23c8f596499778ad},
+	urldate={2019-01-18}
 }
 
 @misc{contiki-github,
-  author = {contiki-os},
-  title = {Contiki},
-  year = {2018},
-  publisher = {GitHub},
-  journal = {GitHub repository},
-  howpublished = {\url{https://github.com/contiki-os/contiki}},
-  commit = {32b5b17f674232867c22916bb2e2534c8e9a92ff},
-  urldate={2019-01-18}
+	author = {contiki-os},
+	title = {Contiki},
+	year = {2018},
+	publisher = {GitHub},
+	journal = {GitHub repository},
+	url={https://github.com/contiki-os/contiki},
+	commit = {32b5b17f674232867c22916bb2e2534c8e9a92ff},
+	urldate={2019-01-18}
 }
 
 @inproceedings{protothreads,
- author = {Dunkels, Adam and Schmidt, Oliver and Voigt, Thiemo and Ali, Muneeb},
- title = {Protothreads: Simplifying Event-driven Programming of Memory-constrained Embedded Systems},
- booktitle = {Proceedings of the 4th International Conference on Embedded Networked Sensor Systems},
- series = {SenSys '06},
- year = {2006},
- isbn = {1-59593-343-3},
- location = {Boulder, Colorado, USA},
- pages = {29--42},
- numpages = {14},
- url = {http://doi.acm.org/10.1145/1182807.1182811},
- doi = {10.1145/1182807.1182811},
- acmid = {1182811},
- publisher = {ACM},
- address = {New York, NY, USA},
- keywords = {embedded systems, threads, wireless sensor networks},
+	author = {Dunkels, Adam and Schmidt, Oliver and Voigt, Thiemo and Ali, Muneeb},
+	title = {Protothreads: Simplifying Event-driven Programming of Memory-constrained Embedded Systems},
+	booktitle = {Proceedings of the 4th International Conference on Embedded Networked Sensor Systems},
+	series = {SenSys '06},
+	year = {2006},
+	isbn = {1-59593-343-3},
+	location = {Boulder, Colorado, USA},
+	pages = {29--42},
+	numpages = {14},
+	url = {http://doi.acm.org/10.1145/1182807.1182811},
+	doi = {10.1145/1182807.1182811},
+	acmid = {1182811},
+	publisher = {ACM},
+	address = {New York, NY, USA},
+	keywords = {embedded systems, threads, wireless sensor networks},
 }
 
 @misc{contiki-multithreading,
@@ -238,7 +233,7 @@
 	year={2014},
 	publisher={GitHub},
 	journal={GitHub repository},
-	howpublished={\url{https://github.com/contiki-os/contiki/wiki/Multithreading}},
+	url={https://github.com/contiki-os/contiki/wiki/Multithreading},
 	commit={e928103bffe1549b740d9a838831f8fd255604a9},
 	urldate={2019-01-23}
 }
@@ -270,10 +265,9 @@
 	month=oct,
 }
 
-
 @misc{erbium, 
 	title={Erbium (Er) REST Engine - C CoAP implementation}, 
-	howpublished={\url{https://web.archive.org/web/20130716001010/http://people.inf.ethz.ch/mkovatsc/erbium.php}}, 
+	url={https://web.archive.org/web/20130716001010/http://people.inf.ethz.ch/mkovatsc/erbium.php}, 
 	journal={}, 
 	author={Matthias Kovatsch}, 
 	year={2012}, 
@@ -282,25 +276,25 @@
 }
 
 @misc{erbium-github,
-  author = {Matthias Kovatsch},
-  title = {SmartAppContiki},
-  year = {2012},
-  publisher = {GitHub},
-  journal = {GitHub repository},
-  howpublished = {\url{https://github.com/mkovatsc/SmartAppContiki}},
-  commit = {3da616c31edcefdd81fdea1d13e468258fe3e7c8},
-  urldate={2019-01-18}
+	author = {Matthias Kovatsch},
+	title = {SmartAppContiki},
+	year = {2012},
+	publisher = {GitHub},
+	journal = {GitHub repository},
+	url={https://github.com/mkovatsc/SmartAppContiki},
+	commit = {3da616c31edcefdd81fdea1d13e468258fe3e7c8},
+	urldate={2019-01-18}
 }
 
 @misc{tinydtls-github,
-  author = {contiki-ng},
-  title = {TinyDTLS},
-  year = {2018},
-  publisher = {GitHub},
-  journal = {GitHub repository},
-  howpublished = {\url{https://github.com/contiki-ng/tinydtls}},
-  commit = {53a0d97da748a67093c49cb38744650c71d58c4d},
-  urldate={2019-01-18}
+	author = {contiki-ng},
+	title = {TinyDTLS},
+	year = {2018},
+	publisher = {GitHub},
+	journal = {GitHub repository},
+	url={https://github.com/contiki-ng/tinydtls},
+	commit = {53a0d97da748a67093c49cb38744650c71d58c4d},
+	urldate={2019-01-18}
 }
 
 @misc{contiki-coap,
@@ -309,7 +303,7 @@
 	year={2018},
 	publisher={GitHub},
 	journal={GitHub repository},
-	howpublished={\url{https://github.com/contiki-ng/contiki-ng/wiki/Documentation:-CoAP}},
+	url={https://github.com/contiki-ng/contiki-ng/wiki/Documentation:-CoAP},
 	commit={8da1227a9040582274bca0f081889d65fb9777bd},
 	urldate={2019-01-23}
 }
@@ -321,7 +315,7 @@
 	publisher =	{Internet Engineering Task Force},
 	note =		{Work in Progress},
 	url =		{https://datatracker.ietf.org/doc/html/draft-ietf-ace-coap-est-07},
-    author =	{Peter Van der Stok and Panos Kampanakis and Michael Richardson and Shahid Raza},
+	author =	{Peter Van der Stok and Panos Kampanakis and Michael Richardson and Shahid Raza},
 	title =		{{EST over secure CoAP (EST-coaps)}},
 	pagetotal =	46,
 	year =		2019,
@@ -337,7 +331,7 @@
 	publisher =	{RFC Editor},
 	doi =		{10.17487/RFC7030},
 	url =		{https://rfc-editor.org/rfc/rfc7030.txt},
-    author =	{Max Pritikin and Peter E. Yee and Dan Harkins},
+	author =	{Max Pritikin and Peter E. Yee and Dan Harkins},
 	title =		{{Enrollment over Secure Transport}},
 	pagetotal =	53,
 	year =		2013,
@@ -346,15 +340,15 @@
 }
 
 @techreport{sha256,
-  title={Secure hash standard},
-  author={Dang, Quynh H},
-  year={2015}
+	title={Secure hash standard},
+	author={Dang, Quynh H},
+	year={2015}
 }
 
 @manual{firefly-datasheet,
-	organization="Zolertia",
-	title="Zolertia Firefly Revision A2 Internet of Things hardware development platform,
-	for 2.4-GHz and 863-950MHz IEEE 802.15.4, 6LoWPAN and ZigBee® Applications",
+	organization={Zolertia},
+	title={Zolertia Firefly Revision A2 Internet of Things hardware development platform,
+	for 2.4-GHz and 863-950MHz IEEE 802.15.4, 6LoWPAN and ZigBee® Applications},
 	number="ZOL-BO001-A2",
 	year="2017",
 	month=dec,
