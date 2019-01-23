@@ -1,6 +1,7 @@
  \documentclass[0-thesis.tex]{subfiles}
 
 \begin{document}
+% TODO: Fix section references
 This chapter presents the theoretical background needed to understand the thesis. Section
 \ref{sec:network} introduces the networks protocols used and motivates their use over
 other protocols in an IoT context. Section \ref{sec:hardware} presents the target hardware
@@ -231,14 +232,14 @@ flexible.
 \section{SUIT}
 \label{sec:suit}
 The IETF SUIT (Software Updates for Internet of Things) working group aims to define a
-firmware update solution that is interoperable and non-proprietary \parencite{suit}. The
-solution shall be usable on Class 1 devices as defined in RFC 7228. These devices feature
-~10 KiB of RAM and ~100 KiB code size, which makes it suitable for this thesis
-\parencite{rfc7228}. The solution may be applied to more powerful devices. The working
-group does not however try to define new transport or discovery mechanism, making their
-proposal angostic of any particular technology. Subsection \ref{ssec:architecture}
-presents the SUIT architecture and subsection \ref{ssec:information-model} presents the
-SUIT information model.
+firmware update solution for IoT devices that is interoperable and non-proprietary
+\parencite{suit}. The working group does not however try to define new transport or
+discovery mechanism, making their proposal angostic of any particular technology. The
+solution shall be usable on Class 1 devices, defined by ~10 KiB RAM and ~100 KiB code size
+\parencite{rfc7228}. The solution may be applied to more powerful devices. 
+
+Subsection \ref{ssec:architecture} presents the SUIT architecture and subsection
+\ref{ssec:information-model} presents the SUIT information model.
 
 \subsection{Architecture}
 \label{ssec:architecture}
@@ -267,8 +268,11 @@ presents ten qualitative requirements this architecture should have:
             standard is not applicable. The proposed network stack uses UDP, DTLS, and
             CoAP for transportation and the target devices are Firefly devices running
             the Contiki-NG operating system.
+            % Is this still valid because the manifest and payload does not change based
+            % on underlying technology?
     \item Friendly to broadcast delivery:\\
-            Broadcasting will not be of main concern in this thesis.
+            Broadcasting will not be of main concern in this thesis, it will be considered
+            with respect to time.
     \item Use state-of-the-art security mechanisms:\\
             The SUIT standard assumes a PKI is in place. RISE has previously developed a
             PKI suitable for IoT, this PKI is an underlying assumption for the thesis. The
@@ -278,7 +282,8 @@ presents ten qualitative requirements this architecture should have:
             numbers and best-before timestamps to avoid rollback attacks.
     \item High reliability:\\
             This is an implementation requirement and depends heavily on the hardware of
-            the target device. % TODO: Mention possibilities for the specific bootloader of Firefly?
+            the target device. % TODO: Mention possibilities specifically for Firefly? Or
+            % refer to some later chapter?
     \item Operate with a small bootloader:\\
             This is also an implementation requirement. % TODO: Same as above?
     \item Small parser:\\
@@ -288,27 +293,31 @@ presents ten qualitative requirements this architecture should have:
             manifests.
     \item Minimal impact on existing firmware formats:\\
             The update mechanism itself must not make assumptions of the current format of
-            firmware images, but be able to support different types of firmware images.
+            firmware images, but be able to support different types of firmware image
+            formats.
     \item Robust permissions:\\
             This requirement is directed towards the administration of firmware updates
             and how different roles interact with the devices. The thesis will not
             consider any infrastructure outside of transporting manifest and image and
-            applying the update such as device management, but will consider authorisation
-            of parties through techniques like signing.
+            applying the update, such as device management, but will consider
+            authorisation of parties through techniques like signing.
     \item Operating modes:\\
             The draft presents three broad modes of updates: client-initiated updates,
             server-initiated updates, and hybrid updates, where hybrids are mechanisms
             that require interaction between the device and firmware provider before
-            updating. The thesis will look into all three of these broad classes.
+            updating. The thesis will look into all three of these broad classes. Some
+            classes may be preferred over others based on the technologies chosen in the
+            thesis.
 \end{itemize}
 
-An example architecture encompassing a device, a firmware update author, a firmware
-server, a network operator and a device operator is presented in the draft. The author and
-the device ineract with the firmware server in order to communicate firmware updates and
-possibly manifests. The communication of the device as well as the updating itself is the
-concern of this thesis. The draft also presents device management for the device operator
-so that it is possible to track the state of updates in a network. Device management is
-considered out of scope for this thesis.
+% TODO: Cut? Feels much too abstract and not applicable
+%An example architecture consisting of a device, a firmware update author, a firmware
+%server, a network operator and a device operator is presented in the draft. The author and
+%the device ineract with the firmware server in order to communicate firmware updates and
+%possibly manifests. The communication of the device as well as the updating itself is the
+%concern of this thesis. The draft also presents device management for the device operator
+%so that it is possible to track the state of updates in a network. Device management is
+%considered out of scope for this thesis.
 
 The distribution of manifest and firmware image is also discussed, with a couple of
 options being possible. The manifest and image can be distributed together to a firmware
@@ -326,14 +335,18 @@ that an update mechanism must support both types.
 \label{ssec:information-model}
 The corresponding Internet Draft for the SUIT information model presents the information
 needed in the manifest to secure a firmware update mechanism
-\parencite{suit-information-model}. It also presents threats, classifies them according to
-the STRIDE model, and presents security requirements that map to the threats
-\parencite{stride}. FInally it presents use cases and maps usability requirements to the
-use cases in order to motivate the presence of the manifest elements. Since the thesis
-makes a choice about specific technologies to use, not all use cases, usability
-requirements, and manifest elements are deemed necessary. The threats and security
-requirements however are. Note that the information model does not discuss threats outside
-of transporting the updates, such as physical attacks.
+\parencite{suit-information-model}. A manifest is needed for a device to make a decision
+about whether or not to update itself, and if the image related to the manifest is valid
+and untampered with.
+
+The draft also presents threats, classifies them according to the STRIDE model, and
+presents security requirements that map to the threats \parencite{stride}. Finally it
+presents use cases and maps usability requirements to the use cases in order to motivate
+the presence of the manifest elements. Since the thesis makes a choice about specific
+technologies to use, not all use cases, usability requirements, and manifest elements are
+deemed necessary. The threats and security requirements however are. Note that the
+information model does not discuss threats outside of transporting the updates, such as
+physical attacks.
 
 The proposed manifest elements and their brief motivations can be seen in Table
 \ref{tab:manifest-elements}. For more detailed motivations and requirements, refer to
@@ -513,14 +526,21 @@ The proposed manifest elements and their brief motivations can be seen in Table
 % TODO: Which manifest elements are deemed most useful/needed? Is this a question for the design
 % part of the thesis?
 
+Certain elements of the manifest are dependant on certain use cases. Examples of this are
+storage location (assumes there are more than one components on the device) and precursor
+image digest condition (assumes differential updates). As the thesis will implement a
+subset of the SUIT standard, mentioned in Section \ref{ssec:architecture}, not all
+elements would be mandatory for the particular use cases of the thesis. This will have to
+be taken into consideration when designing the manifest transport protocol.
+
 To summarize, the SUIT information model proposes to use a signed manifest that is
 distributed to each device in need of an update. The device then processes the manifest in
 order to determine if the update is trusted, suitable, up to date, with many other
-optional elements such as if other precursor images, special processing steps, or new URIs
-to fetch the images are needed. The model does not make assumptions about technology which
-is one of the reasons there are optional elements, not all of them are applicable to all
-solutions. Nevertheless, the architecture and information model together provides a solid
-base on which to design a secure update mechanism for IoT.
+optional elements such as if special processing steps or new URIs to fetch the images are
+needed. The model does not make assumptions about technology which is one of the reasons
+there are optional elements, not all of them are applicable to all solutions.
+Nevertheless, the architecture and information model together provides a solid base on
+which to design a secure update mechanism for IoT.
 
 \section{Contiki-NG}
 \label{ssec:contiki-ng}
