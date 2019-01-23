@@ -229,6 +229,17 @@ blocks can be reassembled. The size of blocks can also be negotiated between ser
 client meaning they can always find a suitable block size, making the mechanism quite
 flexible.
 
+\subsection{EST-coaps}
+\label{ssec:est-coaps}
+EST-coaps is a protocol for certificate enrollment in constrained environments using CoAP.
+\parencite{est-coaps}. By allowing IoT devices to enroll for certificates, assymetric
+encryption can be used even in a constrained environment. EST-coaps is heavily based on
+EST which was developed for traditional, less constrained networks and is thus unsuitable
+to be used with the SUIT standard \parencite{rfc7030}. EST-coaps retains much of the
+functionality and structure of EST but modifies it slightly to work over CoAP, DTLS, and
+UDP instead of HTTP, TLS, and TCP, for instance by making use of CoAPs block requests and
+responses to remedy the relatively large sizes of certificates.
+
 \section{SUIT}
 \label{sec:suit}
 The IETF SUIT (Software Updates for Internet of Things) working group aims to define a
@@ -661,26 +672,14 @@ of messages \parencite{tinydtls-github}. The CoAP implementation consists of
     \item a CoAP timer API providing timers for retransmission mechanisms.    
 \end{itemize}
 
-
-\section{EST-coaps}
-\label{ssec:est-coaps}
-EST-coaps is a protocol for certificate enrollment in constrained environments using CoAP.
-\parencite{est-coaps}. By allowing IoT devices to enroll for certificates, assymetric
-encryption can be used even in a constrained environment. EST-coaps is heavily based on
-EST which was developed for traditional, less constrained networks and is thus unsuitable
-to be used with the SUIT standard \parencite{rfc7030}. EST-coaps retains much of the
-functionality and structure of EST but modifies it slightly to work over CoAP, DTLS, and
-UDP instead of HTTP, TLS, and TCP, for instance by making use of CoAPs block requests and
-responses to remedy the relatively large sizes of certificates.
-
-\section{Firefly}
-\label{sec:hardware}
-Zolertia Firefly is the targeted board for this thesis. It is a breakout board designed
-for IoT application development and is supported by Contiki-NG. The board sports an ARM
-Cortex-M3 with 512 KB flash and 32 KB RAM, making it more powerful than the Class 1
-devices the SUIT standard targets. This is not an issue but should be kept in mind as less
-capable devices are supposed to be able to use an update mechanism complying with SUIT.
-Furthermore the board supports IEEE 802.15.4 communication in the 2.4 GHz band and SHA2
-and RSA hardware acceleration \parencite{firefly-datasheet}.
+\subsection{Firefly}
+\label{ssec:firefly}
+Zolertia Firefly is a supported hardware platform in Contiki-NG and the targeted board for
+this thesis. It is a breakout board designed for IoT application development sporting an
+ARM Cortex-M3 with 512 KB flash and 32 KB RAM, making it more powerful than the Class 1
+devices the SUIT standard specifies as a lower bound. This is not an issue but should be
+kept in mind as less capable devices are supposed to be able to use an update mechanism
+complying with SUIT. Furthermore the board supports IEEE 802.15.4 communication in the 2.4
+GHz band and SHA2 and RSA hardware acceleration \parencite{firefly-datasheet}.
 
 \end{document}
