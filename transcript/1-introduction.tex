@@ -5,13 +5,21 @@
 \section{Background}
 Internet of Things, or IoT, is the notion of connecting physical objects to the
 world-spanning Internet in order to facilitate services and communication both
-machine-to-human and machine-to-machine. By having everything connected, from everyday
+machine-to-human and machine-to-machine. By having everything connected from everyday
 appliances to vehicles to critical parts of infrastructure, computing will be ubiquitous
 and the Internet of Things realized. The benefits from the IoT can range from quality of
 life services, such as controlling lights and thermostats from afar, to data gathering
 through wireless sensor networks, to enabling life critical operations such as monitoring
-a pacemaker. IoT is a broad definition and fits many different devices in many different
-environment, what they all have in common is that they are physical and connected devices.
+a pacemaker or traffic system. IoT is a broad definition and fits many different devices
+in many different environments, what they all have in common is that they are physical and
+connected devices.
+
+The Internet of Things is expected to grow massively in the following years as devices get
+cheaper and more capable. Ericsson expects the amount of IoT connections to reach 22.3
+billion devices in 2024, of which the majority is short-range IoT devices
+\parencite{ericsson-mobility-report}. However, cellular IoT connections are expected to
+have the highest compound annual growth rate as 4G and new 5G networks enable even more
+use cases for IoT devices.
 
 In recent years the general public has become increasingly aware of digital attacks and
 intrustions affecting their day to day lives. In 2016 the DNS provider Dyn was attacked by
@@ -20,16 +28,20 @@ such as printers and baby monitors were leveraged to launch an attack on Dyn's s
 which affected sites like Airbnb, Amazon, and CNN \parencite{perlroth_2016}. Cardiac
 devices implanted in patients were also discovered to be unsafe, with hackers being able
 to deplete the batteries of pacemakers prematurely \parencite{hern_2017}. These cases and
-many others make it clear that security in IoT is a big deal.
+many others make it clear that security in IoT is a big deal, and as IoT is expected to
+grow rapidly insecure devices can cause even more problems in the future.
 
-According to Bain \& Company, the largest barrier for Internet of Things (IoT) adoptation
-is security concerns, and customers would buy an average of 70\% more IoT devices if they
-were secured \parencite{ali_bosche_ford_2018}. Despite security being lacking today in
-IoT, the field is expected to grow rapidly and an increase in unsecured devices could
-spell disaster. Securing IoT equipment such as printers, baby monitors, and pacemakers is
-imperative to prevent future attacks. But what about the devices currently employed
-without security? They need to be updated and patched in order to fix these
-vulnerabilities, a non-trivial task.
+Security in IoT is also closely related to its business potential. According to Bain \&
+Company, the largest barrier for Internet of Things adoptation is security concerns, and
+customers would buy an average of 70\% more IoT devices if they were secured
+\parencite{ali_bosche_ford_2018}. Despite security being lacking today in IoT, the field
+is expected to grow rapidly and an increase in unsecured devices could spell disaster.
+Securing IoT equipment such as printers, baby monitors, and pacemakers is imperative to
+prevent future attacks. But what about the devices currently employed without security, or
+devices in which security vulnerabilities are discovered after deployment? They need to be
+updated and patched in order to fix these vulnerabilities, but sending a technician to
+each and every of the predicted 22.3 billion devices is not feasible. They need secure and
+remote updates which is a non-trivial task.
 
 \section{Problem Statement}
 There is a need for secure software and firmware updates for IoT devices as
@@ -46,27 +58,29 @@ remote IoT devices can be developed.
 The thesis project will examine the architecture and information model proposed by SUIT in
 order to create and evaluate an updating mechanism for battery powered, constrained, and
 remote IoT devices with a life span exceeding five years. The update mechanism can be
-considered as two parts, communication and upgrading. Communication will happen over
-unreliable channels and the payloads must arrive intact and untampered with. The upgrade
-mechanism itself must ensure integrity of the target image and safely perform the upgrade
-with a limited amount of memory. The thesis will examine the update mechanism from the
-viewpoint of IoT devices running the Contiki-NG operating system on 32-bit ARM Cortex M3
-processors. A suitable public key infrastructure developed by RISE will also be an
-underlying assumption for the work. The thesis aims to investigate the problem "How can
-the SUIT architecture be used to provide secure software and firmware update for the
-Internet of Things?".
+considered in three parts, communication, upgrading, and device management. Communication
+will happen over unreliable channels and the payloads must arrive intact and untampered
+with. The upgrade mechanism itself must ensure integrity of the target image and safely
+perform the upgrade with a limited amount of memory. Device management concers managing
+devices in a network and seeing which devices are in need of updates. Device management
+will not be considered in this thesis.
+
+The thesis will examine the update mechanism from the viewpoint of IoT devices running the
+Contiki-NG operating system on 32-bit ARM Cortex M3 processors. A suitable public key
+infrastructure developed by RISE will also be an underlying assumption for the work. The
+thesis aims to investigate the problem "How can the SUIT architecture be used to provide
+secure software and firmware update for the Internet of Things?".
 
 \subsection{Purpose}
-The purpose of the thesis project is to provide an open and interoperable software and
-firmware update mechanism that complies with the standards suggested by the IETF SUIT
-working group. This will aid other projects trying to secure their IoT devices following
-accepted standards.
+The purpose of the thesis project is to provide an open and interoperable update mechanism
+that complies with the standards suggested by the IETF SUIT working group. This will aid
+other projects trying to secure their IoT devices following accepted standards.
 
 \subsection{Goal}
-The goals of the thesis are to study current solutions and then propose lightweight
-end-to-end protocols that can be used when updating IoT devices. The degree project shall
-deliver specifications and prototypes of the protocols in an IoT testbed, as well as a
-thesis report.
+The goals of the thesis are to study current solutions and technologies and then propose
+lightweight end-to-end protocols that can be used when updating IoT devices. The degree
+project shall deliver specifications and prototypes of the protocols in an IoT testbed, as
+well as a thesis report.
 
 \section{Methodologies}
 The thesis will follow a mix of qualitative and quantitative methodologies. The SUIT group
@@ -79,28 +93,32 @@ an evaluation. The quantitative part of the evaluation will follow an objective,
 experimental approach, while the qualitative part will follow a interpretative approach.
 
 \section{Risks, Consequences, and Ethics}
-IoT devices need to be securely updated in order to fix vulnerabilities and undergo
-maintenance to ensure their future operability. Failing to do so could leave a device or
-network unsecured, posing a security risk. Furthermore the performance of the service
-provided by the IoT device may itself degrade. Lastly, if updates are not applied in a
-safe and secure manner, the updating mechanism itself might cause service disruptions.
-These risks are serious and could pose ethical dilemmas depending on what the IoT device
-is used for.
+As IoT devices become more commonplace their security becomes more important. Incorrect or
+faulty firmware or software can lead to incorrect sensor readings, a common application of
+IoT devices, which in turn can lead to incorrect conclusions. This could have a large
+effect on businesses such as agriculture and healthcare.
+
+As these devices are typically connected on networks with other computers such as laptops,
+a compromised IoT device can cause an attack to proliferate throughout an entire network.
+This can affect other IoT devices as well as traditional computers, putting every
+connected device at risk. Furthermore hacked devices can leak data to attackers and cause
+service distruptions. All of these risks and more have to be accounted for as IoT is
+expected to boom.
 
 \section{Scope}
-The updating mechanism can be roughlt split into three parts: the actual updating or
+The updating mechanism can be roughly split into three parts: the actual updating or
 flipping of images on the device, the transportation of the new image, and managing a
 heterogeneous network of devices needing different updates at different times. This thesis
 will only look at the first two parts, updating a firmware image on the device and
-transportation of the image. The thesis will not be concerned about device management.
+transportation of the image. The thesis will not be concerned with device management.
 
 \section{Outline}
 Chapter two describes the theoretical background needed to understand the results of the
-thesis. This includes the network protocols, hardware, operating system, and PKI being
-used in the thesis. Chapter three describes the design of the communication protocols used
-in the update mechanism. Chapter four describes how the local update mechanism works and
-how devices can upgrade their images. Chapter five evaluates the developed updating
-mechanism and presents the results. Chapter six ends the report with a discussion about
-the update mechanism and its results.
+thesis. This includes the network protocols and operating system being used in the thesis
+as well as the SUIT standard. Chapter three describes the design of the communication
+protocols used in the update mechanism. Chapter four describes how the local update
+mechanism works and how devices can upgrade their images. Chapter five evaluates the
+developed updating mechanism and presents the results. Chapter six ends the report with a
+discussion about the update mechanism and its results.
 
 \end{document}
