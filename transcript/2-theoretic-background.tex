@@ -4,12 +4,11 @@
 % TODO: Fix section references
 This chapter presents the theoretical background needed to understand the thesis. Section
 \ref{sec:network} introduces the networks protocols used and motivates their use over
-other protocols in an IoT context. Section \ref{sec:hardware} presents the target hardware
-for this thesis. The following section, Section \ref{sec:suit} presents and explains the
-SUIT architecture and information model and their respective requirements as formulated by
-the IETF. Section \ref{ssec:contiki-ng} presents the Contiki-NG operating system which the
-updating mechanism will be developed for, and finally \ref{ssec:pki} introduces EST-CoAP
-which is a protocol for public key certificate distribution. 
+other protocols in an IoT context. The following section, Section \ref{sec:suit} presents
+and explains the SUIT architecture and information model and their respective requirements
+as formulated by the IETF. Finally, Section \ref{ssec:contiki-ng} presents the Contiki-NG
+operating system which the updating mechanism will be developed for as well as the target
+hardware.
 
 \section{IoT Network Stack}
 \label{sec:network}
@@ -38,10 +37,12 @@ constrained networks. Instead, CoAP is a common protocol for the application lay
 networks. Figure \ref{fig:stack-comparison} shows the equivalent protocols for IoT network
 stacks versus traditional network stacks. 
 
-In this chapter, subsection \ref{ssec:udp} explains UDP and why UDP is preferable in
-IoT networks. Subsection \ref{ssec:dtls} briefly explains TLS, why it is unsuitable for
-IoT networks, the differences between TLS and DTLS and why DTLS is used. Lastly subsection
-\ref{ssec:coap} describes the CoAP protocol.
+In this chapter, subsection \ref{ssec:udp} explains UDP and why it is the prefered
+transport protocol in IoT networks. Subsection \ref{ssec:dtls} briefly explains TLS, why
+it is unsuitable for IoT networks, the differences between TLS and DTLS and why DTLS is
+used. Subsection \ref{ssec:coap} describes the CoAP protocol, and lastly subsection
+\ref{ssec:est-coaps} briefly introduces the certificate enrollment protocol used in the
+thesis.
 
 \begin{figure}
     \begin{bytefield}[bitformatting=\small, bitwidth=1.1em]{30}
@@ -567,9 +568,10 @@ of creating an open standard for updating IoT devices.
 Subsection \ref{ssec:process-event-memory} explains processes, events, and memory
 management in Contiki-NG. These internals are heavily based on the previous Contiki
 operating system and much of the information is gathered from there. Subsection
-\ref{ssec:timers} presents the different timers available in Contiki-NG. Finally,
-subsection \ref{ssec:networking-contiki} presents part of the network protocol stack that
-is implemented in standard Contiki-NG.
+\ref{ssec:timers} presents the different timers available in Contiki-NG. Subsection
+\ref{ssec:networking-contiki} presents part of the network protocol stack that is
+implemented in standard Contiki-NG. Finally, subsection \ref{ssec:firefly} presents the
+target hardware Contiki-NG will run on.
 
 \subsection{Processes, Events, and Memory Management}
 \label{ssec:process-event-memory}
