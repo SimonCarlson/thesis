@@ -16,70 +16,64 @@ transportation of the manifest is done as quickly as possible. As a rule of thum
 byte sent expends as much energy as roughly 8000 CPU cycles, so reducing the size of the
 manifest is of importance \parencite{interconnecting}.
 
+Different versions of manifests can feature different fields as amechanism evolves,
+therefore the device needs to know what to expect from the manifest. This can be encoded
+in a manifest version ID. Rollback attacks need to be prevented so that old, vulnerable
+images cannot be applied. They can be mitigated through a sequence number. Furthermore the
+format (ELF, binary, etc), the size of the image, and a URI of where to find the image must
+be included in three separate fields. Vendor and class IDs, possibly device ID, must also
+be included so that the device knows the image is applicable and will work. Lastly, a
+digest of the image must be included so the device can be sure the image has not been
+tampered with during transport. These elements are deemed absolutely necessary and form
+the very minimum upon which an update mechanism can operate. 
 
+In addition to these elements, there are several elements that are not as critical. If a
+device consists of several MCUs, a location element must inform which components are
+targeted by the update. This might mean several digests are carried at once, which needs
+to be indexed by XIP addresses. If the update is dependant on previous versions being
+present, or a differential update needs certain other images to function, those
+dependencies and precursor images must be described together with URIs of where to obtain
+them. Cryptographic keys can be distributed in different ways, and a key distribution
+method element can describe which method is chosen for this update. These elements have
+their use cases but as the thesis will primarily look at updating a singular MCU with one
+monolithic update using a PKI location, precursors, and key distribution method are not
+needed. Also only one digest at a time is needed, but space will be made to facilitate
+several digests. Despite this it is wise to include them in the format of the manifest as
+it is supposed to be interoperable, and developing a highly specific mechanism for one
+particular platform and use case would go against what SUIT is trying to achieve.
 
-In order to provide secure and valid updates, a manifest needs to reach the device. The
-device then parses the manifest to see if the update is untampered with and applicable.
-Not all elements of the manifest are relevant for all use cases, but as the thesis aims to
-be as compliant with SUIT as possible, all mandatory elements will be added. The
-non-mandatory elements that are regarded as necessary will also be added in the standard
-manifest format, with room for optional elements. These may not be implemented in the
-parser, but at least be considered for the manifest format. % TODO: Diskutera detta med
-% någon (Shahid?)
+Finally are the elements presented by SUIT as optional such as directives, aliases,
+best-before timestamp, component identifier, weighted URIs, and processing steps. These
+elements should usually not be needed and preparing for their regular occurence in the
+manifest would waste space. There is an argument to be made about having the best-before
+timestamp as a regular element, but it is only relevant in contexts where firmware expires
+which is not always the case. For rollbacks, sequence numbers (which themselves can be
+timestamps) already solve that.These elements can be included as options, mapping option
+codes to values, as presented in Table \ref{tab:option-codes}. By including these as
+options, the manifest size can be reduced.
 
-The manifest format will consist of several structured nested in the general ManifestInfo
-structure. The structures, their elements, and their motivations will be explained in
-Subsection \ref{ssec:mandatory-elements}. Optional elements and their structure will be
-explained in Subsection \ref{ssec:options}.
+\begin{longtable}[]{@{}ll@{}}
+    \caption{The manifest options.}
+    \label{tab:option-codes}\\
+    \toprule
+    Option Number & Option Value\tabularnewline
+    \midrule
+    \endhead
+    1 & directives\tabularnewline
+    2 & processingSteps\tabularnewline
+    3 & URIs\tabularnewline
+    4 & aliases\tabularnewline
+    5 & component\tabularnewline
+    \bottomrule
+\end{longtable}
+    
+
+Subsection \ref{ssec:mandatory-elements} explains the structure of the manifest. Optional
+elements and their structure are explained in Subsection \ref{ssec:options}.
 
 \subsection{Mandatory Elements}
 \label{ssec:mandatory-elements}
 % Show header format, motivate sizes
-At the top level resides the ManifestInfo structure. It is presented in Figure
-\ref{fig:manifest-info}. The ManifestInfo structure contains the following fields:
-
-\begin{itemize}
-    \item versionID: The version number of the manifest format. 
-    \item sequenceNumber: The sequence number of the image.
-    \item dependencies: A URI/Digest structure containing digests of images needed before
-            updating to this image, with URIs of where to find them.
-    \item precursors: A URI/Digest structure containing precursor images for differential
-            updates. 
-    \item keyDistributionMethod: The key distributon method. In this thesis, EST-coaps
-            will be used to enroll devices with assymetric keys.
-    \item conditions: A Conditions structure containing different types of conditions
-            (vendorID, classID, deviceID) and their respective UUIDs.
-    \item best-before: A timestamp to avoid applying old images.
-    \item aliases: A URI/Digest structure with alternative URIs for images.
-    \item payloadInfo: A PayloadInfo structure containing information about the image.
-    \item directives: A Directives structure containing instructions on how to process the
-        entire manifest.
-\end{itemize}
- 
-The other major structure is the PayloadInfo structure, shown in Figure
-\ref{fig:payload-info}. It contains the following fields:
-
-\begin{itemize}
-    \item format: The format of the payload (ELF, binary, etc)
-    \item storageLocation: Which component the payload is for. As the target hardware of
-        the thesis only has one MCU, this is not of interest but mandatory for other kinds
-        of devices
-    \item digests: Digest(s) of the payload(s).
-    \item XIP: Adresses for making sure the payloads are distributed to their correct
-        components. Only relevant with several digests in the PayloadInfo structure.
-    \item size: The size of the payload in bytes.
-    \item URI: Where to get the payload.
-    \item processingSteps: A Directives structure containing instructions on how to
-        process the payload
-\end{itemize}
-
-The Conditions, URI/Digest, and Directives structures are small structures mapping Types
-to UUIDs, Types to Values, and URIs to digests. These are broken out in individual
-structures as they can contain a varying amount of entries each. 
-\begin{figure}
-    \caption{The ManifestInfo structure.}
-    \label{fig:manifest-info}
-\end{figure}
 
 \subsection{Options}
 \label{ssec:options}
