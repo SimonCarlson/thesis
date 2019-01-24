@@ -18,29 +18,31 @@ manifest is of importance \parencite{interconnecting}.
 
 Different versions of manifests can feature different fields as amechanism evolves,
 therefore the device needs to know what to expect from the manifest. This can be encoded
-in a manifest version ID. Rollback attacks need to be prevented so that old, vulnerable
-images cannot be applied. They can be mitigated through a sequence number. Furthermore the
-format (ELF, binary, etc), the size of the image, and a URI of where to find the image must
-be included in three separate fields. Vendor and class IDs, possibly device ID, must also
-be included so that the device knows the image is applicable and will work. Lastly, a
-digest of the image must be included so the device can be sure the image has not been
-tampered with during transport. These elements are deemed absolutely necessary and form
-the very minimum upon which an update mechanism can operate. 
+in a \textbf{manifest version ID}. Rollback attacks need to be prevented so that old,
+vulnerable images cannot be applied. They can be mitigated through a \textbf{sequence
+number}. Furthermore the \textbf{format} (ELF, binary, etc), the \textbf{size} of the
+image, and a \textbf{URI} of where to find the image must be included in three separate
+fields. \textbf{Vendor and class IDs}, possibly \textbf{device ID}, must also be included
+so that the device knows the image is applicable and will work. Lastly, a \textbf{digest}
+of the image must be included so the device can be sure the image has not been tampered
+with during transport. These elements are deemed absolutely necessary and form the very
+minimum upon which an update mechanism can operate. 
 
 In addition to these elements, there are several elements that are not as critical. If a
-device consists of several MCUs, a location element must inform which components are
-targeted by the update. This might mean several digests are carried at once, which needs
-to be indexed by XIP addresses. If the update is dependant on previous versions being
-present, or a differential update needs certain other images to function, those
-dependencies and precursor images must be described together with URIs of where to obtain
-them. Cryptographic keys can be distributed in different ways, and a key distribution
-method element can describe which method is chosen for this update. These elements have
-their use cases but as the thesis will primarily look at updating a singular MCU with one
-monolithic update using a PKI location, precursors, and key distribution method are not
-needed. Also only one digest at a time is needed, but space will be made to facilitate
-several digests. Despite this it is wise to include them in the format of the manifest as
-it is supposed to be interoperable, and developing a highly specific mechanism for one
-particular platform and use case would go against what SUIT is trying to achieve.
+device consists of several MCUs, a \textbf{location} element must inform which components
+are targeted by the update. This might mean \textbf{several digests} are carried at once,
+which needs to be indexed by \textbf{XIP addresses}. If the update is dependant on
+previous versions being present, or a differential update needs certain other images to
+function, those \textbf{dependencies and precursor images} must be described together with
+URIs of where to obtain them. Cryptographic keys can be distributed in different ways, and
+a \textbf{key distribution method} element can describe which method is chosen for this
+update. These elements have their use cases but as the thesis will primarily look at
+updating a singular MCU with one monolithic update using a PKI location, precursors, and
+key distribution method are not needed. Also only one digest at a time is needed, but
+space will be made to facilitate several digests. Despite this it is wise to include them
+in the format of the manifest as it is supposed to be interoperable, and developing a
+highly specific mechanism for one particular platform and use case would go against what
+SUIT is trying to achieve.
 
 Finally are the elements presented by SUIT as optional such as directives, aliases,
 best-before timestamp, component identifier, weighted URIs, and processing steps. These
