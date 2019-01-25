@@ -16,6 +16,12 @@ manifest is done as quickly as possible. %As a rule of thumb, each byte sent exp
 %much energy as roughly 8000 CPU cycles, so reducing the size of the manifest is of
 %importance \parencite{interconnecting}.
 
+Subsection \ref{ssec:mandatory-elements} explains the structure of the manifest. Optional
+elements and their structure are explained in subsection \ref{ssec:options}. 
+
+\subsection{Mandatory Elements}
+\label{ssec:mandatory-elements}
+% Show header format, motivate sizes
 Different versions of manifests can feature different fields as an update mechanism
 evolves, therefore the device needs to know what to expect from the manifest. This can be
 encoded in a \textbf{manifest version ID}. Rollback attacks need to be prevented so that
@@ -43,15 +49,35 @@ are not needed. Despite this it is wise to include them in the format of the man
 it is supposed to be interoperable, and developing a highly specific mechanism for one
 particular platform and use case would go against what SUIT is trying to achieve.
 
-Finally are the elements presented by SUIT as optional such as directives, aliases,
-best-before timestamp, component identifier, weighted URIs, and processing steps. These
-elements should usually not be needed and preparing for their regular occurence in the
-manifest would waste space. There is an argument to be made about having the best-before
-timestamp as a regular element, but it is only relevant in contexts where firmware expires
-which is not always the case. For rollbacks, sequence numbers (which themselves can be
-timestamps) already solve that. These elements can be included as options, mapping option
-codes to values, as presented in Table \ref{tab:option-codes}. By including these as
-options, the manifest size can be reduced.
+The proposed format of the manifest is presented in Figure \ref{fig:manifest-format}.
+Options and their format is explained in the next subsection. Many of these elements are
+singular values but some elements are nested structures. Digests, dependencies, and
+precursors consist of URIs mapped to image digests in order to provide a source for images
+as well as validating them. Conditions map conditions type to their UUIDs. The UUIDs will
+be implemented in UUID5 as suggested in \parencite{suit-information-model}, where the
+vendor ID uses a vendor's registered namespace, class ID uses the vendor ID, and device ID
+the class ID. This ensures ID conditions are unique among vendors, and unique among
+classes and devices within vendors.
+
+\begin{figure}
+    
+
+    \caption{The proposed manifest format.}
+    \label{fig:manifest-format}
+\end{figure}
+
+\subsection{Options}
+\label{ssec:options}
+% Show options format, motivate sizes
+The elements presented by SUIT as optional namely directives, aliases, best-before
+timestamp, component identifier, weighted URIs, and processing steps will be considered
+options in the manifest format. These elements should usually not be needed and preparing
+for their regular occurence in the manifest would waste space. There is an argument to be
+made about having the best-before timestamp as a regular element, but it is only relevant
+in contexts where firmware expires which is not always the case. For rollbacks, sequence
+numbers (which themselves can be timestamps) already solve that. These elements can be
+included as options, mapping option codes to values, as presented in Table
+\ref{tab:option-codes}. By including these as options, the manifest size can be reduced.
 
 \begin{longtable}[]{@{}ll@{}}
     \caption{The manifest options.}
@@ -67,18 +93,12 @@ options, the manifest size can be reduced.
     5 & component\tabularnewline
     \bottomrule
 \end{longtable}
-    
 
-Subsection \ref{ssec:mandatory-elements} further explains the structure of the manifest.
-Optional elements and their structure are explained in more detail in subsection
-\ref{ssec:options}.
-
-\subsection{Mandatory Elements}
-\label{ssec:mandatory-elements}
-% Show header format, motivate sizes
-
-\subsection{Options}
-\label{ssec:options}
-% Show options format, motivate sizes
+The option field in the manifest format will contain a list of option structures, each
+structure consisting of an option ID, option length, and option value. The directives and
+processingSteps options are structures mapping types of directives and steps to values.
+URIs is a list of alternative mirrors for the image, aliases map URIs to digests just like
+digests, conditions, and precursors do in the mandatory fields. Finally, component is a
+singular value describing which component in a heterogeneous system is to be updated.
 
 \end{document}
