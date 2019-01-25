@@ -101,4 +101,19 @@ URIs is a list of alternative mirrors for the image, aliases map URIs to digests
 digests, conditions, and precursors do in the mandatory fields. Finally, component is a
 singular value describing which component in a heterogeneous system is to be updated.
 
+\begin{figure}
+    \begin{bytefield}{32}
+        \bitbox{16}{Num} & \bitbox{16}{Length}\\
+        \bitbox{32}{Extra length $\dots$}\\
+        \bitbox{32}{Value $\dots$}\\
+    \end{bytefield}
+    \caption{The option bit format.}
+    \label{fig:option-format}
+\end{figure}
+
+Figure \ref{fig:option-format} shows the bit format for the options. Almost all options
+can vary greatly in size depending on the use case and thus the length field can be
+extended. The length of the value field is equal to the sum of the length field(s)
+expressed in bytes.
+
 \end{document}
