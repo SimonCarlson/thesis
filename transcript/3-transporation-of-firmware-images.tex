@@ -9,10 +9,11 @@
 \label{sec:manifest-format}
 % General intro to the chapter
 % Maybe state assumptions about storage and computational capability of target devices?
-As the target devices of the update mechanism are contrained IoT devices, the manifest
+As the target devices of the update mechanism are constrained IoT devices, the manifest
 format must be designed with careful consideration. The format must be easy to parse in
 order to reduce power consumption on devices and be small so that transportation of the
-manifest is done as quickly as possible. %As a rule of thumb, each byte sent expends as
+manifest is done as quickly as possible, but still contain all necessary information to
+perform secure updates. %As a rule of thumb, each byte sent expends as
 %much energy as roughly 8000 CPU cycles, so reducing the size of the manifest is of
 %importance \parencite{interconnecting}.
 
@@ -22,99 +23,133 @@ elements and their structure are explained in subsection \ref{ssec:options}.
 \subsection{Mandatory Elements}
 \label{ssec:mandatory-elements}
 % Show header format, motivate sizes
+The mandatory elements of the manifest should facilitate singular updates for a homogenous
+device supporting one MCU as this is the simplest use case for secure updates. This use
+case updates the entire image at once, OS and code, and does not need to care for
+different storage locations or components. By restricting the mandatory elements to
+supporting these kinds of updates, the size of the always occuring elements can be
+reduced. 
+
 Different versions of manifests can feature different fields as an update mechanism
 evolves, therefore the device needs to know what to expect from the manifest. This can be
 encoded in a \textbf{manifest version ID}. Rollback attacks need to be prevented so that
 old, vulnerable images cannot be applied. They can be mitigated through a \textbf{sequence
-number}. Furthermore the \textbf{format} (ELF, binary, etc), the \textbf{size} of the
-image, and a \textbf{URI} of where to find the image must be included in three separate
-fields. \textbf{Vendor and class IDs}, possibly \textbf{device ID}, must also be included
-so that the device knows the image is applicable and will work. Lastly, a \textbf{digest}
-of the image must be included so the device can be sure the image has not been tampered
-with during transport. These elements are deemed absolutely necessary and form the very
-minimum upon which an update mechanism can operate. 
+number}. Furthermore the \textbf{format} (ELF, binary, etc) and the \textbf{size} of the
+image must be included. \textbf{Vendor and class IDs}, possibly \textbf{device ID}, must
+also be included so that the device knows the image is applicable and will work. Lastly, a
+\textbf{digest} of the image must be included so the device can be sure the image has not
+been tampered with during transport. The \textbf{URI} from which the image can be fetched
+is bundled together with the digest. The manifest structure expressed as a C struct can be
+seen in Listing \ref{lst:manifest-struct}.
 
-In addition to these elements, there are several elements that are not as critical. If a
-device can update the OS and code separately or has different means of storage, a
-\textbf{storage location} element must inform which storage location the update is for.
-This might mean \textbf{several digests} are carried at once, which needs to be indexed by
-\textbf{XIP addresses}. If the update is dependant on previous versions being present, or
-a differential update needs certain other images to function, those \textbf{dependencies
-and precursor images} must be described together with URIs of where to obtain them.
-Cryptographic keys can be distributed in different ways, and a \textbf{key distribution
-method} element can describe which method is chosen for this update. These elements have
-their use cases but as the thesis will primarily look at updating a singular MCU with one
-monolithic update using a PKI storage location, precursors, and key distribution method
-are not needed. Despite this it is wise to include them in the format of the manifest as
-it is supposed to be interoperable, and developing a highly specific mechanism for one
-particular platform and use case would go against what SUIT is trying to achieve.
+\begin{lstlisting}[caption={The mandatory manifest format.}, 
+                    label={lst:manifest-struct}]
+    struct Manifest {
+        int version;
+        int sequenceNumber;
+        int format;
+        int size;
+        Condition* condition;
+        URIDigest* digest;
+        Option* option;
+    } Manifest;
+\end{lstlisting}
 
-The proposed format of the manifest is presented in Figure \ref{fig:manifest-format}.
-Options and their format is explained in the next subsection. Many of these elements are
-singular values but some elements are nested structures. Digests, dependencies, and
-precursors consist of URIs mapped to image digests in order to provide a source for images
-as well as validating them. Conditions map conditions type to their UUIDs. The UUIDs will
-be implemented in UUID5 as suggested in \parencite{suit-information-model}, where the
-vendor ID uses a vendor's registered namespace, class ID uses the vendor ID, and device ID
-the class ID. This ensures ID conditions are unique among vendors, and unique among
-classes and devices within vendors.
+These elements are deemed absolutely necessary and form the very minimum upon which an
+update mechanism can operate. A manifest containing these and only these elements can be
+used to perform a singular update for a device containing one MCU and one means of storage
+(no ambiguity about which components/locations are being updated).
 
-\begin{figure}
-    
+The digests, conditions, and options are nested structures that can possibly be repeated
+depending on how many digests, conditions, and options are necessary. In order to
+implement this, each of these structures contain an element which is a pointer to another
+structure of the same type. This allows a parser to traverse the link of structures, and
+thus parse several URI/Digest pairs, conditions, or options. Their structures can be seen
+in Listing \ref{lst:uridigest-struct}, Listing \ref{lst:condition-struct}, and Listing
+\ref{lst:option-struct} in the next section.
 
-    \caption{The proposed manifest format.}
-    \label{fig:manifest-format}
-\end{figure}
+\begin{lstlisting}[caption={The format of URI/digest pairs.}, 
+                    label={lst:uridigest-struct}]
+    struct URIDigest {
+        int URILength;
+        char* URI;
+        char* digest;
+        URIDigest* next;
+    } URIDigest;
+\end{lstlisting}
+
+\begin{lstlisting}[caption={The format of vendor, class, and device ID conditions.}, 
+                    label={lst:condition-struct}]
+    struct Condition {
+        int type;
+        char* UUID;
+        Condition* next
+    } Condition;
+\end{lstlisting}
 
 \subsection{Options}
 \label{ssec:options}
 % Show options format, motivate sizes
-The elements presented by SUIT as optional namely directives, aliases, best-before
-timestamp, component identifier, weighted URIs, and processing steps will be considered
-options in the manifest format. These elements should usually not be needed and preparing
-for their regular occurence in the manifest would waste space. There is an argument to be
-made about having the best-before timestamp as a regular element, but it is only relevant
-in contexts where firmware expires which is not always the case. For rollbacks, sequence
-numbers (which themselves can be timestamps) already solve that. These elements can be
-included as options, mapping option codes to values, as presented in Table
-\ref{tab:option-codes}. By including these as options, the manifest size can be reduced.
+The options provide additional value to the mechanism, but as the manifest aims to be as
+small as possible they are not accounted for in the base manifest. Instead they can be
+optionally included using the options field of the manifest. The structure of the options
+field is shown in \ref{fig:option-struct}. The included options must be sorted by their
+option code in ascending order to calculate a delta between the current and preceeding
+option. This is the way CoAP implements options, and it allows for a smaller amount of
+bits to encode the option code when the codes get larger. The options and their codes are
+presented in Table \ref{tab:option-codes}.
 
 \begin{longtable}[]{@{}ll@{}}
-    \caption{The manifest options.}
+    \caption{The optional elements of the manifest and their option codes.}
     \label{tab:option-codes}\\
     \toprule
-    Option Number & Option Value\tabularnewline
+    Option Code & Option Name\tabularnewline
     \midrule
     \endhead
-    1 & directives\tabularnewline
-    2 & processingSteps\tabularnewline
+    1 & directives (Instruction struct)\tabularnewline
+    2 & processingSteps (Instruction struct)\tabularnewline
     3 & URIs\tabularnewline
-    4 & aliases\tabularnewline
-    5 & component\tabularnewline
-    6 & best-before timestamp\tabularnewline
+    4 & component\tabularnewline
+    5 & dependencies (URIDigest struct)\tabularnewline
+    6 & precursors (URIDigest struct)\tabularnewline
+    7 & aliases (URIDigest struct)\tabularnewline
+    8 & storage\tabularnewline
+    9 & keyDist\tabularnewline
+    10 & best-before\tabularnewline
+    11 & payload (if small enough)\tabularnewline
     \bottomrule
 \end{longtable}
 
 The option field in the manifest format will contain a list of option structures, each
-structure consisting of an option ID, option length, and option value. The directives and
-processingSteps options are structures mapping types of directives and steps to values.
-URIs is a list of alternative mirrors for the image, aliases map URIs to digests just like
-digests, conditions, and precursors do in the mandatory fields. Finally, component is a
-singular value describing which component in a heterogeneous system is to be updated.
+structure consisting of an option delta, option length, option value, and a pointer to the
+next option as seen in Listing \ref{lst:option-struct}. As with the mandatory elements,
+some options consist of nested structs. The dependencies and precursor options list
+digests of images or parts of images that must be acquired before applying the update,
+along with their URLs. Aliases lists alternative mirrors for each image that could be used
+instead. Directives and processingSteps both use a different kind of structure, an
+Instruction struct, that maps types of instructions to their values. Examples of
+directives could be when to install the update, and examples of processingSteps could be
+which decompression algorithm to use. The Instruction struct can be seen in Listing
+\ref{lst:instruction}.
 
-\begin{figure}
-    \begin{bytefield}{32}
-        \bitbox{16}{Num} & \bitbox{16}{Length}\\
-        \bitbox{32}{Extra length $\dots$}\\
-        \bitbox{32}{Value $\dots$}\\
-    \end{bytefield}
-    \caption{The option bit format.}
-    \label{fig:option-format}
-\end{figure}
+\begin{lstlisting}[caption={The format of the option field.}, 
+                    label={lst:option-struct}]
+    struct Option {
+        int delta;
+        int length;
+        char* value;
+        Option* next;
+    } Option;
+\end{lstlisting}
 
-Figure \ref{fig:option-format} shows the bit format for the options. Almost all options
-can vary greatly in size depending on the use case and thus the length field can be
-extended. The length of the value field is equal to the sum of the length field(s)
-expressed in bytes.
+\begin{lstlisting}[caption={The format of directives or processing steps.}, 
+                    label={lst:instruction}]
+    struct Instruction {
+        int type;
+        int value;
+        Instruction* next;
+    } Instruction;
+\end{lstlisting}
+
 
 \end{document}

@@ -116,7 +116,8 @@ These fields, with the exception of the epoch and sequence number, are the same
 as in TLS 1.2 \parencite{rfc6347}.
 
 \lstset{language=C}
-\begin{lstlisting}[caption={The DTLS plaintext record structure.}, label={lst:dtls-plain}]
+\begin{lstlisting}[caption={The DTLS plaintext record structure.}, 
+                    label={lst:dtls-plain}]
     struct {
         ContentType type;
         ProtocolVersion version;
@@ -127,7 +128,8 @@ as in TLS 1.2 \parencite{rfc6347}.
     } DTLSPlaintext;
 \end{lstlisting}
 
-\begin{lstlisting}[caption={The DTLS ciphertext record structure.}, label={lst:dtls-cipher}]
+\begin{lstlisting}[caption={The DTLS ciphertext record structure.}, 
+                    label={lst:dtls-cipher}]
     struct {
         ContentType type;
         ProtocolVersion version;
