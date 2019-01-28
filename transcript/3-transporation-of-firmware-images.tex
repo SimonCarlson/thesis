@@ -158,5 +158,98 @@ which decompression algorithm to use. The Instruction struct can be seen in List
     } Instruction;
 \end{lstlisting}
 
+\subsection{Example Manifest}
+\label{ssec:example-manifest}
+JSON is a human readable and easily modified format. It is easy to convert JSON, which is
+quite verbose, into CBOR as a more efficient means of encoding the data. CBOR was designed
+around the same principles and elements as JSON, but is not very readable for humans. For
+these reasons, the thesis proposes to craft manifests in JSON, then convert into CBOR, and
+finally sign and send to the device requiring an update. An example manifest could look as
+in Listing \ref{lst:example-manifest}.
+
+% TODO: Fix formatting
+\begin{lstlisting}[caption={An example manifest.},
+                    label={lst:example-manifest}]
+    {
+        "versionID": 1,
+        "sequenceNumber": 1,
+        "format": 0,
+        "size": 512,        // Size of image in bytes
+        "conditions": [
+            {
+                "type": 0,  // UUID5 vendor ID
+                "UUID": "74738ff5-5367-5958-9aee-98fffdcd1876"
+            },
+            {
+                "type": 1,  // UUID5 class ID
+                "UUID": "74738ff5-5367-5958-9aee-98fffdcd1876"
+            }
+        ],
+        "digests": [
+            {
+                "URI": "coap://fake.uri/image",
+                // Digest of image found on that URI
+                "digest": "b924842b4f4212d45ab7e0dc6f570cc9a69a20c9256181b9c1eabaecf3301985"
+            }
+        ],
+        "options": [
+            {
+                "delta": 4  // 0 + 4 = 4, option component
+                "length": 1,
+                "value": 0
+            },
+            {
+                "delta": 6, // 6 + 4 = 10, option best-before
+                "length": 10,
+                "value": 1548683522
+            }
+        ]
+    }
+\end{lstlisting}
+
+This manifest contains all the mandatory information and two options. There are two
+conditions telling the vendor and class ID so that the device knows the update is
+correctly targeted. There is only one URI/digest pair, giving the device the URI to
+download the image from and the digest to validate the image with. The two options
+specified are the component and best-before timestamp options. The component option value
+can for instance map integers to components to be updated, and the best-before timestamp
+prevents the device from applying the device if that moment in time has been exceeded. The
+manifest is easy to read but as it is JSON it is unnecessarily verbose. By encoding it in
+CBOR, which is a binary encoding, it will shrink in size and thus cost less to receive.
+
+\begin{lstlisting}[caption={The first four elements of the example manifest in CBOR encoding.},
+                    label={lst:example-manifest-cbor}]
+A7                                      # map(7)
+   69                                   # text(9)
+      76657273696F6E4944                # "versionID"
+   01                                   # unsigned(1)
+   6E                                   # text(14)
+      73657175656E63654E756D626572      # "sequenceNumber"
+   01                                   # unsigned(1)
+   66                                   # text(6)
+      666F726D6174                      # "format"
+   00                                   # unsigned(0)
+   64                                   # text(4)
+      73697A65                          # "size"
+   19 0200                              # unsigned(512)
+\end{lstlisting}
+
+Listing \ref{lst:example-manifest-cbor} shows the first four elements of the example
+manifest when encoded in CBOR. The structure of mapping keys to values is the same, but
+each element is preceeded by an indication of type and length. This allows for arbitrarily
+nested elements and indefinite length items. It also allows for a more efficient encoding
+of elements since if the size is known beforehand, only the required amount of bits can be
+used instead of preallocating bits and wasting them on shorter items.
+
+The example manifest would be transmitted to a device and then parsed. The parser would
+divide the manifest into the structures shown in subsections \ref{ssec:mandatory-elements}
+and \ref{ssec:options}. The parsed manifest structure would have an option struct
+referencing another option struct, meaning the chain is of length 2. The reason for having
+the nested structs carry a reference to its own type is to make memory allocation easier.
+While parsing, when the parser detects a new nested struct will be created it can simply
+allocate that memory and add it in the chain of structs. There is no need to preallocate a
+large enough block of memory to make sure the structs will fit. Finally, when the manifest
+is parsed and analyzed, the update itself can take place. This is a topic for the next
+chapter.
 
 \end{document}
