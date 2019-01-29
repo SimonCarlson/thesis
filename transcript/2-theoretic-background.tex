@@ -24,7 +24,7 @@ TCP/IP stack. It uses TCP as a transportation protocol, usually with TLS for sec
 a common application layer protocol is HTTP. TCP is however poorly suited for IoT networks
 as it is a connection based, stateful protocol which tries to ensure the guaranteed
 delivery of packets in the correct order. There is also advanced congestion control
-mechanisms in TCP which are hard to apply on low-bandwitch, unreliable networks. IoT
+mechanisms in TCP which are hard to apply on low-bandwidth, unreliable networks. IoT
 networks on the other hand often utilize UDP for transport. UDP is also an IP-based
 protocol but it connectionless and less reliable than TCP, performing on a best-effort
 level instead. Despite being less reliable, UDP often performs better in IoT contexts. As
@@ -32,12 +32,12 @@ TLS is based on the same assumptions TCP it is unsuitable for UDP networks.
 
 UDP networks are instead secured by DTLS, which is a version of TLS enhanced for use in
 datagram oriented protocols. HTTP can be used over UDP for the application layer, but as
-HTTP is encoded in human readable plaintext it is unecessarily wordy and not optimal for
+HTTP is encoded in human readable plaintext it is unnecessarily wordy and not optimal for
 constrained networks. Instead, CoAP is a common protocol for the application layer in IoT
 networks. Figure \ref{fig:stack-comparison} shows the equivalent protocols for IoT network
 stacks versus traditional network stacks. 
 
-In this chapter, subsection \ref{ssec:udp} explains UDP and why it is the prefered
+In this chapter, subsection \ref{ssec:udp} explains UDP and why it is the preferred
 transport protocol in IoT networks. Subsection \ref{ssec:dtls} briefly explains TLS, why
 it is unsuitable for IoT networks, the differences between TLS and DTLS and why DTLS is
 used. Subsection \ref{ssec:coap} describes the CoAP protocol, and lastly subsection
@@ -143,7 +143,7 @@ as in TLS 1.2 \parencite{rfc6347}.
     } DTLSCiphertext;
 \end{lstlisting}
 
-TLS records are compressed and then encrypted, the same holds for DTLS. When initating
+TLS records are compressed and then encrypted, the same holds for DTLS. When initiating
 contact, a compression algorithm is chosen. The DTLSPlaintext is then compressed into a
 DTLSCompressed record, with similar structure to Listing \ref{lst:dtls-plain}.The
 compressed record is encrypted into a DTLSCiphertext record whose structure is shown in
@@ -175,32 +175,32 @@ overhead, and UDP and DTLS bindings which are all suitable for constrained envir
 
 As CoAP is usually implemented on top of UDP, communication is stateless and asynchronous.
 For this reason CoAP defines four message types: Confirmable, Non-confirmable,
-Acknowledgement, and Reset. Confirmable messages must be answered with a corresponding
-Acknowledgement, this provides one form of reliability over an otherwise unreliable
-channel. Non-confirmable messages do not require an Acknowledgement and thus act
+Acknowledgment, and Reset. Confirmable messages must be answered with a corresponding
+Acknowledgment, this provides one form of reliability over an otherwise unreliable
+channel. Non-confirmable messages do not require an Acknowledgment and thus act
 asynchronously. Reset messages are used when a recipient is unable to process a
-Non-confirmable message. Confirmable, Non-confirmable, and Acknowledgement messages all
+Non-confirmable message. Confirmable, Non-confirmable, and Acknowledgment messages all
 use Message IDs in order to detect duplicate messages in case of retransmission.
 
 Since CoAP is based on unreliable means of transport, there are some lightweight
 reliability and congestion control mechanics in CoAP. Message IDs allows for detection of
 duplicate messages and tokens allow asynchronous requests and responses be paired
 correctly. There is also a retransmission mechanic with an exponential back-off timer for
-Confirmable messages so that lost Acknowledgements does not cause a flood of
+Confirmable messages so that lost Acknowledgments does not cause a flood of
 retransmissions. Additionally, CoAP features piggybacked responses, meaning a response can
-be sent in the Acknowledgement of a Confirmable or Non-Confirmable request if the response
+be sent in the Acknowledgment of a Confirmable or Non-Confirmable request if the response
 fits and is available right away. This also reduces the amount of messages sent by the
 protocol.
 
 Figure \ref{fig:coap} shows the CoAP message format. The 2-bit version (Ver) field
 indicates the CoAP version, which at time of writing is 1 (01 in binary). The 2-bit type
-(T) field determines the type of message (Confirmable, Non-confirmable, Acknowledgement,
+(T) field determines the type of message (Confirmable, Non-confirmable, Acknowledgment,
 Reset). Token length (TKL) indicates the length of the Token field which can vary between
 zero to eight bytes. The 8-bit code field carries which method code the message carries
 and can be further broken into a 3-bit class and 5-bit detail. The class can indicate a
 request (0), a success response (2), a client error response (4), or a server error
 response (5), with the detail further specifying the status of the message. The message ID
-is a 16-bit integer used to detect duplicate message and to match Acknowledgement or
+is a 16-bit integer used to detect duplicate message and to match Acknowledgment or
 Resets with their initiating requests.
 
 Following the header is the zero to eight bit Token value, which in turn is follow by zero
@@ -235,7 +235,7 @@ flexible.
 \subsection{EST-coaps}
 \label{ssec:est-coaps}
 EST-coaps is a protocol for certificate enrollment in constrained environments using CoAP.
-\parencite{est-coaps}. By allowing IoT devices to enroll for certificates, assymetric
+\parencite{est-coaps}. By allowing IoT devices to enroll for certificates, asymmetric
 encryption can be used even in a constrained environment. EST-coaps is heavily based on
 EST which was developed for traditional, less constrained networks and is thus unsuitable
 to be used with the SUIT standard \parencite{rfc7030}. EST-coaps retains much of the
@@ -248,7 +248,7 @@ responses to remedy the relatively large sizes of certificates.
 The IETF SUIT (Software Updates for Internet of Things) working group aims to define a
 firmware update solution for IoT devices that is interoperable and non-proprietary
 \parencite{suit}. The working group does not however try to define new transport or
-discovery mechanism, making their proposal angostic of any particular technology. The
+discovery mechanism, making their proposal agnostic of any particular technology. The
 solution shall be usable on Class 1 devices, defined by ~10 KiB RAM and ~100 KiB code size
 \parencite{rfc7228}. The solution may be applied to more powerful devices. 
 
@@ -335,10 +335,10 @@ presents ten qualitative requirements this architecture should have:
 
 The distribution of manifest and firmware image is also discussed, with a couple of
 options being possible. The manifest and image can be distributed together to a firmware
-server. The device then recieves the manifest either via pulling or pushing and can
+server. The device then receives the manifest either via pulling or pushing and can
 subsequently download the image. Alternatively, the manifest itself can be directly sent
 to the device without a need of a firmware server, while the firmware image is put on the
-firmware server. After the device has receieved the lone manifest through some method, the
+firmware server. After the device has received the lone manifest through some method, the
 firmware can be downloaded from the firmware server. The SUIT architecture does not
 enforce a specific method to be used when delivering the manifest and firmware, but states
 that an update mechanism must support both types.
@@ -502,7 +502,7 @@ The proposed manifest elements and their brief motivations can be seen in Table
     \end{minipage} & \begin{minipage}[t]{0.26\columnwidth}\raggedright\strut
     Optional\strut
     \end{minipage} & \begin{minipage}[t]{0.60\columnwidth}\raggedright\strut
-    For heterogeneous storages, identifies which part is to store the
+    For heterogeneous storage architecture, identifies which part is to store the
     payload\strut
     \end{minipage}\tabularnewline
     \begin{minipage}[t]{0.23\columnwidth}\raggedright\strut

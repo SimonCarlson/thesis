@@ -32,11 +32,11 @@ elements and their structure are explained in subsection \ref{ssec:options}.
 \subsection{Mandatory Elements}
 \label{ssec:mandatory-elements}
 % Show header format, motivate sizes
-The mandatory elements of the manifest should facilitate singular updates for a homogenous
+The mandatory elements of the manifest should facilitate singular updates for a homogeneous
 device supporting one MCU as this is the simplest use case for secure updates. This use
 case updates the entire image at once, OS and code, and does not need to care for
 different storage locations or components. By restricting the mandatory elements to
-supporting these kinds of updates, the size of the always occuring elements can be
+supporting these kinds of updates, the size of the always occurring elements can be
 reduced. 
 
 Different versions of manifests can feature different fields as an update mechanism
@@ -103,7 +103,7 @@ The options provide additional value to the mechanism, but as the manifest aims 
 small as possible they are not accounted for in the base manifest. Instead they can be
 optionally included using the options field of the manifest. The included options must be
 sorted by their option code in ascending order to calculate a delta between the current
-and preceeding option. This is the way CoAP implements options, and it allows for a
+and preceding option. This is the way CoAP implements options, and it allows for a
 smaller amount of bits to encode the option code when the codes get larger. The options
 and their codes are presented in Table \ref{tab:option-codes}.
 
@@ -238,7 +238,7 @@ A7                                      # map(7)
 
 Listing \ref{lst:example-manifest-cbor} shows the first four elements of the example
 manifest when encoded in CBOR. The structure of mapping keys to values is the same, but
-each element is preceeded by an indication of type and length. This allows for arbitrarily
+each element is preceded by an indication of type and length. This allows for arbitrarily
 nested elements and indefinite length items. It also allows for a more efficient encoding
 of elements since if the size is known beforehand, only the required amount of bits can be
 used instead of preallocating bits and wasting them on shorter items.

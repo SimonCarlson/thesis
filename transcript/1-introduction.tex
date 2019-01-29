@@ -22,7 +22,7 @@ have the highest compound annual growth rate as 4G and new 5G networks enable ev
 use cases for IoT devices.
 
 In recent years the general public has become increasingly aware of digital attacks and
-intrustions affecting their day to day lives. In 2016 the DNS provider Dyn was attacked by
+intrusions affecting their day to day lives. In 2016 the DNS provider Dyn was attacked by
 a botnet consisting of heterogeneous IoT devices infected by the Mirai malware. Devices
 such as printers and baby monitors were leveraged to launch an attack on Dyn's services
 which affected sites like Airbnb, Amazon, and CNN \parencite{perlroth_2016}. Cardiac
@@ -32,7 +32,7 @@ many others make it clear that security in IoT is a big deal, and as IoT is expe
 grow rapidly insecure devices can cause even more problems in the future.
 
 Security in IoT is also closely related to its business potential. According to Bain \&
-Company, the largest barrier for Internet of Things adoptation is security concerns, and
+Company, the largest barrier for Internet of Things adaptation is security concerns, and
 customers would buy an average of 70\% more IoT devices if they were secured
 \parencite{ali_bosche_ford_2018}. Despite security being lacking today in IoT, the field
 is expected to grow rapidly and an increase in unsecured devices could spell disaster.
@@ -58,10 +58,10 @@ remote IoT devices can be developed.
 The thesis project will examine the architecture and information model proposed by SUIT in
 order to create and evaluate an updating mechanism for battery powered, constrained, and
 remote IoT devices with a life span exceeding five years. The update mechanism can be
-considered in three parts, communication, upgrading, and device management. Communication
+considered in three parts: communication, upgrading, and device management. Communication
 will happen over unreliable channels and the payloads must arrive intact and untampered
 with. The upgrade mechanism itself must ensure integrity of the target image and safely
-perform the upgrade with a limited amount of memory. Device management concers managing
+perform the upgrade with a limited amount of memory. Device management concerns managing
 devices in a network and seeing which devices are in need of updates. Device management
 will not be considered in this thesis.
 
@@ -87,22 +87,24 @@ The thesis will follow a mix of qualitative and quantitative methodologies. The 
 defines some goals or constraints a suitable updating mechanism should follow, but as
 their proposed architecture is agnostic of any particular technology these goals cannot be
 easily quantified. It is better to regard them as qualitative properties the mechanism
-should have. In addition to this there are some relevant measurements, such as reliability
-of the communication and memory and power requirements of the updates, that can be used in
-an evaluation. The quantitative part of the evaluation will follow an objective,
-experimental approach, while the qualitative part will follow a interpretative approach.
+should have. In addition there are some relevant measurements, such as reliability of the
+communication and memory and power requirements of the updates, that can be used in an
+evaluation. The quantitative part of the evaluation will follow an objective, experimental
+approach, while the qualitative part will follow a interpretative approach.
 
 \section{Risks, Consequences, and Ethics}
 As IoT devices become more commonplace their security becomes more important. Incorrect or
 faulty firmware or software can lead to incorrect sensor readings, a common application of
 IoT devices, which in turn can lead to incorrect conclusions. This could have a large
-effect on businesses such as agriculture and healthcare.
+effect on businesses such as agriculture and healthcare. Insecure communication channels
+can expose confidential or personal data, something governments and international unions
+are taking more seriously. 
 
-As these devices are typically connected on networks with other computers such as laptops,
-a compromised IoT device can cause an attack to proliferate throughout an entire network.
+As these devices can be connected on networks with other computers such as laptops, a
+compromised IoT device can cause an attack to proliferate throughout an entire network.
 This can affect other IoT devices as well as traditional computers, putting every
 connected device at risk. Furthermore hacked devices can leak data to attackers and cause
-service distruptions. All of these risks and more have to be accounted for as IoT is
+service disruptions. All of these risks and more have to be accounted for as IoT is
 expected to boom.
 
 \section{Scope}
