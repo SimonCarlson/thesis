@@ -1,0 +1,123 @@
+\begin{longtable}[]{@{}llll@{}}
+\toprule
+\begin{minipage}[b]{0.05\columnwidth}\raggedright\strut
+Threat\strut
+\end{minipage} & \begin{minipage}[b]{0.44\columnwidth}\raggedright\strut
+Description\strut
+\end{minipage} & \begin{minipage}[b]{0.30\columnwidth}\raggedright\strut
+Threat Model\strut
+\end{minipage} & \begin{minipage}[b]{0.09\columnwidth}\raggedright\strut
+Mitigated By\strut
+\end{minipage}\tabularnewline
+\midrule
+\endhead
+\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
+MFT1\strut
+\end{minipage} & \begin{minipage}[t]{0.44\columnwidth}\raggedright\strut
+Old Firmware\strut
+\end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
+Elevation of Privilege\strut
+\end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright\strut
+MFSR1\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
+MFT2\strut
+\end{minipage} & \begin{minipage}[t]{0.44\columnwidth}\raggedright\strut
+Mismatched Firmware\strut
+\end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
+Denial of Service\strut
+\end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright\strut
+MFSR2\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
+MFT3\strut
+\end{minipage} & \begin{minipage}[t]{0.44\columnwidth}\raggedright\strut
+Offline device + old firmware\strut
+\end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
+Elevation of Privilege\strut
+\end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright\strut
+MFSR3\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
+MFT4\strut
+\end{minipage} & \begin{minipage}[t]{0.44\columnwidth}\raggedright\strut
+The target device misinterprets the type of payload\strut
+\end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
+Denial of Service\strut
+\end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright\strut
+MFSRa\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
+MFT5\strut
+\end{minipage} & \begin{minipage}[t]{0.44\columnwidth}\raggedright\strut
+The target device installs the payload to the wrong location\strut
+\end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
+Denial of Service\strut
+\end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright\strut
+MFSR4b\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
+MFT6\strut
+\end{minipage} & \begin{minipage}[t]{0.44\columnwidth}\raggedright\strut
+Redirection\strut
+\end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
+Denial of Service\strut
+\end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright\strut
+MFSR4c\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
+MFT7\strut
+\end{minipage} & \begin{minipage}[t]{0.44\columnwidth}\raggedright\strut
+Payload Verification on Boot\strut
+\end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
+Elevation of Privilege\strut
+\end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright\strut
+MFSR4d\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
+MFT8\strut
+\end{minipage} & \begin{minipage}[t]{0.44\columnwidth}\raggedright\strut
+Unauthenticated Updates\strut
+\end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
+Elevation of Privilege\strut
+\end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright\strut
+MFSR5\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
+MFT9\strut
+\end{minipage} & \begin{minipage}[t]{0.44\columnwidth}\raggedright\strut
+Unexpected Precursor Image\strut
+\end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
+Denial of Service\strut
+\end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright\strut
+MFSR4e\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
+MFT10\strut
+\end{minipage} & \begin{minipage}[t]{0.44\columnwidth}\raggedright\strut
+Unqualified Firmware\strut
+\end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
+Denial of Service, Elevation of Privilege\strut
+\end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright\strut
+MFSR6, MFSR8\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
+MFT11\strut
+\end{minipage} & \begin{minipage}[t]{0.44\columnwidth}\raggedright\strut
+Reverse Engineering Of Firmware Image for Vulnerability Analysis\strut
+\end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
+All classes\strut
+\end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright\strut
+MFSR7\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
+MFT12\strut
+\end{minipage} & \begin{minipage}[t]{0.44\columnwidth}\raggedright\strut
+Overriding Critical Manifest Elements\strut
+\end{minipage} & \begin{minipage}[t]{0.30\columnwidth}\raggedright\strut
+Elevation of Privilege\strut
+\end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright\strut
+MFSR8\strut
+\end{minipage}\tabularnewline
+\bottomrule
+\end{longtable}
