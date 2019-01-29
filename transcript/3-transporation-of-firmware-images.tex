@@ -135,9 +135,9 @@ digests of images or parts of images that must be acquired before applying the u
 along with their URLs. Aliases lists alternative mirrors for each image that could be used
 instead. Directives and processingSteps both use a different kind of structure, an
 Instruction struct, that maps types of instructions to their values. Examples of
-directives could be when to install the update, and examples of processingSteps could be
-which decompression algorithm to use. The Instruction struct can be seen in Listing
-\ref{lst:instruction}.
+directives could be whether to install the update right away or just cache the image and
+install at some later point, and examples of processingSteps could be which decompression
+algorithm to use. The Instruction struct can be seen in Listing \ref{lst:instruction}.
 
 \begin{lstlisting}[caption={The format of the option field.}, 
                     label={lst:option-struct}]
