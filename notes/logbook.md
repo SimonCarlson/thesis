@@ -1,3 +1,13 @@
+29/1-19:
+Wrote some more on the presentation
+Put all documents in the git repo, no point separating them
+ARM mbed json-cbor converter and sbabic/swupdate can be used for inspiration but neither solution fits the thesis
+Read chapter 8, 9, 11.2, 11.3, and 13 in the interconnecting book
+Created a script that checks my .tex files for spelling errors. Fixed some spelling errors
+Made a figure describing the modes of distributing images and manifests
+Added todos about EST-coaps, interesting to speculate how it fits into the architecture
+
+
 28/1-19:
 "Epiphany". Mandatory elements in SUIT does not mean must always be present, it means it must be implemented to comply with SUIT. Can still put those fields in options to reduce manifest size.
 SWUpdate: Made for Linux systems, only supports single image delivery, seems to assume there is a filesystem, assumes GRUB is bootloader, seems to use HTTP/HTTPS, seems to use symmetric encryption of images. Include in thesis as example of state of the art?
