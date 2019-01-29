@@ -339,11 +339,50 @@ server. The device then receives the manifest either via pulling or pushing and 
 subsequently download the image. Alternatively, the manifest itself can be directly sent
 to the device without a need of a firmware server, while the firmware image is put on the
 firmware server. After the device has received the lone manifest through some method, the
-firmware can be downloaded from the firmware server. The SUIT architecture does not
-enforce a specific method to be used when delivering the manifest and firmware, but states
-that an update mechanism must support both types.
+firmware can be downloaded from the firmware server. The two approaches are shown in
+Figure \ref{fig:manifest-image-distribution}. The SUIT architecture does not enforce a
+specific method to be used when delivering the manifest and firmware, but states that an
+update mechanism must support both types.
 
 % TODO: Images showing the differences of distribution
+\begin{figure}
+    \caption{The two modes of distributing manifests and images. The top figure shows the 
+            manifest and image distributed together. The bottom figure shows separate
+            distribution of manifest and image.}   
+    \label{fig:manifest-image-distribution}
+    \begin{tikzpicture}[>=stealth',
+        box/.style={rectangle,draw,minimum width=3cm,minimum height=2cm},
+        line/.style={->,shorten >=3mm, shorten <=3mm}]
+        
+        \node[box] (author) {Firmware author};
+        \node[box, right=5cm of author] (device) {Device};
+        \node[box, above right=2.5cm and 2.5cm of author, anchor=center] (server) {Firmware server};
+        
+        \draw[line] (author.north) -- node[above,sloped] 
+            {Manifest} node[below,sloped]{Image} (server.west); 
+        
+        \draw[line] (server.east) -- node[above,sloped] 
+            {Manifest} node[below,sloped]{Image} (device.north); 
+    \end{tikzpicture}
+
+    \begin{tikzpicture}[>=stealth',
+        box/.style={rectangle,draw,minimum width=3cm,minimum height=2cm},
+        line/.style={->,shorten >=3mm, shorten <=3mm}]
+        
+        \node[box] (author) {Firmware author};
+        \node[box, right=5cm of author] (device) {Device};
+        \node[box, above right=2.5cm and 2.5cm of author, anchor=center] (server) {Firmware server};
+        
+        \draw[line] (author.north) -- node[above,sloped] 
+            {Image} (server.west); 
+
+        \draw[line] (author.east) -- node[above, sloped]
+            {Manifest} (device.west);
+        
+        \draw[line] (server.east) -- node[above,sloped] 
+            {Image} (device.north); 
+    \end{tikzpicture}
+\end{figure}
 
 \subsection{Information Model}
 \label{ssec:information-model}
