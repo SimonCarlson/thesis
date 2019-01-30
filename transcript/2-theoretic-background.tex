@@ -1,13 +1,13 @@
  \documentclass[0-thesis.tex]{subfiles}
 
 \begin{document}
-This chapter presents the theoretical background needed to understand the thesis. Section
-\ref{sec:network} introduces the networks protocols used and motivates their use over
-other protocols in an IoT context. The following section, Section \ref{sec:suit} presents
-and explains the SUIT architecture and information model and their respective requirements
-as formulated by the IETF. Finally, Section \ref{ssec:contiki-ng} presents the Contiki-NG
-operating system which the updating mechanism will be developed for as well as the target
-hardware.
+This chapter presents the theoretical background needed to understand the thesis.
+Section~\ref{sec:network} introduces the network protocols used and motivates their use
+over other protocols in an IoT context. The following section, Section~\ref{sec:suit}
+presents and explains the SUIT architecture and information model and their respective
+requirements as formulated by the IETF. Finally, Section~\ref{sec:contiki-ng} presents
+the Contiki-NG operating system which the updating mechanism will be developed for as well
+as the target hardware.
 
 \section{IoT Network Stack}
 \label{sec:network}
@@ -23,25 +23,26 @@ TCP/IP stack. It uses TCP as a transportation protocol, usually with TLS for sec
 a common application layer protocol is HTTP. TCP is however poorly suited for IoT networks
 as it is a connection based, stateful protocol which tries to ensure the guaranteed
 delivery of packets in the correct order. There is also advanced congestion control
-mechanisms in TCP which are hard to apply on low-bandwidth, unreliable networks. IoT
-networks on the other hand often utilize UDP for transport. UDP is also an IP-based
-protocol but it connectionless and less reliable than TCP, performing on a best-effort
-level instead. Despite being less reliable, UDP often performs better in IoT contexts. As
-TLS is based on the same assumptions TCP it is unsuitable for UDP networks. 
+mechanisms in TCP which are hard to apply on unreliable low-bandwidth networks. IoT
+networks often utilize UDP as a transport protocol instead. UDP is also an IP-based
+protocol but is connectionless and less reliable than TCP, performing on a best-effort
+level instead. Despite being less reliable, UDP often performs better in IoT contexts.
 
-UDP networks are instead secured by DTLS, which is a version of TLS enhanced for use in
-datagram oriented protocols. HTTP can be used over UDP for the application layer, but as
-HTTP is encoded in human readable plaintext it is unnecessarily wordy and not optimal for
-constrained networks. Instead, CoAP is a common protocol for the application layer in IoT
-networks. Figure \ref{fig:stack-comparison} shows the equivalent protocols for IoT network
-stacks versus traditional network stacks. 
+As TLS is based on the same assumptions as TCP it is unsuitable for UDP networks. UDP
+networks still need confidentiality and integrity through some means and thus use DTLS,
+which is a version of TLS enhanced for use in datagram oriented protocols. HTTP can be
+used over UDP for the application layer, but as HTTP is encoded in human readable
+plaintext it is unnecessarily verbose and not optimal for constrained networks. Instead,
+CoAP is a common protocol for the application layer in IoT networks. Figure
+\ref{fig:stack-comparison} shows the equivalent protocols for IoT network stacks versus
+traditional network stacks. 
 
-In this chapter, subsection \ref{ssec:udp} explains UDP and why it is the preferred
-transport protocol in IoT networks. Subsection \ref{ssec:dtls} briefly explains TLS, why
+In this chapter, Section~\ref{ssec:udp} explains UDP and why it is the preferred
+transport protocol in IoT networks. Section~\ref{ssec:dtls} briefly explains TLS, why
 it is unsuitable for IoT networks, the differences between TLS and DTLS and why DTLS is
-used. Subsection \ref{ssec:coap} describes the CoAP protocol, and lastly subsection
-\ref{ssec:est-coaps} briefly introduces the certificate enrollment protocol used in the
-thesis.
+used instead. Section~\ref{ssec:coap} describes the CoAP protocol, and lastly
+Section~\ref{ssec:est-coaps} briefly introduces EST-coaps, the certificate enrollment
+protocol used in the thesis.
 
 \begin{figure}
     \begin{bytefield}[bitformatting=\small, bitwidth=1.1em]{30}
@@ -67,11 +68,14 @@ TCP could face issues. Since TCP wants to ensure packet delivery, it will retran
 packages generating a lot of traffic and processing required for a receiver. Also, if the
 connection is too unstable TCP will not work at all since it can no longer guarantee the
 packets arrival. The best-effort approach of UDP is favorable in these situations, in
-addition to UDP being a lightweight protocol.
+addition to UDP being a lightweight protocol requiring a smaller memory footprint to
+implement.
 
-Figure \ref{fig:udp-header} shows the UDP header format. The source port is optional, the
+Figure~\ref{fig:udp-header} shows the UDP header format. The source port is optional, the
 length denotes the length of the datagram (including the header), and the checksum is
 calculated on a pseudo-header constructed from both the IP header, UDP header, and data.
+UDP headers are minimalist which shows the point of it being a lightweight protocol with
+not many features available.
 
 \begin{figure}
     \begin{bytefield}[bitformatting=\small, bitwidth=1.1em]{32}        
@@ -86,28 +90,31 @@ calculated on a pseudo-header constructed from both the IP header, UDP header, a
 
 \subsection{DTLS}
 \label{ssec:dtls}
-DTLS is a protocol which adds privacy to datagram protocols like UDP \parencite{rfc6347}.
-The protocol is designed to prevent eavesdropping, tampering, or message forgery. DTLS is
-based on TLS, a similar protocol for stateful transport protocols such as TCP, which would
-not work well on unreliable networks as previously discussed. The main issues with using
-TLS over unreliable networks is that TLS decryption is dependant on previous packets,
-meaning the decryption of a packet would fail if the previous packet was not received. In
-addition, the TLS handshake procedure assumes all handshake messages are delivered
-reliably which is not the case in IoT networks.
+DTLS is a protocol which adds confidentiality and integrity to datagram protocols like UDP
+\parencite{rfc6347}. The protocol is designed to prevent eavesdropping, tampering, or
+message forgery. DTLS is based on TLS, a similar protocol for stateful transport protocols
+such as TCP, which would not work well on unreliable networks as previously discussed. The
+main issues with using TLS over unreliable networks is that TLS decryption is dependant on
+previous packets, meaning the decryption of a packet would fail if the previous packet was
+not received. In addition, the TLS handshake procedure assumes all handshake messages are
+delivered reliably which is rarely the case in IoT networks.
 
 DTLS solves this by banning stream ciphers, effectively making decryption an independent
 operation between packets, as well as adding explicit sequence numbers. Furthermore, DTLS
 supports packet retransmission, reordering, as well as fragmenting DTLS handshake messages
 into several DTLS records. These mechanisms makes the handshake process feasible over
-unreliable networks. By splitting messages into different DTLS records, fragmentation at
-the IP level can be avoided since a DTLS record is guaranteed to fit an IP datagram. IP
-fragmentation is problematic is low-performing networks since if a single fragment of an
-IP packet is dropped all fragments of that packet must be retransmitted and should thus be
-avoided. Since DTLS is designed to correctly handle reordering and retransmission in lossy
-networks, splitting messages into several DTLS records is no problem, and if one record is
-lost only that record needs to be retransmitted
+unreliable networks. 
 
-Listing \ref{lst:dtls-plain} shows the DTLS record structure. It contains a TLS 1.2 type
+By splitting messages into different DTLS records, fragmentation at the IP level can be
+avoided since a DTLS record is guaranteed to fit an IP datagram. IP fragmentation is
+problematic in low-performing networks since if a single fragment of an IP packet is
+dropped all fragments of that packet must be retransmitted, and thus fragmenting at the IP
+level should be avoided. Since DTLS is designed to correctly handle reordering and
+retransmission in lossy networks, splitting messages into several DTLS records is no
+problem, and if one record is lost only that record needs to be retransmitted in a single
+IP packet.
+
+Listing~\ref{lst:dtls-plain} shows the DTLS record structure. It contains a TLS 1.2 type
 field, a version field which for DTLS 1.2 is 254.253, an epoch counter that is incremented
 for each cipher state change, an increasing sequence number (unique to each epoch), a
 length field and a fragment field containing the application data \parencite{rfc5246}.
@@ -144,9 +151,9 @@ as in TLS 1.2 \parencite{rfc6347}.
 
 TLS records are compressed and then encrypted, the same holds for DTLS. When initiating
 contact, a compression algorithm is chosen. The DTLSPlaintext is then compressed into a
-DTLSCompressed record, with similar structure to Listing \ref{lst:dtls-plain}.The
+DTLSCompressed record, with similar structure to Listing~\ref{lst:dtls-plain}. The
 compressed record is encrypted into a DTLSCiphertext record whose structure is shown in
-Listing \ref{lst:dtls-cipher}. Note that since DTLS disallows stream ciphers they are not
+Listing~\ref{lst:dtls-cipher}. Note that since DTLS disallows stream ciphers they are not
 an option in the encrypted fragment, whereas in TLS they are.
 
 In order to communicate via TLS and DTLS, a handshake has to be carried out. The handshake
@@ -159,6 +166,10 @@ finally verifies that their peer has the correct security parameters. The DTLS h
 adds to this a stateless cookie exchange to prevent DoS attacks, some modifications to the
 handshake header to make communication over UDP possible, and retransmission timers since
 the communication is unreliable. Otherwise the DTLS handshake is as the TLS handshake.
+Since the (D)TLS handshake assumes asymmetric cryptography, and the SUIT standard does as
+well as explained in Section~\ref{ssec:architecture}, devices must be able to enroll for
+certificates. EST-coaps is an enrollment protocol designed for use over CoAPs, and is
+introduced in Section~\ref{ssec:est-coaps}.
 
 \subsection{CoAP}
 \label{ssec:coap}
@@ -167,10 +178,12 @@ networks with low throughput and possibly high unreliability for machine-to-mach
 communication \parencite{rfc7252}. While designed for constrained networks, a design
 feature of CoAP is how it is easily interfaced with HTTP so that communication over
 traditional networks can be proxied. CoAP uses a request/response model similar to HTTP
-with method codes and request methods that are easily mapped to HTTP. Furthermore CoAP is
-a RESTful protocol utilizing concepts such as endpoints, resources, and URIs. Additionally
-CoAP offers features such as multicast support, asynchronous messages, low header
-overhead, and UDP and DTLS bindings which are all suitable for constrained environments.
+with method codes and request methods that are easily mapped to those of HTTP. Furthermore
+CoAP is a RESTful protocol utilizing concepts such as endpoints, resources, and URIs.
+These features makes it easier to design IoT applications that seamlessly interact with
+traditional web services. Additionally CoAP offers features such as multicast support,
+asynchronous messages, low header overhead, and UDP and DTLS bindings which are all
+suitable for constrained environments.
 
 As CoAP is usually implemented on top of UDP, communication is stateless and asynchronous.
 For this reason CoAP defines four message types: Confirmable, Non-confirmable,
@@ -178,8 +191,8 @@ Acknowledgment, and Reset. Confirmable messages must be answered with a correspo
 Acknowledgment, this provides one form of reliability over an otherwise unreliable
 channel. Non-confirmable messages do not require an Acknowledgment and thus act
 asynchronously. Reset messages are used when a recipient is unable to process a
-Non-confirmable message. Confirmable, Non-confirmable, and Acknowledgment messages all
-use Message IDs in order to detect duplicate messages in case of retransmission.
+Non-confirmable message. Confirmable, Non-confirmable, and Acknowledgment messages all use
+Message IDs in order to detect duplicate messages in case of retransmission.
 
 Since CoAP is based on unreliable means of transport, there are some lightweight
 reliability and congestion control mechanics in CoAP. Message IDs allows for detection of
@@ -191,7 +204,7 @@ be sent in the Acknowledgment of a Confirmable or Non-Confirmable request if the
 fits and is available right away. This also reduces the amount of messages sent by the
 protocol.
 
-Figure \ref{fig:coap} shows the CoAP message format. The 2-bit version (Ver) field
+Figure~\ref{fig:coap} shows the CoAP message format. The 2-bit version (Ver) field
 indicates the CoAP version, which at time of writing is 1 (01 in binary). The 2-bit type
 (T) field determines the type of message (Confirmable, Non-confirmable, Acknowledgment,
 Reset). Token length (TKL) indicates the length of the Token field which can vary between
@@ -199,12 +212,12 @@ zero to eight bytes. The 8-bit code field carries which method code the message 
 and can be further broken into a 3-bit class and 5-bit detail. The class can indicate a
 request (0), a success response (2), a client error response (4), or a server error
 response (5), with the detail further specifying the status of the message. The message ID
-is a 16-bit integer used to detect duplicate message and to match Acknowledgment or
-Resets with their initiating requests.
+is a 16-bit integer used to detect duplicate message and to match Acknowledgment or Resets
+with their initiating requests.
 
 Following the header is the zero to eight bit Token value, which in turn is follow by zero
-or more Options. One of the options offered is the observe options, which allows a client
-to notified by the server when a particular resource changes. Lastly comes the optional
+or more Options. One of the options offered is the observe option, which allows a client
+to be notified by the server when a particular resource changes. Lastly comes the optional
 payload, which if present is prefixed by a payload marker (0xFF). The length of the
 payload is dependant on the carrying protocol, which in this thesis will be DTLS. The
 length of the payload is calculated depending on the size of the CoAP header, token, and
@@ -236,11 +249,12 @@ flexible.
 EST-coaps is a protocol for certificate enrollment in constrained environments using CoAP.
 \parencite{est-coaps}. By allowing IoT devices to enroll for certificates, asymmetric
 encryption can be used even in a constrained environment. EST-coaps is heavily based on
-EST which was developed for traditional, less constrained networks and is thus unsuitable
-to be used with the SUIT standard \parencite{rfc7030}. EST-coaps retains much of the
-functionality and structure of EST but modifies it slightly to work over CoAP, DTLS, and
-UDP instead of HTTP, TLS, and TCP, for instance by making use of CoAPs block requests and
-responses to remedy the relatively large sizes of certificates.
+EST which was developed for traditional, less constrained networks and is thus
+incompatible with the SUIT standard, which is specified to work on very small devices
+\parencite{rfc7030}. EST-coaps retains much of the functionality and structure of EST but
+modifies it slightly to work over CoAP, DTLS, and UDP instead of HTTP, TLS, and TCP, for
+instance by making use of CoAPs block requests and responses to remedy the relatively
+large sizes of certificates.
 
 \section{SUIT}
 \label{sec:suit}
@@ -249,47 +263,49 @@ firmware update solution for IoT devices that is interoperable and non-proprieta
 \parencite{suit}. The working group does not however try to define new transport or
 discovery mechanism, making their proposal agnostic of any particular technology. The
 solution shall be usable on Class 1 devices, defined by ~10 KiB RAM and ~100 KiB code size
-\parencite{rfc7228}. The solution may be applied to more powerful devices. 
+\parencite{rfc7228}. The solution may be applied to more powerful devices, such as the one
+used in this thesis described in Section~\ref{ssec:firefly}.
 
-Subsection \ref{ssec:architecture} presents the SUIT architecture and subsection
-\ref{ssec:information-model} presents the SUIT information model.
+Section~\ref{ssec:architecture} presents the SUIT architecture and
+Section~\ref{ssec:information-model} presents the SUIT information model.
 
 \subsection{Architecture}
 \label{ssec:architecture}
-There is an Internet Draft by the SUIT group focusing on the firmware update architecture
-\parencite{suit-architecture}. This draft describes the goals and requirements of the
-architecture, although makes no mention of any particular technology. The overarching
-goals of the update process is to thwart any attempts to flash unauthorized, possibly
-malicious firmware images as well as protecting the firmware image's confidentiality.
-These goals reduces the possibility of an attacker either getting control over a device or
-reverse engineering a malicious but valid firmware image as an attempt to mount an attack.
+There is an Internet Draft by the SUIT group focusing on the architecture of the firmware
+update mechanism \parencite{suit-architecture}. This draft describes the goals and
+requirements of the architecture, although makes no mention of any particular technology.
+The overarching goals of the update process is to thwart any attempts to flash
+unauthorized, possibly malicious firmware images as well as protecting the firmware
+image's confidentiality and integrity. These goals reduces the possibility of an attacker
+either getting control over a device or reverse engineering a malicious but valid firmware
+image as an attempt to mount an attack.
 
-In order to accept an image and update itself, a device must be presented with certain
-information. Several decisions must be made before updating and the information comes in
-form of a manifest. The next section will describe the requirements posted upon this
-manifest in more detail. The manifest helps the device make important decisions such
-as if it trusts the author of the new image, if the image is intact, if the image is
-applicable, where the image should be stored and so on. This in turns means the device
-also has to trust the manifest itself, and that both manifest and update image must be
-distributed in a safe and trusted architecture. The draft \parencite{suit-architecture}
-presents ten qualitative requirements this architecture should have:
+In order to accept an image and update itself, a device must make several decisions about
+the validity and suitability of the image. The information needed comes in form of a
+manifest. The next section will describe the requirements posted upon this manifest in
+more detail. The manifest helps the device make important decisions such as if it trusts
+the author of the new image, if the image is intact, if the image is applicable, where the
+image should be stored and so on. This in turns means the device also has to trust the
+manifest itself, and that both manifest and update image must be distributed in a safe and
+trusted architecture. The draft \parencite{suit-architecture} presents ten qualitative
+requirements this architecture should have:
+
 \begin{itemize}
     \item Agnostic to how firmware images are distributed:\\
-            As this thesis aims to implement a prototype of an update mechanism, some
-            choices about technology has to be done. This will realistically mean only a
-            subset of the SUIT standard will be implemented as certain parts of the
-            standard is not applicable. The proposed network stack uses UDP, DTLS, and
-            CoAP for transportation and the target devices are Firefly devices running
-            the Contiki-NG operating system.
-            % Is this still valid because the manifest and payload does not change based
-            % on underlying technology?
+            The mechanism should not assume a particular technology is used to distributed
+            manifests and images, but instead be able to be carried over different
+            mediums. This means decisions about formats and distribution methods must not
+            rely on features of a particular technology. This thesis will as discussed use
+            a CoAP/UDP stack, but the developed prototype will not be specific to this
+            stack.
     \item Friendly to broadcast delivery:\\
-            Broadcasting will not be of main concern in this thesis, it will be considered
-            with respect to time.
+            The mechanism should be broadcast friendly, meaning the mechanism can not be
+            reliant on security on the transport layer or below. Also, devices receiving
+            broadcast updates not meant for them should not incorrectly apply the update.
     \item Use state-of-the-art security mechanisms:\\
-            The SUIT standard assumes a PKI is in place. RISE has previously developed a
-            PKI suitable for IoT, this PKI is an underlying assumption for the thesis. The
-            PKI will allow for signing of the update manifest and firmware image.
+            The SUIT standard assumes a Public Key Infrastructure (PKI) is in place. As
+            previously mentioned, EST-coaps will be used for device enrollment. The PKI
+            will allow for signing of the update manifest and firmware image.
     \item Rollback attacks must be prevented:\\
             The manifest will contain metadata such as monotonically increasing sequence
             numbers and best-before timestamps to avoid rollback attacks.
@@ -323,15 +339,6 @@ presents ten qualitative requirements this architecture should have:
             thesis.
 \end{itemize}
 
-% TODO: Cut? Feels much too abstract and not applicable
-%An example architecture consisting of a device, a firmware update author, a firmware
-%server, a network operator and a device operator is presented in the draft. The author and
-%the device ineract with the firmware server in order to communicate firmware updates and
-%possibly manifests. The communication of the device as well as the updating itself is the
-%concern of this thesis. The draft also presents device management for the device operator
-%so that it is possible to track the state of updates in a network. Device management is
-%considered out of scope for this thesis.
-
 The distribution of manifest and firmware image is also discussed, with a couple of
 options being possible. The manifest and image can be distributed together to a firmware
 server. The device then receives the manifest either via pulling or pushing and can
@@ -339,7 +346,7 @@ subsequently download the image. Alternatively, the manifest itself can be direc
 to the device without a need of a firmware server, while the firmware image is put on the
 firmware server. After the device has received the lone manifest through some method, the
 firmware can be downloaded from the firmware server. The two approaches are shown in
-Figure \ref{fig:manifest-image-distribution}. The SUIT architecture does not enforce a
+Figure~\ref{fig:manifest-image-distribution}. The SUIT architecture does not enforce a
 specific method to be used when delivering the manifest and firmware, but states that an
 update mechanism must support both types.
 
@@ -384,11 +391,10 @@ update mechanism must support both types.
 
 \subsection{Information Model}
 \label{ssec:information-model}
-The corresponding Internet Draft for the SUIT information model presents the information
-needed in the manifest to secure a firmware update mechanism
-\parencite{suit-information-model}. A manifest is needed for a device to make a decision
-about whether or not to update itself, and if the image related to the manifest is valid
-and untampered with.
+The Internet Draft for the SUIT information model presents the information needed in the
+manifest to secure a firmware update mechanism \parencite{suit-information-model}. A
+manifest is needed for a device to make a decision about whether or not to update itself,
+and if the image related to the manifest is valid and its integrity ensured.
 
 The draft also presents threats, classifies them according to the STRIDE model, and
 presents security requirements that map to the threats \parencite{stride}. Finally it
@@ -399,12 +405,12 @@ deemed necessary. The threats and security requirements however are. Note that t
 information model does not discuss threats outside of transporting the updates, such as
 physical attacks.
 
-The proposed manifest elements and their brief motivations can be seen in Table
-\ref{tab:manifest-elements}. For more detailed motivations and requirements, refer to
-\parencite{suit-information-model}.
+The proposed manifest elements and their brief motivations can be seen in
+Table~\ref{tab:manifest-elements}. For more detailed motivations, use cases, and
+requirements refer to \parencite{suit-information-model}.
 
 \begin{longtable}[]{@{}lll@{}}
-    \caption{The proposed manifest elements of the SUIT information model.}
+    \caption{The proposed manifest elements of the SUIT information model. Adapted from \parencite{suit-information-model}.}
     \label{tab:manifest-elements}\\
     \toprule
     \begin{minipage}[b]{0.23\columnwidth}\raggedright\strut
@@ -574,58 +580,66 @@ The proposed manifest elements and their brief motivations can be seen in Table
     \bottomrule
 \end{longtable}
 
-% TODO: Which manifest elements are deemed most useful/needed? Is this a question for the design
-% part of the thesis?
+% TODO: Which manifest elements are deemed most useful/needed? Is this a question for the
+% design part of the thesis?
 
 Certain elements of the manifest are dependant on certain use cases. Examples of this are
 storage location (assumes there are more than one components on the device) and precursor
-image digest condition (assumes differential updates). As the thesis will implement a
-subset of the SUIT standard, mentioned in Section \ref{ssec:architecture}, not all
-elements would be mandatory for the particular use cases of the thesis. This will have to
-be taken into consideration when designing the manifest transport protocol.
+image digest condition (assumes differential updates). Since the thesis is primarily
+exploring singular updates for a specific, homogeneous device type, not all elements would
+be mandatory for the particular use cases of the thesis. This will have to be taken into
+consideration when designing the manifest transport protocol as the manifest should not be
+too specific to the use cases of the thesis, but rather be prepared for a variety of use
+cases.
 
 To summarize, the SUIT information model proposes to use a signed manifest that is
-distributed to each device in need of an update. The device then processes the manifest in
-order to determine if the update is trusted, suitable, up to date, with many other
-optional elements such as if special processing steps or new URIs to fetch the images are
-needed. The model does not make assumptions about technology which is one of the reasons
-there are optional elements, not all of them are applicable to all solutions.
-Nevertheless, the architecture and information model together provides a solid base on
-which to design a secure update mechanism for IoT.
+distributed to each device in need of an update through some method. The device then
+parses the manifest in order to determine if the update is trusted, suitable, and up to
+date, with many other optional elements such as if special processing steps or new URIs to
+fetch the images are needed. The model does not make assumptions about technology which is
+one of the reasons there are optional elements, not all of them are applicable to all
+solutions. Nevertheless, the architecture and information model together provides a solid
+base on which to design a secure update mechanism for IoT.
 
 \section{Contiki-NG}
-\label{ssec:contiki-ng}
+\label{sec:contiki-ng}
 % TODO: For details on image flipping/bootloaders, talk to Niclas
 Contiki-NG is an open-source operating system for resource constrained IoT devices based
-on the Contiki operating system \parencite{contiki-ng-github}, \parencite{contiki-github}.
+on the Contiki operating system \parencite{contiki-ng-github, contiki-github}.
 Contiki-NG focuses on low-power communication and standard protocols and comes with
 IPv6/LoWPAN, DTLS, and CoAP implementations which makes it a suitable operating system for
 this thesis. Furthermore Contiki-NG is open source and licensed under the permissive BSD
 3-Clause license and targets a wide variety of boards which makes it align with SUITs goal
 of creating an open standard for updating IoT devices.
 
-Subsection \ref{ssec:process-event-memory} explains processes, events, and memory
-management in Contiki-NG. These internals are heavily based on the previous Contiki
-operating system and much of the information is gathered from there. Subsection
-\ref{ssec:timers} presents the different timers available in Contiki-NG. Subsection
-\ref{ssec:networking-contiki} presents part of the network protocol stack that is
-implemented in standard Contiki-NG. Finally, subsection \ref{ssec:firefly} presents the
-target hardware Contiki-NG will run on.
+Section~\ref{ssec:process-event} explains processes and events, and
+Section~\ref{ssec:memory} explains memory management in Contiki-NG. These internals are
+heavily based on the previous Contiki operating system and much of the information is
+gathered from there. Section~\ref{ssec:timers} presents the different timers available in
+Contiki-NG. Section~\ref{ssec:networking-contiki} presents part of the network protocol
+stack that is implemented in standard Contiki-NG. Finally, Section~\ref{ssec:firefly}
+presents the target hardware Contiki-NG will run on.
 
-\subsection{Processes, Events, and Memory Management}
-\label{ssec:process-event-memory}
+\subsection{Processes and Events}
+\label{ssec:process-event}
 Contiki-NG has a process abstraction which is built on lightweight protothreads
 \parencite{protothreads}. Protothreads can be seen as a combination of threads and
-event-driven programming, keeping the yield semantics of threads and stacklessness of
-event-driven programming. By providing a conditional blocking wait statement, protothreads
-can execute cooperatively. All protothreads in a system are run on the same stack, meaning
-each protothread has a very low memory overhead. A process is declared through a
+event-driven programming. Threads or multi-programming provides a way of running
+sequential programs concurrently, enabling the use of flow-control mechanisms. This
+however requires a thread-local stack which is too resource heavy on small IoT devices.
+Event-driven programming on the other hand does not require a thread-local stack but
+programs are limited to computation as a callback on event triggers, meaning sequential
+programs are very difficult to program. Protothreads combine these paradigms in a
+lightweight way, keeping the yield semantics of threads and stacklessness of event-driven
+programming. All protothreads in a system are run on the same stack, meaning each
+protothread has a very low memory overhead, and by providing a conditional blocking wait
+statement protothreads can execute cooperatively. A process is declared through a
 \texttt{PROCESS} macro and can be automatically started after system boot or when a
 specific module is loaded. 
 
 Contiki-NGs execution model is event based, meaning processes often yield execution until
-they are informed a certain event has taken place, upon which they can act. Figure
-\ref{fig:state-machine} shows the states of the processes and their transitions.
+they are informed a certain event has taken place, upon which they can act.
+Figure~\ref{fig:state-machine} shows the states of the processes and their transitions.
 User-space processes are run in a cooperative manner while kernel-space processes can
 preempt user-space processes. Examples of events are timers expiring, a process being
 polled, or a network packet arriving.
@@ -645,13 +659,25 @@ polled, or a network packet arriving.
     \caption{The state machine of Contiki threads. Adapted from \parencite{contiki-multithreading}.}
 \end{figure}
 
+\subsection{Memory Management}
+\label{ssec:memory}
+Memory can be allocated either statically, dynamically, or using a hybrid of static and
+dynamic allocation. Static allocation happens at compile-time, and while deterministic it
+limits the functionality of a program. Dynamic memory allocation allocates memory of
+various sizes on a heap, which can lead to fragmentation of heap memory. This is a problem
+in IoT devices as they are already resource constrained. The hybrid approach statically
+allocates pools of memory which can then dynamically allocate memory segments inside the
+pools. The hybrid approach does not suffer from external fragmentation as segments in the
+pool are perfectly divided. However, that does not mean fragmentation cannot occur, as
+sometimes segments will not be fully used and cause internal fragmentation.
+
 Contiki-NG provides two memory allocators in addition to using static memory. They are
 called \texttt{MEMB} and \texttt{HeapMem} and are semi-dynamic and dynamic, respectively.
-\texttt{MEMB} provides ways to manage memory blocks. The memory blocks are allocated on
-static memory as arrays of constant sized objects. After a memory block has been declared,
-it is initialized after which objects can be allocated memory from the block. All objects
-allocated through the same block have the same size. Blocks can be freed, and it is
-possible to check whether a pointer resides within a certain memory block or not.
+\texttt{MEMB} allocates pools of static memory as arrays of constant sized objects. After
+a memory pool has been declared, it is initialized after which objects can be allocated
+memory from the pool. All objects allocated through the same pool have the same size.
+Pools can be freed, and it is possible to check whether a pointer resides within a certain
+memory pool or not.
 
 \texttt{HeapMem} solves the issue of dynamically allocating objects of varying sizes
 during runtime in Contiki-NG. It can be used on a variety of hardware platforms, something
@@ -668,16 +694,16 @@ The definition of system time is platform dependent.
 
 The different timers and their usages are:
 \begin{itemize}
-    \item \texttt{timer}: a simple timer without built-in notification.
-    \item \texttt{stimer}: counts in seconds and has a long wrapping period.
-    \item \texttt{etimer}: schedules events to processes. Since events in Contiki-NG
+    \item \texttt{timer} - A simple timer without built-in notification.
+    \item \texttt{stimer} - Counts in seconds and has a long wrapping period.
+    \item \texttt{etimer} - Schedules events to processes. Since events in Contiki-NG
             can put yielding processes in the execution state, \texttt{etimer} can be
             used to periodically schedule code by setting up an \texttt{etimer} to
-            signal a specific event when it expires then waiting on that event
-    \item \texttt{ctimer}: schedules calls to a callback function. \texttt{ctimer}
+            signal a specific event when it expires then waiting on that event.
+    \item \texttt{ctimer} - Schedules calls to a callback function. \texttt{ctimer}
             works in similar ways to \texttt{etimer} but with callbacks to callback
             functions instead of events.
-    \item \texttt{rtimer}: schedules real-time tasks. Since real-time tasks face
+    \item \texttt{rtimer} - Schedules real-time tasks. Since real-time tasks face
             different requirements than normal tasks, rtimer uses a higher resolution
             clock. Real-time tasks preempt normal execution so that the real-time task can
             execute immediately. This mean there are constraints on what can be done in
@@ -703,14 +729,14 @@ of messages \parencite{tinydtls-github}. The CoAP implementation consists of
 \parencite{contiki-coap}: 
 
 \begin{itemize}
-    \item a CoAP engine which registers CoAP resources
-    \item a CoAP handler API that allows for implementations of resource handlers. The
-        handlers act upon incoming messages to their corresponding resource
-    \item a CoAP endpoint API allowing handling of different kinds of CoAP endpoints.
-    \item a CoAP transport API which hands CoAP data from the CoAP stack to the transport
+    \item A CoAP engine which registers CoAP resources.
+    \item A CoAP handler API that allows for implementations of resource handlers. The
+        handlers act upon incoming messages for their corresponding resource.
+    \item A CoAP endpoint API allowing handling of different kinds of CoAP endpoints.
+    \item A CoAP transport API which hands CoAP data from the CoAP stack to the transport
     protocol.
-    \item CoAP messages functions for parsing and creating messages
-    \item a CoAP timer API providing timers for retransmission mechanisms.    
+    \item CoAP message functions for parsing and creating messages.
+    \item A CoAP timer API providing timers for retransmission mechanisms.    
 \end{itemize}
 
 \subsection{Firefly}
@@ -720,7 +746,7 @@ this thesis. It is a breakout board designed for IoT application development spo
 ARM Cortex-M3 with 512 KB flash and 32 KB RAM, making it more powerful than the Class 1
 devices the SUIT standard specifies as a lower bound. This is not an issue but should be
 kept in mind as less capable devices are supposed to be able to use an update mechanism
-complying with SUIT. Furthermore the board supports IEEE 802.15.4 communication in the 2.4
-GHz band and SHA2 and RSA hardware acceleration \parencite{firefly-datasheet}.
+that is complying with SUIT. Furthermore the board supports IEEE 802.15.4 communication in
+the 2.4 GHz band and SHA2 and RSA hardware acceleration \parencite{firefly-datasheet}.
 
 \end{document}
