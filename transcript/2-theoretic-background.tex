@@ -210,10 +210,10 @@ version, type, token length, code, and message ID. Following these fields are th
 token, options, and optional payload. The length of the payload is dependant on the
 carrying protocol, which in this thesis will be DTLS. The length of the payload is
 calculated depending on the size of the CoAP header, token, and options as well as maximum
-DTLS record size. Section 4.6 of the CoAP standard says "If the Path MTU is not known for
-a destination, an IP MTU of 1280 bytes SHOULD be assumed; if nothing is known about the
-size of the headers, good upper bounds are 1152 bytes for the message size and 1024 bytes
-for the payload size" \parencite{rfc7252}.
+DTLS record size. Section 4.6 of the CoAP standard says "If the Path MTU [Maximum
+Transmission Unit] is not known for a destination, an IP MTU of 1280 bytes SHOULD be
+assumed; if nothing is known about the size of the headers, good upper bounds are 1152
+bytes for the message size and 1024 bytes for the payload size" \parencite{rfc7252}.
 
 \begin{figure}
     \begin{bytefield}[bitformatting={\small}, bitwidth=1.1em]{32}
@@ -346,6 +346,7 @@ the firmware can be downloaded from the firmware server. The SUIT architecture d
 enforce a specific method to be used when delivering the manifest and firmware, but states
 that an update mechanism must support both types.
 
+% TODO: Split into two figures, update referencing
 \begin{figure}
     \caption{The two modes of distributing update manifests and images.}   
     \label{fig:manifest-image-distribution}
@@ -601,7 +602,7 @@ base on which to design a secure update mechanism for IoT.
 Contiki-NG is an open-source operating system for resource constrained IoT devices based
 on the Contiki operating system \parencite{contiki-ng-github, contiki-github}.
 Contiki-NG focuses on low-power communication and standard protocols and comes with
-IPv6/LoWPAN, DTLS, and CoAP implementations which makes it a suitable operating system for
+IPv6/6LoWPAN, DTLS, and CoAP implementations which makes it a suitable operating system for
 this thesis. Furthermore Contiki-NG is open source and licensed under the permissive BSD
 3-Clause license and targets a wide variety of boards which makes it align with SUITs goal
 of creating an open standard for updating IoT devices.

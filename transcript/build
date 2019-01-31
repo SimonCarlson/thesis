@@ -1,5 +1,8 @@
-rm 0-thesis.aux 0-thesis.bbl 0-thesis.bcf 0-thesis.blg 0-thesis.log 0-thesis.pdf 0-thesis.run.xml 0-thesis.toc
+#rm 0-thesis.aux 0-thesis.bbl 0-thesis.bcf 0-thesis.blg 0-thesis.log 0-thesis.pdf 0-thesis.run.xml 0-thesis.toc
 pdflatex -halt-on-error 0-thesis.tex | grep '^!.*' -A200 --color=always
+echo "Making glossary"
+makeglossaries 0-thesis | grep -e 'Warning'
+echo "Glossary finished"
 echo "Running biber"
 biber 0-thesis | grep -v 'INFO - '
 echo "Biber finished"

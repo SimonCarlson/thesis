@@ -10,6 +10,8 @@
 \usepackage{tikz} % For drawing figures
 \usetikzlibrary{arrows, automata, positioning}
 \usepackage{pgf} % For PDF graphics
+\usepackage[acronym,nonumberlist,nomain,nopostdot]{glossaries} % For the glossary
+\makeglossaries
 \addbibresource{references.bib} % The file containing our references, in BibTeX format
 
 \definecolor{background}{HTML}{EEEEEE}
@@ -81,6 +83,45 @@ while showing G and H reliability and power requirements on the nodes.
 \listoftables
 \listoffigures
 \lstlistoflistings
+
+\newacronym{iot}{IoT}{Internet of Things}
+\newacronym{suit}{SUIT}{Software Updates for Internet of Things}
+\newacronym{ietf}{IETF}{Internet Engineering Task Force}
+\newacronym{ip}{IP}{Internet Protocol}
+\newacronym{tcp}{TCP}{Transmission Control Protocol}
+\newacronym{udp}{UDP}{User Datagram Protocol}
+\newacronym{tls}{TLS}{Transport Layer Security}
+\newacronym{dtls}{DTLS}{Datagram Transport Layer Security}
+\newacronym{http}{HTTP}{Hypertext Transfer Protocol}
+\newacronym{coap}{CoAP}{Constrained Application Protocol}
+\newacronym{est}{EST}{Enrollment over Secure Transport}
+\newacronym{pki}{PKI}{Public Key Infrastructure}
+\newacronym{uri}{URI}{Uniform Resource Identifier}
+\newacronym{sha}{SHA}{Secure Hash Algorithm}
+\newacronym{mcu}{MCU}{Microcontroller Unit}
+\newacronym{json}{JSON}{JavaScript Object Notation}
+\newacronym{cbor}{CBOR}{Concise Binary Object Representation}
+
+
+
+\gls{iot}
+\gls{suit}
+\gls{ietf}
+\gls{ip}
+\gls{tcp}
+\gls{udp}
+\gls{tls}
+\gls{dtls}
+\gls{http}
+\gls{coap}
+\gls{est}
+\gls{pki}
+\gls{uri}
+\gls{sha}
+\gls{mcu}
+\gls{json}
+\gls{cbor}
+\printglossaries
 
 % Mainmatter is where the actual contents of the thesis goes
 \mainmatter

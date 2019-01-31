@@ -5,6 +5,14 @@
 *.toc
 *.bcf
 *.run.xml
+*.acn
+*.acr
+*.alg
+*.glsdefs
+*.ist
+*.lof
+*.lol
+*.lot
 *~
 .~lock.*
 Template-exjobb.zip
