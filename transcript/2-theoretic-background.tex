@@ -121,8 +121,8 @@ length field and a fragment field containing the application data \parencite{rfc
 These fields, with the exception of the epoch and sequence number, are the same 
 as in TLS 1.2 \parencite{rfc6347}.
 
-\lstset{language=C}
-\begin{lstlisting}[caption={The DTLS plaintext record structure.}, 
+\begin{lstlisting}[language=blockc,
+                    caption={The DTLS plaintext record structure.}, 
                     label={lst:dtls-plain}]
     struct {
         ContentType type;
@@ -134,7 +134,8 @@ as in TLS 1.2 \parencite{rfc6347}.
     } DTLSPlaintext;
 \end{lstlisting}
 
-\begin{lstlisting}[caption={The DTLS ciphertext record structure.}, 
+\begin{lstlisting}[language=blockc,
+                    caption={The DTLS ciphertext record structure.}, 
                     label={lst:dtls-cipher}]
     struct {
         ContentType type;

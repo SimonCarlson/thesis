@@ -51,7 +51,8 @@ been tampered with during transport. The \textbf{URI} from which the image can b
 is bundled together with the digest. The manifest structure expressed as a C struct can be
 seen in Listing \ref{lst:manifest-struct}.
 
-\begin{lstlisting}[caption={The mandatory manifest format.}, 
+\begin{lstlisting}[language=blockc,
+                    caption={The mandatory manifest format.}, 
                     label={lst:manifest-struct}]
     struct Manifest {
         int version;
@@ -77,7 +78,8 @@ thus parse several URI/Digest pairs, conditions, or options. Their structures ca
 in Listing \ref{lst:uridigest-struct}, Listing \ref{lst:condition-struct}, and Listing
 \ref{lst:option-struct} in the next section.
 
-\begin{lstlisting}[caption={The format of URI/digest pairs.}, 
+\begin{lstlisting}[language=blockc,
+                    caption={The format of URI/digest pairs.}, 
                     label={lst:uridigest-struct}]
     struct URIDigest {
         int URILength;
@@ -87,7 +89,8 @@ in Listing \ref{lst:uridigest-struct}, Listing \ref{lst:condition-struct}, and L
     } URIDigest;
 \end{lstlisting}
 
-\begin{lstlisting}[caption={The format of vendor, class, and device ID conditions.}, 
+\begin{lstlisting}[language=blockc,
+                    caption={The format of vendor, class, and device ID conditions.}, 
                     label={lst:condition-struct}]
     struct Condition {
         int type;
@@ -141,7 +144,8 @@ directives could be whether to install the update right away or just cache the i
 install at some later point, and examples of processingSteps could be which decompression
 algorithm to use. The Instruction struct can be seen in Listing \ref{lst:instruction}.
 
-\begin{lstlisting}[caption={The format of the option field.}, 
+\begin{lstlisting}[language=blockc,
+                    caption={The format of the option field.}, 
                     label={lst:option-struct}]
     struct Option {
         int delta;
@@ -151,7 +155,8 @@ algorithm to use. The Instruction struct can be seen in Listing \ref{lst:instruc
     } Option;
 \end{lstlisting}
 
-\begin{lstlisting}[caption={The format of directives or processing steps.}, 
+\begin{lstlisting}[language=blockc,
+                    caption={The format of directives or processing steps.}, 
                     label={lst:instruction}]
     struct Instruction {
         int type;
@@ -169,39 +174,39 @@ these reasons, the thesis proposes to craft manifests in JSON, then convert into
 finally sign and send to the device requiring an update. An example manifest could look as
 in Listing \ref{lst:example-manifest}.
 
-% TODO: Fix formatting
-\begin{lstlisting}[caption={An example manifest.},
-                    label={lst:example-manifest}]
+\begin{lstlisting}[language=blockjson,
+                    caption={An example manifest.},
+                    label={lst:example-manifest},
+                    escapechar=\%]
     {
         "versionID": 1,
         "sequenceNumber": 1,
         "format": 0,
-        "size": 512,        // Size of image in bytes
+        "size": 512,
         "conditions": [
             {
-                "type": 0,  // UUID5 vendor ID
+                "type": 0,
                 "UUID": "74738ff5-5367-5958-9aee-98fffdcd1876"
             },
             {
-                "type": 1,  // UUID5 class ID
-                "UUID": "74738ff5-5367-5958-9aee-98fffdcd1876"
+                "type": 1,
+                "UUID": "28718ff5-9302-8217-7auu-14llldsd1276"
             }
         ],
         "digests": [
             {
                 "URI": "coap://fake.uri/image",
-                // Digest of image found on that URI
-                "digest": "b924842b4f4212d45ab7e0dc6f570cc9a69a20c9256181b9c1eabaecf3301985"
+                "digest": "b924842b4f42 %$\dots$% ecf3301985"
             }
         ],
         "options": [
             {
-                "delta": 4  // 0 + 4 = 4, option component
+                "delta": 4
                 "length": 1,
                 "value": 0
             },
             {
-                "delta": 6, // 6 + 4 = 10, option best-before
+                "delta": 6,
                 "length": 10,
                 "value": 1548683522
             }
@@ -219,7 +224,8 @@ prevents the device from applying the device if that moment in time has been exc
 manifest is easy to read but as it is JSON it is unnecessarily verbose. By encoding it in
 CBOR, which is a binary encoding, it will shrink in size and thus cost less to receive.
 
-\begin{lstlisting}[caption={The first four elements of the example manifest in CBOR encoding.},
+\begin{lstlisting}[language=blockjson,
+                    caption={The first four elements of the example manifest in CBOR encoding.},
                     label={lst:example-manifest-cbor}]
 A7                                      # map(7)
    69                                   # text(9)

@@ -12,6 +12,30 @@
 \usepackage{pgf} % For PDF graphics
 \addbibresource{references.bib} % The file containing our references, in BibTeX format
 
+\definecolor{background}{HTML}{EEEEEE}
+
+\lstdefinelanguage{blockc}{
+    language=C,
+    basicstyle=\ttfamily,
+    numbers=left,
+    numberstyle=\scriptsize,
+    stepnumber=1,
+    numbersep=8pt,
+    %showstringspaces=false,
+    breaklines=true
+    %frame=lines,
+    %backgroundcolor=\color{background},
+}
+
+\lstdefinelanguage{blockjson}{
+    basicstyle=\ttfamily,
+    numbers=left,
+    numberstyle=\scriptsize,
+    stepnumber=1,
+    numbersep=8pt
+}
+
+
 \title{Software and Firmware Updates for Internet of Things}
 \alttitle{Mjukvaru- och Firmwareuppdateringar för Internet of Things}
 \author{Simon Carlson}
