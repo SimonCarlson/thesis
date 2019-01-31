@@ -204,24 +204,15 @@ be sent in the Acknowledgment of a Confirmable or Non-Confirmable request if the
 fits and is available right away. This also reduces the amount of messages sent by the
 protocol.
 
-Figure~\ref{fig:coap} shows the CoAP message format. The 2-bit version (Ver) field
-indicates the CoAP version, which at time of writing is 1 (01 in binary). The 2-bit type
-(T) field determines the type of message (Confirmable, Non-confirmable, Acknowledgment,
-Reset). Token length (TKL) indicates the length of the Token field which can vary between
-zero to eight bytes. The 8-bit code field carries which method code the message carries
-and can be further broken into a 3-bit class and 5-bit detail. The class can indicate a
-request (0), a success response (2), a client error response (4), or a server error
-response (5), with the detail further specifying the status of the message. The message ID
-is a 16-bit integer used to detect duplicate message and to match Acknowledgment or Resets
-with their initiating requests.
-
-Following the header is the zero to eight bit Token value, which in turn is follow by zero
-or more Options. One of the options offered is the observe option, which allows a client
-to be notified by the server when a particular resource changes. Lastly comes the optional
-payload, which if present is prefixed by a payload marker (0xFF). The length of the
-payload is dependant on the carrying protocol, which in this thesis will be DTLS. The
-length of the payload is calculated depending on the size of the CoAP header, token, and
-options as well as maximum DTLS record size.
+Figure~\ref{fig:coap} shows the CoAP message format. The header contains fields for
+version, type, token length, code, and message ID. Following these fields are the actual
+token, options, and optional payload. The length of the payload is dependant on the
+carrying protocol, which in this thesis will be DTLS. The length of the payload is
+calculated depending on the size of the CoAP header, token, and options as well as maximum
+DTLS record size. Section 4.6 of the CoAP standard says "If the Path MTU is not known for
+a destination, an IP MTU of 1280 bytes SHOULD be assumed; if nothing is known about the
+size of the headers, good upper bounds are 1152 bytes for the message size and 1024 bytes
+for the payload size" \parencite{rfc7252}.
 
 \begin{figure}
     \begin{bytefield}[bitformatting={\small}, bitwidth=1.1em]{32}
@@ -242,7 +233,10 @@ option allows stateless transfer of a large file separated in different blocks. 
 can be individually retransmitted and by using monotonically increasing block numbers, the
 blocks can be reassembled. The size of blocks can also be negotiated between server and
 client meaning they can always find a suitable block size, making the mechanism quite
-flexible.
+flexible. Another option of interest is the observe option, which allows a client to be
+notified by the server when a particular resource changes. This option can be used in a
+pull or hybrid update architecture, meaning the device does not have to continuously poll
+the server for a new manifest.
 
 \subsection{EST-coaps}
 \label{ssec:est-coaps}
