@@ -18,22 +18,23 @@ traditional networks enjoy high reliability, high throughput, and high computati
 performance. This posts some constraints on the protocols used in IoT as they must
 properly handle these characteristics.
 
-One of the most widely used network protocol stacks today in traditional networks is the
-TCP/IP stack. It uses TCP as a transportation protocol, usually with TLS for security, and
-a common application layer protocol is HTTP. TCP is however poorly suited for IoT networks
-as it is a connection based, stateful protocol which tries to ensure the guaranteed
-delivery of packets in the correct order. There is also advanced congestion control
-mechanisms in TCP which are hard to apply on unreliable low-bandwidth networks. IoT
-networks often utilize UDP as a transport protocol instead. UDP is also an IP-based
-protocol but is connectionless and less reliable than TCP, performing on a best-effort
-level instead. Despite being less reliable, UDP often performs better in IoT contexts.
+One of the most widely used network protocol stacks today in traditional networks is based
+on the \gls{ip}. The stack uses \gls{tcp} as a transportation protocol, usually with
+\gls{tls} for security, and a common application layer protocol is \gls{http}. TCP is
+however poorly suited for IoT networks as it is a connection based, stateful protocol
+which tries to ensure the guaranteed delivery of packets in the correct order. There is
+also advanced congestion control mechanisms in TCP which are hard to apply on unreliable
+low-bandwidth networks. IoT networks often utilize \gls{udp} as a transport protocol instead.
+UDP is also an IP-based protocol but is connectionless and less reliable than TCP,
+performing on a best-effort level instead. Despite being less reliable, UDP often performs
+better in IoT contexts.
 
 As TLS is based on the same assumptions as TCP it is unsuitable for UDP networks. UDP
-networks still need confidentiality and integrity through some means and thus use DTLS,
-which is a version of TLS enhanced for use in datagram oriented protocols. HTTP can be
-used over UDP for the application layer, but as HTTP is encoded in human readable
-plaintext it is unnecessarily verbose and not optimal for constrained networks. Instead,
-CoAP is a common protocol for the application layer in IoT networks. Figure
+networks still need confidentiality and integrity through some means and thus use
+\gls{dtls}, which is a version of TLS enhanced for use in datagram oriented protocols.
+HTTP can be used over UDP for the application layer, but as HTTP is encoded in human
+readable plaintext it is unnecessarily verbose and not optimal for constrained networks.
+Instead, \gls{coap} is a common protocol for the application layer in IoT networks. Figure
 \ref{fig:stack-comparison} shows the equivalent protocols for IoT network stacks versus
 traditional network stacks. 
 
@@ -180,7 +181,7 @@ communication \parencite{rfc7252}. While designed for constrained networks, a de
 feature of CoAP is how it is easily interfaced with HTTP so that communication over
 traditional networks can be proxied. CoAP uses a request/response model similar to HTTP
 with method codes and request methods that are easily mapped to those of HTTP. Furthermore
-CoAP is a RESTful protocol utilizing concepts such as endpoints, resources, and URIs.
+CoAP is a RESTful protocol utilizing concepts such as endpoints, resources, and \gls{uri}.
 These features makes it easier to design IoT applications that seamlessly interact with
 traditional web services. Additionally CoAP offers features such as multicast support,
 asynchronous messages, low header overhead, and UDP and DTLS bindings which are all
@@ -244,7 +245,7 @@ the server for a new manifest.
 EST-coaps is a protocol for certificate enrollment in constrained environments using CoAP.
 \parencite{est-coaps}. By allowing IoT devices to enroll for certificates, asymmetric
 encryption can be used even in a constrained environment. EST-coaps is heavily based on
-EST which was developed for traditional, less constrained networks and is thus
+\gls{est} which was developed for traditional, less constrained networks and is thus
 incompatible with the SUIT standard, which is specified to work on very small devices
 \parencite{rfc7030}. EST-coaps retains much of the functionality and structure of EST but
 modifies it slightly to work over CoAP, DTLS, and UDP instead of HTTP, TLS, and TCP, for
@@ -298,7 +299,7 @@ requirements this architecture should have:
             reliant on security on the transport layer or below. Also, devices receiving
             broadcast updates not meant for them should not incorrectly apply the update.
     \item Use state-of-the-art security mechanisms:\\
-            The SUIT standard assumes a Public Key Infrastructure (PKI) is in place. As
+            The SUIT standard assumes a \gls{pki} is in place. As
             previously mentioned, EST-coaps will be used for device enrollment. The PKI
             will allow for signing of the update manifest and firmware image.
     \item Rollback attacks must be prevented:\\
@@ -336,20 +337,20 @@ requirements this architecture should have:
 
 The distribution of manifest and firmware image is also discussed, with a couple of
 options being possible. The two approaches are shown in
-Figure~\ref{fig:manifest-image-distribution}. The topmost part of the figure shows the
-manifest and image distributed together to a firmware server. The device then receives the
-manifest either via pulling or pushing and can subsequently download the image from the
-same server. Alternatively, as shown on the bottom, the manifest itself can be directly
+Figure~\ref{fig:manifest-image-combined-distribution} and
+Figure~\ref{fig:manifest-image-separate-distribution}. The first figure shows the manifest
+and image distributed together to a firmware server. The device then receives the manifest
+either via pulling or pushing and can subsequently download the image from the same
+server. Alternatively, as shown in the second figure, the manifest itself can be directly
 sent to the device without a need of a firmware server, while the firmware image is put on
 the firmware server. After the device has received the lone manifest through some method,
 the firmware can be downloaded from the firmware server. The SUIT architecture does not
 enforce a specific method to be used when delivering the manifest and firmware, but states
 that an update mechanism must support both types.
 
-% TODO: Split into two figures, update referencing
 \begin{figure}
-    \caption{The two modes of distributing update manifests and images.}   
-    \label{fig:manifest-image-distribution}
+    \caption{Distributing both manifest and image through a firmware server.}   
+    \label{fig:manifest-image-combined-distribution}
     \begin{tikzpicture}[>=stealth',
         box/.style={rectangle,draw,minimum width=3cm,minimum height=2cm},
         line/.style={->,shorten >=3mm, shorten <=3mm}]
@@ -364,7 +365,11 @@ that an update mechanism must support both types.
         \draw[line] (server.east) -- node[above,sloped] 
             {Manifest} node[below,sloped]{Image} (device.north); 
     \end{tikzpicture}
-\\\\
+\end{figure}
+
+\begin{figure}
+    \caption{Distributing the manifest directly to the device and image through a firmware server.}
+    \label{fig:manifest-image-separate-distribution}
     \begin{tikzpicture}[>=stealth',
         box/.style={rectangle,draw,minimum width=3cm,minimum height=2cm},
         line/.style={->,shorten >=3mm, shorten <=3mm}]
