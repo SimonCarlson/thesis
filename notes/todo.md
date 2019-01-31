@@ -9,14 +9,15 @@ To do:
   - [x] Chapter 9
   - [x] Chapter 11.2, 11.3
   - [x] Chapter 13
-- [ ] Reread and improve the introduction and background
-  - [ ] Maybe include CBOR? Should check if Contiki can use it first
-  - [ ] Expand/add discussion on suitability of IP and web based systems for IoT
-  - [ ] (Introduction) further explain security for IoT, and what challenges it faces
+- [x] Reread and improve the introduction and background
+- [ ] Consider adding section about CBOR
+  - [ ] Talk to Niclas about state of CBOR in Contiki-NG
 - [ ] Consider how to integrate EST-coaps into the mechanism
+  - [x] Read EST RFC
   - [ ] Does it require anything from the application?
-  - [ ] Does it change conditions for key management? How do keys reach the device?
-  - [ ] Further explain why it is needed (from SUIT)
+  - [ ] Does it change conditions for key management? How do keys reach the device? (Can use predistributed certificate to authenticate on EST server)
+  - [x] Further explain why it is needed (from SUIT)
+- [x] Fix presentation so that someone with no prior knowledge can understand what SUIT is
 - [ ] Start looking at a minimal C manifest parser
-- [ ] Start looking at a JSON to CBOR converter
+- [ ] Start looking at a JSON to CBOR converter (Python?)
 

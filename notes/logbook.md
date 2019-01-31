@@ -1,3 +1,17 @@
+31/1-19:
+Reduced the amount of detail in the CoAP chapter, put in a quote about upper bounds for message sizes.
+Improved the style of listings and made them consistent.
+Further improved consistency of text in the thesis
+Started pondering JSON to CBOR manifest converter. CLI that either takes existing manifest and extracts format, vendor, class, and device. Can create new from scratch, specify parameters with flags. Must consider options so that interface does not become clunky (how much do I care about interface anyways?)
+Put in list of tables, figures, listings, and abbreviations. Updated gitignore and build script accordingly
+Split the image/manifest distribution image into two
+
+
+30/1-19:
+Improvements to Chapter 2. Better formatting, consistency, and style concerning section references and lists.
+Made the presenation easier to understand without prior knowledge.
+
+
 29/1-19:
 Wrote some more on the presentation
 Put all documents in the git repo, no point separating them
@@ -6,7 +20,6 @@ Read chapter 8, 9, 11.2, 11.3, and 13 in the interconnecting book
 Created a script that checks my .tex files for spelling errors. Fixed some spelling errors
 Made a figure describing the modes of distributing images and manifests
 Added todos about EST-coaps, interesting to speculate how it fits into the architecture
-
 
 28/1-19:
 "Epiphany". Mandatory elements in SUIT does not mean must always be present, it means it must be implemented to comply with SUIT. Can still put those fields in options to reduce manifest size.

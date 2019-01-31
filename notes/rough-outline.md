@@ -4,10 +4,10 @@
   - [x] EST-CoAP
   - [x] RFC 7959 (Block)
   - [x] RFC 7641 (Observe)
-- [ ] DTLS
+- [x] DTLS
   - [x] RFC 6347 (DTLS 1.2)
   - [x] RFC 7925 (Profiles)
-- [ ] TLS
+- [x] TLS
   - [x] RFC 5246 (TLS 1.2)
 - [x] Contiki
 - [x] SUIT documents
