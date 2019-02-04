@@ -1,3 +1,12 @@
+4/2-19:
+Can generate very small and simple manifests from existing ones, reusing some attributes.
+Made a GitHub repo for the manifest generator
+Want to start looking at the parser, talk to Joel maybe? Should I make Shahid aware of what I'm doing or just keep going?
+
+1/2-19:
+Started on a manifest generator
+Prepared for the ID2223 presentation
+
 31/1-19:
 Reduced the amount of detail in the CoAP chapter, put in a quote about upper bounds for message sizes.
 Improved the style of listings and made them consistent.
