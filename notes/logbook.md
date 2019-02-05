@@ -1,3 +1,13 @@
+5/2-19:
+Spoke to Shahid. He offered insight on overarching purpose of thesis. I need to put more focus on the architecture of the mechanism, including the lifecycle of devices, how they interact with a server (profiles?), who can act as a server, and how keys can be generated and delivered to devices.
+Mailed Ludwig Seitz and Martin Gunnarsson, they are researching secure IoT updates
+Libcoap can be used for a mock server, pipe openssl signed payloads (manifests/images) to libcoap and send to a device
+I have a much more abstract view of the architecture at large and lifespan of a device needing updates at some point. This is the topic for chapter 3.
+Certificates are exchanged during (D)TLS handshake, and are not verified with a CA because they already contain the signature of the CA
+A device needs to be shipped with their UUIDs, knowledge of how to register at a server, and at least one CA cert in order to verify certs of server and/or operator
+Keep thinking, who is a server? Who can act as a server? Who installs/maintains/controls a server? In what cases can an operator bypass a server (manifest)? How does the server react if a operator bypasses it, does it care?
+
+
 4/2-19:
 Can generate very small and simple manifests from existing ones, reusing some attributes.
 Made a GitHub repo for the manifest generator

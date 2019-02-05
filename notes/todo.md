@@ -20,9 +20,11 @@ To do:
 - [x] Fix presentation so that someone with no prior knowledge can understand what SUIT is
 - [ ] Start looking at a minimal C manifest parser
 - [ ] JSON to CBOR converter
-  - [ ] Create script that accepts version, vendor, class, device, and image that generates all mandatory fields
-  - [ ] Let script derive version, vendor, class, and device from an existing JSON manifest
+  - [x] Create script that accepts version, vendor, class, device, and image that generates all mandatory fields
+  - [x] Let script derive version, vendor, class, and device from an existing JSON manifest
   - [ ] Figure out how to sign it. If not EST, use whatever method for proof of concept
-  - [ ] Validate correctness of mandatory fields (using cbor.me perhaps?)
+  - [x] Validate correctness of mandatory fields (using cbor.me perhaps?)
   - [ ] Figure out how to add options without making the entire thing clunky
+- [ ] Rewrite the introduction regarding device management (architecture not implementation)
+- [ ] Further push understanding of standardisation - needs flexibility, details left to implementation
 
