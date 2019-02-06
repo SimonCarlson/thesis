@@ -100,8 +100,43 @@ prompts the server to rebuild the profile for the device.
 \begin{figure}
     \caption{The life cycle of a device.}
     \label{fig:lifecycle}
-    \begin{tikzpicture}
+    \begin{tikzpicture}[>=stealth',
+        box/.style={rectangle,draw,minimum width=3cm,minimum height=2cm}]
+        \node[box] (new) {Factory new};
+        \node[box, below right=1.5cm of new] (enroll) {Enrollment stage};
+        \node[box, below left=1.5cm of enroll] (maintain) {Maintenance};
+        \node[box, below left=1.5cm of new] (end) {End of life};
+
+        \node[align=left, above right=0.6cm of new] (new_notes) {Ship with:\\
+            Pre-shared key\\
+            Vendor and class IDs\\
+            Server registration endpoint\\
+            CA certificate};
+        \node[align=left, xshift=-2.5cm, yshift=-1cm, below right=0.4cm of enroll] (enroll_notes) 
+            {Register at server\\
+            Obtain certificate};
+        \node[align=left, below left=0.7cm of maintain] (maintain_notes) {Push/pull updates\\
+            Update server profile};
+
+        \path[->,>=stealth]
+        (new) edge [bend left=35] (enroll)
+        (enroll) edge [bend left=35] (maintain)
+        (maintain) edge [bend left=35] (end);
         
+        \def\myshift#1{\raisebox{-2.5ex}}
+        %\path[->,thick,postaction={decorate,decoration={text along path,text align=center,
+        %text={|\sffamily\myshift|Some more bent text}}}]
+        \path[decoration={text along path,text align=center,
+        text={|\myshift|Please recycle}, raise=0.7cm}]
+        (end) edge[decorate, bend left=35] node {} (new);
+
+        \path[->,>=stealth,dashed]
+        (end) edge [bend left=35] (new);
+
+        \path[-,>=stealth]
+        (new) edge (new_notes)
+        (enroll) edge (enroll_notes)
+        (maintain) edge (maintain_notes);
     \end{tikzpicture}
 \end{figure}
 
