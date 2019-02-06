@@ -1,3 +1,10 @@
+6/2-19:
+Kept pondering about an architecture. SUIT presents one similar to what I have in mind, is this an issue?
+Created a new chapter 3 dedicated to the architecture and lifecycle of devices. Transportation of images should be later, possibly last chapter before evaluation
+My confidence has been declining as I feel less and less qualified for this task. At the same time I feel like I cannot contribute to anything. It is hard to stay motivated to work well
+Wrote about the lifecycle of devices. Tried to include the perspective of enabling secure communications and profiles on server side. Drew a neato image.
+Started writing about the actual architecture
+
 5/2-19:
 Spoke to Shahid. He offered insight on overarching purpose of thesis. I need to put more focus on the architecture of the mechanism, including the lifecycle of devices, how they interact with a server (profiles?), who can act as a server, and how keys can be generated and delivered to devices.
 Mailed Ludwig Seitz and Martin Gunnarsson, they are researching secure IoT updates
