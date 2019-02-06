@@ -44,12 +44,12 @@ evolves, therefore the device needs to know what to expect from the manifest. Th
 encoded in a \textbf{manifest version ID}. Rollback attacks need to be prevented so that
 old, vulnerable images cannot be applied. They can be mitigated through a \textbf{sequence
 number}. Furthermore the \textbf{format} (ELF, binary, etc) and the \textbf{size} of the
-image must be included. \textbf{Vendor and class IDs}, possibly \textbf{device ID}, must
-also be included so that the device knows the image is applicable and will work. Lastly, a
-\textbf{digest} of the image must be included so the device can be sure the image has not
-been tampered with during transport. The \textbf{URI} from which the image can be fetched
-is bundled together with the digest. The manifest structure expressed as a C struct can be
-seen in Listing \ref{lst:manifest-struct}.
+image must be included. \textbf{Vendor and class IDs} must also be included so that the
+device knows the image is applicable and will work. Lastly, a \textbf{digest} of the image
+must be included so the device can be sure the image has not been tampered with during
+transport. The \textbf{URI} from which the image can be fetched is bundled together with
+the digest. The manifest structure expressed as a C struct can be seen in Listing
+\ref{lst:manifest-struct}.
 
 \begin{lstlisting}[language=blockc,
                     caption={The mandatory manifest format.}, 
@@ -90,7 +90,7 @@ in Listing \ref{lst:uridigest-struct}, Listing \ref{lst:condition-struct}, and L
 \end{lstlisting}
 
 \begin{lstlisting}[language=blockc,
-                    caption={The format of vendor, class, and device ID conditions.}, 
+                    caption={The format of vendor and class ID conditions.}, 
                     label={lst:condition-struct}]
     struct Condition {
         int type;
