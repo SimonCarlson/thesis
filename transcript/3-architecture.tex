@@ -7,6 +7,73 @@ manifests and images, and the lifecycle of a device. Section hm hm does ha ha
 
 \section{Device Lifecycle}
 \label{sec:device-lifecycle}
+A network of IoT devices can consist of many different kinds of devices. They may contain
+different components, perform different tasks, and thus have different means of
+communication. This will impact how they enroll and secure safe networks and how they
+communicate with a server. The server needs to know how to reach a certain device, what
+protocols and security measure does a specific device handle? It is helpful to think about
+the lifecycle of devices: how they enroll in a secure network, how they keep communication
+with a server, and how they can be maintained for all those years they are intended to
+work.
 
+When a factory new device is installed somewhere, it needs to enroll. Enrollment can mean
+two things in this context: the first meaning is to obtain some way of securely
+communicating such that payloads authenticity and validity are not unknown or altered. The
+second meaning is that a server providing updates must have a profile of each device so
+that the server knows which device is which, which devices needs updates, and how to
+contact those devices. 
+
+Secure communication can be achieved through numerous ways. There are different secure
+transport protocols today, DTLS just being one example, and communication can be secured
+by either symmetric or asymmetric cryptography. The update architecture does not make
+assumptions about which protocols are used, but it is necessary that manifests and images
+are somehow encrypted. Symmetric encryption can be achieved through Pre-Shared Keys, or
+key exchange algorithms. Assymetric encryption can be achieved through private/public key
+pairs issued by a Certificate Authority. No matter the means of encryption, it is clear
+the device needs a pre-shared secret, either to be used as a symmetric
+encryption/decryption key or for enrolling in a PKI.
+
+EST-coaps is an example of a private/public key enrollment protocol. In order for a device
+to enroll, it must have a predetermined secret available as well as the certificate of the
+Certificate Authority. If it does not have a predetermined secret, the Certificate
+Authority cannot be sure they are issuing a certificate and key pair to the correct actor.
+If private keys are generated on the server side, which it might because constrained
+devices could prefer to save that energy as well as not being able to properly randomise
+numbers, the transfer of the private key must also be protected through some means. Yet
+again the predetermined secret would achieve this.
+
+If the device is installed in a network without the certificate of at least one
+Certificate Authority, it cannot be sure they certificate and keys received are actually
+from the Authority. A malicious actor could intercept traffic and distribute a certificate
+and key pair while knowing the private key, depending on the method used. It is clear that
+a predetermined secret as well as atleast one certificate is needed for enrollment in a
+PKI.
+
+After obtaining a means of secure communication, devices must make their preferd way of
+communicating known to a server. This can also be called enrollment, or registration
+perhaps. When first contacted by a device, a server will authorize the device and create a
+profile for it.
+
+The device can be authorized by checking its certificate if assymetric cryptography is
+used. This once again assumes the device had a predetermined secret used to obtain a
+certificate from a Certificate Authority. If symmetric encryption is used instead, the
+server must have a copy of the key used by the device. The server can then issue a
+challenge, such as encrypting a random number N, and let the device authorize itself by
+responding with the encrypted number N+1. This would prove the device is the holder of the
+correct key. The symmetric encryption solution scales poorly however since keys should not
+be shared between devices, and as IoT networks can consist of tens to thousands of
+devices, managing keys can easily become a monumental task. Asymmetric encryption does not
+face the same issue, but instead relies on a trusted authority.
+
+When a device has been authorized a profile for that device can be built. The profile will
+tell how to communicate with that device depending on what protocols it implements.
+Section \ref{ssec:information-model} introduces the notion of vendor, class, and device
+IDs in the manifest used to verify a device is the intended receiver of an update. These
+IDs can also be used to build a profile for a device. Since the IDs pinpoint which
+category of device it is, it is easy to map a hierarchy of IDs to communication
+capabilities. The device must be aware of its own IDs, and thus must be shipped with a
+vendor, class, and device ID. The SUIT information model does not treat these fields as
+mandatory for the manifest, but they must be present on the device in order to build these
+kinds of profiles. Furthermore
 
 \end{document}
