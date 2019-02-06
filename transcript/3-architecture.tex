@@ -124,8 +124,6 @@ prompts the server to rebuild the profile for the device.
         (maintain) edge [bend left=35] (end);
         
         \def\myshift#1{\raisebox{-2.5ex}}
-        %\path[->,thick,postaction={decorate,decoration={text along path,text align=center,
-        %text={|\sffamily\myshift|Some more bent text}}}]
         \path[decoration={text along path,text align=center,
         text={|\myshift|Please recycle}, raise=0.7cm}]
         (end) edge[decorate, bend left=35] node {} (new);
@@ -137,6 +135,43 @@ prompts the server to rebuild the profile for the device.
         (new) edge (new_notes)
         (enroll) edge (enroll_notes)
         (maintain) edge (maintain_notes);
+    \end{tikzpicture}
+\end{figure}
+
+\section{Architecture}
+\ref{sec:architecture}
+The architecture of the update mechanism shall enable the lifecycle described in the
+previous section as well as align with the goals of the SUIT standard. In the architecture
+there are four important actors: the device, the firmware server, the operator, and the
+certificate authority. In the scenario of symmetric encryption a certificate authority is
+not needed, but as that approach is less fit for scaling IoT networks asymmetric
+encryption will be encounted for. If using symmetric encryption, everything is the same
+but the certificate authority can be ignored.
+
+Figure \ref{fig:architecture} shows the proposed architecture. 
+
+\begin{figure}
+    \caption{The proposed architecture.}
+    \label{fig:architecture}
+    \begin{tikzpicture}[box/.style={rectangle,draw,minimum width=3cm, minimum height=2cm},
+        line/.style={->,>=latex}]
+        \node[box] (operator) {Operator};
+        \node[box, right=3cm of operator] (server) {Server};
+        \node[box, right=3cm of server] (device) {Device};
+        \node[box, below=1.5cm of server] (CA) {CA};
+
+        \draw[line] (device.south) -- node[above,sloped] 
+            {0.0 Enroll} (CA.east); 
+        \draw[line] ([yshift=0.8cm]device.west) -- node[above] {0.1 Register} ([yshift=0.8cm]server.east);
+        \draw[line] ([yshift=0.8cm]operator.east) -- node[above] {0.3 Manifest and image} ([yshift=0.8cm]server.west);
+        \draw[line] (server.east) -- node[above] {0.4 Manifest and image} (device.west);
+        \draw[line] ([yshift=-0.8cm]device.west) -- node[above] {0.5, 1.6 Update profile} ([yshift=-0.8cm]server.east);
+        
+        \draw[line, bend right] (operator.north) to[out=30,in=150] node[above] {1.3 Manifest} (device.north);
+        \draw[line] ([yshift=-0.8cm]operator.east) -- node[above] {1.4 Image} ([yshift=-0.8cm]server.west);
+        \draw[line] (server.east) -- node[above] {1.5 Image} (device.west);
+        
+
     \end{tikzpicture}
 \end{figure}
 
