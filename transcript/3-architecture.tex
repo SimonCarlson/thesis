@@ -131,15 +131,16 @@ devices please consider recycling or re-using devices, starting the life cycle a
 \section{Architecture}
 \label{sec:architecture}
 The architecture of the update mechanism shall enable the life cycle described in the
-previous section as well as align with the goals of the SUIT standard. In the architecture
-there are four important actors: the device, the firmware server, the operator, and the
-certificate authority. In the scenario of symmetric encryption a certificate authority is
-not needed, but as mentioned in Section \ref{sec:device-lifecycle} the thesis will discuss
-the architecture from the assymetric cryptography point of view. If using symmetric
-encryption, everything is the same but the certificate authority can be ignored.
+previous section as well as align with the goals of the SUIT standard described in Section
+\ref{ssec:architecture}. In the architecture there are four important actors: the device,
+the firmware server, the operator, and the certificate authority. In the scenario of
+symmetric encryption a certificate authority is not needed, but as mentioned in Section
+\ref{sec:device-lifecycle} the thesis will discuss the architecture from the assymetric
+cryptography point of view. If using symmetric encryption, everything is the same but the
+certificate authority can be ignored.
 
 \begin{figure}
-    \caption{The proposed architecture showing two means of updating.}
+    \caption{The proposed architecture showing two modes of updating a device.}
     \label{fig:architecture}
     \begin{tikzpicture}[box/.style={rectangle,draw,minimum width=3cm, minimum height=3.2cm},
         line/.style={->,>=latex}]
@@ -162,6 +163,63 @@ encryption, everything is the same but the certificate authority can be ignored.
     \end{tikzpicture}
 \end{figure}
 
+Figure \ref{fig:architecture} shows the proposed architecture and the flow of an update
+mechanism. The update mechanism follows the device life cycle and presents to modes of
+distributing manifests and images. The steps are numbered 0.0 to 0.5 and 1.6, with the
+first three steps being mutual. The modes diverge with step 0.3 and 1.3 respectively. The
+common steps for updating a device is as follows:
 
+\begin{enumerate}[label=0.\arabic*]
+    \setcounter{enumi}{-1}
+    \item Enrolling the device at the certificate authority. This is one half of the
+            enrollment stage in the life cycle.
+    \item Registering at the server. This is the second half of the enrollment stage
+            in the life cycle and creates a profile for the device on the server.
+    \item The operator prepares a manifest and signs it.
+\end{enumerate}
+
+At this point the two modes diverge in how they proceed. Distributing the manifest and
+image together works as follows:
+
+\begin{enumerate}[label=0.\arabic*]
+    \setcounter{enumi}{2}
+    \item The manifest and image are both signed and sent to the server. If the image
+            is small enough it can be attached as a payload to the manifest itself.
+    \item The signed manifest and image are sent to the device. If sent in different
+            packets, the manifest can be sent first and the image after the device confirms the
+            manifest is correct. The device can either query the server for an update, or
+            the server can push the update to the device.
+    \item The device confirms the update if successful and causes the server to update
+            its device profile.
+\end{enumerate}
+
+If the manifest and image are distributed separately the following steps occur:
+
+\begin{enumerate}[label=1.\arabic*]
+    \setcounter{enumi}{2}
+    \item The signed manifest is sent directly from the operator to the device.
+    \item The signed image is sent to the server.
+    \item The signed image is sent to the device. This can be done either by the
+        device querying the server following a successful manifest parsing, or by the server
+        pushing the image to the device.
+    \item The device confirms the update if successful and causes the server to update
+    its device profile.
+\end{enumerate}
+
+Whether the manifest and image are distributed together or separately, they are both
+signed by the operator in order to achieve end-to-end security between the operator and
+device. The server should not be able to decrypt the payloads of manifest and image as
+that could enable for instance MITM attacks. The device is to only accept manifests from
+either the operator or server, and images from the server. This raises the questions: who
+can act as an operator, and who can act as a server?
+
+% Operator: human making decisions about updates. Crafts/generates manifests, signs
+% manifests and images. Authorized by keys, needs to be on device? Can send manifest for
+% ease of operations, cannot send images because of size constraints/single point of
+% truth/proxying? How does an operator send manifests, get profile from server? Must get
+% profiles anyways for versioning.
+
+% Server: dedicated server or other device in network. Authorized by keys, needs to be on
+% devices? Single point of truth for device profiles and versions. 
 
 \end{document}
