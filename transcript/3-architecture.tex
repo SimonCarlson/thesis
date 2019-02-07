@@ -1,101 +1,25 @@
 \documentclass[0-thesis.tex]{subfiles}
 
 \begin{document}
-This chapter presents an update architecture based on the SUIT standard. It encompasses
-device management, end-to-end security for manifests and images, transportation of
-manifests and images, and the life cycle of a device. Section hm hm does ha ha
+This chapter presents an update architecture based on the SUIT standard. The architecture
+encompasses device management, end-to-end security for manifests and images,
+transportation of manifests and images, and the life cycle of a device. Section hm hm does
+ha ha
 
 \section{Device Life Cycle}
 \label{sec:device-lifecycle}
 A network of IoT devices can consist of many different kinds of devices. They may contain
 different components, perform different tasks, and thus have different means of
-communication. This will impact how they enroll and secure safe networks and how they
-communicate with a server. The server needs to know how to reach a certain device, what
-protocols and security measure does a specific device handle? It is helpful to think about
-the life cycle of devices: how they enroll in a secure network, how they keep communication
-with a server, and how they can be maintained for all those years they are intended to
-work.
+communication. This will impact how they enroll in a secure network and how they
+communicate with a server, the server will need to know what protocols and security
+measure a specific device handles. It is helpful to think about the life cycle of devices:
+how they enroll in a secure network, how they securely communicate with a server, and how
+they can be maintained for all those years they are intended to work.
 
-When a factory new device is installed somewhere, it needs to enroll. Enrollment can mean
-two things in this context: the first meaning is to obtain some way of securely
-communicating such that payloads authenticity and validity are not unknown or altered. The
-second meaning is that a server providing updates must have a profile of each device so
-that the server knows which device is which, which devices needs updates, and how to
-contact those devices. 
-
-Secure communication can be achieved through numerous ways. There are different secure
-transport protocols today, DTLS just being one example, and communication can be secured
-by either symmetric or asymmetric cryptography. The update architecture does not make
-assumptions about which protocols are used, but it is necessary that manifests and images
-are somehow encrypted. Symmetric encryption can be achieved through Pre-Shared Keys, or
-key exchange algorithms. Asymmetric encryption can be achieved through private/public key
-pairs issued by a Certificate Authority. No matter the means of encryption, it is clear
-the device needs a pre-shared secret, either to be used as a symmetric
-encryption/decryption key or for enrolling in a PKI.
-
-EST-coaps is an example of a private/public key enrollment protocol. In order for a device
-to enroll, it must have a predetermined secret available as well as the certificate of the
-Certificate Authority. If it does not have a predetermined secret, the Certificate
-Authority cannot be sure they are issuing a certificate and key pair to the correct actor.
-If private keys are generated on the server side, which it might because constrained
-devices could prefer to save that energy as well as not being able to properly randomize
-numbers, the transfer of the private key must also be protected through some means. Yet
-again the predetermined secret would achieve this.
-
-If the device is installed in a network without the certificate of at least one
-Certificate Authority, it cannot be sure they certificate and keys received are actually
-from the Authority. A malicious actor could intercept traffic and distribute a certificate
-and key pair while knowing the private key, depending on the method used. It is clear that
-a predetermined secret as well as at least one certificate is needed for enrollment in a
-PKI.
-
-After obtaining a means of secure communication, devices must make their preferred way of
-communicating known to a server. This can also be called enrollment, or registration
-perhaps. When first contacted by a device, a server will authorize the device and create a
-profile for it.
-
-The device can be authorized by checking its certificate if asymmetric cryptography is
-used. This once again assumes the device had a predetermined secret used to obtain a
-certificate from a Certificate Authority. If symmetric encryption is used instead, the
-server must have a copy of the key used by the device. The server can then issue a
-challenge, such as encrypting a random number N, and let the device authorize itself by
-responding with the encrypted number N+1. This would prove the device is the holder of the
-correct key. The symmetric encryption solution scales poorly however since keys should not
-be shared between devices, and as IoT networks can consist of tens to thousands of
-devices, managing keys can easily become a monumental task. Asymmetric encryption does not
-face the same issue, but instead relies on a trusted authority.
-
-When a device has been authorized a profile for that device can be built. The profile will
-tell how to communicate with that device depending on what protocols it implements.
-Section \ref{ssec:information-model} introduces the notion of vendor, class, and device
-IDs in the manifest used to verify a device is the intended receiver of an update. These
-IDs can also be used to build a profile for a device. Since the IDs pinpoint which
-category of device it is, it is easy to map a hierarchy of IDs to communication
-capabilities. The device must be aware of its own IDs, and thus must be shipped with
-vendor, and class IDs. The SUIT information model does not treat these fields as mandatory
-for the manifest, but they must be present on the device in order to build these kinds of
-profiles. For that reason, vendor and class IDs must be present in this architecture.
-
-After a device has enrolled and the server has made a profile for it, the device enters
-the maintenance stage of its life cycle. It is ready to receive and apply updates when
-needed, which can be done in a few different ways. Updates might change the conditions of
-communication for the device, for instance by implementing a new protocol in software.
-Also, the server needs to be aware of the current version of the device in order to
-properly distribute updates. These points make it clear that after an update, the device
-must signal the success (or failure) of an update so that the server can update its view
-of the device as well as rebuild the profile of the device. If a more efficient
-communication protocol has been introduced the device will prefer that way of
-communicating in the future, and the server should accomodate that.
-
-The life cycle of a device can be summarized as in Figure \ref{fig:lifecycle}. A new
-device is installed in a network. This device contains a predetermined secret for
-enrolling or symmetric encryption, vendor and class IDs for building profiles and
-verifying manifests, the location of a registration service on the server, and possibly a
-Certificate Authority certificate if asymmetric encryption is used. The device enrolls in
-the PKI of that is the used solution, and communicates its vendor and class IDs to the
-server. The server authorizes the device and creates a profile for it. Later on, the
-device receives and applies an update, tells the server of its success or failure, which
-prompts the server to rebuild the profile for the device.
+The life cycle of a device can be summarized as in Figure \ref{fig:lifecycle}. The figure
+shows the different stages of a device from being manufactured to ending its service.
+There are also annotations showing what needs to be done in each stage. These stages are
+discussed in further detail in this section.
 
 \begin{figure}
     \caption{The life cycle of a device.}
@@ -138,20 +62,84 @@ prompts the server to rebuild the profile for the device.
     \end{tikzpicture}
 \end{figure}
 
+A factory new device that is to be installed in an IoT network needs some information in
+order to enroll and register at a server. As a basis for secure communication, a
+pre-shared key is needed. This key can either be used for symmetric encryption or for
+enrolling in an asymmetric encryption infrastructure. Both modes can be used and the
+architecture does not care about which is used as long as end-to-end security of manifests
+and images can be achieved. Symmetric encryption however will require a symmetric key for
+each device in the network, and as networks can grow very large it will become
+increasingly difficult to handle keys. Asymmetric encryption solves this, but instead
+needs a trusted certificate authority to enroll devices. With the availability of
+EST-coaps and therefore certificates in an IoT context, the thesis will discuss the
+architecture from an asymmetric cryptography viewpoint, but keep in mind that purely
+symmetric encryption would work as well.
+
+With a pre-shared key, devices can enter the enrollment stage of the life cycle and
+securely enroll and obtain a certificate. In order to trust this certificate, they also
+need to be shipped with at least one certificate of the certificate authority, or of some
+authority further down the chain of trust. If a device is not equipped with a certificate
+it cannot trust the authority when enrolling and thus not be sure it has obtained a valid
+certificate or not.
+
+After a device has enrolled, it needs to register at a server. This is because IoT
+networks can be heterogeneous, containing different kinds of devices communicating in
+different ways. In order for a server to know how to reach a device, the device must tell
+the server if its capabilities. As discussed in Section \ref{ssec:information-model}, the
+manifest should contain a vendor and class ID so a device can check if an update is
+applicable, this means a device must be aware of its own vendor and class ID for
+comparison. This information can be used to register at a server. Devices must come
+prepared with their respective IDs and an endpoint or some other service where they can
+register. By for instance POSTing their IDs and current firmware version to a specific
+server endpoint, a server can create a profile based on the class of the device, enabling
+server initiated communication in the future (pushing updates).
+
+There are alternatives to using device profiles. One alternative is not to keep profiles
+on the server, but instead keep a list of known protocols implemented by devices in the
+network, and when communicating with a device trying each protocol in sequence. This has
+the benefit of not needing to keep a separate profile for each class of devices and map
+profiles to specific devices, but also has some issues. One issue is that you still need
+to keep some state of the devices on the server regarding firmware version. If the server
+does not know what the status of device versions are, it cannot help a human operator
+decide about deploying updates. Another drawback is that devices might implement common
+protocols but have different preferences. If two devices implement some common protocols
+but one of them supports hardware operations for encrypting one of the protocols, it will
+prefer using that protocol with the server, whereas the other device might not. The server
+will however, with no information about device preference, try the same sequence of
+protocols with both devices. 
+
+Lastly, as communication can be unreliable over these networks, the server cannot know for
+sure if a device does not respond due to not understanding the protocol and therefore
+dropping the packets, or if the response just got lost in transmission. It seems more
+robust to keep track of which protocols devices support and conform to the preferences of
+the constrained devices.
+
+After enrollment and registration has been done, the device enters the maintenance stage.
+It can be expected to last for several years in this stage, and this is where the device
+receives and applies updates. As updates can change the capabilities of devices, by for
+instance implementing a new transport protocol in software, devices should confirm
+successful updates at the server so the server can build a new profile for that device. If
+an old, inefficient protocol has been replaced by a more efficient version the server
+should switch to using the new protocol with the updated device. Furthermore, the server
+will act as a source of truth regarding the firmware and software versions running on the
+devices. If a device successfully changes version, the server must be aware so that future
+updates to that device is of the correct version. This also requires updating of a devices
+profile as the device remains in use. The device will remain in the maintenance stage
+until it either breaks or is taken out of service. If you are a manufacturer of IoT
+devices please consider recycling or re-using devices, starting the life cycle anew.
+
 \section{Architecture}
-\ref{sec:architecture}
-The architecture of the update mechanism shall enable the lifecycle described in the
+\label{sec:architecture}
+The architecture of the update mechanism shall enable the life cycle described in the
 previous section as well as align with the goals of the SUIT standard. In the architecture
 there are four important actors: the device, the firmware server, the operator, and the
 certificate authority. In the scenario of symmetric encryption a certificate authority is
-not needed, but as that approach is less fit for scaling IoT networks asymmetric
-encryption will be encounted for. If using symmetric encryption, everything is the same
-but the certificate authority can be ignored.
-
-Figure \ref{fig:architecture} shows the proposed architecture. 
+not needed, but as mentioned in Section \ref{sec:device-lifecycle} the thesis will discuss
+the architecture from the assymetric cryptography point of view. If using symmetric
+encryption, everything is the same but the certificate authority can be ignored.
 
 \begin{figure}
-    \caption{The proposed architecture.}
+    \caption{The proposed architecture showing two means of updating.}
     \label{fig:architecture}
     \begin{tikzpicture}[box/.style={rectangle,draw,minimum width=3cm, minimum height=3.2cm},
         line/.style={->,>=latex}]
@@ -171,9 +159,9 @@ Figure \ref{fig:architecture} shows the proposed architecture.
         \draw[line, bend right] (operator.north) to[out=30,in=150] node[above] {1.3 Manifest} (device.north);
         \draw[line] ([yshift=-0.8cm]operator.east) -- node[above] {1.4 Image} ([yshift=-0.8cm]server.west);
         \draw[line] ([yshift=-1.5cm]server.east) -- node[above] {1.5 Image} ([yshift=-1.5cm]device.west);
-        
-
     \end{tikzpicture}
 \end{figure}
+
+
 
 \end{document}
