@@ -264,5 +264,36 @@ the topology of choice:
 % ease of operations, cannot send images because of size constraints/single point of
 % truth/proxying? How does an operator send manifests, get profile from server? Must get
 % profiles anyways for versioning.
+Operators are people authorized to upload manifests and images to a server. They can also
+optionally upload manifests directly to a device depending on the topology. Operators
+prepare manifests and images and signs them before transporting them to a server, which
+forwards them to a device. The signing ensures end-to-end security for images and
+manifests between operators and devices.
+
+Like a list of servers introduced in Section \ref{ssec:who-is-a-server}, devices also need
+a list of operators. This is because if an operator wishes to send a manifest directly to
+a device, the device needs to know if the operator is authorized to do so, otherwise it is
+discarded. Just like with mapping devices to servers, devices can receive manifests from
+several operators and different devices may interact with different operators. This
+creates opportunities to logically divide a network between different operators. An
+example use case is a constrained network supported by different vendors; the respective
+vendors should only be able to service their respective devices despite all devices
+belonging to the same network. It can also create a hierarchy, where certain operators may
+directly interact with devices but other operators must interact with devices through
+servers. Yet again the point is to prepare for as many different scenarios as possible and
+create a flexible architecture.
+
+As with servers, the essence of being an operator can be captured in a few points:
+
+\begin{itemize}
+    \item An operator is enrolled and has a valid certificate
+    \item An operator is included in a devices list of operators (and therefore can send
+            manifests to the device)
+    \item An operator is trusted by a server to send manifests and images to the server,
+            causing devices to update
+\end{itemize}
+
+\subsection{Different Topologies}
+\label{ssec:different-topologies}
 
 \end{document}
