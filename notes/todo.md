@@ -15,7 +15,7 @@ To do:
 - [ ] Consider how to integrate EST-coaps into the mechanism
   - [x] Read EST RFC
   - [ ] Does it require anything from the application?
-  - [ ] Does it change conditions for key management? How do keys reach the device? (Can use predistributed certificate to authenticate on EST server)
+  - [x] Does it change conditions for key management? How do keys reach the device? (Can use predistributed certificate to authenticate on EST server)
   - [x] Further explain why it is needed (from SUIT)
 - [x] Fix presentation so that someone with no prior knowledge can understand what SUIT is
 - [ ] Start looking at a minimal C manifest parser
@@ -26,5 +26,6 @@ To do:
   - [x] Validate correctness of mandatory fields (using cbor.me perhaps?)
   - [ ] Figure out how to add options without making the entire thing clunky
 - [ ] Rewrite the introduction regarding device management (architecture not implementation)
-- [ ] Further push understanding of standardisation - needs flexibility, details left to implementation
+  - [ ] Further push understanding of standardisation - needs flexibility, details left to implementation
+- [ ] Install libcoap
 

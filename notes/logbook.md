@@ -1,3 +1,10 @@
+7/2-19:
+Improved the architecture image a little bit
+I get all good ideas in the afternoon or at night, when I'm home or out walking. I don't at all feel as creative in the office
+Improved the chapter about device life cycle and update architecture. Needs further discussion on roles.
+Wrote about the proposed architecture, who can be considered a server and operator, and showed three example architectures.
+Made placeholder images for these three examples
+
 6/2-19:
 Kept pondering about an architecture. SUIT presents one similar to what I have in mind, is this an issue?
 Created a new chapter 3 dedicated to the architecture and lifecycle of devices. Transportation of images should be later, possibly last chapter before evaluation
