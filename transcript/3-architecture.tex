@@ -193,7 +193,8 @@ image together works as follows:
             its device profile.
 \end{enumerate}
 
-If the manifest and image are distributed separately the following steps occur:
+If the manifest and image are distributed separately the following steps occur instead of
+steps 0.3-0.5:
 
 \begin{enumerate}[label=1.\arabic*]
     \setcounter{enumi}{2}
@@ -210,16 +211,58 @@ Whether the manifest and image are distributed together or separately, they are 
 signed by the operator in order to achieve end-to-end security between the operator and
 device. The server should not be able to decrypt the payloads of manifest and image as
 that could enable for instance MITM attacks. The device is to only accept manifests from
-either the operator or server, and images from the server. This raises the questions: who
-can act as an operator, and who can act as a server?
+either the operator or server, and images from the server. This raises two important
+questions: who can act as an operator, and who can act as a server?
 
+\subsection{Who Is a Server?}
+\label{ssec:who-is-a-server}
+% Server: dedicated server or other device in network. Authorized by keys, needs to be on
+% devices? Single point of truth for device profiles and versions. Can be used as storage
+% for images being deployed later on.
+Servers are responsible for transporting manifests and images to the devices. Upon
+enrollment devices register at a server and the server creates a profile for that device.
+The profile contains the vendor and class IDs and firmware version of the device. This
+allows the server to know through which protocols the device can be contacted and which
+version it should be updated to. Operators, discussed in the next section, send signed
+manifests and images to servers, and can query them for device status.
+
+Devices should contain a list of servers and by trusting the certificate authority, they
+can validate those machines certificates after being enrolled. A server is thus any
+machine that is enrolled, has a valid certificate, and is included in the devices list of
+servers. The reasoning behind this decision is that a standard solution for updates should
+not assume the topology of an IoT network. The server may be a machine acting as a proxy
+between a traditional network with the operator and a constrained network with IoT
+devices. The server could also be located entirely within the constrained network and be
+contacted through a proxy. The server could be located entirely within the traditional
+network and use a proxy to communicate with devices. 
+
+% TODO: Does a device need one keypair for each server? Does it need one keypair for all servers?
+A device could also be aware of several servers, and different devices can be mapped to
+different servers. This can make device management easier as certain classes of devices
+can be handled by certain servers. By allowing a device to receive updates from several
+servers, the update mechanism architecture displays a form of robustness. If one server is
+a machine located entirely within the constrained network and the connection between that
+server and the operator is severed, updates can still be distributed through other
+servers. If devices are pulling updates, they can query the servers in order of their list
+of servers. If updates are pushed, devices keep the connection with the server pushing the
+update.
+
+Which machines acting like servers can be boiled down to a few important points no matter
+the topology of choice:
+
+\begin{itemize}
+    \item The server is enrolled and has a valid certificate
+    \item The server is included in a devices list of servers (meaning it is authorized to
+            transport updates to the device)
+    \item An operator can reach the server and is authorized by the server to upload updates
+\end{itemize}
+
+\subsection{Who Is an Operator?}
+\label{ssec:who-is-an-operator}
 % Operator: human making decisions about updates. Crafts/generates manifests, signs
 % manifests and images. Authorized by keys, needs to be on device? Can send manifest for
 % ease of operations, cannot send images because of size constraints/single point of
 % truth/proxying? How does an operator send manifests, get profile from server? Must get
 % profiles anyways for versioning.
-
-% Server: dedicated server or other device in network. Authorized by keys, needs to be on
-% devices? Single point of truth for device profiles and versions. 
 
 \end{document}
