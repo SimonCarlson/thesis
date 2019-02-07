@@ -265,7 +265,7 @@ the topology of choice:
 % truth/proxying? How does an operator send manifests, get profile from server? Must get
 % profiles anyways for versioning.
 Operators are people authorized to upload manifests and images to a server. They can also
-optionally upload manifests directly to a device depending on the topology. Operators
+optionally upload manifests directly to a device depending on the architecture. Operators
 prepare manifests and images and signs them before transporting them to a server, which
 forwards them to a device. The signing ensures end-to-end security for images and
 manifests between operators and devices.
@@ -293,21 +293,22 @@ As with servers, the essence of being an operator can be captured in a few point
             causing devices to update
 \end{itemize}
 
-\subsection{Different Topologies}
-\label{ssec:different-topologies}
+\subsection{Different Architectures}
+\label{ssec:different-architectures}
 As discussed operators, servers, and devices can interact in many ways. The architecture
 tries to be flexible allowing for different network topologies and configurations. The
 important parts are that devices can enroll, all actors have valid certificates, and that
 devices know which certificates belong to which roles beforehand. 
 
-Figure \ref{fig:operator-direct} shows an example topology with one operator, one server,
-and one device. The operator is capable of running the protocols needed to communicate in
-the constrained network, and can thus interact both directly with the device to send
-manifests and interact with the server residing within the constrained network. A topology
-like this allows for servers to be distributed within the constrained network.
+Figure \ref{fig:operator-direct} shows an example architecture with one operator, one
+server, and one device. The operator is capable of running the protocols needed to
+communicate in the constrained network, and can thus interact both directly with the
+device to send manifests and interact with the server residing within the constrained
+network. A architecture like this allows for servers to be distributed within the
+constrained network.
 
 \begin{figure}
-    \caption{An operator communicating directly with machines in the contrained network.}
+    \caption{An operator communicating directly with machines in the constrained network.}
     \label{fig:operator-direct}
     \includegraphics[scale=0.8]{images/operator-direct.png}
 \end{figure}
@@ -336,7 +337,7 @@ time.
     \includegraphics[scale=0.8]{images/operator-server.png}
 \end{figure}
 
-There are many other possible topologies and configurations. What these three examples
+There are many other possible architectures and configurations. What these three examples
 have in common is that the operator always resides outside the constrained network,
 devices always reside within the constrained network, and that servers transport images to
 devices. In turn, devices register and update their statuses to the servers. Since
