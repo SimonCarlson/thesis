@@ -295,5 +295,56 @@ As with servers, the essence of being an operator can be captured in a few point
 
 \subsection{Different Topologies}
 \label{ssec:different-topologies}
+As discussed operators, servers, and devices can interact in many ways. The architecture
+tries to be flexible allowing for different network topologies and configurations. The
+important parts are that devices can enroll, all actors have valid certificates, and that
+devices know which certificates belong to which roles beforehand. 
+
+Figure \ref{fig:operator-direct} shows an example topology with one operator, one server,
+and one device. The operator is capable of running the protocols needed to communicate in
+the constrained network, and can thus interact both directly with the device to send
+manifests and interact with the server residing within the constrained network. A topology
+like this allows for servers to be distributed within the constrained network.
+
+\begin{figure}
+    \caption{An operator communicating directly with machines in the contrained network.}
+    \label{fig:operator-direct}
+    \includegraphics[scale=0.8]{images/operator-direct.png}
+\end{figure}
+
+Figure \ref{fig:operator-proxy} shows an operator interacting with a proxy which in turn
+interacts with the server. Note that since the operator is not capable of contacting the
+server directly it can not contact the device directly either. All traffic, manifest and
+image, goes through the server to the device. 
+
+\begin{figure}
+    \caption{An operator using a proxy to reach the constrained network.}
+    \label{fig:operator-proxy}
+    \includegraphics[scale=0.7]{images/operator-proxy.png}
+\end{figure}
+
+Figure \ref{fig:operator-server} shows a third alternative where the server acts as a
+proxy between the operator and the device. The operator is yet again unable to reach the
+devices directly and relies on a server. In this scenario, there are two devices who both
+receive updates from the server. If the devices use the same transport protocols,
+broadcasting could be used from the server to send updates to both devices at the same
+time.
+
+\begin{figure}
+    \caption{A server is used as a proxy to reach two devices.}
+    \label{fig:operator-server}
+    \includegraphics[scale=0.8]{images/operator-server.png}
+\end{figure}
+
+There are many other possible topologies and configurations. What these three examples
+have in common is that the operator always resides outside the constrained network,
+devices always reside within the constrained network, and that servers transport images to
+devices. In turn, devices register and update their statuses to the servers. Since
+operators reside in traditional networks using traditional protocols such as HTTP over
+TCP, a proxy mechanism may be necessary to communicate with the often UDP based
+constrained networks. Remember from Section \ref{ssec:coap} that CoAP can easily be
+proxied to and from HTTP meaning a server running for instance CoAP could also be used as
+a proxy for the operator. If the operator has the proper protocols implemented, they could
+communicate manifests directly to a device.
 
 \end{document}
