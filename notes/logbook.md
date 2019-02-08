@@ -1,3 +1,10 @@
+8/2-19:
+Getting up within ten minutes of waking up seems to feel better
+Meeting with Ludwig, Martin, Marco, and Shahid. Felt good. Overlap between my thesis and their research. They are interested in seeing what I propose. Will improve my thesis and send them my current work
+Marco clarified differences between identity and authority: certificates proves the identity of machines and verifies who they are. Authority is about what they are allowed to do and will need some kind of access token (access control).
+Expanded the server part, mentioning access control. Should write a separate section about it and embed in the architecture. Possibly put ACE in the background?
+Meeting with Nexus and RISE members about PKI and security in IoT. Raised the question and need for access control, code signing, defining actors, interoperability between vendors.
+
 7/2-19:
 Improved the architecture image a little bit
 I get all good ideas in the afternoon or at night, when I'm home or out walking. I don't at all feel as creative in the office

@@ -1,7 +1,3 @@
-Chapter 3 of thesis: write what the goals of my design is (size) and motivate why to use the bare minimum. Present those elements, and tell which issues are covered by them. Present optional elements, motivate why they are included as options, tell their use cases are not critical but rather functional.
-
-
-
 C-parser: define dynamic memory allocator as macro in header file, aim to have that as the only platform specific piece. Rest of implementation should work on any platform. Provide function to register an update handler which processes the parsed manifest.
 
 
@@ -13,3 +9,14 @@ How to enroll devices, both with keys and server connections? Don't assume a dev
 Who can be a server? Who is allowed to distributed updates? How can that actor know how to communicate with devices?
 
 Update "checker" or similar mechanism on device should have separate key pair with update server since it should only communicate updates with that specific actor. Other key pair for all other communications. Security implications of enrolling two key pairs from one factory certificate?
+
+
+
+Certificates = identity but not authorization. Tokens for authorization, talk to Ludwig. Preferably, obtaining and validating tokens would be opaque like the PKI currently presented
+
+The architecture needs to account for: key distribution and management, means of communication (profiles), access control, local updating and patching. These are the key ingredients
+
+<b>Key distribution and management:</b> pre-shared secrets, PKI w/ CA, certificates
+<b>Means of communication:</b> registering devices at server, updating profile after update, operators querying servers
+<b>Access control:</b> ACE tokens. Somehow authorize parts of code? Authorize memory access?
+<b>Local updating and patching:</b> extract image and prepare bootloader, restart. Is it possible to hotswap code by changing memory addresses? Feels really wonky

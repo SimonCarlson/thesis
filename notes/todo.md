@@ -28,4 +28,5 @@ To do:
 - [ ] Rewrite the introduction regarding device management (architecture not implementation)
   - [ ] Further push understanding of standardisation - needs flexibility, details left to implementation
 - [ ] Install libcoap
+- [ ] Read ACE, talk to Ludwig about it
 
