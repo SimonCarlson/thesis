@@ -62,18 +62,18 @@ discussed in further detail in this section.
     \end{tikzpicture}
 \end{figure}
 
+The current state of the SUIT architecture assumes asymmetric cryptography using a PKI,
+and with the availability of EST-coaps this is feasible for IoT contexts. The thesis will
+therefore propose an architecture based on asymmetric cryptography, but as the SUIT
+standard might be further developed to include symmetric cryptography as well, the
+architecture should be flexible enough to allow for it.
+
 A factory new device that is to be installed in an IoT network needs some information in
 order to enroll and register at a server. As a basis for secure communication, a
-pre-shared key is needed. This key can either be used for symmetric encryption or for
-enrolling in an asymmetric encryption infrastructure. Both modes can be used and the
-architecture does not care about which is used as long as end-to-end security of manifests
-and images can be achieved. Symmetric encryption however will require a symmetric key for
-each device in the network, and as networks can grow very large it will become
-increasingly difficult to handle keys. Asymmetric encryption solves this, but instead
-needs a trusted certificate authority to enroll devices. With the availability of
-EST-coaps and therefore certificates in an IoT context, the thesis will discuss the
-architecture from an asymmetric cryptography viewpoint, but keep in mind that purely
-symmetric encryption would work as well.
+pre-shared key is needed. This key will be used for enrolling in an asymmetric encryption
+infrastructure. Furthermore, a device needs appropriate vendor and class IDs in order to
+verify the suitability of updates. In order to communicate with servers and operators, a
+device also needs predetermined lists of servers and operators. 
 
 With a pre-shared key, devices can enter the enrollment stage of the life cycle and
 securely enroll and obtain a certificate. In order to trust this certificate, they also
@@ -85,7 +85,7 @@ certificate or not.
 After a device has enrolled, it needs to register at a server. This is because IoT
 networks can be heterogeneous, containing different kinds of devices communicating in
 different ways. In order for a server to know how to reach a device, the device must tell
-the server if its capabilities. As discussed in Section \ref{ssec:information-model}, the
+the server of its capabilities. As discussed in Section \ref{ssec:information-model}, the
 manifest should contain a vendor and class ID so a device can check if an update is
 applicable, this means a device must be aware of its own vendor and class ID for
 comparison. This information can be used to register at a server. Devices must come
@@ -97,22 +97,20 @@ server initiated communication in the future (pushing updates).
 There are alternatives to using device profiles. One alternative is not to keep profiles
 on the server, but instead keep a list of known protocols implemented by devices in the
 network, and when communicating with a device trying each protocol in sequence. This has
-the benefit of not needing to keep a separate profile for each class of devices and map
-profiles to specific devices, but also has some issues. One issue is that you still need
-to keep some state of the devices on the server regarding firmware version. If the server
-does not know what the status of device versions are, it cannot help a human operator
-decide about deploying updates. Another drawback is that devices might implement common
-protocols but have different preferences. If two devices implement some common protocols
-but one of them supports hardware operations for encrypting one of the protocols, it will
-prefer using that protocol with the server, whereas the other device might not. The server
-will however, with no information about device preference, try the same sequence of
-protocols with both devices. 
-
-Lastly, as communication can be unreliable over these networks, the server cannot know for
-sure if a device does not respond due to not understanding the protocol and therefore
-dropping the packets, or if the response just got lost in transmission. It seems more
-robust to keep track of which protocols devices support and conform to the preferences of
-the constrained devices.
+the benefit of not needing to keep a and continuously update profiles, but also has some
+issues. One issue is that you still need to keep some state of the devices on the server
+regarding firmware version. If the server does not know what the status of device versions
+are, it cannot help a human operator decide about deploying updates. Another drawback is
+that devices might implement common protocols but have different preferences. If two
+devices implement some common protocols but one of them supports hardware operations for
+encrypting one of the protocols, it will prefer using that protocol with the server,
+whereas the other device might not. The server will however, with no information about
+device preference, try the same sequence of protocols with both devices. Lastly, as
+communication can be unreliable over these networks, the server cannot know for sure if a
+device does not respond due to not understanding the protocol and therefore dropping the
+packets, or if the response just got lost in transmission. It is more robust to keep track
+of which protocols devices support and conform to the preferences of the constrained
+devices.
 
 After enrollment and registration has been done, the device enters the maintenance stage.
 It can be expected to last for several years in this stage, and this is where the device
@@ -126,7 +124,8 @@ devices. If a device successfully changes version, the server must be aware so t
 updates to that device is of the correct version. This also requires updating of a devices
 profile as the device remains in use. The device will remain in the maintenance stage
 until it either breaks or is taken out of service. If you are a manufacturer of IoT
-devices please consider recycling or re-using devices, starting the life cycle anew.
+devices please consider recycling or (securely) re-using devices, starting the life cycle
+anew.
 
 \section{Architecture}
 \label{sec:architecture}
@@ -149,11 +148,10 @@ certificate authority can be ignored.
         \node[box, right=3cm of server] (device) {Device};
         \node[box, below=1.5cm of server] (CA) {CA};
 
-        \draw[line] (device.south) -- node[above,sloped] 
-            {0.0 Enroll} (CA.east); 
+        \draw[line] (device.south) -- node[above,sloped] {0.0 Enroll} (CA.east); 
         \draw[line] ([yshift=1.5cm]device.west) -- node[above] {0.1 Register} ([yshift=1.5cm]server.east);
-            \draw[line] ([yshift=0.8cm]operator.east) -- node[above] {0.3 Manifest}
-            node[below] {Image} ([yshift=0.8cm]server.west);
+        \draw[line] ([yshift=0.8cm]operator.east) -- node[above] {0.3 Manifest}node[below] {Image} ([yshift=0.8cm]server.west);
+        
         \draw[line] ([yshift=0.8cm]server.east) -- node[above] {0.4 Manifest and image} ([yshift=0.8cm]device.west);
         \draw[line] ([yshift=-0.8cm]device.west) -- node[above] {0.5, 1.6 Update profile} ([yshift=-0.8cm]server.east);
         
@@ -164,7 +162,7 @@ certificate authority can be ignored.
 \end{figure}
 
 Figure \ref{fig:architecture} shows the proposed architecture and the flow of an update
-mechanism. The update mechanism follows the device life cycle and presents to modes of
+mechanism. The update mechanism follows the device life cycle and presents two modes of
 distributing manifests and images. The steps are numbered 0.0 to 0.5 and 1.6, with the
 first three steps being mutual. The modes diverge with step 0.3 and 1.3 respectively. The
 common steps for updating a device is as follows:
@@ -184,11 +182,11 @@ image together works as follows:
 \begin{enumerate}[label=0.\arabic*]
     \setcounter{enumi}{2}
     \item The manifest and image are both signed and sent to the server. If the image
-            is small enough it can be attached as a payload to the manifest itself.
+            is small enough it can be attached as a payload in the manifest itself.
     \item The signed manifest and image are sent to the device. If sent in different
-            packets, the manifest can be sent first and the image after the device confirms the
-            manifest is correct. The device can either query the server for an update, or
-            the server can push the update to the device.
+            packets, the manifest can be sent first and the image after the device
+            confirms the manifest is correct. The device can either query the server for
+            an update, or the server can push the update to the device.
     \item The device confirms the update if successful and causes the server to update
             its device profile.
 \end{enumerate}
@@ -207,6 +205,14 @@ steps 0.3-0.5:
     its device profile.
 \end{enumerate}
 
+There are also possibilities regarding how the updating process is initiated. Either the
+device could query the server for an update, which prompts a notification to an operator.
+Upon notification, an operator can prepare a manifest and image and send to the server as
+described above. It is also possible for an operator to query the server for the status of
+one or several devices, prepare an update for them, and have the update pushed through the
+server. Both approaches assume the devices are already enrolled and registered at the
+server.
+
 Whether the manifest and image are distributed together or separately, they are both
 signed by the operator in order to achieve end-to-end security between the operator and
 device. The server should not be able to decrypt the payloads of manifest and image as
@@ -214,7 +220,7 @@ that could enable for instance MITM attacks. The device is to only accept manife
 either the operator or server, and images from the server. This raises two important
 questions: who can act as an operator, and who can act as a server?
 
-\subsection{Who Is a Server?}
+\subsection{Who Is a Server and What Can They Do?}
 \label{ssec:who-is-a-server}
 % Server: dedicated server or other device in network. Authorized by keys, needs to be on
 % devices? Single point of truth for device profiles and versions. Can be used as storage
@@ -257,7 +263,18 @@ the topology of choice:
     \item An operator can reach the server and is authorized by the server to upload updates
 \end{itemize}
 
-\subsection{Who Is an Operator?}
+What servers are allowed to do must also be predetermined. Imagine a device running an
+operating system and an application. The operating system is developed by some party
+different than the one developing the application, and thus the device is aware of two
+update servers, one for the operating system and one for the application. If receieving an
+update from the application update server, the device should allow for the update to
+happen but also make sure the correct parts of code are updated. The application vendor
+should not be allowed to touch the operating system if they are not authorized to do so,
+and vice versa. This introduces the topic of authorizing servers, in addition to
+identifying them. Authorization and access control is discussed in Section
+\ref{ssec:access-control}.
+
+\subsection{Who Is an Operator and What Can They Do?}
 \label{ssec:who-is-an-operator}
 % Operator: human making decisions about updates. Crafts/generates manifests, signs
 % manifests and images. Authorized by keys, needs to be on device? Can send manifest for
@@ -310,6 +327,7 @@ constrained network.
 \begin{figure}
     \caption{An operator communicating directly with machines in the constrained network.}
     \label{fig:operator-direct}
+    % TODO: Placeholder image
     \includegraphics[scale=0.8]{images/operator-direct.png}
 \end{figure}
 
@@ -321,6 +339,7 @@ image, goes through the server to the device.
 \begin{figure}
     \caption{An operator using a proxy to reach the constrained network.}
     \label{fig:operator-proxy}
+    % TODO: Placeholder image
     \includegraphics[scale=0.7]{images/operator-proxy.png}
 \end{figure}
 
@@ -334,6 +353,7 @@ time.
 \begin{figure}
     \caption{A server is used as a proxy to reach two devices.}
     \label{fig:operator-server}
+    % TODO: Placeholder image
     \includegraphics[scale=0.8]{images/operator-server.png}
 \end{figure}
 
@@ -347,5 +367,8 @@ constrained networks. Remember from Section \ref{ssec:coap} that CoAP can easily
 proxied to and from HTTP meaning a server running for instance CoAP could also be used as
 a proxy for the operator. If the operator has the proper protocols implemented, they could
 communicate manifests directly to a device.
+
+\subsection{Access Control}
+\label{ssec:access-control}
 
 \end{document}
