@@ -266,7 +266,7 @@ the topology of choice:
 What servers are allowed to do must also be predetermined. Imagine a device running an
 operating system and an application. The operating system is developed by some party
 different than the one developing the application, and thus the device is aware of two
-update servers, one for the operating system and one for the application. If receieving an
+update servers, one for the operating system and one for the application. If receiving an
 update from the application update server, the device should allow for the update to
 happen but also make sure the correct parts of code are updated. The application vendor
 should not be allowed to touch the operating system if they are not authorized to do so,
@@ -309,6 +309,23 @@ As with servers, the essence of being an operator can be captured in a few point
     \item An operator is trusted by a server to send manifests and images to the server,
             causing devices to update
 \end{itemize}
+
+Access control for operators is an important topic. Operators should only be able to send
+updates to devices they are authorized for, and the updates should cover parts of the
+device within the operators rights. The next section discusses access control for
+operators and servers.
+
+\subsection{Access Control}
+\label{ssec:access-control}
+A flexible architecture introduces different configurations of server, operators, and
+devices. An operator might be authorized to update all parts of all devices, or be
+constrained to updating a specific piece of functionality for a subset of the devices.
+Servers may only be allowed to update devices manufactured by a specific vendor, and so
+on. Controlling access rights is a security issue and the architecture must support it.
+
+% TODO: Image showing how a server authorizes itself using ACE? Mention it assumes already
+% enrolled and registered devices
+
 
 \subsection{Different Architectures}
 \label{ssec:different-architectures}
@@ -367,8 +384,5 @@ constrained networks. Remember from Section \ref{ssec:coap} that CoAP can easily
 proxied to and from HTTP meaning a server running for instance CoAP could also be used as
 a proxy for the operator. If the operator has the proper protocols implemented, they could
 communicate manifests directly to a device.
-
-\subsection{Access Control}
-\label{ssec:access-control}
 
 \end{document}
