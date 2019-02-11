@@ -1,6 +1,8 @@
+# Parser
+
 C-parser: define dynamic memory allocator as macro in header file, aim to have that as the only platform specific piece. Rest of implementation should work on any platform. Provide function to register an update handler which processes the parsed manifest.
 
-
+# Considerations
 
 Stronger architecture. Consider the lifecycle of a device from being rolled out of the factory to being installed and updated. Also consider the server side. Device management will be a consideration from an architectural view but not implementation.
 
@@ -10,9 +12,9 @@ Who can be a server? Who is allowed to distributed updates? How can that actor k
 
 Update "checker" or similar mechanism on device should have separate key pair with update server since it should only communicate updates with that specific actor. Other key pair for all other communications. Security implications of enrolling two key pairs from one factory certificate?
 
-
-
 Certificates = identity but not authorization. Tokens for authorization, talk to Ludwig. Preferably, obtaining and validating tokens would be opaque like the PKI currently presented
+
+# Key points
 
 The architecture needs to account for: key distribution and management, means of communication (profiles), access control, local updating and patching. These are the key ingredients
 

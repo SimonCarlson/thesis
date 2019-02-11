@@ -28,13 +28,14 @@ To do:
 - [ ] Rewrite the introduction regarding device management (architecture not implementation)
   - [ ] Further push understanding of standardisation - needs flexibility, details left to implementation
 - [ ] Install libcoap
-- [ ] Read ACE, talk to Ludwig about it
-- [ ] Chapter 2:
-  - [ ] Fix any mention of device management: server side will care about finding devices, what versions they are running
-  - [ ] Cut down CoAP section?
-  - [ ] Remove header figures, they are superfluous
-  - [ ] DTLS: maybe put less focus on records (removing code snippets) and more on the handshake? Good to understand it relies on PKI but establishes symmetric encryption
-  - [ ] SUIT information model: remove long table, leave details to RFC. Mention the important fields in text
+- [x] Read ACE, talk to Ludwig about it
+- [x] Chapter 2:
+  - [x] Fix any mention of device management: server side will care about finding devices, what versions they are running
+  - [x] Cut down CoAP section?
+  - [x] Remove header figures, they are superfluous
+  - [x] DTLS: maybe put less focus on records (removing code snippets) and more on the handshake? Good to understand it relies on PKI but establishes symmetric encryption
+  - [x] SUIT information model: remove long table, leave details to RFC. Mention the important fields in text
+  - [x] Include ACE/OAuth 2.0
 - [ ] Chapter 3 intro stub:
   - [ ] Mention four key areas
   - [ ] Briefly explain the point of the life cycle

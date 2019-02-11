@@ -2,6 +2,8 @@
 Still feeling a lack of motivation, don't understand why
 The architecture chapter should focus on the four key areas I identified: key management and distribution, authorization/access control, means of communication, and updating.
 Are keys affected by updates? Maybe it depends on if devices are using a file system or not? If yes, keys are stored there so updating code should not affect it (permanent storage). If no, certificates and pre-shared secrets have to be distributed in code in order to re-enroll?
+Studying models of authorization using ACE/OAuth2.0, hard to tell how abstract my approach should be. Right now it is purely schematic.
+Authorizing the user seems enough. The servers are implicitly authorized through the updates they send (is it a security issue that they can send updates anyways?). Authorization server must be reached by devices and servers for introspection, yet again it may be proxied.
 
 8/2-19:
 Getting up within ten minutes of waking up seems to feel better
