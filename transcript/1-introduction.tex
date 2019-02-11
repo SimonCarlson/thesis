@@ -62,8 +62,7 @@ considered in three parts: communication, upgrading, and device management. Comm
 will happen over unreliable channels and the payloads must arrive intact and untampered
 with. The upgrade mechanism itself must ensure integrity of the target image and safely
 perform the upgrade with a limited amount of memory. Device management concerns managing
-devices in a network and seeing which devices are in need of updates. Device management
-will not be considered in this thesis.
+devices in a network and seeing which devices are in need of updates.
 
 The thesis will examine the update mechanism from the viewpoint of IoT devices running the
 Contiki-NG operating system on 32-bit ARM Cortex M3 processors. A suitable public key
@@ -108,23 +107,13 @@ service disruptions. All of these risks and more have to be accounted for as IoT
 expected to boom.
 
 \section{Scope}
-The updating mechanism can be roughly split into three parts: the actual updating or
-flipping of images on the device, the transportation of the new image, and managing a
-heterogeneous network of devices needing different updates at different times. This thesis
-will only look at the first two parts, updating a firmware image on the device and
-transportation of the image. The thesis will not be concerned with device management.
-Furthermore the thesis will focus on the use case of applying an entire update to one
-single device. Other use cases such as broadcasting updates or applying differential
-updates will only be considered with respect to time.
+The thesis will primarily focus on the use case of applying an entire update to one single
+device consisting of only one microcontroller. The use case of applying differential
+updates is considered important and the architecture will enable these kinds of updates,
+but the prototype will only support it with respect to time. 
 
 \section{Outline}
 % TODO: Fix numbering
-Chapter two describes the theoretical background needed to understand the results of the
-thesis. This includes the network protocols and operating system being used in the thesis
-as well as the SUIT standard. Chapter three describes the design of the communication
-protocols used in the update mechanism. Chapter four describes how the local update
-mechanism works and how devices can upgrade their images. Chapter five evaluates the
-developed updating mechanism and presents the results. Chapter six ends the report with a
-discussion about the update mechanism and its results.
+Chapter this will talk about that. Chapter whis will talk about what.
 
 \end{document}
