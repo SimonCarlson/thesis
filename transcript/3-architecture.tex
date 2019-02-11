@@ -37,14 +37,14 @@ discussed in further detail in this section.
             Server registration endpoint\\
             CA certificate};
         \node[align=left, xshift=-2.5cm, yshift=-1cm, below right=0.4cm of enroll] (enroll_notes) 
-            {Register at server\\
+            {Register at server/update profile\\
             Obtain certificate};
-        \node[align=left, below left=0.7cm of maintain] (maintain_notes) {Push/pull updates\\
-            Update server profile};
+        \node[align=left, below left=0.7cm of maintain] (maintain_notes) {Push/pull updates};
 
         \path[->,>=stealth]
         (new) edge [bend left=35] (enroll)
         (enroll) edge [bend left=35] (maintain)
+        (maintain) edge [bend left=45] (enroll)
         (maintain) edge [bend left=35] (end);
         
         \def\myshift#1{\raisebox{-2.5ex}}
