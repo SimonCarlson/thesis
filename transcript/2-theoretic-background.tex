@@ -638,14 +638,8 @@ statement protothreads can execute cooperatively. A process is declared through 
 \texttt{PROCESS} macro and can be automatically started after system boot or when a
 specific module is loaded. 
 
-Contiki-NGs execution model is event based, meaning processes often yield execution until
-they are informed a certain event has taken place, upon which they can act.
-Figure~\ref{fig:state-machine} shows the states of the processes and their transitions.
-User-space processes are run in a cooperative manner while kernel-space processes can
-preempt user-space processes. Examples of events are timers expiring, a process being
-polled, or a network packet arriving.
-
 \begin{figure}
+    \caption{The state machine of Contiki threads. Adapted from \parencite{contiki-multithreading}.}
     \label{fig:state-machine}
     \begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=5cm, semithick]
         \node[initial,state] (A) {Ready};
@@ -657,8 +651,14 @@ polled, or a network packet arriving.
               (B) edge[bend left=15] node {yield} (A)
                   edge node {stop} (C);
     \end{tikzpicture}
-    \caption{The state machine of Contiki threads. Adapted from \parencite{contiki-multithreading}.}
 \end{figure}
+
+Contiki-NGs execution model is event based, meaning processes often yield execution until
+they are informed a certain event has taken place, upon which they can act.
+Figure~\ref{fig:state-machine} shows the states of the processes and their transitions.
+User-space processes are run in a cooperative manner while kernel-space processes can
+preempt user-space processes. Examples of events are timers expiring, a process being
+polled, or a network packet arriving.
 
 \subsection{Memory Management}
 \label{ssec:memory}
