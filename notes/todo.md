@@ -15,7 +15,7 @@ To do:
 - [ ] Consider how to integrate EST-coaps into the mechanism
   - [x] Read EST RFC
   - [ ] Does it require anything from the application?
-  - [x] Does it change conditions for key management? How do keys reach the device? (Can use predistributed certificate to authenticate on EST server)
+  - [x] Does it change conditions for key management? How do keys reach the device? (Can use <b>predistributed certificate</b> to authenticate on EST server)
   - [x] Further explain why it is needed (from SUIT)
 - [x] Fix presentation so that someone with no prior knowledge can understand what SUIT is
 - [ ] Start looking at a minimal C manifest parser
@@ -29,4 +29,21 @@ To do:
   - [ ] Further push understanding of standardisation - needs flexibility, details left to implementation
 - [ ] Install libcoap
 - [ ] Read ACE, talk to Ludwig about it
+- [ ] Chapter 2:
+  - [ ] Fix any mention of device management: server side will care about finding devices, what versions they are running
+  - [ ] Cut down CoAP section?
+  - [ ] Remove header figures, they are superfluous
+  - [ ] DTLS: maybe put less focus on records (removing code snippets) and more on the handshake? Good to understand it relies on PKI but establishes symmetric encryption
+  - [ ] SUIT information model: remove long table, leave details to RFC. Mention the important fields in text
+- [ ] Chapter 3 intro stub:
+  - [ ] Mention four key areas
+  - [ ] Briefly explain the point of the life cycle
+  - [ ] Briefly explain the responsibilities of the architecture
+  - [ ] Introduce the sections
+- [ ] Chapter 3 life cycle:
+  - [ ] Include what happens to keys/certs upon update
+- [ ] Chapter 3 architecture:
+  - [ ] Include authorization (maybe as separate figure because it will get messy otherwise)
+- [ ] Chapter 3 access control:
+  - [ ] Is there a benchmark of how much ACE demands from a device?
 

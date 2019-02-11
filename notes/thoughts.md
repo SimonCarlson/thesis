@@ -18,5 +18,5 @@ The architecture needs to account for: key distribution and management, means of
 
 <b>Key distribution and management:</b> pre-shared secrets, PKI w/ CA, certificates
 <b>Means of communication:</b> registering devices at server, updating profile after update, operators querying servers
-<b>Access control:</b> ACE tokens. Somehow authorize parts of code? Authorize memory access?
+<b>Access control:</b> ACE tokens. Somehow authorize parts of code? Authorize memory access? How to define roles?
 <b>Local updating and patching:</b> extract image and prepare bootloader, restart. Is it possible to hotswap code by changing memory addresses? Feels really wonky

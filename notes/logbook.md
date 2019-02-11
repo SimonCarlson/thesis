@@ -1,3 +1,8 @@
+11/2-19:
+Still feeling a lack of motivation, don't understand why
+The architecture chapter should focus on the four key areas I identified: key management and distribution, authorization/access control, means of communication, and updating.
+Are keys affected by updates? Maybe it depends on if devices are using a file system or not? If yes, keys are stored there so updating code should not affect it (permanent storage). If no, certificates and pre-shared secrets have to be distributed in code in order to re-enroll?
+
 8/2-19:
 Getting up within ten minutes of waking up seems to feel better
 Meeting with Ludwig, Martin, Marco, and Shahid. Felt good. Overlap between my thesis and their research. They are interested in seeing what I propose. Will improve my thesis and send them my current work
