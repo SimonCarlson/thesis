@@ -1,3 +1,8 @@
+12/2-19:
+Woke up 3:40 AM with a serious head ache. Sleep got completely fucked so worked from home today. Half day
+Expanded the motivation for a life cycle and mentioned the four key areas. 
+Added access control to the architecture but not yet done with that.
+
 11/2-19:
 Still feeling a lack of motivation, don't understand why
 The architecture chapter should focus on the four key areas I identified: key management and distribution, authorization/access control, means of communication, and updating.

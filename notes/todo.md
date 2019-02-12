@@ -37,12 +37,12 @@ To do:
   - [x] SUIT information model: remove long table, leave details to RFC. Mention the important fields in text
   - [x] Include ACE/OAuth 2.0
 - [ ] Chapter 3 intro stub:
-  - [ ] Mention four key areas
-  - [ ] Briefly explain the point of the life cycle
+  - [x] Mention four key areas
+  - [x] Briefly explain the point of the life cycle
   - [ ] Briefly explain the responsibilities of the architecture
-  - [ ] Introduce the sections
-- [ ] Chapter 3 life cycle:
-  - [ ] Include what happens to keys/certs upon update
+  - [x] Introduce the sections
+- [x] Chapter 3 life cycle:
+  - [x] Include what happens to keys/certs upon update
 - [ ] Chapter 3 architecture:
   - [ ] Include authorization (maybe as separate figure because it will get messy otherwise)
 - [ ] Chapter 3 access control:
