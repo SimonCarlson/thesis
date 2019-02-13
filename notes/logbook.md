@@ -1,3 +1,16 @@
+13/2-19:
+Re-structured chapter 3. I feel this structure makes my thoughts come through in a more structured and convincing way. I can re use a lot of material I've already written and more easily expand some underdeveloped fields
+i3 is pretty cool, starting to get the hang of it
+Key management, first pass done
+Authorization, first pass done
+Communication, first pass done
+Updating, first pass done
+My updating discussion feels rather weak. I know too little about safe boot and bootloaders I feel
+Should aim to make thesis look presentable and send to Farhad, Ludwig, Martin, Shahid asap
+Maybe I should seriously cut down the amounts of Contiki-background. Do you really need to know anything besides it implementing standard protocols, having a process model, and events?
+Life cycle, first pass done
+Sketched all images that should be remade, won't be using tikz but instead draw.io. It just looks better imo
+
 12/2-19:
 Woke up 3:40 AM with a serious head ache. Sleep got completely fucked so worked from home today. Half day
 Expanded the motivation for a life cycle and mentioned the four key areas. 
