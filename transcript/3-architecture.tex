@@ -402,7 +402,7 @@ device would boot from an unencrypted image.
 By storing the manifest containing the image digest, unencrypted images can be verified by
 comparing their digest to the one in the manifest. Digests are easier to calculate than
 decryption is, and a power cycle would just interrupt the digest calculation instead of
-the decyption of the actual bootable image. In order to make sure the manifest is correct
+the decryption of the actual bootable image. In order to make sure the manifest is correct
 upon boot, the digest of the manifest can be calculated and stored alongside the manifest
 and image. The manifest also has to be stored in order to prevent rollback attacks. It
 contains monotonically increasing sequence numbers to ensure devices do not install older,
@@ -419,19 +419,18 @@ boot.
 
 \section{Device Life Cycle}
 \label{sec:device-lifecycle}
-A network of IoT devices can consist of many different kinds of devices. They may contain
-different components, perform different tasks, and thus have different means of
-communication. This will impact how they enroll in a secure network and how they
-communicate with a server, the server will need to know what protocols and security
-measure a specific device handles. It is helpful to think about the life cycle of devices:
-how they enroll in a secure network, how they securely communicate with a server, and how
-they can be maintained for all those years they are intended to work.
+The four key areas discussed in sections \ref{sec:key-management},
+\ref{sec:authorization}, \ref{sec:communication}, and \ref{sec:updates} are all part of
+the life cycle of a device. From the moment a new device is deployed in a network to the
+point where it is taken out of action possibly several years later, the life cycle
+describes a holistic view of the state and operations of devices.
 
-The life cycle of a device can be summarized as in Figure~\ref{fig:lifecycle}. The figure
-shows the different stages of a device from being manufactured to ending its service.
-There are also annotations showing what needs to be done in each stage. These stages are
-discussed in further detail in this section.
+Figure~\ref{fig:lifecycle} summarizes the life cycle of a device from an update
+perspective. The figure shows the different stages of a device from being manufactured to
+ending its service. There are also annotations showing what needs to be done in each
+stage. These stages are discussed in further detail in this section.
 
+% TODO: Use the five-node figure, separating enrollment and registration
 \begin{figure}
     \caption{The life cycle of a device.}
     \label{fig:lifecycle}
@@ -473,51 +472,34 @@ discussed in further detail in this section.
     \end{tikzpicture}
 \end{figure}
 
-The current state of the SUIT architecture assumes asymmetric cryptography using a PKI,
-and with the availability of EST-coaps this is feasible for IoT contexts. The thesis will
-therefore propose an architecture based on asymmetric cryptography, but as the SUIT
-standard might be further developed to include symmetric cryptography as well, the
-architecture should be flexible enough to allow for it.
 
-A factory new device that is to be installed in an IoT network needs some information in
-order to enroll and register at a server. As a basis for secure communication, a
-pre-shared key and \gls{ca} certificate is needed. The pre-shared key will be used during
-enrollment to obtain a key pair, and the certificate is to know the devices own
-certificate is issued by the correct CA. Furthermore, a device needs appropriate vendor
-and class IDs in order to verify the suitability of updates and to register at servers. In
-order to communicate with servers and operators, a device also needs predetermined lists
-of servers and operators. 
+As discussed, a factory new device that is to be installed in an IoT network needs some
+information in order to enroll and register at a server. A pre-shared key, CA certificate,
+vendor and class IDs, list of servers and operators, and and endpoint for registration is
+needed. These parts make sure the device can take part of the network and move to the next
+step of the life cycle. 
 
-With a pre-shared key, devices can enter the enrollment stage of the life cycle and
-securely enroll and obtain a certificate. In order to trust this certificate, they also
-need to be shipped with at least one certificate of the certificate authority, or of some
-authority further down the chain of trust. If a device is not equipped with a certificate
-it cannot trust the authority when enrolling and thus not be sure it has obtained a valid
-certificate or not.
+Entering the enrollment stage, devices obtain certificates by enrolling at the CA. For
+this the pre-shared key and CA certificate is needed. After obtaining a certificate the
+device can be trusted by the servers. It registers at its designated servers who all
+create a profile for the device. The device is now ready to be updated, and proceeds to
+the maintenance stage.
 
-After enrollment and registration has been done, the device enters the maintenance stage.
-It can be expected to last for several years in this stage, and this is where the device
-receives and applies updates. As updates can change the capabilities of devices, by for
-instance implementing a new transport protocol in software, devices should confirm
-successful updates at the server so the server can build a new profile for that device. If
-an old, inefficient protocol has been replaced by a more efficient version the server
-should switch to using the new protocol with the updated device. Furthermore, the server
-will act as a source of truth regarding the firmware and software versions running on the
-devices. If a device successfully changes version, the server must be aware so that future
-updates to that device is of the correct version. This also requires updating of a devices
-profile as the device remains in use. 
+The maintenance state can be expected to last for several years, and this is where the
+device receives and applies updates. As updates can change the capabilities of devices, by
+for instance implementing a new transport protocol in software, devices should confirm
+successful updates at the server so the server can build a new profile for that device.
+Servers also need to be updated with the new version the device is running, which further
+motivates the update confirmation. This means after an update, the device will either move
+back to the enrollment or registration stage.
 
-When updating a device, certificates might have to be re-issued. In the best case, the old
-certificate of the device can be used to re-enroll in the PKI. Optionally, operators can
-prepare an update with a pre-shared key as if the device was factory new, and let the
-device re-enroll. This depends on implementation specific issues such as how keys are
-stored in the device and if the device has a file system or not, but it is important to
-note that updates might break certificates and after applying an update a device must be
-able to re-enroll at the CA.
-
-The device will remain in the maintenance stage until it either breaks or is taken out of
-service. If you are a manufacturer of IoT devices please consider recycling or (securely)
-re-using devices, starting the life cycle anew.
+If certificates are broken after updates, as discussed in Section~\ref{sec:key-management},
+devices move back to the enrollment stage to obtain a new certificate. If the certificate
+is still valid after the update, the device moves back to the registration stage, updates
+the profile at the servers, and then moves back to maintenance. The device will remain in
+the maintenance stage until it either breaks or is taken out of service. If you are a
+manufacturer of IoT devices please consider recycling or (securely) re-using devices,
+starting the life cycle anew.
 
 
 \section{Different Architectures}
