@@ -256,8 +256,34 @@ devices as the update already will be shipped with a token authorizing the updat
 
 \section{Communication}
 \label{sec:communication}
+In heterogeneous networks of IoT devices, each device might sport a specific protocol
+stack. In order to enable different devices to be updated, servers must be aware of how to
+reach these devices. This problem introduces the notion of device profiles containing
+information about device capabilities and software versions. 
+
+When devices have enrolled and obtained a valid certificate, they must contact their
+respective servers so the servers can create profiles of the devices. The profiles will
+tell through which protocols to reach a device and what software versions the device is
+using. In order to achieve this, devices must first know which servers to contact. This
+can be solved through shipping devices with a list of servers. This list can later on be
+updated like any other software. Furthermore, the devices use vendor and class IDs as
+described in the SUIT information model. The information model uses these pieces of
+information to verify an update is intended for a specific device by matching the IDs, but
+they can also be sent to a server to tell it what kind of device is contacting it. The
+server can infer a profile based on the IDs it is sent, or simply use the protocols the
+device chose to contact it. The devices also need to be aware of how to register, for
+instance by POSTing to a specific server endpoint. 
+
+When updating there are possibilities regarding how the updating process is initiated. An
+operator can query the server for the status of one or several devices, prepare an update
+for them, and have the update pushed through the server. Optionally the operator could
+send a manifest to the device explaining when the update is to be applied and put the
+image on the server. Later when the device should update, the device pulls the image from
+the server, validates it using the already received manifest, and updates. Both the pull
+and push approaches assume the devices are already enrolled and registered at the server.
 
 % TODO: Update image with:
+% Change to just distribute together
 % Authorization server
 % Operator obtaining a token
 % Device optionally introspecting it
@@ -286,35 +312,20 @@ devices as the update already will be shipped with a token authorizing the updat
     \end{tikzpicture}
 \end{figure}
 
-Figure~\ref{fig:communication-workflow} shows the proposed architecture and the flow of an update
-mechanism. The update mechanism follows the device life cycle and presents two modes of
-distributing manifests and images. The steps are numbered 0.0 to 0.6 and 1.7, with the
-first three steps being mutual. The modes diverge with step 0.4 and 1.4 respectively. The
-common steps for updating a device is as follows:
+Figure~\ref{fig:communication-workflow} shows an example update flow in the architecture.
+This update is initiated by the operator by querying the server for device status and then
+pushing an update. The manifest and image are distributed together.
 
 \begin{enumerate}[label=0.\arabic*]
     \setcounter{enumi}{-1}
-    \item Enrolling the device at the certificate authority. This is one half of the
-            enrollment stage in the life cycle.
-    \item Registering at the server. This is the second half of the enrollment stage
-            in the life cycle and creates a profile for the device on the server.
+    \item Enrolling the device at the certificate authority.
+    \item Registering at the server. This creates a profile for the device on the server.
     \item The operator prepares a manifest and signs it.
     \item The operator requests an access token from the authorization server in order to
-            gain access to applying updates.
-\end{enumerate}
-
-At this point the two modes diverge in how they proceed. Distributing the manifest and
-image together works as follows:
-
-\begin{enumerate}[label=0.\arabic*]
-    \setcounter{enumi}{2}
+            gain access to applying the update.
     \item The manifest and image are both signed and sent to the server with the
-            authorization token. If the image is small enough it can be attached as a
-            payload in the manifest itself.
+            authorization token.
     \item The signed manifest and image are sent with the authorization token to the
-            device. If sent in different packets, the manifest can be sent first and the
-            image after the device confirms the manifest is correct. The device can either
-            query the server for an update, or the server can push the update to the
             device.
     \item The device optionally requests introspection data from the authorization server
             to verify the authorization token.
@@ -322,37 +333,42 @@ image together works as follows:
             its device profile.
 \end{enumerate}
 
-If the manifest and image are distributed separately the following steps occur instead of
-steps 0.3-0.5:
+After updating, the devices capabilities might have changed, for instance by having a new
+protocol implemented in software. The version has also changed due to applying an update.
+After an update, a device should notify all its servers so they can update the device
+profile (or simply discard the old one and generate a new, as if the device registered for
+the first time). This ensures the servers view of the devices is up to date and that
+communication will always happen through the intended and supported protocols. The
+functionality of registering is the same as when a device is new and thus not costly to
+implement.
 
-\begin{enumerate}[label=1.\arabic*]
-    \setcounter{enumi}{2}
-    \item The signed manifest is sent with the authorization token directly from the
-            operator to the device.
-    \item The authorization token and signed image is sent to the server.
-    \item The authorization token and signed image is sent to the device. This can be done
-            either by the device querying the server following a successful manifest parsing,
-            or by the server pushing the image to the device.
-    \item The device optionally requests introspection data from the authorization server
-            to verify the authorization token.
-    \item The device confirms the update if successful and causes the server to update
-            its device profile.
-\end{enumerate}
+There are alternatives to using device profiles. One alternative is to instead keep a list
+of known protocols implemented by devices in the network, and when pushing updates to a
+device trying each protocol in sequence. This has the benefit of not needing to keep and
+continuously update profiles, but also has some issues. One issue is that you still need
+to keep some state of the devices on the server regarding firmware version. If the server
+does not know what the status of device versions are, it cannot help a human operator
+decide about deploying updates. 
 
-There are also possibilities regarding how the updating process is initiated. Either the
-device could query the server for an update, which prompts a notification to an operator.
-Upon notification, an operator can prepare a manifest and image and send to the server as
-described above. It is also possible for an operator to query the server for the status of
-one or several devices, prepare an update for them, and have the update pushed through the
-server. Both approaches assume the devices are already enrolled and registered at the
-server.
+Another drawback is that devices might implement common protocols but have different
+preferences. If two devices implement some common protocols but one of them supports
+hardware operations for encrypting one of the protocols, it will prefer using that
+protocol with the server, whereas the other device might not. The server will however,
+with no information about device preference, try the same sequence of protocols with both
+devices.
 
-Whether the manifest and image are distributed together or separately, they are both
-signed by the operator in order to achieve end-to-end security between the operator and
-device. The server should not be able to decrypt the payloads of manifest and image as
-that could enable for instance MITM attacks. The device is to only accept manifests from
-either the operator or server, and images from the server. This raises two important
-questions: who can act as an operator, and who can act as a server?
+Furthermore, as communication can be unreliable over these networks, the server
+cannot know for sure if a device does not respond due to not understanding the protocol
+and therefore dropping the packets, or if the response just got lost in transmission. It
+is more robust to keep track of which protocols devices support and conform to the
+preferences of the constrained devices.
+
+Lastly, instead of using profiles all communication could be initiated from the device
+side, meaning updates are only done through a pulling mechanism. This would not enable the
+use case of pushing updates which could be critical if a vulnerability must be patched
+right away. Operators must be given the choice to push updates to their devices, and thus
+servers must be able to initiate contact with devices.
+
 
 \section{Updates}
 \label{sec:updates}
@@ -361,6 +377,45 @@ questions: who can act as an operator, and who can act as a server?
 % bootloader procedure. Implementation specific though
 % Cite mailing list perhaps?
 
+When an update has finally arrived to the device, it must be processed and then installed.
+The process of decrypting, validating, and installing the image is heavily implementation
+specific with most of the details being out of scope for the architecture. However, since
+devices operate using different hardware and bootloaders they must be given the freedom
+to update in the way that makes most sense for them. The architecture should support this.
+
+By delivering optional fields such as decryption instructions, processing steps, and
+postconditions, update handlers and bootloaders can take care of updates in various ways.
+This enables different ways of applying updates within the same architecture. What the
+update handlers and bootloaders of all devices have in common is that they must trust the
+source of the update, they must be able to decrypt the update, they must be able to verify
+the validity of the update, and they must be able to do this safely such that an
+unexpected power cycle does not brick the entire device.
+
+Still being in the realm of very constrained devices, the bootloader should be as simple
+as possible. This is also a requirement stated by SUIT on the architecture. By decrypting
+and verifying the image at every boot the boot procedure will be secure but
+quite complex. Also if a power cycle occurs during decryption, the device might not be
+able to recover. Decrypting the image as part of the update mechanism and writing it
+unencrypted to flash would allow for a simpler bootloader, but is less secure as the
+device would boot from an unencrypted image.
+
+By storing the manifest containing the image digest, unencrypted images can be verified by
+comparing their digest to the one in the manifest. Digests are easier to calculate than
+decryption is, and a power cycle would just interrupt the digest calculation instead of
+the decyption of the actual bootable image. In order to make sure the manifest is correct
+upon boot, the digest of the manifest can be calculated and stored alongside the manifest
+and image. The manifest also has to be stored in order to prevent rollback attacks. It
+contains monotonically increasing sequence numbers to ensure devices do not install older,
+possibly vulnerable images, but in order to compare sequence numbers the most recent
+manifest has to be kept around. Manifests should be kept for the update handler to compare
+sequence numbers, and for the bootloader to verify images.
+
+% TODO: Fix chapter numbering
+Besides offering encryption, authorization, communication, and manifests, the architecture
+cannot influence the update procedure further. Locally upgrading an image is a concern of
+the target device that is to be updated. Chapter NUMBER will present the prototype
+architecture implementation, and touch upon subjects such as manifest format and secure
+boot.
 
 \section{Device Life Cycle}
 \label{sec:device-lifecycle}
@@ -439,43 +494,6 @@ need to be shipped with at least one certificate of the certificate authority, o
 authority further down the chain of trust. If a device is not equipped with a certificate
 it cannot trust the authority when enrolling and thus not be sure it has obtained a valid
 certificate or not.
-
-After a device has enrolled, it needs to register at a server. This is because IoT
-networks can be heterogeneous, containing different kinds of devices communicating in
-different ways. In order for a server to know how to reach a device, the device must tell
-the server of its capabilities. As discussed in Section~\ref{ssec:information-model}, the
-manifest should contain a vendor and class ID so a device can check if an update is
-applicable, this means a device must be aware of its own vendor and class ID for
-comparison. These pieces of information can be used to register at a server. Devices must
-come prepared with their respective IDs and an endpoint or some other service where they
-can register. By for instance POSTing their IDs and current firmware version to a specific
-server endpoint, a server can create a profile based on the class of the device, enabling
-server initiated communication in the future (pushing updates).
-
-There are alternatives to using device profiles. One alternative is not to keep profiles
-on the server, but instead keep a list of known protocols implemented by devices in the
-network, and when communicating with a device trying each protocol in sequence. This has
-the benefit of not needing to keep a and continuously update profiles, but also has some
-issues. One issue is that you still need to keep some state of the devices on the server
-regarding firmware version. If the server does not know what the status of device versions
-are, it cannot help a human operator decide about deploying updates. 
-
-Another drawback is that devices might implement common protocols but have different
-preferences. If two devices implement some common protocols but one of them supports
-hardware operations for encrypting one of the protocols, it will prefer using that
-protocol with the server, whereas the other device might not. The server will however,
-with no information about device preference, try the same sequence of protocols with both
-devices. Furthermore, as communication can be unreliable over these networks, the server
-cannot know for sure if a device does not respond due to not understanding the protocol
-and therefore dropping the packets, or if the response just got lost in transmission. It
-is more robust to keep track of which protocols devices support and conform to the
-preferences of the constrained devices.
-
-Lastly, instead of using profiles all communication could be initiated from the device
-side, meaning updates are only done through a pulling mechanism. This would not enable the
-use case of pushing updates which could be critical if a vulnerability must be patched
-right away. Operators must be given the choice to push updates to their devices, and thus
-servers must be able to initiate contact with devices.
 
 After enrollment and registration has been done, the device enters the maintenance stage.
 It can be expected to last for several years in this stage, and this is where the device
