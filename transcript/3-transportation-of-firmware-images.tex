@@ -26,8 +26,8 @@ option can be used if the manifest adds many options and thus grows.
 %much energy as roughly 8000 CPU cycles, so reducing the size of the manifest is of
 %importance \parencite{interconnecting}.
 
-Section \ref{ssec:mandatory-elements} explains the structure of the manifest. Optional
-elements and their structure are explained in section \ref{ssec:options}. 
+Section~\ref{ssec:mandatory-elements} explains the structure of the manifest. Optional
+elements and their structure are explained in Section~\ref{ssec:options}. 
 
 \subsection{Mandatory Elements}
 \label{ssec:mandatory-elements}
@@ -75,8 +75,8 @@ depending on how many digests, conditions, and options are necessary. In order t
 implement this, each of these structures contain an element which is a pointer to another
 structure of the same type. This allows a parser to traverse the link of structures, and
 thus parse several URI/Digest pairs, conditions, or options. Their structures can be seen
-in Listing \ref{lst:uridigest-struct}, Listing \ref{lst:condition-struct}, and Listing
-\ref{lst:option-struct} in the next section.
+in Listing~\ref{lst:uridigest-struct}, Listing~\ref{lst:condition-struct}, and
+Listing~\ref{lst:option-struct} in the next section.
 
 \begin{lstlisting}[language=blockc,
                     caption={The format of URI/digest pairs.}, 
@@ -108,7 +108,7 @@ optionally included using the options field of the manifest. The included option
 sorted by their option code in ascending order to calculate a delta between the current
 and preceding option. This is the way CoAP implements options, and it allows for a
 smaller amount of bits to encode the option code when the codes get larger. The options
-and their codes are presented in Table \ref{tab:option-codes}.
+and their codes are presented in Table~\ref{tab:option-codes}.
 
 \begin{longtable}[]{@{}ll@{}}
     \caption{The optional elements of the manifest and their option codes.}
@@ -134,7 +134,7 @@ and their codes are presented in Table \ref{tab:option-codes}.
 
 The option field in the manifest format will contain a list of option structures, each
 structure consisting of an option delta, option length, option value, and a pointer to the
-next option as seen in Listing \ref{lst:option-struct}. As with the mandatory elements,
+next option as seen in Listing~\ref{lst:option-struct}. As with the mandatory elements,
 some options consist of nested structs. The dependencies and precursor options list
 digests of images or parts of images that must be acquired before applying the update,
 along with their URLs. Aliases lists alternative mirrors for each image that could be used
@@ -142,7 +142,7 @@ instead. Directives and processingSteps both use a different kind of structure, 
 Instruction struct, that maps types of instructions to their values. Examples of
 directives could be whether to install the update right away or just cache the image and
 install at some later point, and examples of processingSteps could be which decompression
-algorithm to use. The Instruction struct can be seen in Listing \ref{lst:instruction}.
+algorithm to use. The Instruction struct can be seen in Listing~\ref{lst:instruction}.
 
 \begin{lstlisting}[language=blockc,
                     caption={The format of the option field.}, 
@@ -172,7 +172,7 @@ quite verbose, into CBOR as a more efficient means of encoding the data. CBOR wa
 around the same principles and elements as JSON, but is not very readable for humans. For
 these reasons, the thesis proposes to craft manifests in JSON, then convert into CBOR, and
 finally sign and send to the device requiring an update. An example manifest could look as
-in Listing \ref{lst:example-manifest}.
+in Listing~\ref{lst:example-manifest}.
 
 \begin{lstlisting}[language=blockjson,
                     caption={An example manifest.},
@@ -242,7 +242,7 @@ A7                                      # map(7)
    19 0200                              # unsigned(512)
 \end{lstlisting}
 
-Listing \ref{lst:example-manifest-cbor} shows the first four elements of the example
+Listing~\ref{lst:example-manifest-cbor} shows the first four elements of the example
 manifest when encoded in CBOR. The structure of mapping keys to values is the same, but
 each element is preceded by an indication of type and length. This allows for arbitrarily
 nested elements and indefinite length items. It also allows for a more efficient encoding
@@ -252,7 +252,7 @@ used instead of preallocating bits and wasting them on shorter items.
 % TODO: More concrete? Code snippets of parsing?
 The example manifest would be transmitted to a device and then parsed. The parser would
 divide the manifest into the structures shown in sections \ref{ssec:mandatory-elements}
-and \ref{ssec:options}. The parsed manifest structure would have an option struct
+and ref{ssec:options}. The parsed manifest structure would have an option struct
 referencing another option struct, meaning the chain is of length 2. The reason for having
 the nested structs carry a reference to its own type is to make memory allocation easier.
 While parsing, when the parser detects a new nested struct will be created it can simply
