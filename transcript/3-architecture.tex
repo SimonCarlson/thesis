@@ -45,6 +45,7 @@ Section~\ref{ssec:who-is-an-operator} covers operators.
 % Server: dedicated server or other device in network. Identified by keys, needs to be on
 % devices? Single point of truth for device profiles and versions. Can be used as storage
 % for images being deployed later on.
+% TODO: Mention pre-determined lists of servers
 Servers are responsible for transporting manifests and images to the devices and keeping
 track of device profiles. Upon enrollment devices register at a server and the server
 creates a profile for that device. The profile contains the vendor and class IDs and
@@ -103,6 +104,8 @@ control is discussed in Section~\ref{sec:authorization}.
 % ease of operations, cannot send images because of size constraints/single point of
 % truth/proxying? How does an operator send manifests, get profile from server? Must get
 % profiles anyways for versioning.
+% TODO: Mention pre-determined list of operators. Mention it can be updated just like any
+% other piece of software
 Operators are people authorized to upload manifests and images to a server. They can also
 optionally upload manifests directly to a device depending on the architecture. Operators
 prepare manifests and images and signs them before transporting them to a server, which
@@ -139,8 +142,7 @@ control for operators and servers.
 
 \section{Key Management}
 \label{sec:key-management}
-% TODO: Mention what is needed for enrollment 
-% Consider updates breaking certificates. Why would they? Lack of understanding concerning
+% TODO: Consider updates breaking certificates. Why would they? Lack of understanding concerning
 % certificates perhaps
 % Two pairs of keys from one PSK? Are two pairs needed?
 The architecture will, in order to align with the goals of SUIT, be based on asymmetric
@@ -179,22 +181,78 @@ security of future device communication.
 
 \section{Authorization}
 \label{sec:authorization}
-A flexible architecture introduces different configurations of server, operators, and
+% TODO: Maybe put this after communication?
+A flexible architecture enables different configurations of servers, operators, and
 devices. An operator might be authorized to update all parts of all devices, or be
 constrained to updating a specific piece of functionality for a subset of the devices.
-Servers may only be allowed to update devices manufactured by a specific vendor, and so
-on. Controlling access rights is a security issue and the architecture must support it.
+Operating system vendors might be allowed to push security updates for the operating
+system but not change the application code. Controlling access rights is a security issue
+and the architecture must support it.
 
-% TODO: Image showing how a server authorizes itself using ACE? Mention it assumes already
-% enrolled and registered devices. Adapt the RFC image
+How clients can access a protected resource through authorization tokens is described in
+\parencite{ace} and Figure \ref{fig:ace-flow} shows an adaptation of the protocol flow
+from that document. The figure shows how a client wanting to access a resource requests a
+token from an authorization server. The token is returned to the client, which can then
+send a request and token to the server holding the resource. If necessary, the resource
+server can send an introspection request to the authorization server asking for more
+information about the token in order to verify it. If everything goes as planned, the
+client is allowed the resource.
 
-% TODO: Explain how an authorization server can be used and how it can be placed in or
-% between networks. Introspection
+In the context of the update architecture, the client would be a party needing to
+authorize themselves, i.e. an operator or server. The access token would have to be of a
+lightweight variant since they are to be used on constrained devices, but which variant is
+implementation specific. Tokens will be sent with updates (signed manifests and images) to
+devices, the resource sought for is the ability to update the device. The device will thus
+not respond with a particular resource, but instead if the token is valid recognize the
+originator of the update as an authorized one and proceed with the update. Introspection
+is an interesting feature of ACE since it requires less from the device concerning
+validating tokens. Instead of doing everything on its own, the device can ask the server
+for additional information making the validation procedure easier. This however means some
+extra communication which is power consuming for an IoT device. To use introspection or
+not is yet again an implementation issue, but authorization servers should be both
+enrolled and reachable for devices to send introspection requests if necessary.
 
-% TODO: Discuss if operators, or servers, or both must receive authorization tokens. Argue
-% for that only operators do since 1) they are the ones making a decision and 2) updates
-% are always at some point prepared by an operator and thus authorized. Servers just act
-% as forwarding proxies, image repositories, and profile databases.
+\begin{figure}
+    \caption{The protocol flow of ACE. Adapted from \parencite{ace}.}
+    \label{fig:ace-flow}
+    \begin{tikzpicture}[>=stealth',
+        box/.style={rectangle,draw,minimum width=3cm,minimum height=2cm},
+        placeholder/.style={rectangle,minimum width=3cm,minimum height=2cm},
+        tallbox/.style={rectangle,draw,minimum width=3cm, minimum height=6cm},
+        line/.style={->,shorten >=3mm, shorten <=3mm}]
+
+        \node[tallbox] (client) {Client};
+        \node[placeholder, above right=1cm of client] (placeholder) {};
+        \node[box, below=1cm of placeholder, right=5cm of client] (as) {Authorization Server};
+        \node[box, below=3cm of as] (rs) {Resource Server};
+
+        \draw[line] (client.north) -- node[above] {0. Token Request} (as.north);
+        \draw[line] (as.west) -- node[above] {1. Access Token} (client.east);
+        \draw[line] (client.south) -- node[above] {2. Token + Request} (rs.south);
+        \draw[line] (rs.north) -- node[above] {3. Introspection Request} (as.south);
+        \draw[line] (as.south) -- node[above] {4. Introspection Response} (rs.north);
+        \draw[line] (rs.south) -- node[above] {5. Protected Resource} (client.south);
+        
+    \end{tikzpicture}
+\end{figure}
+
+Who is supposed to authorize? As updates will be sent from operators through servers to
+devices, the devices need to know the originator of an update is authorized to issue the
+update. The proposition is to only require operators to authorize. No matter how updates
+are initiated or distributed (pull vs push and manifest and image together vs separately),
+updates at some point must be crafted, signed, and sent by an operator. The operator is
+making the decisions about updating, and thus must authorize these decisions through
+tokens. Servers deliver the updates to devices, but do so as a relay for operators, as
+well as acting as repositories for images and device profiles. The messages forwarded by
+servers will contain the authorization token granted to an operator. This token can in
+addition to authorizing the update on a device be used by the server to authorize the
+usage of the server by the operator. 
+
+Not requiring servers to authorize should not pose any issues as the update must be
+prepared in a previous step by an operator that authorizes. Also, it makes the flow of
+applying an update easier by not needing communication to the authorization server by an
+update server. Requiring update servers to authorize would not add any security to the
+devices as the update already will be shipped with a token authorizing the update.
 
 \section{Communication}
 \label{sec:communication}

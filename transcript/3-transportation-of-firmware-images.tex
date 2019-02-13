@@ -252,7 +252,7 @@ used instead of preallocating bits and wasting them on shorter items.
 % TODO: More concrete? Code snippets of parsing?
 The example manifest would be transmitted to a device and then parsed. The parser would
 divide the manifest into the structures shown in sections \ref{ssec:mandatory-elements}
-and ref{ssec:options}. The parsed manifest structure would have an option struct
+and \ref{ssec:options}. The parsed manifest structure would have an option struct
 referencing another option struct, meaning the chain is of length 2. The reason for having
 the nested structs carry a reference to its own type is to make memory allocation easier.
 While parsing, when the parser detects a new nested struct will be created it can simply
