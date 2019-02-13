@@ -13,20 +13,256 @@ proposed. Four key areas that the architecture must deal with have been identifi
 
 The architecture must propose solutions for these four areas while complying with SUIT as
 much as possible in order to make the architecture interoperable and suitable as a
-standard. Certain elements, such as how to locally flip an image and which authorization
-tokens to issue, are implementation dependant. The architecture must however support
-different means of achieving these goals and not restrict engineers to one certain
+standard. Certain elements, such as how to locally flip an image and which kinds of
+authorization tokens to issue, are implementation dependant. The architecture must however
+support different means of achieving these goals and not restrict engineers to one certain
 implementation.
 
 Alongside these four key areas is the concern of a devices life cycle from an update
 perspective. The life cycle should be intertwined with the mechanisms of the architecture
 and show how devices can enroll, communicate, and receive updates throughout their long
-expected lifetimes. The life cycle is described in Section \ref{sec:device-lifecycle} and the
-proposed architecture in Section \ref{sec:architecture}. Sections
-\ref{ssec:who-is-a-server} and \ref{ssec:who-is-an-operator} discuss the notions of
-servers and operators and what they do in the architecture, while Section
-\ref{ssec:access-control} discusses how to authorize these parties. Finally, Section
-\ref{ssec:access-control} shows example architectures.
+expected lifetimes. 
+
+Section \ref{sec:roles} defines what a server and operator means in the context of the
+update mechanism. Section \ref{sec:key-management} discusses what is needed for devices to
+enroll in a PKI and how keys are handled during updates. Section \ref{sec:authorization}
+describes the purpose of issuing authorization tokens, how devices can use them, and who
+is to be authorized. Section \ref{sec:communication} describes how devices, servers, and
+operators can communicate and shows an example workflow of communicating an update.
+Section \ref{sec:updates} discusses different means of handling the payload when applying
+an update. Section \ref{sec:device-lifecycle} introduces the notion of a life cycle for
+devices, and Section \ref{ssec:different-architectures} shows different examples of
+possible architectures.
+
+\section{Roles}
+\label{sec:roles}
+This section explains the notion of servers and operators in the architecture and their
+responsibilities. Section \ref{ssec:who-is-a-server} covers the topic of servers while
+Section \ref{ssec:who-is-an-operator} covers operators.
+
+\subsection{Who Is a Server and What Do They Do?}
+\label{ssec:who-is-a-server}
+% Server: dedicated server or other device in network. Identified by keys, needs to be on
+% devices? Single point of truth for device profiles and versions. Can be used as storage
+% for images being deployed later on.
+Servers are responsible for transporting manifests and images to the devices and keeping
+track of device profiles. Upon enrollment devices register at a server and the server
+creates a profile for that device. The profile contains the vendor and class IDs and
+firmware version of the device. This allows the server to know through which protocols the
+device can be contacted and which version it should be updated to. Operators, discussed in
+the next section, send signed manifests and images to servers, and can query them for
+device status.
+
+Devices should contain a list of servers and by trusting the certificate authority, they
+can validate those machines certificates after being enrolled. A server is thus any
+machine that is enrolled, has a valid certificate, and is included in the devices list of
+servers. The reasoning behind this decision is that a standard solution for updates should
+not assume the topology of an IoT network. The server may be a machine acting as a proxy
+between a traditional network containing the operator and a constrained network with IoT
+devices. The server could be a more capable IoT device located entirely within the
+constrained network and be contacted through a proxy. The server could be located entirely
+within the traditional network and use a proxy to communicate with devices of the
+constrained network.
+
+% TODO: Does a device need one keypair for each server? Does it need one keypair for all servers?
+A device could also be aware of several servers, and different devices can be mapped to
+different servers. This can make device management easier as certain classes of devices
+can be handled by certain servers. By allowing a device to receive updates from several
+servers, the update mechanism architecture displays a form of robustness. If one server is
+a machine located entirely within the constrained network and the connection between that
+server and the operator is severed, updates can still be distributed through other
+servers. If devices are pulling updates, they can query the servers in order of their list
+of servers. If updates are pushed, devices keep the connection with the server pushing the
+update.
+
+Which machines are allowed to act like servers can be boiled down to a few important
+points no matter the topology of choice:
+
+\begin{itemize}
+    \item The server is enrolled and has a valid certificate
+    \item The server is included in a devices list of servers (meaning it is authorized to
+            transport updates to the device)
+    \item An operator can reach the server and is authorized by the server to upload
+            updates
+\end{itemize}
+
+What servers are allowed to do must also be predetermined. Imagine a device running an
+operating system and an application. The operating system is developed by some party
+different than the one developing the application, and thus the device is aware of two
+update servers, one for the operating system and one for the application. If receiving an
+update from the application update server, the device should allow for the update to
+happen but also make sure the correct parts of code are updated. The application vendor
+should not be allowed to touch the operating system if they are not authorized to do so,
+and vice versa. This introduces the topic of authorizing updates. Authorization and access
+control is discussed in Section~\ref{ssec:access-control}.
+
+\subsection{Who Is an Operator and What Do They Do?}
+\label{ssec:who-is-an-operator}
+% Operator: human making decisions about updates. Crafts/generates manifests, signs
+% manifests and images. Authorized by keys, needs to be on device? Can send manifest for
+% ease of operations, cannot send images because of size constraints/single point of
+% truth/proxying? How does an operator send manifests, get profile from server? Must get
+% profiles anyways for versioning.
+Operators are people authorized to upload manifests and images to a server. They can also
+optionally upload manifests directly to a device depending on the architecture. Operators
+prepare manifests and images and signs them before transporting them to a server, which
+forwards them to a device. The signing ensures end-to-end security for images and
+manifests between operators and devices.
+
+Like a list of servers introduced in Section~\ref{ssec:who-is-a-server}, devices also need
+a list of operators. This is because if an operator wishes to send a manifest directly to
+a device, the device needs to know if the operator is authorized to do so, otherwise it is
+discarded. Just like with mapping devices to servers, devices can receive manifests from
+several operators and different devices may interact with different operators. This
+creates opportunities to logically divide a network between different operators. An
+example use case is a constrained network supported by different vendors; the respective
+vendors should only be able to service their respective devices despite all devices
+belonging to the same network. It can also create a hierarchy, where certain operators may
+directly interact with devices but other operators must interact with devices through
+servers. Yet again the point is to prepare for as many different scenarios as possible and
+create a flexible architecture.
+
+As with servers, the essence of being an operator can be captured in a few points:
+
+\begin{itemize}
+    \item An operator is enrolled and has a valid certificate
+    \item An operator is included in a devices list of operators (and therefore can send
+            manifests to the device)
+    \item An operator is trusted by a server to send manifests and images to the server,
+            causing devices to update
+\end{itemize}
+
+Access control for operators is an important topic. Operators should only be able to send
+updates to devices they are authorized for, and the updates should cover parts of the
+device within the operators rights. The next section discusses access control for
+operators and servers.
+
+\section{Key Management}
+\label{sec:key-management}
+
+
+\section{Authorization}
+\label{sec:authorization}
+A flexible architecture introduces different configurations of server, operators, and
+devices. An operator might be authorized to update all parts of all devices, or be
+constrained to updating a specific piece of functionality for a subset of the devices.
+Servers may only be allowed to update devices manufactured by a specific vendor, and so
+on. Controlling access rights is a security issue and the architecture must support it.
+
+% TODO: Image showing how a server authorizes itself using ACE? Mention it assumes already
+% enrolled and registered devices. Adapt the RFC image
+
+% TODO: Explain how an authorization server can be used and how it can be placed in or
+% between networks. Introspection
+
+% TODO: Discuss if operators, or servers, or both must receive authorization tokens. Argue
+% for that only operators do since 1) they are the ones making a decision and 2) updates
+% are always at some point prepared by an operator and thus authorized. Servers just act
+% as forwarding proxies, image repositories, and profile databases.
+
+\section{Communication}
+\label{sec:communication}
+
+% TODO: Update image with:
+% Authorization server
+% Operator obtaining a token
+% Device optionally introspecting it
+% Operator preparing manifest
+% Maybe break up into two figures if too messy
+\begin{figure}
+    \caption{Example workflow of communication in the architecture.}
+    \label{fig:communication-workflow}
+    \begin{tikzpicture}[box/.style={rectangle,draw,minimum width=3cm, minimum height=3.2cm},
+        line/.style={->,>=latex}]
+        \node[box] (operator) {Operator};
+        \node[box, right=3cm of operator] (server) {Server};
+        \node[box, right=3cm of server] (device) {Device};
+        \node[box, below=1.5cm of server] (CA) {CA};
+
+        \draw[line] (device.south) -- node[above,sloped] {0.0 Enroll} (CA.east); 
+        \draw[line] ([yshift=1.5cm]device.west) -- node[above] {0.1 Register} ([yshift=1.5cm]server.east);
+        \draw[line] ([yshift=0.8cm]operator.east) -- node[above] {0.3 Manifest}node[below] {Image} ([yshift=0.8cm]server.west);
+        
+        \draw[line] ([yshift=0.8cm]server.east) -- node[above] {0.4 Manifest and image} ([yshift=0.8cm]device.west);
+        \draw[line] ([yshift=-0.8cm]device.west) -- node[above] {0.5, 1.6 Update profile} ([yshift=-0.8cm]server.east);
+        
+        \draw[line, bend right] (operator.north) to[out=30,in=150] node[above] {1.3 Manifest} (device.north);
+        \draw[line] ([yshift=-0.8cm]operator.east) -- node[above] {1.4 Image} ([yshift=-0.8cm]server.west);
+        \draw[line] ([yshift=-1.5cm]server.east) -- node[above] {1.5 Image} ([yshift=-1.5cm]device.west);
+    \end{tikzpicture}
+\end{figure}
+
+Figure~\ref{fig:communication-workflow} shows the proposed architecture and the flow of an update
+mechanism. The update mechanism follows the device life cycle and presents two modes of
+distributing manifests and images. The steps are numbered 0.0 to 0.6 and 1.7, with the
+first three steps being mutual. The modes diverge with step 0.4 and 1.4 respectively. The
+common steps for updating a device is as follows:
+
+\begin{enumerate}[label=0.\arabic*]
+    \setcounter{enumi}{-1}
+    \item Enrolling the device at the certificate authority. This is one half of the
+            enrollment stage in the life cycle.
+    \item Registering at the server. This is the second half of the enrollment stage
+            in the life cycle and creates a profile for the device on the server.
+    \item The operator prepares a manifest and signs it.
+    \item The operator requests an access token from the authorization server in order to
+            gain access to applying updates.
+\end{enumerate}
+
+At this point the two modes diverge in how they proceed. Distributing the manifest and
+image together works as follows:
+
+\begin{enumerate}[label=0.\arabic*]
+    \setcounter{enumi}{2}
+    \item The manifest and image are both signed and sent to the server with the
+            authorization token. If the image is small enough it can be attached as a
+            payload in the manifest itself.
+    \item The signed manifest and image are sent with the authorization token to the
+            device. If sent in different packets, the manifest can be sent first and the
+            image after the device confirms the manifest is correct. The device can either
+            query the server for an update, or the server can push the update to the
+            device.
+    \item The device optionally requests introspection data from the authorization server
+            to verify the authorization token.
+    \item The device confirms the update if successful and causes the server to update
+            its device profile.
+\end{enumerate}
+
+If the manifest and image are distributed separately the following steps occur instead of
+steps 0.3-0.5:
+
+\begin{enumerate}[label=1.\arabic*]
+    \setcounter{enumi}{2}
+    \item The signed manifest is sent with the authorization token directly from the
+            operator to the device.
+    \item The authorization token and signed image is sent to the server.
+    \item The authorization token and signed image is sent to the device. This can be done
+            either by the device querying the server following a successful manifest parsing,
+            or by the server pushing the image to the device.
+    \item The device optionally requests introspection data from the authorization server
+            to verify the authorization token.
+    \item The device confirms the update if successful and causes the server to update
+            its device profile.
+\end{enumerate}
+
+There are also possibilities regarding how the updating process is initiated. Either the
+device could query the server for an update, which prompts a notification to an operator.
+Upon notification, an operator can prepare a manifest and image and send to the server as
+described above. It is also possible for an operator to query the server for the status of
+one or several devices, prepare an update for them, and have the update pushed through the
+server. Both approaches assume the devices are already enrolled and registered at the
+server.
+
+Whether the manifest and image are distributed together or separately, they are both
+signed by the operator in order to achieve end-to-end security between the operator and
+device. The server should not be able to decrypt the payloads of manifest and image as
+that could enable for instance MITM attacks. The device is to only accept manifests from
+either the operator or server, and images from the server. This raises two important
+questions: who can act as an operator, and who can act as a server?
+
+\section{Updates}
+\label{sec:updates}
+
 
 \section{Device Life Cycle}
 \label{sec:device-lifecycle}
@@ -167,232 +403,8 @@ The device will remain in the maintenance stage until it either breaks or is tak
 service. If you are a manufacturer of IoT devices please consider recycling or (securely)
 re-using devices, starting the life cycle anew.
 
-\section{Architecture}
-\label{sec:architecture}
-The architecture of the update mechanism shall enable the life cycle described in the
-previous section as well as align with the goals of the SUIT standard described in
-Section~\ref{ssec:architecture}. In the architecture there are five important actors: the
-device, the firmware server, the operator, the certificate authority, and the
-authorization server. In the scenario of symmetric encryption a certificate authority is
-not needed, but as mentioned in Section~\ref{sec:device-lifecycle} the thesis will discuss
-the architecture from the asymmetric cryptography point of view. If using symmetric
-encryption, everything is the same but the certificate authority can be ignored.
 
-% TODO: Update image with:
-% Authorization server
-% Operator obtaining a token
-% Device optionally introspecting it
-% Operator preparing manifest
-% Maybe break up into two figures if too messy
-\begin{figure}
-    \caption{The proposed architecture showing two modes of updating a device.}
-    \label{fig:architecture}
-    \begin{tikzpicture}[box/.style={rectangle,draw,minimum width=3cm, minimum height=3.2cm},
-        line/.style={->,>=latex}]
-        \node[box] (operator) {Operator};
-        \node[box, right=3cm of operator] (server) {Server};
-        \node[box, right=3cm of server] (device) {Device};
-        \node[box, below=1.5cm of server] (CA) {CA};
-
-        \draw[line] (device.south) -- node[above,sloped] {0.0 Enroll} (CA.east); 
-        \draw[line] ([yshift=1.5cm]device.west) -- node[above] {0.1 Register} ([yshift=1.5cm]server.east);
-        \draw[line] ([yshift=0.8cm]operator.east) -- node[above] {0.3 Manifest}node[below] {Image} ([yshift=0.8cm]server.west);
-        
-        \draw[line] ([yshift=0.8cm]server.east) -- node[above] {0.4 Manifest and image} ([yshift=0.8cm]device.west);
-        \draw[line] ([yshift=-0.8cm]device.west) -- node[above] {0.5, 1.6 Update profile} ([yshift=-0.8cm]server.east);
-        
-        \draw[line, bend right] (operator.north) to[out=30,in=150] node[above] {1.3 Manifest} (device.north);
-        \draw[line] ([yshift=-0.8cm]operator.east) -- node[above] {1.4 Image} ([yshift=-0.8cm]server.west);
-        \draw[line] ([yshift=-1.5cm]server.east) -- node[above] {1.5 Image} ([yshift=-1.5cm]device.west);
-    \end{tikzpicture}
-\end{figure}
-
-Figure~\ref{fig:architecture} shows the proposed architecture and the flow of an update
-mechanism. The update mechanism follows the device life cycle and presents two modes of
-distributing manifests and images. The steps are numbered 0.0 to 0.6 and 1.7, with the
-first three steps being mutual. The modes diverge with step 0.4 and 1.4 respectively. The
-common steps for updating a device is as follows:
-
-\begin{enumerate}[label=0.\arabic*]
-    \setcounter{enumi}{-1}
-    \item Enrolling the device at the certificate authority. This is one half of the
-            enrollment stage in the life cycle.
-    \item Registering at the server. This is the second half of the enrollment stage
-            in the life cycle and creates a profile for the device on the server.
-    \item The operator prepares a manifest and signs it.
-    \item The operator requests an access token from the authorization server in order to
-            gain access to applying updates.
-\end{enumerate}
-
-At this point the two modes diverge in how they proceed. Distributing the manifest and
-image together works as follows:
-
-\begin{enumerate}[label=0.\arabic*]
-    \setcounter{enumi}{2}
-    \item The manifest and image are both signed and sent to the server with the
-            authorization token. If the image is small enough it can be attached as a
-            payload in the manifest itself.
-    \item The signed manifest and image are sent with the authorization token to the
-            device. If sent in different packets, the manifest can be sent first and the
-            image after the device confirms the manifest is correct. The device can either
-            query the server for an update, or the server can push the update to the
-            device.
-    \item The device optionally requests introspection data from the authorization server
-            to verify the authorization token.
-    \item The device confirms the update if successful and causes the server to update
-            its device profile.
-\end{enumerate}
-
-If the manifest and image are distributed separately the following steps occur instead of
-steps 0.3-0.5:
-
-\begin{enumerate}[label=1.\arabic*]
-    \setcounter{enumi}{2}
-    \item The signed manifest is sent with the authorization token directly from the
-            operator to the device.
-    \item The authorization token and signed image is sent to the server.
-    \item The authorization token and signed image is sent to the device. This can be done
-            either by the device querying the server following a successful manifest parsing,
-            or by the server pushing the image to the device.
-    \item The device optionally requests introspection data from the authorization server
-            to verify the authorization token.
-    \item The device confirms the update if successful and causes the server to update
-            its device profile.
-\end{enumerate}
-
-There are also possibilities regarding how the updating process is initiated. Either the
-device could query the server for an update, which prompts a notification to an operator.
-Upon notification, an operator can prepare a manifest and image and send to the server as
-described above. It is also possible for an operator to query the server for the status of
-one or several devices, prepare an update for them, and have the update pushed through the
-server. Both approaches assume the devices are already enrolled and registered at the
-server.
-
-Whether the manifest and image are distributed together or separately, they are both
-signed by the operator in order to achieve end-to-end security between the operator and
-device. The server should not be able to decrypt the payloads of manifest and image as
-that could enable for instance MITM attacks. The device is to only accept manifests from
-either the operator or server, and images from the server. This raises two important
-questions: who can act as an operator, and who can act as a server?
-
-\subsection{Who Is a Server and What Do They Do?}
-\label{ssec:who-is-a-server}
-% Server: dedicated server or other device in network. Identified by keys, needs to be on
-% devices? Single point of truth for device profiles and versions. Can be used as storage
-% for images being deployed later on.
-Servers are responsible for transporting manifests and images to the devices and keeping
-track of device profiles. Upon enrollment devices register at a server and the server
-creates a profile for that device. The profile contains the vendor and class IDs and
-firmware version of the device. This allows the server to know through which protocols the
-device can be contacted and which version it should be updated to. Operators, discussed in
-the next section, send signed manifests and images to servers, and can query them for
-device status.
-
-Devices should contain a list of servers and by trusting the certificate authority, they
-can validate those machines certificates after being enrolled. A server is thus any
-machine that is enrolled, has a valid certificate, and is included in the devices list of
-servers. The reasoning behind this decision is that a standard solution for updates should
-not assume the topology of an IoT network. The server may be a machine acting as a proxy
-between a traditional network containing the operator and a constrained network with IoT
-devices. The server could be a more capable IoT device located entirely within the
-constrained network and be contacted through a proxy. The server could be located entirely
-within the traditional network and use a proxy to communicate with devices of the
-constrained network.
-
-% TODO: Does a device need one keypair for each server? Does it need one keypair for all servers?
-A device could also be aware of several servers, and different devices can be mapped to
-different servers. This can make device management easier as certain classes of devices
-can be handled by certain servers. By allowing a device to receive updates from several
-servers, the update mechanism architecture displays a form of robustness. If one server is
-a machine located entirely within the constrained network and the connection between that
-server and the operator is severed, updates can still be distributed through other
-servers. If devices are pulling updates, they can query the servers in order of their list
-of servers. If updates are pushed, devices keep the connection with the server pushing the
-update.
-
-Which machines are allowed to act like servers can be boiled down to a few important
-points no matter the topology of choice:
-
-\begin{itemize}
-    \item The server is enrolled and has a valid certificate
-    \item The server is included in a devices list of servers (meaning it is authorized to
-            transport updates to the device)
-    \item An operator can reach the server and is authorized by the server to upload
-            updates
-\end{itemize}
-
-What servers are allowed to do must also be predetermined. Imagine a device running an
-operating system and an application. The operating system is developed by some party
-different than the one developing the application, and thus the device is aware of two
-update servers, one for the operating system and one for the application. If receiving an
-update from the application update server, the device should allow for the update to
-happen but also make sure the correct parts of code are updated. The application vendor
-should not be allowed to touch the operating system if they are not authorized to do so,
-and vice versa. This introduces the topic of authorizing updates. Authorization and access
-control is discussed in Section~\ref{ssec:access-control}.
-
-\subsection{Who Is an Operator and What Do They Do?}
-\label{ssec:who-is-an-operator}
-% Operator: human making decisions about updates. Crafts/generates manifests, signs
-% manifests and images. Authorized by keys, needs to be on device? Can send manifest for
-% ease of operations, cannot send images because of size constraints/single point of
-% truth/proxying? How does an operator send manifests, get profile from server? Must get
-% profiles anyways for versioning.
-Operators are people authorized to upload manifests and images to a server. They can also
-optionally upload manifests directly to a device depending on the architecture. Operators
-prepare manifests and images and signs them before transporting them to a server, which
-forwards them to a device. The signing ensures end-to-end security for images and
-manifests between operators and devices.
-
-Like a list of servers introduced in Section~\ref{ssec:who-is-a-server}, devices also need
-a list of operators. This is because if an operator wishes to send a manifest directly to
-a device, the device needs to know if the operator is authorized to do so, otherwise it is
-discarded. Just like with mapping devices to servers, devices can receive manifests from
-several operators and different devices may interact with different operators. This
-creates opportunities to logically divide a network between different operators. An
-example use case is a constrained network supported by different vendors; the respective
-vendors should only be able to service their respective devices despite all devices
-belonging to the same network. It can also create a hierarchy, where certain operators may
-directly interact with devices but other operators must interact with devices through
-servers. Yet again the point is to prepare for as many different scenarios as possible and
-create a flexible architecture.
-
-As with servers, the essence of being an operator can be captured in a few points:
-
-\begin{itemize}
-    \item An operator is enrolled and has a valid certificate
-    \item An operator is included in a devices list of operators (and therefore can send
-            manifests to the device)
-    \item An operator is trusted by a server to send manifests and images to the server,
-            causing devices to update
-\end{itemize}
-
-Access control for operators is an important topic. Operators should only be able to send
-updates to devices they are authorized for, and the updates should cover parts of the
-device within the operators rights. The next section discusses access control for
-operators and servers.
-
-\subsection{Access Control}
-\label{ssec:access-control}
-A flexible architecture introduces different configurations of server, operators, and
-devices. An operator might be authorized to update all parts of all devices, or be
-constrained to updating a specific piece of functionality for a subset of the devices.
-Servers may only be allowed to update devices manufactured by a specific vendor, and so
-on. Controlling access rights is a security issue and the architecture must support it.
-
-% TODO: Image showing how a server authorizes itself using ACE? Mention it assumes already
-% enrolled and registered devices. Adapt the RFC image
-
-% TODO: Explain how an authorization server can be used and how it can be placed in or
-% between networks. Introspection
-
-% TODO: Discuss if operators, or servers, or both must receive authorization tokens. Argue
-% for that only operators do since 1) they are the ones making a decision and 2) updates
-% are always at some point prepared by an operator and thus authorized. Servers just act
-% as forwarding proxies, image repositories, and profile databases.
-
-
-\subsection{Different Architectures}
+\section{Different Architectures}
 \label{ssec:different-architectures}
 As discussed, operators, servers, and devices can interact in many ways. The architecture
 tries to be flexible allowing for different network topologies and configurations. The
