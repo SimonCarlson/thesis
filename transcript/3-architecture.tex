@@ -23,22 +23,22 @@ perspective. The life cycle should be intertwined with the mechanisms of the arc
 and show how devices can enroll, communicate, and receive updates throughout their long
 expected lifetimes. 
 
-Section \ref{sec:roles} defines what a server and operator means in the context of the
-update mechanism. Section \ref{sec:key-management} discusses what is needed for devices to
-enroll in a PKI and how keys are handled during updates. Section \ref{sec:authorization}
+Section~\ref{sec:roles} defines what a server and operator means in the context of the
+update mechanism. Section~\ref{sec:key-management} discusses what is needed for devices to
+enroll in a PKI and how keys are handled during updates. Section~\ref{sec:authorization}
 describes the purpose of issuing authorization tokens, how devices can use them, and who
-is to be authorized. Section \ref{sec:communication} describes how devices, servers, and
+is to be authorized. Section~\ref{sec:communication} describes how devices, servers, and
 operators can communicate and shows an example workflow of communicating an update.
-Section \ref{sec:updates} discusses different means of handling the payload when applying
-an update. Section \ref{sec:device-lifecycle} introduces the notion of a life cycle for
-devices, and Section \ref{ssec:different-architectures} shows different examples of
+Section~\ref{sec:updates} discusses different means of handling the payload when applying
+an update. Section~\ref{sec:device-lifecycle} introduces the notion of a life cycle for
+devices, and Section~\ref{ssec:different-architectures} shows different examples of
 possible architectures.
 
 \section{Roles}
 \label{sec:roles}
-This section explains the notion of servers and operators in the architecture and their
-responsibilities. Section \ref{ssec:who-is-a-server} covers the topic of servers while
-Section \ref{ssec:who-is-an-operator} covers operators.
+This Section~explains the notion of servers and operators in the architecture and their
+responsibilities. Section~\ref{ssec:who-is-a-server} covers the topic of servers while
+Section~\ref{ssec:who-is-an-operator} covers operators.
 
 \subsection{Who Is a Server and What Do They Do?}
 \label{ssec:who-is-a-server}
@@ -94,7 +94,7 @@ update from the application update server, the device should allow for the updat
 happen but also make sure the correct parts of code are updated. The application vendor
 should not be allowed to touch the operating system if they are not authorized to do so,
 and vice versa. This introduces the topic of authorizing updates. Authorization and access
-control is discussed in Section~\ref{ssec:access-control}.
+control is discussed in Section~\ref{sec:authorization}.
 
 \subsection{Who Is an Operator and What Do They Do?}
 \label{ssec:who-is-an-operator}
@@ -134,12 +134,48 @@ As with servers, the essence of being an operator can be captured in a few point
 
 Access control for operators is an important topic. Operators should only be able to send
 updates to devices they are authorized for, and the updates should cover parts of the
-device within the operators rights. The next section discusses access control for
-operators and servers.
+device within the operators rights. Section~\ref{sec:authorization} discusses access
+control for operators and servers.
 
 \section{Key Management}
 \label{sec:key-management}
+% TODO: Mention what is needed for enrollment 
+% Consider updates breaking certificates. Why would they? Lack of understanding concerning
+% certificates perhaps
+% Two pairs of keys from one PSK? Are two pairs needed?
+The architecture will, in order to align with the goals of SUIT, be based on asymmetric
+cryptography. The availability of EST-coaps makes this feasible in IoT contexts but other
+enrollment protocols could also be used. This means a \gls{ca} is needed to act as a
+trusted third party distributing certificates. The certificates are linked to a public key
+which has a private key partner and are used to verify the correctness of a public key.
+Certificates are signed by the CA and in order to trust them, device have to trust the CA
+itself.
 
+In order to enroll, a pre-shared key is proposed. This is the approach used in EST-coaps,
+but it is not chosen for that reason. If a pre-shared key is not used the CA cannot be
+sure the device asking to enroll really should be part of the trusted network. An attacker
+that obtained a valid certificate could communicate with devices and servers alike and no
+one would be able to tell it is a malicious actor. CAs must know they are issuing
+certificates to the correct devices and pre-shared gives devices a means of identifying
+themselves. Pre-shared keys could be used for encrypting all traffic but as they are less
+scalable and harder to manage than certificates, they are just used for enrolling.
+
+A device that is enrolling has to trust the CA issuing the certificate. If it cannot do
+so, how could it know it received a valid certificate? An attacker would love for a device
+to use the attackers public key instead, and if an attacker poses as a CA it could issue a
+certificate with its own public key and then sign it. In order to trust the CA, a device
+needs to have the certificate of the CA it is enrolling with or some other CA further down
+the chain of trust. By verifying the signature on the newly enrolled certificate with the
+CAs own certificate, a device can be certain they are using the correct keys.
+
+When applying updates, certificates might not be valid anymore. This is implementation
+dependant and might not always be a problem, but the architecture should be prepared for
+these situations. In the case an update breaks a certificate, the certificate cannot be
+used for communication and thus the device cannot use it to re-enroll either. In this
+case, a new pre-shared key should be part of the update so that the device can enroll as
+if it was factory new. The process of issuing pre-shared keys might be difficult to
+automate as the CA must be aware of which keys to accept, but it is needed to ensure the
+security of future device communication.
 
 \section{Authorization}
 \label{sec:authorization}
@@ -262,6 +298,10 @@ questions: who can act as an operator, and who can act as a server?
 
 \section{Updates}
 \label{sec:updates}
+% TODO: How to handle decryption and validation
+% I like the idea of decrypting once and storing decrypted image with its hash for smaller
+% bootloader procedure. Implementation specific though
+% Cite mailing list perhaps?
 
 
 \section{Device Life Cycle}
