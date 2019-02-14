@@ -7,8 +7,8 @@ proposed. Five key areas that the architecture must deal with have been identifi
 \begin{itemize}
     \item Roles
     \item Key distribution and management
-    \item Authorization and access control
     \item Means of communication
+    \item Authorization and access control
     \item Upgrading images
 \end{itemize}
 
@@ -44,7 +44,6 @@ and their responsibilities. Section~\ref{ssec:what-is-a-server} covers the topic
 servers, Section~\ref{ssec:who-is-an-operator} covers operators, and
 Section~\ref{ssec:what-is-a-device} briefly covers devices.
 
-% TODO: Briefly explain what is ment by "device"
 \subsection{What Is a Device and What Do They Do?}
 \label{ssec:what-is-a-device}
 Devices are contrained, low-power IoT appliances connected to a contrained network. They
@@ -148,12 +147,13 @@ itself.
 
 In order to enroll, a pre-shared key is proposed. This is the approach used in EST-coaps,
 but it is not chosen for that reason. If a pre-shared key is not used the CA cannot be
-sure the device asking to enroll really should be part of the trusted network. An attacker
-that obtained a valid certificate could communicate with devices and servers alike and no
-one would be able to tell it is a malicious actor. CAs must know they are issuing
-certificates to the correct devices and pre-shared gives devices a means of identifying
-themselves. Pre-shared keys could be used for encrypting all traffic but as they are less
-scalable and harder to manage than certificates, they are just used for enrolling.
+sure the device asking to enroll really should be part of the trusted network. If an
+attacker obtains a valid certificate they could communicate with devices and servers alike
+and no one would be able to tell it is a malicious actor. CAs must know they are issuing
+certificates to the correct devices and pre-shared keys gives devices a means of
+identifying themselves. Pre-shared keys could be used for encrypting all traffic but as
+they are less scalable and harder to manage than certificates, they are just used for
+enrolling.
 
 A device that is enrolling has to trust the CA issuing the certificate. If it cannot do
 so, how could it know it received a valid certificate? An attacker would love for a device
@@ -222,7 +222,7 @@ Another drawback is that devices might implement common protocols but have diffe
 preferences. If two devices implement some common protocols but one of them supports
 hardware operations for encrypting one of the protocols, it will prefer using that
 protocol with the server, whereas the other device might not. The server will however,
-with no information about device preference, try the same sequence of protocols with both
+without information about device preference, try the same sequence of protocols with both
 devices.
 
 Furthermore, as communication can be unreliable over these networks, the server
@@ -250,26 +250,12 @@ and the architecture must support it.
 
 How clients can access a protected resource through authorization tokens is described in
 \parencite{ace} and Figure \ref{fig:ace-flow} shows an adaptation of the protocol flow
-from that document. The figure shows how a client wanting to access a resource requests a
+from that document. The figure shows a client wanting to access a resource requesting a
 token from an authorization server. The token is returned to the client, which can then
-send a request and token to the server holding the resource. If necessary, the resource
-server can send an introspection request to the authorization server asking for more
-information about the token in order to verify it. If everything goes as planned, the
+send a request with the token to the server holding the resource. If necessary, the
+resource server can send an introspection request to the authorization server asking for
+more information about the token in order to verify it. If everything goes as planned, the
 client is allowed the resource.
-
-In the context of the update architecture, the client would be a party needing to
-authorize themselves, i.e. an operator or server. The access token would have to be of a
-lightweight variant since they are to be used on constrained devices, but which variant is
-implementation specific. Tokens will be sent with updates (signed manifests and images) to
-devices, the resource sought for is the ability to update the device. The device will thus
-not respond with a particular resource, but instead if the token is valid recognize the
-originator of the update as an authorized one and proceed with the update. Introspection
-is an interesting feature of ACE since it requires less from the device concerning
-validating tokens. Instead of doing everything on its own, the device can ask the server
-for additional information making the validation procedure easier. This however means some
-extra communication which is power consuming for an IoT device. To use introspection or
-not is yet again an implementation issue, but authorization servers should be both
-enrolled and reachable for devices to send introspection requests if necessary.
 
 \begin{figure}
     \caption{The protocol flow of ACE. Adapted from \parencite{ace}.}
@@ -277,25 +263,38 @@ enrolled and reachable for devices to send introspection requests if necessary.
     \includegraphics{images/ace.pdf}
 \end{figure}
 
+In the context of the update architecture, the client would be a party needing to
+authorize themselves, i.e. an operator or server. The access token would have to be of a
+lightweight variant since they are to be used on constrained devices, but which variant is
+implementation specific. Tokens will be sent with updates (signed manifests and images) to
+devices and the resource sought for is the ability to update the device. The device will
+thus not respond with a particular resource, but instead if the token is valid recognize
+the originator of the update as an authorized one and proceed with the update.
+Introspection is an interesting feature of ACE since it requires less from the device
+concerning validating tokens. Instead of doing everything on its own, the device can ask
+the server for additional information making the validation procedure easier. This however
+requires some extra communication which is power consuming for an IoT device. To use
+introspection or not is yet again an implementation issue, but authorization servers
+should be both enrolled and reachable for devices to send introspection requests if
+necessary.
+
 Who is supposed to authorize? As updates will be sent from operators through servers to
 devices, the devices need to know the originator of an update is authorized to issue the
 update. The proposition is to only require operators to authorize. No matter how updates
 are initiated or distributed (pull vs push and manifest and image together vs separately),
 updates at some point must be crafted, signed, and sent by an operator. The operator is
 making the decisions about updating, and thus must authorize these decisions through
-tokens. Servers deliver the updates to devices, but do so as a relay for operators, as
+tokens. Servers deliver the updates to devices, but do so as a relay for operators as
 well as acting as repositories for images and device profiles. The messages forwarded by
 servers will contain the authorization token granted to an operator. This token can in
 addition to authorizing the update on a device be used by the server to authorize the
 usage of the server by the operator. 
 
-Not requiring servers to authorize should not pose any issues as the update must be
+Not requiring servers to authorize should not pose any issues as the update must always be
 prepared in a previous step by an operator that authorizes. Also, it makes the flow of
-applying an update easier by not needing communication to the authorization server by an
-update server. Requiring update servers to authorize would not add any security to the
-devices as the update already will be shipped with a token authorizing the update.
-
-
+applying an update easier by not needing and update server to communicate with an
+authorization server. Requiring update servers to authorize would not add any security to
+the devices as the update already will be shipped with a token authorizing the update.
 
 \section{Updates}
 \label{sec:updates}
@@ -305,37 +304,48 @@ devices as the update already will be shipped with a token authorizing the updat
 % Cite mailing list perhaps?
 % What happens locally + example update flow
 When an update has finally arrived to the device, it must be processed and then installed.
-The process of decrypting, validating, and installing the image is heavily implementation
+The process of decrypting, verifying, and installing the image is heavily implementation
 specific with most of the details being out of scope for the architecture. However, since
-devices operate using different hardware and bootloaders they must be given the freedom
-to update in the way that makes most sense for them. The architecture should support this.
+devices operate using different hardware and bootloaders they must be given the freedom to
+update in the way that makes most sense for them and the architecture should support this
+while requiring the approach is secure.
 
-By delivering optional fields such as decryption instructions, processing steps, and
-postconditions, update handlers and bootloaders can take care of updates in various ways.
-This enables different ways of applying updates within the same architecture. What the
-update handlers and bootloaders of all devices have in common is that they must trust the
-source of the update, they must be able to decrypt the update, they must be able to verify
-the validity of the update, and they must be able to do this safely such that an
-unexpected power cycle does not brick the entire device.
+By including optional fields such as decryption instructions, processing steps, and
+postconditions in the manifest, update handlers and bootloaders can take care of updates
+in various ways. This enables different ways of applying updates within the same
+architecture. What the update handlers and bootloaders of all devices have in common is
+that they must trust the source of the update, they must be able to decrypt the update,
+they must be able to verify the validity of the update, and they must be able to do this
+safely such that an unexpected power cycle does not brick the entire device.
 
 Still being in the realm of very constrained devices, the bootloader should be as simple
 as possible. This is also a requirement stated by SUIT on the architecture. By decrypting
-and verifying the image at every boot the boot procedure will be secure but
-quite complex. Also if a power cycle occurs during decryption, the device might not be
-able to recover. Decrypting the image as part of the update mechanism and writing it
-unencrypted to flash would allow for a simpler bootloader, but is less secure as the
-device would boot from an unencrypted image.
+and verifying the image at every boot the boot procedure will be secure but quite complex.
+Also if a power cycle occurs during image decryption, the device might not be able to
+recover. Decrypting the image as part of the update mechanism and writing it unencrypted
+to flash would allow for a simpler bootloader, but is less secure as the device would boot
+from an unencrypted image.
 
 By storing the manifest containing the image digest, unencrypted images can be verified by
-comparing their digest to the one in the manifest. Digests are easier to calculate than
-decryption is, and a power cycle would just interrupt the digest calculation instead of
+comparing their digest to the one in the manifest. Calculating a digest is less demanding
+than decryption, and a power cycle would just interrupt the digest calculation instead of
 the decryption of the actual bootable image. In order to make sure the manifest is correct
 upon boot, the digest of the manifest can be calculated and stored alongside the manifest
-and image. The manifest also has to be stored in order to prevent rollback attacks. It
-contains monotonically increasing sequence numbers to ensure devices do not install older,
-possibly vulnerable images, but in order to compare sequence numbers the most recent
-manifest has to be kept around. Manifests should be kept for the update handler to compare
-sequence numbers, and for the bootloader to verify images.
+and image. Optionally the manifest can be encrypted instead as it typically will be much
+smaller than the image, but again a power cycle during decryption could lead to undefined
+behaviour.
+
+In addition to storing the manifest for verification upon boot, the manifest also has to
+be stored in order to prevent rollback attacks. It contains monotonically increasing
+sequence numbers to ensure devices do not install older, possibly vulnerable images, but
+in order to compare sequence numbers the most recent manifest has to be kept around.
+Manifests should be kept for the update handler to compare sequence numbers, and for the
+bootloader to verify images.
+
+Putting the five key areas together, Figure~\ref{fig:communication-workflow} shows an
+example update flow in the architecture. This update is initiated by the operator by
+querying the server for device status and then pushing an update. The manifest and image
+are distributed together.
 
 \begin{figure}
     \caption{Example workflow of an update procedure.}
@@ -343,33 +353,31 @@ sequence numbers, and for the bootloader to verify images.
     \includegraphics{images/update-flow.pdf}
 \end{figure}
 
-Figure~\ref{fig:communication-workflow} shows an example update flow in the architecture.
-This update is initiated by the operator by querying the server for device status and then
-pushing an update. The manifest and image are distributed together.
+The steps can be briefly explained as:
 
-\begin{enumerate}[label=0.\arabic*]
+\begin{enumerate}
     \setcounter{enumi}{-1}
-    \item Enrolling the device at the certificate authority.
-    \item Registering at the server. This creates a profile for the device on the server.
-    \item The operator prepares a manifest and signs it.
+    \item The device enrolls at the CA and receives a certificate.
+    \item The device registers at the server which now holds a profile for the device.
+    \item The operator queries the server for device status in order to prepare an update.
+    \item The operator prepares a manifest and image (update) and signs them.
     \item The operator requests an access token from the authorization server in order to
             gain access to applying the update.
-    \item The manifest and image are both signed and sent to the server with the
-            authorization token.
-    \item The signed manifest and image are sent with the authorization token to the
-            device.
-    \item The device optionally requests introspection data from the authorization server
-            to verify the authorization token.
-    \item The device confirms the update if successful and causes the server to update
-            its device profile.
+    \item The update is sent to the server with the authorization token.
+    \item The signed update is sent with the authorization token to the device.
+    \item The device requests introspection data from the authorization server
+            to verify the authorization token. Optional.
+    \item The device verifies the update and applies it.
+    \item The devices certificate broke as part of the update and it uses a new pre-shared
+            key included in the update to re-enroll. Optional.
+    \item The device updates its profile at the server by re-registering.
 \end{enumerate}
 
 % TODO: Fix chapter numbering
 Besides offering encryption, authorization, communication, and manifests, the architecture
 cannot influence the update procedure further. Locally upgrading an image is a concern of
 the target device that is to be updated. Chapter NUMBER will present the prototype
-architecture implementation, and touch upon subjects such as manifest format and secure
-boot.
+architecture implementation.
 
 \section{Device Life Cycle}
 \label{sec:device-lifecycle}
