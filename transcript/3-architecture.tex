@@ -45,7 +45,7 @@ Section~\ref{ssec:what-is-a-device} briefly covers devices.
 
 \subsection{What Is a Device and What Do They Do?}
 \label{ssec:what-is-a-device}
-Devices are contrained, low-power IoT appliances connected to a contrained network. They
+Devices are constrained, low-power IoT appliances connected to a constrained network. They
 are running the applications of the network and performs simple tasks such as measurement
 using sensors. The devices communicate wirelessly and must be secured from attackers while
 being able to be updated. They communicate with each other, servers, and operators.
@@ -332,7 +332,7 @@ the decryption of the actual bootable image. In order to make sure the manifest 
 upon boot, the digest of the manifest can be calculated and stored alongside the manifest
 and image. Optionally the manifest can be encrypted instead as it typically will be much
 smaller than the image, but again a power cycle during decryption could lead to undefined
-behaviour.
+behavior.
 
 In addition to storing the manifest for verification upon boot, the manifest also has to
 be stored in order to prevent rollback attacks. It contains monotonically increasing
@@ -429,7 +429,7 @@ As discussed, operators, servers, and devices can interact in many ways. The arc
 tries to be flexible allowing for different network topologies and configurations. The
 important parts are that devices can enroll and register, all actors have valid
 certificates, and that updates can be authorized. The following examples all assume
-devices are in the maintenance stage of the lifecycle, and re-enrollment and updating
+devices are in the maintenance stage of the life cycle, and re-enrollment and updating
 profiles are omitted to make the figures clearer.
 
 Figure~\ref{fig:operator-direct} shows an example architecture with one operator, one
@@ -445,15 +445,16 @@ network, possibly as more capable IoT devices.
     \includegraphics{images/operator-direct.pdf}
 \end{figure}
 
-Figure~\ref{fig:operator-proxy} shows an operator sending updates entirely through an
+Figure~\ref{fig:operator-indirect} shows an operator sending updates entirely through an
 update server. The update server is located outside the constrained network and acts as an
 proxy for the operator to reach the devices. The update is distributed from the server to
 two devices, where one device accepts the update and the other rejects the update since
 the operator was not authorized to apply it to that device.
 
 \begin{figure}
-    \caption{}
-    \label{fig:operator-proxy}
+    \caption{An operator communicating with an update server that pushes the update to two
+                devices, with one device rejecting it.}
+    \label{fig:operator-indirect}
     \includegraphics{images/operator-indirect.pdf}
 \end{figure}
 
@@ -466,7 +467,9 @@ authorization server is located outside the constrained network, and the introsp
 request must go through a proxy in order to reach it.
 
 \begin{figure}
-    \caption{}
+    \caption{An operator pushes updates to two servers forwarding it to one device each. 
+                One device perform an introspection request to validate the authorization 
+                token.}
     \label{fig:operator-server}
     \includegraphics{images/operator-introspection.pdf}
 \end{figure}
