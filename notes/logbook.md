@@ -9,6 +9,8 @@ Rewrote most of the different architecture examples
 Lots of boring work now such as fixing the fucking apostrophes..
 After the boring work, give a proper read-through and mail to anyone interested. Prepare for criticism (should probably explicitly ask for criticism on upgrading chapter)
 Should make an effort to standardize expressions - an update = manifest + image, upgrade = locally flip image etc
+Restructured a bit and proofread chapter 1-3, merged branch with master, sent the thesis to Shahid, Farhad, Marco, Ludwig, Martin, and Joel. Hopefully I'll get some feedback
+Right now it feels ok but I still don't feel I'm contributing with anything non-trivial
 
 13/2-19:
 Re-structured chapter 3. I feel this structure makes my thoughts come through in a more structured and convincing way. I can re use a lot of material I've already written and more easily expand some underdeveloped fields
