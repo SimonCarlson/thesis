@@ -2,9 +2,10 @@
 
 \begin{document}
 With the required background information, an architecture for an update mechanism can be
-proposed. Four key areas that the architecture must deal with have been identified:
+proposed. Five key areas that the architecture must deal with have been identified:
 
 \begin{itemize}
+    \item Roles
     \item Key distribution and management
     \item Authorization and access control
     \item Means of communication
@@ -140,6 +141,8 @@ updates to devices they are authorized for, and the updates should cover parts o
 device within the operators rights. Section~\ref{sec:authorization} discusses access
 control for operators and servers.
 
+% TODO: Briefly explain what is ment by "device"
+
 \section{Key Management}
 \label{sec:key-management}
 % TODO: Consider updates breaking certificates. Why would they? Lack of understanding concerning
@@ -215,25 +218,7 @@ enrolled and reachable for devices to send introspection requests if necessary.
 \begin{figure}
     \caption{The protocol flow of ACE. Adapted from \parencite{ace}.}
     \label{fig:ace-flow}
-    \begin{tikzpicture}[>=stealth',
-        box/.style={rectangle,draw,minimum width=3cm,minimum height=2cm},
-        placeholder/.style={rectangle,minimum width=3cm,minimum height=2cm},
-        tallbox/.style={rectangle,draw,minimum width=3cm, minimum height=6cm},
-        line/.style={->,shorten >=3mm, shorten <=3mm}]
-
-        \node[tallbox] (client) {Client};
-        \node[placeholder, above right=1cm of client] (placeholder) {};
-        \node[box, below=1cm of placeholder, right=5cm of client] (as) {Authorization Server};
-        \node[box, below=3cm of as] (rs) {Resource Server};
-
-        \draw[line] (client.north) -- node[above] {0. Token Request} (as.north);
-        \draw[line] (as.west) -- node[above] {1. Access Token} (client.east);
-        \draw[line] (client.south) -- node[above] {2. Token + Request} (rs.south);
-        \draw[line] (rs.north) -- node[above] {3. Introspection Request} (as.south);
-        \draw[line] (as.south) -- node[above] {4. Introspection Response} (rs.north);
-        \draw[line] (rs.south) -- node[above] {5. Protected Resource} (client.south);
-        
-    \end{tikzpicture}
+    \includegraphics{images/ace.pdf}
 \end{figure}
 
 Who is supposed to authorize? As updates will be sent from operators through servers to
@@ -282,34 +267,10 @@ image on the server. Later when the device should update, the device pulls the i
 the server, validates it using the already received manifest, and updates. Both the pull
 and push approaches assume the devices are already enrolled and registered at the server.
 
-% TODO: Update image with:
-% Change to just distribute together
-% Authorization server
-% Operator obtaining a token
-% Device optionally introspecting it
-% Operator preparing manifest
-% Maybe break up into two figures if too messy
 \begin{figure}
-    \caption{Example workflow of communication in the architecture.}
+    \caption{Example workflow of an update procedure.}
     \label{fig:communication-workflow}
-    \begin{tikzpicture}[box/.style={rectangle,draw,minimum width=3cm, minimum height=3.2cm},
-        line/.style={->,>=latex}]
-        \node[box] (operator) {Operator};
-        \node[box, right=3cm of operator] (server) {Server};
-        \node[box, right=3cm of server] (device) {Device};
-        \node[box, below=1.5cm of server] (CA) {CA};
-
-        \draw[line] (device.south) -- node[above,sloped] {0.0 Enroll} (CA.east); 
-        \draw[line] ([yshift=1.5cm]device.west) -- node[above] {0.1 Register} ([yshift=1.5cm]server.east);
-        \draw[line] ([yshift=0.8cm]operator.east) -- node[above] {0.3 Manifest}node[below] {Image} ([yshift=0.8cm]server.west);
-        
-        \draw[line] ([yshift=0.8cm]server.east) -- node[above] {0.4 Manifest and image} ([yshift=0.8cm]device.west);
-        \draw[line] ([yshift=-0.8cm]device.west) -- node[above] {0.5, 1.6 Update profile} ([yshift=-0.8cm]server.east);
-        
-        \draw[line, bend right] (operator.north) to[out=30,in=150] node[above] {1.3 Manifest} (device.north);
-        \draw[line] ([yshift=-0.8cm]operator.east) -- node[above] {1.4 Image} ([yshift=-0.8cm]server.west);
-        \draw[line] ([yshift=-1.5cm]server.east) -- node[above] {1.5 Image} ([yshift=-1.5cm]device.west);
-    \end{tikzpicture}
+    \includegraphics{images/update-flow.pdf}
 \end{figure}
 
 Figure~\ref{fig:communication-workflow} shows an example update flow in the architecture.
@@ -430,46 +391,10 @@ perspective. The figure shows the different stages of a device from being manufa
 ending its service. There are also annotations showing what needs to be done in each
 stage. These stages are discussed in further detail in this section.
 
-% TODO: Use the five-node figure, separating enrollment and registration
 \begin{figure}
     \caption{The life cycle of a device.}
     \label{fig:lifecycle}
-    \begin{tikzpicture}[>=stealth',
-        box/.style={rectangle,draw,minimum width=3cm,minimum height=2cm}]
-        \node[box] (new) {Factory new};
-        \node[box, below right=1.5cm of new] (enroll) {Enrollment stage};
-        \node[box, below left=1.5cm of enroll] (maintain) {Maintenance};
-        \node[box, below left=1.5cm of new] (end) {End of life};
-
-        \node[align=left, above right=0.6cm of new] (new_notes) {Ship with:\\
-            Pre-shared key\\
-            Vendor and class IDs\\
-            Server registration endpoint\\
-            CA certificate};
-        \node[align=left, xshift=-2.5cm, yshift=-1cm, below right=0.4cm of enroll] (enroll_notes) 
-            {Register at server/update profile\\
-            Obtain certificate};
-        \node[align=left, below left=0.7cm of maintain] (maintain_notes) {Push/pull updates};
-
-        \path[->,>=stealth]
-        (new) edge [bend left=35] (enroll)
-        (enroll) edge [bend left=35] (maintain)
-        (maintain) edge [bend left=45] (enroll)
-        (maintain) edge [bend left=35] (end);
-        
-        \def\myshift#1{\raisebox{-2.5ex}}
-        \path[decoration={text along path,text align=center,
-        text={|\myshift|Please recycle}, raise=0.7cm}]
-        (end) edge[decorate, bend left=35] node {} (new);
-
-        \path[->,>=stealth,dashed]
-        (end) edge [bend left=35] (new);
-
-        \path[-,>=stealth]
-        (new) edge (new_notes)
-        (enroll) edge (enroll_notes)
-        (maintain) edge (maintain_notes);
-    \end{tikzpicture}
+    \includegraphics{images/lifecycle.pdf}
 \end{figure}
 
 
@@ -506,53 +431,42 @@ starting the life cycle anew.
 \label{ssec:different-architectures}
 As discussed, operators, servers, and devices can interact in many ways. The architecture
 tries to be flexible allowing for different network topologies and configurations. The
-important parts are that devices can enroll, all actors have valid certificates, and that
-devices know which certificates belong to which roles beforehand. 
+important parts are that devices can enroll and register, all actors have valid
+certificates, and that updates can be authorized. 
 
 Figure~\ref{fig:operator-direct} shows an example architecture with one operator, one
 server, and one device. The operator is capable of running the protocols needed to
-communicate in the constrained network, and can thus interact both directly with the
-device to send manifests and interact with the server residing within the constrained
-network. A architecture like this allows for servers to be distributed within the
-constrained network.
+communicate in the constrained network, and can thus interact directly with both the
+device to send manifests and server to send images. An architecture like this allows for
+servers to be distributed within the constrained network, possibly as more capable IoT
+devices.
 
 \begin{figure}
     \caption{An operator communicating directly with machines in the constrained network.}
     \label{fig:operator-direct}
-    % TODO: Placeholder image
-    \includegraphics[scale=0.8]{images/operator-direct.png}
+    \includegraphics{images/operator-direct.pdf}
 \end{figure}
 
-Figure~\ref{fig:operator-proxy} shows an operator interacting with a proxy which in turn
-interacts with the server. Note that since the operator is not capable of contacting the
-server directly it can not contact the device directly either. All traffic, manifest and
-image, goes through the server to the device. 
+Figure~\ref{fig:operator-proxy} shows an operator 
 
 \begin{figure}
-    \caption{An operator using a proxy to reach the constrained network.}
+    \caption{}
     \label{fig:operator-proxy}
-    % TODO: Placeholder image
-    \includegraphics[scale=0.7]{images/operator-proxy.png}
+    \includegraphics{images/operator-indirect.pdf}
 \end{figure}
 
-Figure~\ref{fig:operator-server} shows a third alternative where the server acts as a
-proxy between the operator and the device. The operator is yet again unable to reach the
-devices directly and relies on a server. In this scenario, there are two devices who both
-receive updates from the server. If the devices use the same transport protocols,
-broadcasting could be used from the server to send updates to both devices at the same
-time.
+Figure~\ref{fig:operator-server} shows a third alternative 
 
 \begin{figure}
-    \caption{A server is used as a proxy to reach two devices.}
+    \caption{}
     \label{fig:operator-server}
-    % TODO: Placeholder image
-    \includegraphics[scale=0.8]{images/operator-server.png}
+    \includegraphics{images/operator-introspection.pdf}
 \end{figure}
 
 There are many other possible architectures and configurations. What these three examples
 have in common is that the operator always resides outside the constrained network,
-devices always reside within the constrained network, and that servers transport images to
-devices. In turn, devices register and update their statuses to the servers. Since
+devices always reside within the constrained network, and that servers transport updates
+to devices. In turn, devices register and update their statuses to the servers. Since
 operators reside in traditional networks using traditional protocols such as HTTP over
 TCP, a proxy mechanism may be necessary to communicate with the often UDP based
 constrained networks. Remember from Section~\ref{ssec:coap} that CoAP can easily be

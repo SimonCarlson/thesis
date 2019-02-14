@@ -310,42 +310,13 @@ that an update mechanism must support both types.
 \begin{figure}
     \caption{Distributing both manifest and image through a firmware server.}   
     \label{fig:manifest-image-combined-distribution}
-    \begin{tikzpicture}[>=stealth',
-        box/.style={rectangle,draw,minimum width=3cm,minimum height=2cm},
-        line/.style={->,shorten >=3mm, shorten <=3mm}]
-        
-        \node[box] (author) {Firmware author};
-        \node[box, right=5cm of author] (device) {Device};
-        \node[box, above right=2.5cm and 2.5cm of author, anchor=center] (server) {Firmware server};
-        
-        \draw[line] (author.north) -- node[above,sloped] 
-            {Manifest} node[below,sloped]{Image} (server.west); 
-        
-        \draw[line] (server.east) -- node[above,sloped] 
-            {Manifest} node[below,sloped]{Image} (device.north); 
-    \end{tikzpicture}
+    \includegraphics{images/together.pdf}
 \end{figure}
 
 \begin{figure}
     \caption{Distributing the manifest directly to the device and image through a firmware server.}
     \label{fig:manifest-image-separate-distribution}
-    \begin{tikzpicture}[>=stealth',
-        box/.style={rectangle,draw,minimum width=3cm,minimum height=2cm},
-        line/.style={->,shorten >=3mm, shorten <=3mm}]
-        
-        \node[box] (author) {Firmware author};
-        \node[box, right=5cm of author] (device) {Device};
-        \node[box, above right=2.5cm and 2.5cm of author, anchor=center] (server) {Firmware server};
-        
-        \draw[line] (author.north) -- node[above,sloped] 
-            {Image} (server.west); 
-
-        \draw[line] (author.east) -- node[above, sloped]
-            {Manifest} (device.west);
-        
-        \draw[line] (server.east) -- node[above,sloped] 
-            {Image} (device.north); 
-    \end{tikzpicture}
+    \includegraphics{images/separate.pdf}
 \end{figure}
 
 \subsection{Information Model}
