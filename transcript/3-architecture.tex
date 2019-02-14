@@ -19,7 +19,7 @@ tokens and certificates to issue are implementation dependant. The architecture 
 however support different means of achieving these goals and not restrict engineers to one
 certain implementation.
 
-Alongside these five key areas is the concern of a devices life cycle from an update
+Alongside these five key areas is the concern of a device's life cycle from an update
 perspective. The life cycle should be intertwined with the mechanisms of the architecture
 and show how devices can enroll, communicate, and receive updates throughout their long
 expected lifetimes. 
@@ -67,7 +67,7 @@ images to servers, and can query them for device status.
 
 Devices should contain a list of servers and by trusting the certificate authority they
 can validate server certificates. A server is thus any machine that is enrolled, has a
-valid certificate, and is included in the devices list of servers. The reasoning behind
+valid certificate, and is included in the device's list of servers. The reasoning behind
 this definition is that a standard solution for updates should not assume the topology of
 an IoT network. The server may be a machine acting as a proxy between a traditional
 network containing the operator and a constrained network with IoT devices. The server
@@ -91,7 +91,7 @@ points no matter the topology of choice:
 
 \begin{itemize}
     \item The server is enrolled and has a valid certificate
-    \item The server is included in a devices list of servers (meaning it is authorized to
+    \item The server is included in a device's list of servers (meaning it is authorized to
             send updates to the device)
     \item An operator can reach the server and is authorized by the server to upload
             updates
@@ -114,18 +114,17 @@ directly to a device, the device needs to be aware of the operator and permit tr
 that operator. Just like with mapping devices to servers, devices can receive manifests
 from several operators and different devices may interact with different operators. This
 creates opportunities to logically divide a network between different operators. An
-example use case is a constrained network supported by different vendors; the respective
-vendors should only be able to service their respective devices despite all devices
-belonging to the same network. It can also create a hierarchy, where certain operators may
-directly interact with devices but other operators must interact with devices through
-servers. Yet again the point is to prepare for as many different scenarios as possible and
-create a flexible architecture.
+example use case is a constrained network supported by different vendors where the
+respective vendors should only be able to service their respective devices. It can also
+create a hierarchy, where certain operators may directly interact with devices but other
+operators must interact with devices through servers. Yet again the point is to prepare
+for as many different scenarios as possible and create a flexible architecture.
 
 As with servers, the essence of being an operator can be captured in a few points:
 
 \begin{itemize}
     \item An operator is enrolled and has a valid certificate
-    \item An operator is included in a devices list of operators (and therefore can send
+    \item An operator is included in a device's list of operators (and therefore can send
             manifests to the device)
     \item An operator is trusted by a server to send manifests and images to the server
 \end{itemize}
@@ -156,7 +155,7 @@ enrolling.
 
 A device that is enrolling has to trust the CA issuing the certificate. If it cannot do
 so, how could it know it received a valid certificate? An attacker would love for a device
-to use the attackers public key instead, and if an attacker poses as a CA it could issue a
+to use the attacker's public key instead, and if an attacker poses as a CA it could issue a
 certificate with its own public key and then sign it. In order to trust the CA, a device
 needs to have the certificate of the CA it is enrolling with or some other CA further down
 the chain of trust. By verifying the signature on the newly enrolled certificate with the
@@ -200,7 +199,7 @@ image on the server. Later when the device should update, the device pulls the i
 the server, validates it using the already received manifest, and updates. Both the pull
 and push approaches assume the devices are already enrolled and registered at the server.
 
-After updating, the devices capabilities might have changed, for instance by having a new
+After updating, the device's capabilities might have changed, for instance by having a new
 protocol implemented in software. The version has also changed due to applying an update.
 After an update, a device should notify all its servers so they can update the device
 profile (or simply discard the old one and generate a new, as if the device registered for
@@ -367,7 +366,7 @@ The steps can be briefly explained as:
     \item The device requests introspection data from the authorization server
             to verify the authorization token. Optional.
     \item The device verifies the update and applies it.
-    \item The devices certificate broke as part of the update and it uses a new pre-shared
+    \item The device's certificate broke as part of the update and it uses a new pre-shared
             key included in the update to re-enroll. Optional.
     \item The device updates its profile at the server by re-registering.
 \end{enumerate}
