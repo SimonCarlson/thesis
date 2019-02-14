@@ -12,66 +12,77 @@ proposed. Five key areas that the architecture must deal with have been identifi
     \item Upgrading images
 \end{itemize}
 
-The architecture must propose solutions for these four areas while complying with SUIT as
-much as possible in order to make the architecture interoperable and suitable as a
-standard. Certain elements, such as how to locally flip an image and which kinds of
-authorization tokens to issue, are implementation dependant. The architecture must however
-support different means of achieving these goals and not restrict engineers to one certain
-implementation.
+The architecture must propose solutions for these areas while complying with SUIT as much
+as possible in order to make the architecture interoperable and suitable as a standard.
+Certain elements such as how to locally flip an image and which kinds of authorization
+tokens and certificates to issue are implementation dependant. The architecture must
+however support different means of achieving these goals and not restrict engineers to one
+certain implementation.
 
-Alongside these four key areas is the concern of a devices life cycle from an update
+Alongside these five key areas is the concern of a devices life cycle from an update
 perspective. The life cycle should be intertwined with the mechanisms of the architecture
 and show how devices can enroll, communicate, and receive updates throughout their long
 expected lifetimes. 
 
-Section~\ref{sec:roles} defines what a server and operator means in the context of the
-update mechanism. Section~\ref{sec:key-management} discusses what is needed for devices to
-enroll in a PKI and how keys are handled during updates. Section~\ref{sec:authorization}
-describes the purpose of issuing authorization tokens, how devices can use them, and who
-is to be authorized. Section~\ref{sec:communication} describes how devices, servers, and
-operators can communicate and shows an example workflow of communicating an update.
-Section~\ref{sec:updates} discusses different means of handling the payload when applying
-an update. Section~\ref{sec:device-lifecycle} introduces the notion of a life cycle for
-devices, and Section~\ref{ssec:different-architectures} shows different examples of
-possible architectures.
+% TODO: Update accordingly
+Section~\ref{sec:roles} defines what a server, operator, and device means in the context
+of the update architecture. Section~\ref{sec:key-management} discusses what is needed for
+devices to enroll in a PKI and how keys are handled during updates.
+Section~\ref{sec:authorization} describes the purpose of issuing authorization tokens, how
+devices can use them, and who is to be authorized. Section~\ref{sec:communication}
+describes how devices, servers, and operators can communicate and shows an example
+workflow of communicating an update. Section~\ref{sec:updates} discusses different means
+of handling the payload when applying an update. Section~\ref{sec:device-lifecycle}
+introduces the notion of a life cycle for devices, and
+Section~\ref{ssec:different-architectures} shows different examples of possible
+architectures.
 
 \section{Roles}
 \label{sec:roles}
-This Section~explains the notion of servers and operators in the architecture and their
-responsibilities. Section~\ref{ssec:who-is-a-server} covers the topic of servers while
-Section~\ref{ssec:who-is-an-operator} covers operators.
+This Section~explains the notion of servers, operators, and devices in the architecture
+and their responsibilities. Section~\ref{ssec:what-is-a-server} covers the topic of
+servers, Section~\ref{ssec:who-is-an-operator} covers operators, and
+Section~\ref{ssec:what-is-a-device} briefly covers devices.
 
-\subsection{Who Is a Server and What Do They Do?}
-\label{ssec:who-is-a-server}
-% Server: dedicated server or other device in network. Identified by keys, needs to be on
-% devices? Single point of truth for device profiles and versions. Can be used as storage
-% for images being deployed later on.
-% TODO: Mention pre-determined lists of servers
-Servers are responsible for transporting manifests and images to the devices and keeping
-track of device profiles. Upon enrollment devices register at a server and the server
-creates a profile for that device. The profile contains the vendor and class IDs and
-firmware version of the device. This allows the server to know through which protocols the
-device can be contacted and which version it should be updated to. Operators, discussed in
-the next section, send signed manifests and images to servers, and can query them for
-device status.
+% TODO: Briefly explain what is ment by "device"
+\subsection{What Is a Device and What Do They Do?}
+\label{ssec:what-is-a-device}
+Devices are contrained, low-power IoT appliances connected to a contrained network. They
+are running the applications of the network and performs simple tasks such as measurement
+using sensors. The devices communicate wirelessly and must be secured from attackers while
+being able to be updated. They communicate with each other, servers, and operators.
+Communication with servers and operators requires the servers and operators know how to
+reach the devices if they want to initiate the contact. Devices must thus register
+profiles at servers, and must be enrolled in order to be trusted. These concerns are
+discussed in sections \ref{sec:key-management}, \ref{sec:communication}, and
+\ref{sec:device-lifecycle}.
 
-Devices should contain a list of servers and by trusting the certificate authority, they
-can validate those machines certificates after being enrolled. A server is thus any
-machine that is enrolled, has a valid certificate, and is included in the devices list of
-servers. The reasoning behind this decision is that a standard solution for updates should
-not assume the topology of an IoT network. The server may be a machine acting as a proxy
-between a traditional network containing the operator and a constrained network with IoT
-devices. The server could be a more capable IoT device located entirely within the
-constrained network and be contacted through a proxy. The server could be located entirely
-within the traditional network and use a proxy to communicate with devices of the
-constrained network.
+\subsection{What Is a Server and What Do They Do?}
+\label{ssec:what-is-a-server}
+Servers are responsible for transporting manifests and images to the devices, acting as
+image repositories, and keeping track of device profiles. After enrollment devices
+register at a server and the server creates a profile for that device. The profile
+contains the vendor and class IDs and firmware version of the device. This allows the
+server to know through which protocols the device can be contacted and which version it
+should be updated to. Operators, discussed in the next section, send signed manifests and
+images to servers, and can query them for device status.
+
+Devices should contain a list of servers and by trusting the certificate authority they
+can validate server certificates. A server is thus any machine that is enrolled, has a
+valid certificate, and is included in the devices list of servers. The reasoning behind
+this definition is that a standard solution for updates should not assume the topology of
+an IoT network. The server may be a machine acting as a proxy between a traditional
+network containing the operator and a constrained network with IoT devices. The server
+could be a more capable IoT device located entirely within the constrained network and be
+contacted through a proxy. The server could be located entirely within the traditional
+network and use a proxy to communicate with devices of the constrained network.
 
 % TODO: Does a device need one keypair for each server? Does it need one keypair for all servers?
-A device could also be aware of several servers, and different devices can be mapped to
-different servers. This can make device management easier as certain classes of devices
-can be handled by certain servers. By allowing a device to receive updates from several
-servers, the update mechanism architecture displays a form of robustness. If one server is
-a machine located entirely within the constrained network and the connection between that
+A device can be aware of several servers, and different devices can be mapped to different
+servers. This can make device management easier as certain classes of devices can be
+handled by certain servers. By allowing a device to receive updates from several servers,
+the update mechanism architecture also displays a form of robustness. If one server is for
+instance located entirely within the constrained network and the connection between that
 server and the operator is severed, updates can still be distributed through other
 servers. If devices are pulling updates, they can query the servers in order of their list
 of servers. If updates are pushed, devices keep the connection with the server pushing the
@@ -83,41 +94,27 @@ points no matter the topology of choice:
 \begin{itemize}
     \item The server is enrolled and has a valid certificate
     \item The server is included in a devices list of servers (meaning it is authorized to
-            transport updates to the device)
+            send updates to the device)
     \item An operator can reach the server and is authorized by the server to upload
             updates
 \end{itemize}
 
-What servers are allowed to do must also be predetermined. Imagine a device running an
-operating system and an application. The operating system is developed by some party
-different than the one developing the application, and thus the device is aware of two
-update servers, one for the operating system and one for the application. If receiving an
-update from the application update server, the device should allow for the update to
-happen but also make sure the correct parts of code are updated. The application vendor
-should not be allowed to touch the operating system if they are not authorized to do so,
-and vice versa. This introduces the topic of authorizing updates. Authorization and access
-control is discussed in Section~\ref{sec:authorization}.
-
 \subsection{Who Is an Operator and What Do They Do?}
 \label{ssec:who-is-an-operator}
-% Operator: human making decisions about updates. Crafts/generates manifests, signs
-% manifests and images. Authorized by keys, needs to be on device? Can send manifest for
-% ease of operations, cannot send images because of size constraints/single point of
-% truth/proxying? How does an operator send manifests, get profile from server? Must get
-% profiles anyways for versioning.
 % TODO: Mention pre-determined list of operators. Mention it can be updated just like any
 % other piece of software
 Operators are people authorized to upload manifests and images to a server. They can also
 optionally upload manifests directly to a device depending on the architecture. Operators
-prepare manifests and images and signs them before transporting them to a server, which
-forwards them to a device. The signing ensures end-to-end security for images and
-manifests between operators and devices.
+prepare manifests and images, signs and transports them with an authorization token to a
+server, which then forwards them to a device. The signing ensures end-to-end security for
+images and manifests between operators and devices. Authorization is further discussed in
+Section~\ref{sec:authorization}.
 
-Like a list of servers introduced in Section~\ref{ssec:who-is-a-server}, devices also need
-a list of operators. This is because if an operator wishes to send a manifest directly to
-a device, the device needs to know if the operator is authorized to do so, otherwise it is
-discarded. Just like with mapping devices to servers, devices can receive manifests from
-several operators and different devices may interact with different operators. This
+Like a list of servers introduced in Section~\ref{ssec:what-is-a-server}, devices also
+need a list of operators. This is because if an operator wishes to send a manifest
+directly to a device, the device needs to be aware of the operator and permit traffic from
+that operator. Just like with mapping devices to servers, devices can receive manifests
+from several operators and different devices may interact with different operators. This
 creates opportunities to logically divide a network between different operators. An
 example use case is a constrained network supported by different vendors; the respective
 vendors should only be able to service their respective devices despite all devices
@@ -132,22 +129,15 @@ As with servers, the essence of being an operator can be captured in a few point
     \item An operator is enrolled and has a valid certificate
     \item An operator is included in a devices list of operators (and therefore can send
             manifests to the device)
-    \item An operator is trusted by a server to send manifests and images to the server,
-            causing devices to update
+    \item An operator is trusted by a server to send manifests and images to the server
 \end{itemize}
-
-Access control for operators is an important topic. Operators should only be able to send
-updates to devices they are authorized for, and the updates should cover parts of the
-device within the operators rights. Section~\ref{sec:authorization} discusses access
-control for operators and servers.
-
-% TODO: Briefly explain what is ment by "device"
 
 \section{Key Management}
 \label{sec:key-management}
 % TODO: Consider updates breaking certificates. Why would they? Lack of understanding concerning
 % certificates perhaps
 % Two pairs of keys from one PSK? Are two pairs needed?
+% Keys
 The architecture will, in order to align with the goals of SUIT, be based on asymmetric
 cryptography. The availability of EST-coaps makes this feasible in IoT contexts but other
 enrollment protocols could also be used. This means a \gls{ca} is needed to act as a
@@ -182,9 +172,75 @@ if it was factory new. The process of issuing pre-shared keys might be difficult
 automate as the CA must be aware of which keys to accept, but it is needed to ensure the
 security of future device communication.
 
+\section{Communication}
+\label{sec:communication}
+% Device profiles
+In heterogeneous networks of IoT devices, each device might sport a specific protocol
+stack. In order to enable different devices to be updated, servers must be aware of how to
+reach these devices. This problem introduces the notion of device profiles containing
+information about device capabilities and software versions. 
+
+When devices have enrolled and obtained a valid certificate, they must contact their
+respective servers so the servers can create profiles of the devices. The profiles will
+tell through which protocols to reach a device and what software versions the device is
+using. In order to achieve this, devices must first know which servers to contact. This
+can be solved through shipping devices with a list of servers. This list can later on be
+updated like any other software. Furthermore, the devices use vendor and class IDs as
+described in the SUIT information model. The information model uses these pieces of
+information to verify an update is intended for a specific device by matching the IDs, but
+they can also be sent to a server to tell it what kind of device is contacting it. The
+server can infer a profile based on the IDs it is sent, or simply use the protocols the
+device chose to contact it. The devices also need to be aware of how to register, for
+instance by POSTing to a specific server endpoint. 
+
+When updating there are possibilities regarding how the updating process is initiated. An
+operator can query the server for the status of one or several devices, prepare an update
+for them, and have the update pushed through the server. Optionally the operator could
+send a manifest to the device explaining when the update is to be applied and put the
+image on the server. Later when the device should update, the device pulls the image from
+the server, validates it using the already received manifest, and updates. Both the pull
+and push approaches assume the devices are already enrolled and registered at the server.
+
+After updating, the devices capabilities might have changed, for instance by having a new
+protocol implemented in software. The version has also changed due to applying an update.
+After an update, a device should notify all its servers so they can update the device
+profile (or simply discard the old one and generate a new, as if the device registered for
+the first time). This ensures the servers view of the devices is up to date and that
+communication will always happen through the intended and supported protocols. The
+functionality of registering is the same as when a device is new and thus not costly to
+implement.
+
+There are alternatives to using device profiles. One alternative is to instead keep a list
+of known protocols implemented by devices in the network, and when pushing updates to a
+device trying each protocol in sequence. This has the benefit of not needing to keep and
+continuously update profiles, but also has some issues. One issue is that you still need
+to keep some state of the devices on the server regarding firmware version. If the server
+does not know what the status of device versions are, it cannot help a human operator
+decide about deploying updates. 
+
+Another drawback is that devices might implement common protocols but have different
+preferences. If two devices implement some common protocols but one of them supports
+hardware operations for encrypting one of the protocols, it will prefer using that
+protocol with the server, whereas the other device might not. The server will however,
+with no information about device preference, try the same sequence of protocols with both
+devices.
+
+Furthermore, as communication can be unreliable over these networks, the server
+cannot know for sure if a device does not respond due to not understanding the protocol
+and therefore dropping the packets, or if the response just got lost in transmission. It
+is more robust to keep track of which protocols devices support and conform to the
+preferences of the constrained devices.
+
+Lastly, instead of using profiles all communication could be initiated from the device
+side, meaning updates are only done through a pulling mechanism. This would not enable the
+use case of pushing updates which could be critical if a vulnerability must be patched
+right away. Operators must be given the choice to push updates to their devices, and thus
+servers must be able to initiate contact with devices.
+
 \section{Authorization}
 \label{sec:authorization}
 % TODO: Maybe put this after communication?
+% Tokens
 A flexible architecture enables different configurations of servers, operators, and
 devices. An operator might be authorized to update all parts of all devices, or be
 constrained to updating a specific piece of functionality for a subset of the devices.
@@ -239,96 +295,6 @@ applying an update easier by not needing communication to the authorization serv
 update server. Requiring update servers to authorize would not add any security to the
 devices as the update already will be shipped with a token authorizing the update.
 
-\section{Communication}
-\label{sec:communication}
-In heterogeneous networks of IoT devices, each device might sport a specific protocol
-stack. In order to enable different devices to be updated, servers must be aware of how to
-reach these devices. This problem introduces the notion of device profiles containing
-information about device capabilities and software versions. 
-
-When devices have enrolled and obtained a valid certificate, they must contact their
-respective servers so the servers can create profiles of the devices. The profiles will
-tell through which protocols to reach a device and what software versions the device is
-using. In order to achieve this, devices must first know which servers to contact. This
-can be solved through shipping devices with a list of servers. This list can later on be
-updated like any other software. Furthermore, the devices use vendor and class IDs as
-described in the SUIT information model. The information model uses these pieces of
-information to verify an update is intended for a specific device by matching the IDs, but
-they can also be sent to a server to tell it what kind of device is contacting it. The
-server can infer a profile based on the IDs it is sent, or simply use the protocols the
-device chose to contact it. The devices also need to be aware of how to register, for
-instance by POSTing to a specific server endpoint. 
-
-When updating there are possibilities regarding how the updating process is initiated. An
-operator can query the server for the status of one or several devices, prepare an update
-for them, and have the update pushed through the server. Optionally the operator could
-send a manifest to the device explaining when the update is to be applied and put the
-image on the server. Later when the device should update, the device pulls the image from
-the server, validates it using the already received manifest, and updates. Both the pull
-and push approaches assume the devices are already enrolled and registered at the server.
-
-\begin{figure}
-    \caption{Example workflow of an update procedure.}
-    \label{fig:communication-workflow}
-    \includegraphics{images/update-flow.pdf}
-\end{figure}
-
-Figure~\ref{fig:communication-workflow} shows an example update flow in the architecture.
-This update is initiated by the operator by querying the server for device status and then
-pushing an update. The manifest and image are distributed together.
-
-\begin{enumerate}[label=0.\arabic*]
-    \setcounter{enumi}{-1}
-    \item Enrolling the device at the certificate authority.
-    \item Registering at the server. This creates a profile for the device on the server.
-    \item The operator prepares a manifest and signs it.
-    \item The operator requests an access token from the authorization server in order to
-            gain access to applying the update.
-    \item The manifest and image are both signed and sent to the server with the
-            authorization token.
-    \item The signed manifest and image are sent with the authorization token to the
-            device.
-    \item The device optionally requests introspection data from the authorization server
-            to verify the authorization token.
-    \item The device confirms the update if successful and causes the server to update
-            its device profile.
-\end{enumerate}
-
-After updating, the devices capabilities might have changed, for instance by having a new
-protocol implemented in software. The version has also changed due to applying an update.
-After an update, a device should notify all its servers so they can update the device
-profile (or simply discard the old one and generate a new, as if the device registered for
-the first time). This ensures the servers view of the devices is up to date and that
-communication will always happen through the intended and supported protocols. The
-functionality of registering is the same as when a device is new and thus not costly to
-implement.
-
-There are alternatives to using device profiles. One alternative is to instead keep a list
-of known protocols implemented by devices in the network, and when pushing updates to a
-device trying each protocol in sequence. This has the benefit of not needing to keep and
-continuously update profiles, but also has some issues. One issue is that you still need
-to keep some state of the devices on the server regarding firmware version. If the server
-does not know what the status of device versions are, it cannot help a human operator
-decide about deploying updates. 
-
-Another drawback is that devices might implement common protocols but have different
-preferences. If two devices implement some common protocols but one of them supports
-hardware operations for encrypting one of the protocols, it will prefer using that
-protocol with the server, whereas the other device might not. The server will however,
-with no information about device preference, try the same sequence of protocols with both
-devices.
-
-Furthermore, as communication can be unreliable over these networks, the server
-cannot know for sure if a device does not respond due to not understanding the protocol
-and therefore dropping the packets, or if the response just got lost in transmission. It
-is more robust to keep track of which protocols devices support and conform to the
-preferences of the constrained devices.
-
-Lastly, instead of using profiles all communication could be initiated from the device
-side, meaning updates are only done through a pulling mechanism. This would not enable the
-use case of pushing updates which could be critical if a vulnerability must be patched
-right away. Operators must be given the choice to push updates to their devices, and thus
-servers must be able to initiate contact with devices.
 
 
 \section{Updates}
@@ -337,7 +303,7 @@ servers must be able to initiate contact with devices.
 % I like the idea of decrypting once and storing decrypted image with its hash for smaller
 % bootloader procedure. Implementation specific though
 % Cite mailing list perhaps?
-
+% What happens locally + example update flow
 When an update has finally arrived to the device, it must be processed and then installed.
 The process of decrypting, validating, and installing the image is heavily implementation
 specific with most of the details being out of scope for the architecture. However, since
@@ -371,6 +337,33 @@ possibly vulnerable images, but in order to compare sequence numbers the most re
 manifest has to be kept around. Manifests should be kept for the update handler to compare
 sequence numbers, and for the bootloader to verify images.
 
+\begin{figure}
+    \caption{Example workflow of an update procedure.}
+    \label{fig:communication-workflow}
+    \includegraphics{images/update-flow.pdf}
+\end{figure}
+
+Figure~\ref{fig:communication-workflow} shows an example update flow in the architecture.
+This update is initiated by the operator by querying the server for device status and then
+pushing an update. The manifest and image are distributed together.
+
+\begin{enumerate}[label=0.\arabic*]
+    \setcounter{enumi}{-1}
+    \item Enrolling the device at the certificate authority.
+    \item Registering at the server. This creates a profile for the device on the server.
+    \item The operator prepares a manifest and signs it.
+    \item The operator requests an access token from the authorization server in order to
+            gain access to applying the update.
+    \item The manifest and image are both signed and sent to the server with the
+            authorization token.
+    \item The signed manifest and image are sent with the authorization token to the
+            device.
+    \item The device optionally requests introspection data from the authorization server
+            to verify the authorization token.
+    \item The device confirms the update if successful and causes the server to update
+            its device profile.
+\end{enumerate}
+
 % TODO: Fix chapter numbering
 Besides offering encryption, authorization, communication, and manifests, the architecture
 cannot influence the update procedure further. Locally upgrading an image is a concern of
@@ -380,6 +373,7 @@ boot.
 
 \section{Device Life Cycle}
 \label{sec:device-lifecycle}
+% Summarize earlier chapters in a life cycle view
 The four key areas discussed in sections \ref{sec:key-management},
 \ref{sec:authorization}, \ref{sec:communication}, and \ref{sec:updates} are all part of
 the life cycle of a device. From the moment a new device is deployed in a network to the
