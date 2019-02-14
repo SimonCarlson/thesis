@@ -36,7 +36,6 @@
 | Payload Format                   | Mandatory                            | Describes the format of the payload                          |
 | Storage Location                 | Mandatory                            | Tells the device which component is being updated, can be used to establish physical location of update |
 | Payload Digest                   | Mandatory                            | The digest of the payload to ensure authenticity. Must be possible to specify more than one payload digest indexed by XIP Address |
-| XIP Address                      | -                                    | Used to specify which address the payload is for in systems with several potential images |
 | Size                             | Mandatory                            | The size of the payload in bytes                             |
 | Signature                        | Mandatory                            | The manifest is to be wrapped in an authentication container (not a manifest element itself) |
 | Dependencies                     | Mandatory                            | A list of digest/URI pairs linking manifests that are needed to form a complete update |
@@ -44,11 +43,3 @@
 | Content Key Distribution Method  | Mandatory (for encrypted payloads)   | Tells how keys for encryption/decryption are distributed     |
 | Vendor ID Condition              | Recommended                          | Helps distinguish products from different vendors            |
 | Class ID Condition               | Recommended                          | Helps distinguish incompatible devices in a vendors infrastructure |
-|                                  |                                      |                                                              |
-| Required Image Version List      | Optional                             | A list of versions that must be present to apply an update which applies to multiple versions of a firmware |
-| Best-Before Timestamp Condition  | Optional                             | Tells the last application time                              |
-| Component Identifier             | Optional                             | For heterogenous storages, identifies which part is to store the payload |
-| URIs                             | Optional                             | A list of weighted URIs used to obtain the payload           |
-| Directives                       | Optional                             | A list of instructions on processing the manifest. Applies to the entire manifest, unlike "Processing Steps" |
-| Aliases                          | Optional                             | A list of digest/URI pairs                                   |
-| Processing Steps                 | -                                    | A list of payload processors needed to process a nested format |
