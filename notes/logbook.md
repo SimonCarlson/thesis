@@ -1,3 +1,15 @@
+14/2-19:
+Added PDF graphics instead of tikz-figures
+Added roles as a keystone, so there's now five of them
+Added devices to roles, so there's now three of them
+It makes sense to order the key areas keys->communication->authorization->updates because it follows the life cycle
+Polished roles, key management, communication, authorization, updates, lifecycle
+Renamed "updates" to "upgrading" (updating is the entire process, upgrading is the actual flip of images)
+Rewrote most of the different architecture examples
+Lots of boring work now such as fixing the fucking apostrophes..
+After the boring work, give a proper read-through and mail to anyone interested. Prepare for criticism (should probably explicitly ask for criticism on upgrading chapter)
+Should make an effort to standardize expression - an update = manifest + image, upgrade = locally flip image etc
+
 13/2-19:
 Re-structured chapter 3. I feel this structure makes my thoughts come through in a more structured and convincing way. I can re use a lot of material I've already written and more easily expand some underdeveloped fields
 i3 is pretty cool, starting to get the hang of it

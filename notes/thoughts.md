@@ -16,9 +16,15 @@ Certificates = identity but not authorization. Tokens for authorization, talk to
 
 # Key points
 
-The architecture needs to account for: key distribution and management, means of communication (profiles), access control, local updating and patching. These are the key ingredients
+The architecture needs to account for: roles, key distribution and management, means of communication (profiles), access control, local updating and patching. These are the key ingredients
 
+<b>Roles</b>: How to define servers, operators, and devices
 <b>Key distribution and management:</b> pre-shared secrets, PKI w/ CA, certificates
 <b>Means of communication:</b> registering devices at server, updating profile after update, operators querying servers
 <b>Access control:</b> ACE tokens. Somehow authorize parts of code? Authorize memory access? How to define roles?
 <b>Local updating and patching:</b> extract image and prepare bootloader, restart. Is it possible to hotswap code by changing memory addresses? Feels really wonky
+
+# Prototypes
+
+Maybe make two small prototypes, one DTLS and one OSCORE without using tokens to compare their efficency
+Then make a "larger" proof-of-concept implementation using tokens
