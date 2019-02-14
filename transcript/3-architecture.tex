@@ -25,15 +25,15 @@ and show how devices can enroll, communicate, and receive updates throughout the
 expected lifetimes. 
 
 % TODO: Update accordingly
-Section~\ref{sec:roles} defines what a server, operator, and device means in the context
+Section~\ref{sec:roles} defines what a device, server, and operator means in the context
 of the update architecture. Section~\ref{sec:key-management} discusses what is needed for
 devices to enroll in a PKI and how keys are handled during updates.
+Section~\ref{sec:communication} describes how devices, servers, and operators can
+communicate and shows an example workflow of communicating an update.
 Section~\ref{sec:authorization} describes the purpose of issuing authorization tokens, how
-devices can use them, and who is to be authorized. Section~\ref{sec:communication}
-describes how devices, servers, and operators can communicate and shows an example
-workflow of communicating an update. Section~\ref{sec:upgrading} discusses different means
-of handling the payload when applying an update. Section~\ref{sec:device-lifecycle}
-introduces the notion of a life cycle for devices, and
+devices can use them, and who is to be authorized.  Section~\ref{sec:upgrading} discusses
+different means of handling the payload when applying an update.
+Section~\ref{sec:device-lifecycle} introduces the notion of a life cycle for devices, and
 Section~\ref{ssec:different-architectures} shows different examples of possible
 architectures.
 
@@ -41,7 +41,7 @@ architectures.
 \label{sec:roles}
 This Section~explains the notion of servers, operators, and devices in the architecture
 and their responsibilities. Section~\ref{ssec:what-is-a-server} covers the topic of
-servers, Section~\ref{ssec:who-is-an-operator} covers operators, and
+servers, Section~\ref{ssec:what-is-an-operator} covers operators, and
 Section~\ref{ssec:what-is-a-device} briefly covers devices.
 
 \subsection{What Is a Device and What Do They Do?}
@@ -98,8 +98,8 @@ points no matter the topology of choice:
             updates
 \end{itemize}
 
-\subsection{Who Is an Operator and What Do They Do?}
-\label{ssec:who-is-an-operator}
+\subsection{What Is an Operator and What Do They Do?}
+\label{ssec:what-is-an-operator}
 % TODO: Mention pre-determined list of operators. Mention it can be updated just like any
 % other piece of software
 Operators are people authorized to upload manifests and images to a server. They can also
