@@ -1,3 +1,6 @@
+15/2-19:
+Very constructive meeting with Shahid. Main takeaways: anything that is not in the SUIT standard goes into my architecture. Instantiate architecture in different use cases needing different functionality. Present the update procedure workflow image first, then dig deeper into each part of it. Emphasize new concepts. Someone wanting to implement it should easily know what they are required to do. Make life cycle to its own chapter, it can be short (2-3 pages). Make a profile chapter with at least one but preferrably two profiles (DTLS vs OSCORE?). Implementation to evaluate overhead of update, evaluation of other work has already been done, make assumptions about tokens, certs, protocols etc, measure radio cycles and packet loss.
+
 14/2-19:
 Added PDF graphics instead of tikz-figures
 Added roles as a keystone, so there's now five of them

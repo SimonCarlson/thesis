@@ -12,9 +12,9 @@ To do:
 - [x] Reread and improve the introduction and background
 - [ ] Consider adding section about CBOR
   - [ ] Talk to Niclas about state of CBOR in Contiki-NG
-- [ ] Consider how to integrate EST-coaps into the mechanism
+- [x] Consider how to integrate EST-coaps into the mechanism
   - [x] Read EST RFC
-  - [ ] Does it require anything from the application?
+  - [x] Does it require anything from the application? <b>Pre-shared keys and CA certificate</b>.
   - [x] Does it change conditions for key management? How do keys reach the device? (Can use <b>predistributed certificate</b> to authenticate on EST server)
   - [x] Further explain why it is needed (from SUIT)
 - [x] Fix presentation so that someone with no prior knowledge can understand what SUIT is
@@ -25,8 +25,8 @@ To do:
   - [ ] Figure out how to sign it. If not EST, use whatever method for proof of concept
   - [x] Validate correctness of mandatory fields (using cbor.me perhaps?)
   - [ ] Figure out how to add options without making the entire thing clunky
-- [ ] Rewrite the introduction regarding device management (architecture not implementation)
-  - [ ] Further push understanding of standardisation - needs flexibility, details left to implementation
+- [x] Rewrite the introduction regarding device management (architecture not implementation)
+  - [x] Further push understanding of standardisation - needs flexibility, details left to implementation
 - [ ] Install libcoap
 - [x] Read ACE, talk to Ludwig about it
 - [x] Chapter 2:
@@ -36,15 +36,25 @@ To do:
   - [x] DTLS: maybe put less focus on records (removing code snippets) and more on the handshake? Good to understand it relies on PKI but establishes symmetric encryption
   - [x] SUIT information model: remove long table, leave details to RFC. Mention the important fields in text
   - [x] Include ACE/OAuth 2.0
-- [ ] Chapter 3 intro stub:
+- [x] Chapter 3 intro stub:
   - [x] Mention four key areas
   - [x] Briefly explain the point of the life cycle
-  - [ ] Briefly explain the responsibilities of the architecture
+  - [x] Briefly explain the responsibilities of the architecture
   - [x] Introduce the sections
 - [x] Chapter 3 life cycle:
   - [x] Include what happens to keys/certs upon update
-- [ ] Chapter 3 architecture:
-  - [ ] Include authorization (maybe as separate figure because it will get messy otherwise)
-- [ ] Chapter 3 access control:
+- [x] Chapter 3 architecture:
+  - [x] Include authorization (maybe as separate figure because it will get messy otherwise)
+- [x] Chapter 3 access control:
   - [ ] Is there a benchmark of how much ACE demands from a device?
+- [ ] Move update workflow image early in chapter 3
+  - [ ] When explaining the image, dive deep on each concept
+    - [ ] Also think in terms of what is needed to implement a certain role (what does an operator/server/device implementation need?)
+- [ ] More descriptive chapter/section titles
+- [ ] Think of where to introduce the manifest used in the thesis
+  - [ ] Stick to SUIT 100% or propose changes? Does everything make sense? No options because of easier parsing?
+- [ ] Show architecture instantiations with concrete use cases
+- [ ] New chapters (can be short):
+  - [ ] Chapter containing at least one profile
+  - [ ] Make the life cycle its own chapter
 
