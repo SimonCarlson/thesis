@@ -5,24 +5,41 @@ With the required background information, an architecture for an update mechanis
 proposed. Five key areas that the architecture must deal with have been identified:
 
 \begin{itemize}
-    \item Roles
-    \item Key distribution and management
-    \item Means of communication
-    \item Authorization and access control
-    \item Upgrading
+    \item Roles of devices, servers, and operators
+    \item Key management of IoT update procedure
+    \item Device profiles and communication
+    \item Update authorization
+    \item Update handling for local upgrades
 \end{itemize}
 
-The architecture must propose solutions for these areas while complying with SUIT as much
-as possible in order to make the architecture interoperable and suitable as a standard.
-Certain elements such as how to locally flip an image and which kinds of authorization
-tokens and certificates to issue are implementation dependant. The architecture must
-however support different means of achieving these goals and not restrict engineers to one
-certain implementation.
+\begin{figure}
+    \caption{Example workflow of an update procedure.}
+    \label{fig:communication-workflow}
+    \includegraphics{images/update-flow.pdf}
+\end{figure}
 
-Alongside these five key areas is the concern of a device's life cycle from an update
-perspective. The life cycle should be intertwined with the mechanisms of the architecture
-and show how devices can enroll, communicate, and receive updates throughout their long
-expected lifetimes. 
+Putting the five key areas together, Figure~\ref{fig:communication-workflow} shows an
+example update flow in the architecture. This update is initiated by the operator by
+querying the server for device status and then pushing an update. The manifest and image
+are distributed together. The steps can be briefly explained as:
+
+\begin{enumerate}
+    \setcounter{enumi}{-1}
+    \item The device enrolls at the CA and receives a certificate.
+    \item The device registers at the server which now holds a profile for the device.
+    \item The operator queries the server for device status in order to prepare an update.
+    \item The operator prepares a manifest and image (update) and signs them.
+    \item The operator requests an access token from the authorization server in order to
+            gain access to applying the update.
+    \item The update is sent to the server with the authorization token.
+    \item The signed update is sent with the authorization token to the device.
+    \item The device requests introspection data from the authorization server
+            to verify the authorization token. Optional.
+    \item The device verifies the update and applies it.
+    \item The device's certificate broke as part of the update and it uses a new pre-shared
+            key included in the update to re-enroll. Optional.
+    \item The device updates its profile at the server by re-registering.
+\end{enumerate}
 
 Section~\ref{sec:roles} defines what a device, server, and operator means in the context
 of the update architecture. Section~\ref{sec:key-management} discusses what is needed for
@@ -32,11 +49,10 @@ communicate and shows an example workflow of communicating an update.
 Section~\ref{sec:authorization} describes the purpose of issuing authorization tokens, how
 devices can use them, and who is to be authorized. Section~\ref{sec:upgrading} discusses
 different means of handling the payload when applying an update.
-Section~\ref{sec:device-lifecycle} introduces the notion of a life cycle for devices, and
-Section~\ref{ssec:different-architectures} shows different examples of possible
-architectures.
+Section~\ref{ssec:use-cases-examples-topologies} shows the architecture applied to different use
+cases.
 
-\section{Roles}
+\section{Roles of Devices, Servers, and Operators}
 \label{sec:roles}
 This Section~explains the notion of servers, operators, and devices in the architecture
 and their responsibilities. Section~\ref{ssec:what-is-a-server} covers the topic of
@@ -127,7 +143,7 @@ As with servers, the essence of being an operator can be captured in a few point
     \item An operator is trusted by a server to send manifests and images to the server
 \end{itemize}
 
-\section{Key Management}
+\section{Key Management of IoT Update Procedure}
 \label{sec:key-management}
 % TODO: Consider updates breaking certificates. Why would they? Lack of understanding concerning
 % certificates perhaps
@@ -168,7 +184,7 @@ if it was factory new. The process of issuing pre-shared keys might be difficult
 automate as the CA must be aware of which keys to accept, but it is needed to ensure the
 security of future device communication.
 
-\section{Communication}
+\section{Device profiles and Communication}
 \label{sec:communication}
 % Device profiles
 In heterogeneous networks of IoT devices, each device might sport a specific protocol
@@ -233,7 +249,7 @@ use case of pushing updates which could be critical if a vulnerability must be p
 right away. Operators must be given the choice to push updates to their devices, and thus
 servers must be able to initiate contact with devices.
 
-\section{Authorization}
+\section{Update Procedure Authorization}
 \label{sec:authorization}
 A flexible architecture enables different configurations of servers, operators, and
 devices. An operator might be authorized to update all parts of all devices, or be
@@ -290,7 +306,7 @@ applying an update easier by not needing and update server to communicate with a
 authorization server. Requiring update servers to authorize would not add any security to
 the devices as the update already will be shipped with a token authorizing the update.
 
-\section{Upgrading}
+\section{Update Handling for Local Upgrades}
 \label{sec:upgrading}
 % TODO: How to handle decryption and validation
 % I like the idea of decrypting once and storing decrypted image with its hash for smaller
@@ -336,90 +352,8 @@ in order to compare sequence numbers the most recent manifest has to be kept aro
 Manifests should be kept for the update handler to compare sequence numbers, and for the
 bootloader to verify images.
 
-Putting the five key areas together, Figure~\ref{fig:communication-workflow} shows an
-example update flow in the architecture. This update is initiated by the operator by
-querying the server for device status and then pushing an update. The manifest and image
-are distributed together.
-
-\begin{figure}
-    \caption{Example workflow of an update procedure.}
-    \label{fig:communication-workflow}
-    \includegraphics{images/update-flow.pdf}
-\end{figure}
-
-The steps can be briefly explained as:
-
-\begin{enumerate}
-    \setcounter{enumi}{-1}
-    \item The device enrolls at the CA and receives a certificate.
-    \item The device registers at the server which now holds a profile for the device.
-    \item The operator queries the server for device status in order to prepare an update.
-    \item The operator prepares a manifest and image (update) and signs them.
-    \item The operator requests an access token from the authorization server in order to
-            gain access to applying the update.
-    \item The update is sent to the server with the authorization token.
-    \item The signed update is sent with the authorization token to the device.
-    \item The device requests introspection data from the authorization server
-            to verify the authorization token. Optional.
-    \item The device verifies the update and applies it.
-    \item The device's certificate broke as part of the update and it uses a new pre-shared
-            key included in the update to re-enroll. Optional.
-    \item The device updates its profile at the server by re-registering.
-\end{enumerate}
-
-% TODO: Fix chapter numbering
-Besides offering encryption, authorization, communication, and manifests, the architecture
-cannot influence the update procedure further. Locally upgrading an image is a concern of
-the target device that is to be updated. Chapter NUMBER will present the prototype
-architecture implementation.
-
-\section{Device Life Cycle}
-\label{sec:device-lifecycle}
-% Summarize earlier chapters in a life cycle view
-The five key areas discussed in sections \ref{sec:roles}-\ref{sec:upgrading} are all part
-of the life cycle of a device. From the moment a new device is deployed in a network to
-the point where it is taken out of action possibly several years later, the life cycle
-describes a holistic view of the state and operations of devices.
-
-Figure~\ref{fig:lifecycle} summarizes the life cycle of a device from an update
-perspective. The figure shows the different stages of a device from being manufactured to
-ending its service. There are also annotations showing what needs to be done in each
-stage. These stages are discussed in further detail in this section.
-
-\begin{figure}
-    \caption{The life cycle of a device.}
-    \label{fig:lifecycle}
-    \includegraphics{images/lifecycle.pdf}
-\end{figure}
-
-A factory new device that is to be installed in an IoT network needs some information in
-order to enroll and register at a server. A pre-shared key, CA certificate, vendor and
-class IDs, list of servers and operators, and and endpoint for registration is needed.
-These parts make sure the device can take part of the network and move to the next step of
-the life cycle. 
-
-Entering the enrollment stage, devices obtain certificates by enrolling at the CA. For
-this the pre-shared key and CA certificate is needed. After obtaining a certificate the
-device can be trusted by the servers and operators, as well as other devices. 
-
-The next stage is registering. The device registers at its designated servers who all
-create a profile for the device. The servers can now reach the device, and the device is
-ready to be updated, and thus proceeds to the maintenance stage.
-
-The maintenance state can be expected to last for several years, and this is where the
-device receives and applies updates. After an update, a device will either move back to
-the enrollment or registration stage. If the certificate is broken after updating, as
-discussed in Section~\ref{sec:key-management}, the device move back to the enrollment
-stage to obtain a new certificate. After obtaining a new, valid certificate it can update
-its profile. If the certificate is still valid after the update, there is no need to
-re-enroll and the device moves back to the registration stage, updates the profile at the
-servers. Finally the device moves to maintenance once again, and so forth. The device will
-remain in the maintenance stage until it either breaks or is taken out of service. If you
-are a manufacturer of IoT devices please consider recycling or (securely) re-using
-devices, starting the life cycle anew.
-
-\section{Different Architectures}
-\label{ssec:different-architectures}
+\section{Use Cases and Example Topologies}
+\label{ssec:use-cases-examples-topologies}
 As discussed, operators, servers, and devices can interact in many ways. The architecture
 tries to be flexible allowing for different network topologies and configurations. The
 important parts are that devices can enroll and register, all actors have valid
