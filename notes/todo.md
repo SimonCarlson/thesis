@@ -47,7 +47,7 @@ To do:
   - [x] Include authorization (maybe as separate figure because it will get messy otherwise)
 - [x] Chapter 3 access control:
   - [ ] Is there a benchmark of how much ACE demands from a device?
-- [ ] Move update workflow image early in chapter 3
+- [x] Move update workflow image early in chapter 3
   - [ ] When explaining the image, dive deep on each concept
     - [ ] Also think in terms of what is needed to implement a certain role (what does an operator/server/device implementation need?)
 - [ ] More descriptive chapter/section titles
