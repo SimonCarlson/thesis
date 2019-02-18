@@ -374,7 +374,8 @@ certificates, and that updates can be authorized. The following examples all ass
 devices are in the maintenance stage of the life cycle, and re-enrollment and updating
 profiles are omitted to make the figures clearer.
 
-Figure~\ref{fig:operator-direct} shows an example architecture with one operator, one
+% TODO: Rewrite use cases, completely new figures
+Figure~\ref{fig:elderly-home} shows an example architecture with one operator, one
 update server, one authorization server, and one device. The operator is capable of
 running the protocols needed to communicate in the constrained network, and can thus
 interact directly with both the device to send manifests and server to send images. An
@@ -383,11 +384,11 @@ network, possibly as more capable IoT devices.
 
 \begin{figure}
     \caption{An operator communicating directly with machines in the constrained network.}
-    \label{fig:operator-direct}
-    \includegraphics{images/operator-direct.pdf}
+    \label{fig:elderly-home}
+    \includegraphics{images/use-case-elderly-home.pdf}
 \end{figure}
 
-Figure~\ref{fig:operator-indirect} shows an operator sending updates entirely through an
+Figure~\ref{fig:smart-home} shows an operator sending updates entirely through an
 update server. The update server is located outside the constrained network and acts as an
 proxy for the operator to reach the devices. The update is distributed from the server to
 two devices, where one device accepts the update and the other rejects the update since
@@ -396,11 +397,11 @@ the operator was not authorized to apply it to that device.
 \begin{figure}
     \caption{An operator communicating with an update server that pushes the update to two
                 devices, with one device rejecting it.}
-    \label{fig:operator-indirect}
-    \includegraphics{images/operator-indirect.pdf}
+    \label{fig:smart-home}
+    \includegraphics{images/use-case-smart-home.pdf}
 \end{figure}
 
-Figure~\ref{fig:operator-server} shows a more elaborate topology. It contains one
+Figure~\ref{fig:industry} shows a more elaborate topology. It contains one
 operator, one authorization server, two update servers, two devices, and a proxy. The
 update is distributed to both servers, each server forwarding the update to one device
 each. The first device accepts and applies the update. The second device requires more
@@ -412,8 +413,8 @@ request must go through a proxy in order to reach it.
     \caption{An operator pushes updates to two servers forwarding it to one device each. 
                 One device perform an introspection request to validate the authorization 
                 token.}
-    \label{fig:operator-server}
-    \includegraphics{images/operator-introspection.pdf}
+    \label{fig:industry}
+    \includegraphics{images/use-case-industry.pdf}
 \end{figure}
 
 What these three examples have in common is that the operator always resides outside the
