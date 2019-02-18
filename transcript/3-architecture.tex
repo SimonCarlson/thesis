@@ -41,16 +41,20 @@ explained as:
     \item The device enrolls at the CA and receives a certificate.
     \item The device registers at the server which now holds a profile for the device.
     \item The operator queries the server for device status in order to prepare an update.
-    \item The operator prepares a manifest and image (update) and signs them.
+    \item The operator prepares a manifest and image and signs them.
     \item The operator requests an authorization token from the authorization server in
             order to gain access to applying the update.
-    \item The update is sent to the server with the authorization token.
-    \item The signed update is sent with the authorization token to the device.
+    \item The signed manifest and image are sent to the server with the authorization
+            token.
+    \item The server requests an authorization token from the authorization server.
+    \item The signed manifest and image are sent with the server's authorization token to
+            the device.
     \item The device requests introspection data from the authorization server
             to verify the authorization token. This step is optional.
-    \item The device verifies the update and applies it.
+    \item The device verifies the manifest and image and applies the update.
     \item The device's certificate broke as part of the update and it uses a new
-            pre-shared key included in the update to re-enroll. This step is optional.
+            pre-shared key included in the updated image to re-enroll. This step is
+            optional.
     \item The device updates its profile at the server by re-registering.
 \end{enumerate}
 
