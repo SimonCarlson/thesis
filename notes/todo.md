@@ -50,11 +50,15 @@ To do:
 - [x] Move update workflow image early in chapter 3
   - [ ] When explaining the image, dive deep on each concept
     - [ ] Also think in terms of what is needed to implement a certain role (what does an operator/server/device implementation need?)
-- [ ] More descriptive chapter/section titles
+- [x] More descriptive chapter/section titles
 - [ ] Think of where to introduce the manifest used in the thesis
   - [ ] Stick to SUIT 100% or propose changes? Does everything make sense? No options because of easier parsing?
 - [ ] Show architecture instantiations with concrete use cases
 - [ ] New chapters (can be short):
-  - [ ] Chapter containing at least one profile
+  - [ ] Chapter containing at least one profile (DTLS, OSCORE)
   - [ ] Make the life cycle its own chapter
+- [ ] Read ACE, focus on:
+  - [ ] Scope
+  - [ ] Proof-of-possession
+  - [ ] Introspection
 

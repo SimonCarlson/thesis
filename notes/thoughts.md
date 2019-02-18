@@ -27,4 +27,5 @@ The architecture needs to account for: roles, key distribution and management, m
 # Prototypes
 
 Maybe make two small prototypes, one DTLS and one OSCORE without using tokens to compare their efficency
-Then make a "larger" proof-of-concept implementation using tokens
+~~Then make a "larger" proof-of-concept implementation using tokens~~
+Prototypes should make assumptions about protocols, tokens, and certificates as they have already been evaluated. Instead try to get a working connection and measure radio duty cycles of the device and packet loss. Also, dummy update handler since upgrading images does not affect network traffic? Still energy consuming so is interesting.
