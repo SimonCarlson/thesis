@@ -98,7 +98,7 @@ such as TCP, which would not work well on unreliable networks as previously disc
 main issues with using TLS over unreliable networks is that TLS decryption is dependant on
 previous packets, meaning the decryption of a packet would fail if the previous packet was
 not received. In addition, the TLS handshake procedure assumes all handshake messages are
-delivered reliably which is rarely the case in IoT networks.
+delivered reliably which is rarely the case in IoT networks using UDP.
 
 DTLS solves this by banning stream ciphers, effectively making decryption an independent
 operation between packets, as well as adding explicit sequence numbers. Furthermore, DTLS
@@ -123,13 +123,10 @@ in order to agree on a shared premaster secret. The parties authenticate each ot
 public key encryption, generate a shared master secret based on the premaster secret, and
 finally verifies that their peer has the correct security parameters.
 
-The DTLS handshake adds to this a stateless cookie exchange to prevent DoS attacks, some
-modifications to the handshake header to make communication over UDP possible, and
+The DTLS handshake adds to this a stateless cookie exchange to complicate DoS attacks,
+some modifications to the handshake header to make communication over UDP possible, and
 retransmission timers since the communication is unreliable. Otherwise the DTLS handshake
-is as the TLS handshake. Since the (D)TLS handshake assumes asymmetric cryptography, and
-the SUIT standard does as well as explained in Section~\ref{ssec:architecture}, devices
-must be able to enroll for certificates. EST-coaps is an enrollment protocol designed for
-use over CoAPs, and is introduced in Section~\ref{ssec:est-coaps}.
+is as the TLS handshake.
 
 \subsection{CoAP}
 \label{ssec:coap}
@@ -179,7 +176,7 @@ client meaning they can always find a suitable block size, making the mechanism 
 flexible. Another option of interest is the observe option, which allows a client to be
 notified by the server when a particular resource changes. This option can be used in a
 pull or hybrid update architecture, meaning the device does not have to continuously poll
-the server for a new manifest.
+the server for a new update.
 
 \subsection{EST-coaps}
 \label{ssec:est-coaps}
@@ -214,11 +211,11 @@ authorization tokens is a scalable and configurable way of achieving that.
 \label{sec:suit}
 The IETF Software Updates for Internet of Things (SUIT) working group aims to define a
 firmware update solution for IoT devices that is interoperable and non-proprietary
-\parencite{suit}. The working group does not however try to define new transport or
-discovery mechanism, making their proposal agnostic of any particular technology. The
-solution shall be usable on Class 1 devices, defined by ~10 KiB RAM and ~100 KiB code size
-\parencite{rfc7228}. The solution may be applied to more powerful devices, such as the one
-used in this thesis described in Section~\ref{ssec:firefly}.
+\parencite{suit}. The working group does not however try to define new transport,
+discovery, or security mechanisms making their proposal agnostic of any particular
+technology. The solution shall be usable on Class 1 devices, defined by ~10 KiB RAM and
+~100 KiB code size \parencite{rfc7228}. The solution may be applied to more powerful
+devices, such as the one used in this thesis described in Section~\ref{ssec:firefly}.
 
 Section~\ref{ssec:architecture} presents the SUIT architecture and
 Section~\ref{ssec:information-model} presents the SUIT information model.
@@ -250,9 +247,7 @@ requirements this architecture should have:
             The mechanism should not assume a particular technology is used to distributed
             manifests and images, but instead be able to be carried over different
             mediums. This means decisions about formats and distribution methods must not
-            rely on features of a particular technology. This thesis will propose a
-            technology agnostic update architecture and implement a prototype of it using
-            a DTLS/CoAP stack.
+            rely on features of a particular technology.
     \item Friendly to broadcast delivery:\\
             The mechanism should be broadcast friendly, meaning the mechanism can not be
             reliant on security on the transport layer or below. Also, devices receiving

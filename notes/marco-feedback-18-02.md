@@ -7,14 +7,14 @@ considered as related work.
 Chapter 1.1
 The focus of SUIT is actually on updating FW only, not generic SW
 (see WG charter).
-On top of what you say, SUIT does not define any new security
-mechanism either.
+~~On top of what you say, SUIT does not define any new security~~
+~~mechanism either.~~
 
 Chapter 1.1.2 and 1.1.3
-This seems to suggest an incarnation/instance of the SUIT
-architecture, i.e. with exact communication and security protocols.
-This seems to be what is going to be brought on top of SUIT as
-baseline.
+~~This seems to suggest an incarnation/instance of the SUIT~~
+~~architecture, i.e. with exact communication and security protocols.~~
+~~This seems to be what is going to be brought on top of SUIT as~~
+~~baseline.~~
 
 Chapter 2.1
 When you discuss congestion control, you can definely mention the
@@ -24,41 +24,41 @@ You can also mention OSCORE as alternative to DTLS for the IoT stack
 <https://tools.ietf.org/html/draft-ietf-core-object-security>
 
 Chapter 2.1.2
-"The TLS handshake procedure assumes all handshake messages are
-delivered reliably which is rarely the case in IoT networks." is
-true, but just because you usually use UDP. CoAP can actually run
-also over TCP (see RFC 8323), and in that case it would be fine to
-use TLS rather than DTLS.
+~~"The TLS handshake procedure assumes all handshake messages are~~
+~~delivered reliably which is rarely the case in IoT networks." is~~
+~~true, but just because you usually use UDP. CoAP can actually run~~
+~~also over TCP (see RFC 8323), and in that case it would be fine to~~
+~~use TLS rather than DTLS.~~
 You may mention RFC 7925 as a profile of TLS/DTLS for the IoT.
 "The parties authenticate each other via public key encryption, ..."
 is only one possible case. They can instead go for a pure pre-shared
 key approach. Also, if they go for public key encryption, client
 authentication is optional.
-"... cookie exchange to prevent DoS attacks ..." would better say
-"to complicate". See especially:
-<http://soda.swedishict.se/6010/1/IJIS_paper.pdf>
-<https://tools.ietf.org/html/draft-tiloca-tls-dos-handshake>
-"Since the (D)TLS handshake assumes asymmetric cryptography, ..." ,
-see above.
+~~"... cookie exchange to prevent DoS attacks ..." would better say~~
+~~"to complicate". See especially:~~
+~~<http://soda.swedishict.se/6010/1/IJIS_paper.pdf>~~
+~~<https://tools.ietf.org/html/draft-tiloca-tls-dos-handshake~~>
+~~"Since the (D)TLS handshake assumes asymmetric cryptography, ..." ,~~
+~~see above.~~
 
 Chapter 2.1.3
 When you discuss congestion control, you can definely mention the
 IETF work Cocoa
 <https://tools.ietf.org/html/draft-ietf-core-cocoa-03>
-"poll the server for a new manifest" would better say "pull the
-server for a new firmware/software update", as you have not
-introduced the concept of (SUIT) manifest yet.
+~~"poll the server for a new manifest" would better say "pull the~~
+~~server for a new firmware/software update", as you have not~~
+~~introduced the concept of (SUIT) manifest yet.~~
 
 Chapter 2.2
-SUIT is not devoted to any particular security solution either.
-However, it sets high-level security requirements (as you say later
-in Section 2.2.1).
+~~SUIT is not devoted to any particular security solution either.~~
+~~However, it sets high-level security requirements (as you say later~~
+~~in Section 2.2.1).~~
 
 Chapter 2.2.1
-You say: "This thesis will propose a technology agnostic update
-architecture and implement a prototype of it using a DTLS/CoAP
-stack." What is the "agnostic architecture" going to add with
-respect to the SUIT architecture?
+~~You say: "This thesis will propose a technology agnostic update~~
+~~architecture and implement a prototype of it using a DTLS/CoAP~~
+~~stack." What is the "agnostic architecture" going to add with~~
+~~respect to the SUIT architecture?~~
 If you focus on a prototype based on DTLS and CoAP (and I assume
 COSE for end-to-end security between the FW Author and devices), it
 seems you are in fact proposing this as a particular, non-agnostic,
