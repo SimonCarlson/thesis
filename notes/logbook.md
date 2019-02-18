@@ -1,6 +1,8 @@
 18/2-19:
 Brief meeting with Marco, he thought the thesis was well structured but had some issues utilizing the ACE framework properly. Traced back to my poor understanding of the framework, mailed Ludwig some questions. Other than that there were some minor flaws. One important point is: what does my architecture add on top of SUIT? It is still trying to be technology agnostic. I can see my architecture providing a way of adding certificates and tokens as well as profiles, but the working group might not be interested in profiles.
-Marco mentioned my contributions to his and Ludwig's paper would be in the related work area concerning SUIT. It is not a huge, high flying paper but rather a look at existing propositions
+Marco mentioned my possible contributions to his and Ludwig's paper would be in the related work area concerning SUIT. It is not a huge, high flying paper but rather a look at existing propositions
+Produced new figures showing more concrete but somewhat contrived examples
+Included server authorization in update flow image
 
 15/2-19:
 Very constructive meeting with Shahid. Main takeaways: anything that is not in the SUIT standard goes into my architecture. Instantiate architecture in different use cases needing different functionality. Present the update procedure workflow image first, then dig deeper into each part of it. Emphasize new concepts. Someone wanting to implement it should easily know what they are required to do. Make life cycle to its own chapter, it can be short (2-3 pages). Make a profile chapter with at least one but preferrably two profiles (DTLS vs OSCORE?). Implementation to evaluate overhead of update, evaluation of other work has already been done, make assumptions about tokens, certs, protocols etc, measure radio cycles and packet loss.

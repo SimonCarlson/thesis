@@ -53,7 +53,8 @@ To do:
 - [x] More descriptive chapter/section titles
 - [ ] Think of where to introduce the manifest used in the thesis
   - [ ] Stick to SUIT 100% or propose changes? Does everything make sense? No options because of easier parsing?
-- [ ] Show architecture instantiations with concrete use cases
+- [x] Show architecture instantiations with concrete use cases
+  - [ ] Rewrite the examples
 - [ ] New chapters (can be short):
   - [ ] Chapter containing at least one profile (DTLS, OSCORE)
   - [ ] Make the life cycle its own chapter
