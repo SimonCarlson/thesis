@@ -25,16 +25,16 @@ identified:
 
 By putting the five key areas together, Figure~\ref{fig:communication-workflow} shows an
 example update flow in the architecture. Note that where the SUIT standard would
-differentiate between authors of updates and operators, this architecture will for
-simplicity regard them as the same actor. In the same way, the architecture does not
+differentiate between the author of an update and an operators, this architecture will for
+simplicity regard them as the same actor. For the same reason, the architecture will not
 differentiate between device and network operators. An operator is an actor that tracks
-device statuses and prepares, signs, and sends updates to devices. The figure gives a
-brief introduction to the concepts needed to understand the architecture, these concepts
-will be explained in more detail throughout sections
-\ref{sec:roles}-\ref{sec:authorization}. In this particular example the update procedure
-is initiated by the operator by querying the server for device status and then pushing an
-update. The manifest and image are distributed together. The steps can be briefly
-explained as:
+device statuses and prepares, signs, and sends updates to devices.
+Figure~\ref{fig:communication-workflow} gives a brief introduction to the concepts needed
+to understand the architecture, these concepts will be explained in more detail throughout
+sections \ref{sec:roles}-\ref{sec:authorization}. In this particular example the update
+procedure is initiated by the operator by querying the server for device status and then
+pushing an update. The manifest and image are distributed together. The steps can be
+briefly explained as:
 
 \begin{enumerate}
     \setcounter{enumi}{-1}
@@ -46,12 +46,13 @@ explained as:
             order to gain access to applying the update.
     \item The signed manifest and image are sent to the server with the authorization
             token.
-    \item The server requests an authorization token from the authorization server.
+    \item The server requests an authorization token from the authorization server in
+            order to gain access to applying the update.
     \item The signed manifest and image are sent with the server's authorization token to
             the device.
     \item The device requests introspection data from the authorization server
             to verify the authorization token. This step is optional.
-    \item The device verifies the manifest and image and applies the update.
+    \item The device decrypts and verifies the manifest and image and applies the update.
     \item The device's certificate broke as part of the update and it uses a new
             pre-shared key included in the updated image to re-enroll. This step is
             optional.
@@ -66,7 +67,7 @@ communicate and shows an example workflow of communicating an update.
 Section~\ref{sec:authorization} describes the purpose of issuing authorization tokens, how
 devices can use them, and who is to be authorized. Section~\ref{sec:upgrading} discusses
 different means of handling the payload when applying an update.
-Section~\ref{ssec:use-cases-examples-topologies} shows the architecture applied to
+Finally Section~\ref{ssec:use-cases-examples-topologies} shows the architecture applied to
 different use cases.
 
 \section{Roles of Devices, Servers, and Operators}
