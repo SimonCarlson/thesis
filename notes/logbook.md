@@ -1,3 +1,8 @@
+19/2-19:
+Alarm didn't go off for some reason. Working from home instead
+I want to mention the four different tokens suggested by Marco. How do I cite that? It is not my idea originally.
+
+
 18/2-19:
 Brief meeting with Marco, he thought the thesis was well structured but had some issues utilizing the ACE framework properly. Traced back to my poor understanding of the framework, mailed Ludwig some questions. Other than that there were some minor flaws. One important point is: what does my architecture add on top of SUIT? It is still trying to be technology agnostic. I can see my architecture providing a way of adding certificates and tokens as well as profiles, but the working group might not be interested in profiles.
 Marco mentioned my possible contributions to his and Ludwig's paper would be in the related work area concerning SUIT. It is not a huge, high flying paper but rather a look at existing propositions

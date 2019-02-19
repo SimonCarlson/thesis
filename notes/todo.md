@@ -49,7 +49,7 @@ To do:
   - [ ] Is there a benchmark of how much ACE demands from a device?
 - [x] Move update workflow image early in chapter 3
   - [ ] When explaining the image, dive deep on each concept
-    - [ ] Also think in terms of what is needed to implement a certain role (what does an operator/server/device implementation need?)
+    - [ ] Also think in terms of what is needed to implement a certain role (what does a.n operator/server/device implementation need?)
 - [x] More descriptive chapter/section titles
 - [ ] Think of where to introduce the manifest used in the thesis
   - [ ] Stick to SUIT 100% or propose changes? Does everything make sense? No options because of easier parsing?
