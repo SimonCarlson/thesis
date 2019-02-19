@@ -167,7 +167,7 @@ server, which then forwards them to a device. The signing ensures end-to-end sec
 images and manifests between operators and devices. Authorization is further discussed in
 Section~\ref{sec:authorization}.
 
-Like a list of servers introduced in Section~\ref{ssec:what-is-a-server}, devices also
+Like a list of servers introduced in Section~\ref{ssec:what-is-a-device}, devices also
 need a list of operators. This is because if an operator wishes to send a manifest
 directly to a device, the device needs to be aware of the operator and permit traffic from
 that operator. Just like with mapping devices to servers, devices can receive manifests
@@ -182,19 +182,19 @@ again the point is to prepare for as many different scenarios as possible and cr
 flexible architecture.
 
 Operators need a way of creating manifests in order to update devices. In order to create
-a manifest they must be aware of which devices are going to be updates and what firmware
+a manifest they must be aware of which devices are going to be updated and what firmware
 versions they are using. This information is held by the server in form of device
-profiles. An operator can query the server, selecting the devices of interest based on
-vendor or class ID or possibly firmware version. As the manifest contains data difficult
-for humans to craft such as image hash digest and sequence numbers possibly in the form of
-timestamps, operators should be able to provide information such as manifest version,
-vendor and class IDs, firmware version, and URL to a program which then generates,
-encodes, and signs the manifest form them. 
+profiles. An operator can query the server selecting the devices of interest based on
+vendor or class ID or possibly firmware version. 
 
-Such a program can also sign the image and send the manifest and image without further
-intervention from the operator, this is implementation specific. The point is operators
-need help from the server when deciding about which devices to update, and should be given
-help filling in the details of the manifest to ensure its correctness.
+As the manifest contains data difficult for humans to craft such as image hash digest and
+sequence numbers possibly in the form of timestamps, operators should be able to provide
+information such as manifest version, vendor and class IDs, firmware version, and URL to a
+program which then generates, encodes, and signs the manifest for them. Such a program can
+also sign the image and send the manifest and image without further intervention from the
+operator, this is implementation specific. The point is operators need help from the
+server when deciding about which devices to update, and should be given help filling in
+the details of the manifest to ensure its correctness.
 
 As with servers, the essence of being an operator can be captured in a few points:
 
