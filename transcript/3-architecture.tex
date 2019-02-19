@@ -26,9 +26,9 @@ identified:
 By putting the five key areas together, Figure~\ref{fig:communication-workflow} shows an
 example update flow in the architecture. Note that where the SUIT standard would
 differentiate between the author of an update and an operators, this architecture will for
-simplicity regard them as the same actor. For the same reason, the architecture will not
-differentiate between device and network operators. An operator is an actor that tracks
-device statuses and prepares, signs, and sends updates to devices.
+simplicity regard them as the same actor, the operator. For the same reason, the
+architecture will not differentiate between device and network operators. An operator is
+an actor that tracks device statuses and prepares, signs, and sends updates to devices.
 Figure~\ref{fig:communication-workflow} gives a brief introduction to the concepts needed
 to understand the architecture, these concepts will be explained in more detail throughout
 sections \ref{sec:roles}-\ref{sec:authorization}. In this particular example the update
@@ -238,7 +238,23 @@ needs to have the certificate of the CA it is enrolling with or some other CA fu
 the chain of trust. By verifying the signature on the newly enrolled certificate with the
 CAs own certificate, a device can be certain they are using the correct keys.
 
-When applying updates, certificates might not be valid anymore. This is implementation
+There are options concerning how many key pairs a device should have. Device-to-device
+communication might occur in the constrained network depending on the applications running
+and it would also require asymmetric cryptography for identification. Devices receiving
+updates might communicate with servers or operators outside the contrained network. If the
+same key pair is used for device-to-device communication and updates and an attacker gets
+ahold of that key they can use it both inside and outside the constrained network. Using
+the same key pair for device-to-device communication and updates makes the consequences of
+losing keys greater. 
+
+Some devices might not be able to handle different key pairs and therefore certificates,
+either as a result of their constrained memory sizes or as a consequence of not having
+access to abstractions such as a file system. Using the same key pair for all kinds of
+device communication is acceptable but should be carefully considered. If many key pairs
+can be used on the same device, an implementor should consider the granularity of the key
+pairs' scope; should they be used per device, per service, or per application?
+
+After applying updates, certificates might not be valid anymore. This is implementation
 dependant and might not always be a problem, but the architecture should be prepared for
 these situations. In the case an update breaks a certificate, the certificate cannot be
 used for communication and thus the device cannot use it to re-enroll either. In this
@@ -313,10 +329,6 @@ servers must be able to initiate contact with devices.
 
 \section{Update Procedure Authorization}
 \label{sec:authorization}
-% TODO: Discuss the 4 different kinds of tokens, when they are used, and why. When talking
-% about who needs to authorize [try to] explain the issues with proof-of-possession keys
-% and verifying the holder of the key when forwarding messages and that it does not work.
-% Instead introduce a token per hop.
 A flexible architecture enables different configurations of servers, operators, and
 devices. An operator might be authorized to update all parts of all devices, or be
 constrained to updating a specific piece of functionality for a subset of the devices.
@@ -340,12 +352,14 @@ client is allowed the resource.
 \end{figure}
 
 In the context of the update architecture, the client would be a party needing to
-authorize themselves, i.e. an operator or server. The access token would have to be of a
-lightweight variant since they are to be used on constrained devices, but which variant is
-implementation specific. Tokens will be sent with updates (signed manifests and images) to
-devices and the resource sought for is the ability to update the device. The device will
-thus not respond with a particular resource, but instead if the token is valid recognize
-the originator of the update as an authorized one and proceed with the update.
+authorize themselves, i.e. a device, operator, or server. The access token would have to
+be of a lightweight variant since they are to be used on constrained devices, but which
+variant is implementation specific. Tokens will be sent with signed manifests and images
+to devices and the resource sought for is the ability to update the device. The device
+will thus not respond with a particular resource as in Figure~\ref{fig:ace-flow}, but
+instead if the token is valid recognize the originator of the update as an authorized one
+and proceed with the update. 
+
 Introspection is an interesting feature of ACE since it requires less from the device
 concerning validating tokens. Instead of doing everything on its own, the device can ask
 the server for additional information making the validation procedure easier. This however
@@ -354,23 +368,41 @@ introspection or not is yet again an implementation issue, but authorization ser
 should be both enrolled and reachable for devices to send introspection requests if
 necessary.
 
-Who is supposed to authorize? As updates will be sent from operators through servers to
-devices, the devices need to know the originator of an update is authorized to issue the
-update. The proposition is to only require operators to authorize. No matter how updates
-are initiated or distributed (pull vs push and manifest and image together vs separately),
-updates at some point must be crafted, signed, and sent by an operator. The operator is
-making the decisions about updating, and thus must authorize these decisions through
-tokens. Servers deliver the updates to devices, but do so as a relay for operators as
-well as acting as repositories for images and device profiles. The messages forwarded by
-servers will contain the authorization token granted to an operator. This token can in
-addition to authorizing the update on a device be used by the server to authorize the
-usage of the server by the operator. 
+Who is supposed to authorize? Devices will only allow communication from trusted sources
+specified in predetermined whitelists of servers and operators. These trusted servers and
+operators must be authorized to access the resources of the device (in this case, the
+update mechanism). This access control is granted through authorization tokens. Frameworks
+such as OAuth and ACE use proof-of-possession tokens that are bound to a cryptographic
+key. When receiving a proof-of-possession token, a receiver must verify the key bound to
+the token is held by the client sending the token. This means that if an operator sends an
+update with a token to a server which forwards the update and token to a device, the
+device must be able to verify with the operator that it holds the key bound to the token.
+The device will in essence not be able to verify this as it received the message from the
+server, and not the operator.
 
-Not requiring servers to authorize should not pose any issues as the update must always be
-prepared in a previous step by an operator that authorizes. Also, it makes the flow of
-applying an update easier by not needing and update server to communicate with an
-authorization server. Requiring update servers to authorize would not add any security to
-the devices as the update already will be shipped with a token authorizing the update.
+In order to remedy this, the operator's authorization token will be used to authorize the
+communication with the server and then terminate. If the token is valid, the server itself
+will ask for a new token which is used for transporting the update to the device. The
+device can then verify the token's key with the server which should be the holder of that
+key. But what about operators sending manifests directly to devices and devices pulling
+updates from the server? There are four scenarios where tokens must be requested from each
+of the three parties:
+
+\begin{itemize}
+    \item When an operator sends a signed image (and possibly manifest) to a server
+    \item When an operator send a signed manifest to a device
+    \item When a server sends a signed image (and possibly manifest) to a device
+    \item When a device pulls an update from a server or wants to register
+\end{itemize}
+
+It is clear that all parties must be able to reach the authorization server. A device
+could also have a secondary reason for doing so which is introspection requests when
+verfifying the token. If the verification process is complex and the device very
+constrained, additional information can be requested from the authorization server making
+the verification process easier for the device. This would however incur extra
+communication which is a significant energy sink in constrained devices. The trade off
+between verifying locally and on the authorization server must be kept in mind when
+implementing an update handler on a device.
 
 \section{Update Handling for Local Upgrades}
 \label{sec:upgrading}
