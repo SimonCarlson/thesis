@@ -69,34 +69,34 @@ consider DTLS or other transport-layer security solutions.
 In Figure 2.3, is "Operator" simply an alias for "Author"?
 
 Chapter 3.4
-About the usage of the ACE framework, you say: "As updates will be
-sent from operators through servers to devices, the devices need to
-know the originator of an update is authorized to issue the update."
-That's definitely required to know, but well in advance through
-early settings and later verifiable by checking the signature of the
-FW image as coming from a trusted Author. It is that signature that
-proves you origination, but the trustworthiness of those sources as
-entitled to originate the content in the first place has to be
-(securely) learned in advance.
-I am not sure that's something that ACE as such can help you with,
-as it is in fact about issuing an Access Token to prove one is
-allowed to access a particular resource with a particular scope at a
-particular host/audience.
-I believe that ACE is still useful to use, although for different
-reasons and in a different way:
-1) On behalf of the owner of the FW Server, you need to provide FW
-Authors with Access Tokens to upload FW images on the FW server.
-2) On behalf of the owner of the FW Server, you need to provide
-devices with Access Tokens to request FW images on the FW server
-(PULL model), or to register and upload new settings/configurations
-of their own on the FW server.
-3) On behalf of the owner of the Device, you need to provide the FW
-Server with an Access Token to provide that Device with FW images
-(PUSH model).
-4) On behalf of the owner of the Device, you need to provide the
-Author with an Access Token to provide that Device with the FW
-manifest, in case of split provisioning of FW manifest directly) and
-FW image (through the FW Server).
+~~About the usage of the ACE framework, you say: "As updates will be~~
+~~sent from operators through servers to devices, the devices need to~~
+~~know the originator of an update is authorized to issue the update."~~
+~~That's definitely required to know, but well in advance through~~
+~~early settings and later verifiable by checking the signature of the~~
+~~FW image as coming from a trusted Author. It is that signature that~~
+~~proves you origination, but the trustworthiness of those sources as~~
+~~entitled to originate the content in the first place has to be~~
+~~(securely) learned in advance.~~
+~~I am not sure that's something that ACE as such can help you with,~~
+~~as it is in fact about issuing an Access Token to prove one is~~
+~~allowed to access a particular resource with a particular scope at a~~
+~~particular host/audience.~~
+~~I believe that ACE is still useful to use, although for different~~
+~~reasons and in a different way:~~
+~~1) On behalf of the owner of the FW Server, you need to provide FW~~
+~~Authors with Access Tokens to upload FW images on the FW server.~~
+~~2) On behalf of the owner of the FW Server, you need to provide~~
+~~devices with Access Tokens to request FW images on the FW server~~
+~~(PULL model), or to register and upload new settings/configurations~~
+~~of their own on the FW server.~~
+~~3) On behalf of the owner of the Device, you need to provide the FW~~
+~~Server with an Access Token to provide that Device with FW images~~
+~~(PUSH model).~~
+~~4) On behalf of the owner of the Device, you need to provide the~~
+~~Author with an Access Token to provide that Device with the FW~~
+~~manifest, in case of split provisioning of FW manifest directly) and~~
+~~FW image (through the FW Server).~~
 Note that (2)(3)(4) can take advantage of the ACE signaling of its
 profiles to indicate the security protocol that the FW server and
 the Device have to use to communicate.

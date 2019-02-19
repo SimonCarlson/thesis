@@ -29,3 +29,9 @@ The architecture needs to account for: roles, key distribution and management, m
 Maybe make two small prototypes, one DTLS and one OSCORE without using tokens to compare their efficency
 ~~Then make a "larger" proof-of-concept implementation using tokens~~
 Prototypes should make assumptions about protocols, tokens, and certificates as they have already been evaluated. Instead try to get a working connection and measure radio duty cycles of the device and packet loss. Also, dummy update handler since upgrading images does not affect network traffic? Still energy consuming so is interesting.
+
+# Key pairs
+
+If the same key pair is used for different services, it becomes more valuable. Losing that key means higher risk.
+Keys for device-to-device communication stay in the constrained network. Keys for update might leave the constrained network when servers and operators identify devices.
+Might be too expensive to have several certificates per device. Also would that make enrollment more difficult, one PSK per key pair?
