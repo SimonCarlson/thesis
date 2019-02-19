@@ -456,48 +456,62 @@ As discussed, operators, servers, and devices can interact in many ways. The arc
 tries to be flexible allowing for different network topologies and configurations. The
 important parts are that devices can enroll and register, all actors have valid
 certificates, and that updates can be authorized. The following examples all assume
-devices are in the maintenance stage of the life cycle, and re-enrollment and updating
+devices are enrolled and registered, and re-enrollment and updating
 profiles are omitted to make the figures clearer.
 
 % TODO: Rewrite use cases, completely new figures
-Figure~\ref{fig:elderly-home} shows an example architecture with one operator, one
-update server, one authorization server, and one device. The operator is capable of
-running the protocols needed to communicate in the constrained network, and can thus
-interact directly with both the device to send manifests and server to send images. An
-architecture like this allows for servers to be distributed within the constrained
-network, possibly as more capable IoT devices.
+Figure~\ref{fig:elderly-home} shows a use case where wearables of patients in an elderly
+home need their operating system updated. A technician from the operating system vendor
+assumes the role of an operator. The technician interacts with an authorization server and
+a dedicated update server to send the signed manifest and image with an authorization
+token. The server accepts the update and stores it for future use. When the device is
+about to pull the update, it first requests an authorization token. The
+authorization server does not handle the protocols used inside the constrained network and
+thus the token request goes through a proxy on the edge of the network. After the device
+has received the token, it pulls the signed manifest and image using the token to
+authorize the pull.
 
 \begin{figure}
-    \caption{An operator communicating directly with machines in the constrained network.}
+    \caption{An operating system vendor technician updates patient wearable in an elderly home.}
     \label{fig:elderly-home}
     \includegraphics{images/use-case-elderly-home.pdf}
 \end{figure}
 
-Figure~\ref{fig:smart-home} shows an operator sending updates entirely through an
-update server. The update server is located outside the constrained network and acts as an
-proxy for the operator to reach the devices. The update is distributed from the server to
-two devices, where one device accepts the update and the other rejects the update since
-the operator was not authorized to apply it to that device.
+In Figure~\ref{fig:smart-home} a technician from a smart lightbulb vendor is updating a
+lightbulb controller in a smart home. The technician requests a token and sends it
+together with the signed manifest and image to a home automation server living on the edge
+of the constrained network. The server requests a token of its own and pushes the updates
+to devices in its network. Both a lightbulb controller, the intended target, and a
+thermostat controller receives the update. The thermostat controller is supposed to only
+accept updates from the thermostat vendor, thus the lightbulb vendor technician is
+unauthorized to perform this update. The thermostat controller rejects the update while
+the lightbulb controller accepts it and updates itself.
 
 \begin{figure}
-    \caption{An operator communicating with an update server that pushes the update to two
-                devices, with one device rejecting it.}
+    \caption{A lightbulb vendor technician updates a lightbulb controller in a smart home,
+                but the thermostat controller rejects it due to authorization issues.}
     \label{fig:smart-home}
     \includegraphics{images/use-case-smart-home.pdf}
 \end{figure}
 
-Figure~\ref{fig:industry} shows a more elaborate topology. It contains one
-operator, one authorization server, two update servers, two devices, and a proxy. The
-update is distributed to both servers, each server forwarding the update to one device
-each. The first device accepts and applies the update. The second device requires more
-information about the authorization token, and thus sends an introspection request. The
-authorization server is located outside the constrained network, and the introspection
-request must go through a proxy in order to reach it.
+The last example shown in Figure~\ref{fig:industry} shows an on-site devops engineer
+wanting to update a critical temperature sensor in an industry plant. The engineer first
+requests a token to send the signed manifest directly to the device and a token to send
+the signed image to the sensor update server. In this case, the update server is a more
+capable IoT device in the constrained network. It needs to request an authorization token
+to push the update to the device but is unable to speak the protocols used by the
+authorization server. The update server instead goes through a proxy to send the token
+request. With the token, the update can be sent to the device.
+
+The device needs to authorize the token, but as it is a very constrained device it cannot
+perform the necessary calculations. The device opts to perform an introspection request
+through the proxy so the authorization server can help verifying the token. After the
+device has received an answer, it can proceed applying the update.
 
 \begin{figure}
-    \caption{An operator pushes updates to two servers forwarding it to one device each. 
-                One device perform an introspection request to validate the authorization 
-                token.}
+    \caption{An on-site devops engineer updates a very constrained, critical temperature
+                sensor in an industry plant. The constrained sensor asks for introspection
+                data in order to verify the update server's token.}
     \label{fig:industry}
     \includegraphics{images/use-case-industry.pdf}
 \end{figure}
@@ -506,9 +520,8 @@ What these three examples have in common is that the operator always resides out
 constrained network, devices always reside within the constrained network, and that
 servers transport updates to devices alongside authorization tokens. Since operators
 reside in traditional networks using traditional protocols such as HTTP over TCP, a proxy
-mechanism may be necessary to communicate with the often UDP based constrained networks.
-The update server can act as a proxy, or a dedicated proxy could be used. If the operator
-has the proper protocols implemented, they could communicate manifests directly to a
-device.
+may be necessary to communicate with the often UDP based constrained networks. The update
+server can act as a proxy, or a dedicated proxy could be used. If the operator has the
+proper protocols implemented, they can communicate manifests directly to a device.
 
 \end{document}
