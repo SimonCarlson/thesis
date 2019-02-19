@@ -72,13 +72,17 @@ different use cases.
 
 \section{Roles of Devices, Servers, and Operators}
 \label{sec:roles}
-This Section~explains the notion of servers, operators, and devices in the architecture
+This section explains the notion of servers, operators, and devices in the architecture
 and their responsibilities. Section~\ref{ssec:what-is-a-server} covers the topic of
 servers, Section~\ref{ssec:what-is-an-operator} covers operators, and
 Section~\ref{ssec:what-is-a-device} briefly covers devices.
 
 \subsection{What Is a Device and What Do They Do?}
 \label{ssec:what-is-a-device}
+% TODO: Implementation needs an update handler that 1) can decrypt the manifest 2) can
+% parse the decrypted manifest 3) can decrypt the image 4) can verify the decrypted
+% manifest 5) can prepare the decrypted image for boot
+% Mention that how to store manifest and image is further discussed later
 Devices are constrained, low-power IoT appliances connected to a constrained network. They
 are running the applications of the network and performs simple tasks such as measurement
 using sensors. The devices communicate wirelessly and must be secured from attackers while
@@ -91,6 +95,10 @@ discussed in sections \ref{sec:key-management}, \ref{sec:communication}, and
 
 \subsection{What Is a Server and What Do They Do?}
 \label{ssec:what-is-a-server}
+% TODO: Implementation needs an endpoint which devices can POST their credentials to that
+% creates a profile. Also some API for querying devices, where an operator can ask for
+% devices of a vendor, of a class of a vendor, of all devices etc. API for devices to poll
+% and get updates.
 Servers are responsible for transporting manifests and images to the devices, acting as
 image repositories, and keeping track of device profiles. After enrollment devices
 register at a server and the server creates a profile for that device. The profile
@@ -133,6 +141,8 @@ points no matter the topology of choice:
 
 \subsection{What Is an Operator and What Do They Do?}
 \label{ssec:what-is-an-operator}
+% TODO: Operators need a way of creating manifests, querying servers, and using the
+% queried device profiles to send updates either directly or through the server.
 Operators are people authorized to upload manifests and images to a server. They can also
 optionally upload manifests directly to a device depending on the architecture. Operators
 prepare manifests and images, signs and transports them with an authorization token to a
@@ -166,7 +176,6 @@ As with servers, the essence of being an operator can be captured in a few point
 % TODO: Consider updates breaking certificates. Why would they? Lack of understanding concerning
 % certificates perhaps
 % Two pairs of keys from one PSK? Are two pairs needed?
-% Keys
 The architecture will, in order to align with the goals of SUIT, be based on asymmetric
 cryptography. The availability of EST-coaps makes this feasible in IoT contexts but other
 enrollment protocols could also be used. This means a \gls{ca} is needed to act as a
@@ -204,7 +213,6 @@ security of future device communication.
 
 \section{Device Profiles and Communication}
 \label{sec:communication}
-% Device profiles
 In heterogeneous networks of IoT devices, each device might sport a specific protocol
 stack. In order to enable different devices to be updated, servers must be aware of how to
 reach these devices. This problem introduces the notion of device profiles containing
@@ -269,6 +277,10 @@ servers must be able to initiate contact with devices.
 
 \section{Update Procedure Authorization}
 \label{sec:authorization}
+% TODO: Discuss the 4 different kinds of tokens, when they are used, and why. When talking
+% about who needs to authorize [try to] explain the issues with proof-of-possession keys
+% and verifying the holder of the key when forwarding messages and that it does not work.
+% Instead introduce a token per hop.
 A flexible architecture enables different configurations of servers, operators, and
 devices. An operator might be authorized to update all parts of all devices, or be
 constrained to updating a specific piece of functionality for a subset of the devices.
