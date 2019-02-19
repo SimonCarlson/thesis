@@ -72,26 +72,28 @@ different use cases.
 
 \section{Roles of Devices, Servers, and Operators}
 \label{sec:roles}
-This section explains the notion of servers, operators, and devices in the architecture
-and their responsibilities. Section~\ref{ssec:what-is-a-server} covers the topic of
-servers, Section~\ref{ssec:what-is-an-operator} covers operators, and
+This section explains the notion of devices, servers, and operators in the architecture,
+their responsibilities, and their functionality. Section~\ref{ssec:what-is-a-server}
+covers the topic of servers, Section~\ref{ssec:what-is-an-operator} covers operators, and
 Section~\ref{ssec:what-is-a-device} briefly covers devices.
 
 \subsection{What Is a Device and What Do They Do?}
 \label{ssec:what-is-a-device}
-% TODO: Implementation needs an update handler that 1) can decrypt the manifest 2) can
-% parse the decrypted manifest 3) can decrypt the image 4) can verify the decrypted
-% manifest 5) can prepare the decrypted image for boot
-% Mention that how to store manifest and image is further discussed later
 Devices are constrained, low-power IoT appliances connected to a constrained network. They
 are running the applications of the network and performs simple tasks such as measurement
 using sensors. The devices communicate wirelessly and must be secured from attackers while
 being able to be updated. They communicate with each other, servers, and operators.
+
 Communication with servers and operators requires the servers and operators know how to
-reach the devices if they want to initiate the contact. Devices must thus register
-profiles at servers, and must be enrolled in order to be trusted. These concerns are
-discussed in sections \ref{sec:key-management}, \ref{sec:communication}, and
-\ref{sec:device-lifecycle}.
+reach the devices if they want to initiate contact. Devices must thus register profiles at
+servers, and must be enrolled in order to be trusted. In order to register a profile at a
+server, the server must offer an API that allows a device to POST its information
+(vendor and class ID as well as version) to the server. 
+
+To properly handle updates a device needs a local update handler. The update handler is
+responsible for decrypting manifests and images, parsing and verifying the manifest, and
+preparing the image for boot. How and where the device stores manifest and image is
+discussed in further detail in Section~\ref{sec:upgrading}.
 
 \subsection{What Is a Server and What Do They Do?}
 \label{ssec:what-is-a-server}
