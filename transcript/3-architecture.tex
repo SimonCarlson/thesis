@@ -90,6 +90,13 @@ servers, and must be enrolled in order to be trusted. In order to register a pro
 server, the server must offer an API that allows a device to POST its information
 (vendor and class ID as well as version) to the server. 
 
+Devices have to trust servers and operators wanting to send them updates. In order to do
+so, devices need predetermined whitelists of servers and operators. The identity of a
+server or operator can be checked using certificates and by then matching against the
+whitelists, communication can be allowed or prohibited. Servers and operators that are
+whitelisted still need to be authorized to perform an update, this is discussed further in
+Section~\ref{sec:authorization}.
+
 To properly handle updates a device needs a local update handler. The update handler is
 responsible for decrypting manifests and images, parsing and verifying the manifest, and
 preparing the image for boot. How and where the device stores manifest and image is
