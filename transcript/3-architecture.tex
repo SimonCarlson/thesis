@@ -104,10 +104,6 @@ discussed in further detail in Section~\ref{sec:upgrading}.
 
 \subsection{What Is a Server and What Do They Do?}
 \label{ssec:what-is-a-server}
-% TODO: Implementation needs an endpoint which devices can POST their credentials to that
-% creates a profile. Also some API for querying devices, where an operator can ask for
-% devices of a vendor, of a class of a vendor, of all devices etc. API for devices to poll
-% and get updates.
 Servers are responsible for transporting manifests and images to the devices, acting as
 image repositories, and keeping track of device profiles. After enrollment devices
 register at a server and the server creates a profile for that device. The profile
@@ -125,6 +121,18 @@ network containing the operator and a constrained network with IoT devices. The 
 could be a more capable IoT device located entirely within the constrained network and be
 contacted through a proxy. The server could be located entirely within the traditional
 network and use a proxy to communicate with devices of the constrained network.
+Section~\ref{sec:use-cases-examples-topologies} shows different use cases, highlighting
+this aspect.
+
+A server must provide an API for a device to register, this can be done by letting the
+device POST vendor and class IDs and version to some endpoint. Furthermore devices must be
+able to pull updates from the server, this also requires some API the device can use for
+querying. Furthermore operators will also be querying the server for statuses of devices.
+This functionality can be more fleshed out as it interacts with a human, and can offer
+functions for retreiving statuses of devices from a certain vendor or class, or devices
+running a certain firmware version. Allowing the operator to filter devices in the network
+while querying is important as IoT networks can contain a large amount of devices, and it
+is imperative to find the ones in critical need of updates first.
 
 % TODO: Does a device need one keypair for each server? Does it need one keypair for all servers?
 A device can be aware of several servers, and different devices can be mapped to different
@@ -142,10 +150,10 @@ points no matter the topology of choice:
 
 \begin{itemize}
     \item The server is enrolled and has a valid certificate
-    \item The server is included in a device's list of servers (meaning it is authorized to
-            send updates to the device)
-    \item An operator can reach the server and is authorized by the server to upload
-            updates
+    \item The server is included in a device's list of servers
+    \item The server can request authorization tokens and be authorized to update a device
+    \item An operator can reach the server and is authorized by the server to query device
+            status and upload updates
 \end{itemize}
 
 \subsection{What Is an Operator and What Do They Do?}
@@ -392,7 +400,7 @@ Manifests should be kept for the update handler to compare sequence numbers, and
 bootloader to verify images.
 
 \section{Use Cases and Example Topologies}
-\label{ssec:use-cases-examples-topologies}
+\label{sec:use-cases-examples-topologies}
 As discussed, operators, servers, and devices can interact in many ways. The architecture
 tries to be flexible allowing for different network topologies and configurations. The
 important parts are that devices can enroll and register, all actors have valid
