@@ -1,6 +1,9 @@
 19/2-19:
 Alarm didn't go off for some reason. Working from home instead
 I want to mention the four different tokens suggested by Marco. How do I cite that? It is not my idea originally.
+Expanded on different key pairs
+Added the different tokens
+Explained the new use cases
 
 
 18/2-19:

@@ -54,7 +54,7 @@ To do:
 - [ ] Think of where to introduce the manifest used in the thesis
   - [ ] Stick to SUIT 100% or propose changes? Does everything make sense? No options because of easier parsing?
 - [x] Show architecture instantiations with concrete use cases
-  - [ ] Rewrite the examples
+  - [x] Rewrite the examples
 - [ ] New chapters (can be short):
   - [ ] Chapter containing at least one profile (DTLS, OSCORE)
   - [ ] Make the life cycle its own chapter
@@ -62,4 +62,5 @@ To do:
   - [ ] Scope
   - [ ] Proof-of-possession
   - [ ] Introspection
+- [ ] Ask Marco about citing his input on different tokens
 
