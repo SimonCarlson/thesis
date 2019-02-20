@@ -1,7 +1,7 @@
 To do:
 
-- [ ] Keep sketching header formats
-- [ ] Expand/improve the presentation
+- [ ] ~~Keep sketching header formats~~
+- [ ] ~~Expand/improve the presentation~~
 - [x] Make sure the background of the thesis has a clear train of though (motivations for using these technologies - how do they solve problems occuring in IoT networks)
 - [x] Make the introduction more fluent and explain the value in updating IoT devices remotely
 - [x] Interconnecting book
@@ -48,7 +48,7 @@ To do:
 - [x] Chapter 3 access control:
   - [ ] Is there a benchmark of how much ACE demands from a device?
 - [x] Move update workflow image early in chapter 3
-  - [ ] When explaining the image, dive deep on each concept
+  - [x] When explaining the image, dive deep on each concept
     - [x] Also think in terms of what is needed to implement a certain role (what does a.n operator/server/device implementation need?)
 - [x] More descriptive chapter/section titles
 - [ ] Think of where to introduce the manifest used in the thesis
@@ -60,7 +60,15 @@ To do:
   - [ ] Make the life cycle its own chapter
 - [ ] Read ACE, focus on:
   - [ ] Scope
-  - [ ] Proof-of-possession
+  - [x] Proof-of-possession
   - [ ] Introspection
-- [ ] Ask Marco about citing his input on different tokens
+- [x] Ask Marco about citing his input on different tokens. <b>"Just discussion, no need to cite, put me in the acknowledgements"</b>
+- [ ] Read a profile document to understand the scope of a profile
+- [ ] Manifest of the architecture
+  - [ ] Use SUIT manifest as described?
+  - [ ] Use elements described in SUIT with different structure? (What does mandatory mean?)
+  - [ ] Make own manifest structure? (Look at Moran's draft)
+- [x] Emphasize concepts when introduced in chapter 3
+- [ ] Look at the usage of the words "firmware" and "software"
+  - [ ] Is SUIT truly only for firmware? Do they also mean software as in applications?
 

@@ -1,3 +1,11 @@
+20/2-18:
+Spoke to Marco about citation, it is not needed.
+Restructured the repo a bit and made READMEs for all directories
+Removed ACE specifics from architecture part
+Emphasized when new concepts are introduced
+Revised actors, authorization, profiles, and upgrading
+
+
 19/2-19:
 Alarm didn't go off for some reason. Working from home instead
 I want to mention the four different tokens suggested by Marco. How do I cite that? It is not my idea originally.
