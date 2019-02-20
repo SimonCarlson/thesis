@@ -5,6 +5,9 @@ Removed ACE specifics from architecture part
 Emphasized when new concepts are introduced
 Revised actors, authorization, profiles, and upgrading
 Wrote a preliminary draft on the life cycle
+Found a CBOR library for constrained devices
+Started pondering about profiles. What should be included?
+"While the main goal for this document is to protect CoAP messages using DTLS 1.2, the information contained in the following sections is not limited to CoAP nor to DTLS itself." RFC 7925. Maybe this is an approach I should take for my thesis? My the main goal would then be to present a DTLS/CoAP based update architecture using EST-coaps for enrollment and constrained ACE tokens for authorization while having it be applicable for other protocols. Or maybe not since Shahid seems more interested in making some kind of superset of SUIT
 
 
 19/2-19:
