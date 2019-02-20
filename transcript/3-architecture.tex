@@ -31,7 +31,7 @@ architecture will not differentiate between device and network operators. An ope
 an actor that tracks device statuses and prepares, signs, and sends updates to devices.
 Figure~\ref{fig:communication-workflow} gives a brief introduction to the concepts needed
 to understand the architecture, these concepts will be explained in more detail throughout
-sections \ref{sec:roles}-\ref{sec:authorization}. In this particular example the update
+sections \ref{sec:roles}-\ref{sec:upgrading}. In this particular example the update
 procedure is initiated by the operator by querying the server for device status and then
 pushing an update. The manifest and image are distributed together. The steps can be
 briefly explained as:
@@ -241,7 +241,7 @@ CAs own certificate, a device can be certain they are using the correct keys.
 There are options concerning how many key pairs a device should have. Device-to-device
 communication might occur in the constrained network depending on the applications running
 and it would also require asymmetric cryptography for identification. Devices receiving
-updates might communicate with servers or operators outside the contrained network. If the
+updates might communicate with servers or operators outside the constrained network. If the
 same key pair is used for device-to-device communication and updates and an attacker gets
 ahold of that key they can use it both inside and outside the constrained network. Using
 the same key pair for device-to-device communication and updates makes the consequences of
@@ -251,7 +251,7 @@ Some devices might not be able to handle different key pairs and therefore certi
 either as a result of their constrained memory sizes or as a consequence of not having
 access to abstractions such as a file system. Using the same key pair for all kinds of
 device communication is acceptable but should be carefully considered. If many key pairs
-can be used on the same device, an implementor should consider the granularity of the key
+can be used on the same device, an implementer should consider the granularity of the key
 pairs' scope; should they be used per device, per service, or per application?
 
 After applying updates, certificates might not be valid anymore. This is implementation
@@ -397,7 +397,7 @@ of the three parties:
 
 It is clear that all parties must be able to reach the authorization server. A device
 could also have a secondary reason for doing so which is introspection requests when
-verfifying the token. If the verification process is complex and the device very
+verifying the token. If the verification process is complex and the device very
 constrained, additional information can be requested from the authorization server making
 the verification process easier for the device. This would however incur extra
 communication which is a significant energy sink in constrained devices. The trade off
@@ -477,18 +477,18 @@ authorize the pull.
     \includegraphics{images/use-case-elderly-home.pdf}
 \end{figure}
 
-In Figure~\ref{fig:smart-home} a technician from a smart lightbulb vendor is updating a
-lightbulb controller in a smart home. The technician requests a token and sends it
+In Figure~\ref{fig:smart-home} a technician from a smart light bulb vendor is updating a
+light bulb controller in a smart home. The technician requests a token and sends it
 together with the signed manifest and image to a home automation server living on the edge
 of the constrained network. The server requests a token of its own and pushes the updates
-to devices in its network. Both a lightbulb controller, the intended target, and a
+to devices in its network. Both a light bulb controller, the intended target, and a
 thermostat controller receives the update. The thermostat controller is supposed to only
-accept updates from the thermostat vendor, thus the lightbulb vendor technician is
+accept updates from the thermostat vendor, thus the light bulb vendor technician is
 unauthorized to perform this update. The thermostat controller rejects the update while
-the lightbulb controller accepts it and updates itself.
+the light bulb controller accepts it and updates itself.
 
 \begin{figure}
-    \caption{A lightbulb vendor technician updates a lightbulb controller in a smart home,
+    \caption{A light bulb vendor technician updates a light bulb controller in a smart home,
                 but the thermostat controller rejects it due to authorization issues.}
     \label{fig:smart-home}
     \includegraphics{images/use-case-smart-home.pdf}
