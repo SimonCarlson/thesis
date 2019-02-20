@@ -4,6 +4,7 @@ Restructured the repo a bit and made READMEs for all directories
 Removed ACE specifics from architecture part
 Emphasized when new concepts are introduced
 Revised actors, authorization, profiles, and upgrading
+Wrote a preliminary draft on the life cycle
 
 
 19/2-19:

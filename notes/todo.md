@@ -57,7 +57,7 @@ To do:
   - [x] Rewrite the examples
 - [ ] New chapters (can be short):
   - [ ] Chapter containing at least one profile (DTLS, OSCORE)
-  - [ ] Make the life cycle its own chapter
+  - [x] Make the life cycle its own chapter
 - [ ] Read ACE, focus on:
   - [ ] Scope
   - [x] Proof-of-possession
