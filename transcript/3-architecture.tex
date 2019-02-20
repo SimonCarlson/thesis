@@ -88,24 +88,25 @@ are running the applications of the network and performs simple tasks such as me
 using sensors. The devices communicate wirelessly and must be secured from attackers while
 being able to be updated. They communicate with each other, update servers, and operators.
 
-Communication with update servers and operators requires the update servers and operators
-know how to reach the devices if they want to initiate contact. Devices must thus register
-profiles at update servers, and must be enrolled in order to be trusted. In order to
-register a profile at a update server, the update server must offer an API that allows a
-device to POST its information (vendor and class ID as well as version) to the update
-server. 
-
 Devices have to trust update servers and operators wanting to send them updates. In order
 to do so, devices need predetermined whitelists of update servers and operators. The
-identity of a update server or operator can be checked using certificates and by then
+identity of an update server or operator can be checked using certificates and by then
 matching against the whitelists, communication can be allowed or prohibited. Update
 servers and operators that are whitelisted still need to be authorized to perform an
 update, this is discussed further in Section~\ref{sec:authorization}.
 
-To properly handle updates a device needs a local update handler. The update handler is
-responsible for decrypting manifests and images, parsing and verifying the manifest, and
-preparing the image for boot. How and where the device stores manifest and image is
-discussed in further detail in Section~\ref{sec:upgrading}.
+Communication with update servers and operators requires the update servers and operators
+know how to reach the devices if they want to initiate contact. Devices must thus register
+profiles at the update servers, and must be enrolled in order to be trusted. In order to
+register a profile at an update server, the update server must offer an API that allows a
+device to POST its information (vendor and class ID as well as version) to the update
+server. How communication is handled and a further explanation of profiles is in
+Section~\ref{sec:communication}.
+
+To properly handle updates a device needs to implement a local update handler. The update
+handler is responsible for decrypting manifests and images, parsing and verifying the
+manifest, and preparing the image for boot. How and where the device stores manifest and
+image is discussed in further detail in Section~\ref{sec:upgrading}.
 
 \subsection{What Is an Update Server and What Do They Do?}
 \label{ssec:what-is-an-update-server}
@@ -169,7 +170,7 @@ points no matter the topology of choice:
 Operators are people authorized to upload manifests and images to an update server. They
 can also optionally upload manifests directly to a device depending on the topology.
 Operators prepare manifests and images, signs and transports them with an authorization
-token to a update server, which then forwards them to a device. The signing ensures
+token to an update server, which then forwards them to a device. The signing ensures
 end-to-end security for images and manifests between operators and devices. Authorization
 is further discussed in Section~\ref{sec:authorization}.
 
