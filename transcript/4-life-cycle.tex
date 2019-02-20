@@ -20,6 +20,9 @@ stage. These stages are discussed in further detail in this section.
     \includegraphics{images/lifecycle.pdf}
 \end{figure}
 
+\subsection{Enrollment and Registering}
+\label{ssec:enrollment-registering}
+
 A factory new device that is to be installed in an IoT network needs some information in
 order to enroll and register at a server. A pre-shared key, CA certificate, vendor and
 class IDs, list of servers and operators, and and endpoint for registration is needed.
@@ -34,6 +37,8 @@ The next stage is registering. The device registers at its designated servers wh
 create a profile for the device. The servers can now reach the device, and the device is
 ready to be updated, and thus proceeds to the maintenance stage.
 
+\subsection{Maintenance}
+\label{ssec:maintenance}
 The maintenance state can be expected to last for several years, and this is where the
 device receives and applies updates. After an update, a device will either move back to
 the enrollment or registration stage. If the certificate is broken after updating, as
