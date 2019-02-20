@@ -118,7 +118,7 @@ This allows the update server to know through which protocols the device can be 
 and which version it should be updated to. Operators, discussed in the next section, send
 signed manifests and images to update servers, and can query them for device status.
 
-Devices should contain a list of update servers and by trusting the certificate authority
+Devices must contain a list of update servers and by trusting the certificate authority
 they can verify update server certificates. An update server is thus any machine that is
 enrolled, has a valid certificate, and is included in the device's list of update servers.
 The reasoning behind this definition is that a standard solution for updates should not
@@ -131,28 +131,37 @@ devices of the constrained network. Section~\ref{sec:use-cases-examples-topologi
 different use cases, highlighting this aspect.
 
 An update server must provide an API for a device to register, this can be done by letting
-the device POST vendor and class IDs and version to some endpoint. Furthermore devices
-must be able to pull updates from the update server, this also requires some API the
-device can use for querying. Furthermore operators will also be querying the update server
-for statuses of devices. This functionality can be more fleshed out as it interacts with a
-human, and can offer functions for retrieving statuses of devices from a certain vendor or
-class, or devices running a certain firmware version. Allowing the operator to filter
-devices in the network while querying is important as IoT networks can contain a large
-amount of devices, and it is imperative to find the ones in critical need of updates
+the device POST vendor and class IDs and version to some registration endpoint.
+Furthermore devices must be able to pull updates from the update server, this also
+requires some API the device can use for querying. The querying could be a GET request
+from the device upon which the update server matches the profile of the device with
+available manifests. The update server should offload the device as much as possible when
+it comes to picking an update as devices will typically have much tougher energy
+constraints. In addition, update servers act as repositories for updates and have much
+more information regarding which update is suitable.
+
+Additionally operators will also be querying the update server for statuses of devices.
+This functionality can be more fleshed out as it interacts with a human being and can
+offer filters for retrieving statuses of devices from a certain vendor or class, or
+devices running a certain firmware version. Allowing the operator to filter devices in the
+network while querying is important as IoT networks can contain a large amount of
+different devices, and it is imperative to find the ones in critical need of updates
 first.
 
 A device can be aware of several update servers, and different devices can be mapped to
-different update servers. This can make device management easier as certain classes of
-devices can be handled by certain update servers. By allowing a device to receive updates
-from several update servers, the update mechanism architecture also displays a form of
-robustness. If one update server is for instance located entirely within the constrained
-network and the connection between that update server and the operator is severed, updates
-can still be distributed through other update servers. If devices are pulling updates,
-they can query the update servers in order of their list of update servers. If updates are
-pushed, devices keep the connection with the update server pushing the update.
+different update servers. Optionally, different devices can be mapped to different
+endpoints of the same physical update server. This can make device management easier as
+certain classes of devices can be handled by certain update servers. By allowing a device
+to receive updates from several update servers, the update mechanism architecture also
+displays a form of robustness. If one update server is for instance located entirely
+within the constrained network and the connection between that update server and the
+operator is severed, updates can still be distributed through other update servers. If
+devices are pulling updates, they can query the update servers in order of their list of
+update servers. If updates are pushed, devices keep the connection with the update server
+pushing the update.
 
-Which machines are allowed to act like update servers can be boiled down to a few important
-points no matter the topology of choice:
+Which machines are allowed to act like update servers can be boiled down to a few
+important points no matter the topology of choice:
 
 \begin{itemize}
     \item An update server is enrolled and has a valid certificate
@@ -168,11 +177,11 @@ points no matter the topology of choice:
 % TODO: Operators need a way of creating manifests, querying update servers, and using the
 % queried device profiles to send updates either directly or through the update server.
 Operators are people authorized to upload manifests and images to an update server. They
-can also optionally upload manifests directly to a device depending on the topology.
-Operators prepare manifests and images, signs and transports them with an authorization
-token to an update server, which then forwards them to a device. The signing ensures
-end-to-end security for images and manifests between operators and devices. Authorization
-is further discussed in Section~\ref{sec:authorization}.
+can also optionally upload manifests directly to a device depending on the network
+topology. Operators prepare manifests and images, signs and transports them with an
+authorization token to an update server, which then forwards them to a device. The signing
+ensures end-to-end security for images and manifests between operators and devices.
+Authorization is further discussed in Section~\ref{sec:authorization}.
 
 Like a list of update servers introduced in Section~\ref{ssec:what-is-a-device}, devices
 also need a list of operators. This is because if an operator wishes to send a manifest
@@ -182,12 +191,12 @@ manifests from several operators and different devices may interact with differe
 operators. 
 
 Mapping devices to different operators creates opportunities to logically divide a network
-between different operators. An example use case is a constrained network supported by
-different vendors where the respective vendors should only be able to service their
-respective devices. It can also create a hierarchy, where certain operators may directly
-interact with devices but other operators must interact with devices through update
-servers. Yet again the point is to prepare for as many different scenarios as possible and
-create a flexible architecture.
+between operators. An example use case is a constrained network supported by different
+vendors where the respective vendors should only be able to service their respective
+devices. It can also create a hierarchy, where certain operators may directly interact
+with devices but other operators must interact with devices through update servers. Yet
+again the point is to prepare for as many different scenarios as possible and create a
+flexible architecture.
 
 Operators need a way of creating manifests in order to update devices. In order to create
 a manifest they must be aware of which devices are going to be updated and what firmware
