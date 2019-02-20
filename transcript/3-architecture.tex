@@ -430,10 +430,9 @@ safely such that an unexpected power cycle does not brick the entire device.
 Still being in the realm of very constrained devices, the bootloader should be as simple
 as possible. This is also a requirement stated by SUIT on the architecture. By decrypting
 and verifying the image at every boot the boot procedure will be secure but quite complex.
-Also if a power cycle occurs during image decryption, the device might not be able to
-recover. Decrypting the image as part of the update mechanism and writing it unencrypted
-to flash would allow for a simpler bootloader, but is less secure as the device would boot
-from an unencrypted image.
+Decrypting the image as part of the update mechanism and writing it unencrypted to flash
+would allow for a simpler bootloader, but is less secure as the device would boot from an
+unencrypted image.
 
 By storing the manifest containing the image digest, unencrypted images can be verified by
 comparing their digest to the one in the manifest. Calculating a digest is less demanding
