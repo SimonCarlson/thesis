@@ -292,14 +292,13 @@ respective update servers so the update servers can create profiles of the devic
 profiles will tell through which protocols to reach a device and what software versions
 the device is using. In order to achieve this, devices must first know which update
 servers to contact. This can be solved through shipping devices with a list of update
-servers. This list can later on be updated like any other software. Furthermore, the
-devices use vendor and class IDs as described in the SUIT information model. The
-information model uses these pieces of information to verify an update is intended for a
-specific device by matching the IDs, but they can also be sent to an update server to tell
-it what kind of device is contacting it. The update server can infer a profile based on
-the IDs it is sent, or simply use the protocols the device chose to contact it. The
-devices also need to be aware of how to register, for instance by POSTing to a specific
-update server endpoint. 
+servers. This list can later on be updated like any other software. Furthermore, the SUIT
+information model uses vendor and class IDs to verify an update is intended for a specific
+device by matching the IDs. These IDs can also be sent to an update server to tell it what
+kind of device is contacting it. The update server can infer a profile based on the IDs it
+is sent, or simply use the protocols the device chose to contact it. The devices also need
+to be aware of how to register, for instance by POSTing to a specific update server
+registration endpoint. 
 
 When updating there are possibilities regarding how the updating process is initiated. An
 operator can query the update server for the status of one or several devices, prepare an
@@ -311,13 +310,13 @@ and updates. Both the pull and push approaches assume the devices are already en
 registered at the update server.
 
 After updating, the device's capabilities might have changed, for instance by having a new
-protocol implemented in software. The version has also changed due to applying an update.
-After an update, a device should notify all its update servers so they can update the
-device profile (or simply discard the old one and generate a new, as if the device
-registered for the first time). This ensures the update servers view of the devices is up
-to date and that communication will always happen through the intended and supported
-protocols. The functionality of registering is the same as when a device is new and thus
-not costly to implement.
+protocol implemented in software. The version of the device will also have changed due to
+applying an update. After applying an update, a device should notify all its update
+servers so they can update the device profile (or simply discard the old one and generate
+a new, as if the device registered for the first time). This ensures the update servers
+view of the devices is up to date and that communication will always happen through the
+intended and supported protocols. The functionality of re-registering is the same as when
+a device is new and thus not costly to implement.
 
 There are alternatives to using device profiles. One alternative is to instead keep a list
 of known protocols implemented by devices in the network, and when pushing updates to a
@@ -369,7 +368,7 @@ communication to allow. This does not mean however that each of the trusted sour
 allowed to apply any update they so wish, they need to provide tokens to prove
 authorization for such resources.
 
-Frameworks like OAuth and ACE use proof-of-possession tokens that are bound to a
+Frameworks like OAuth 2.0 and ACE use proof-of-possession tokens that are bound to a
 cryptographic key. When receiving a proof-of-possession token, a receiver must verify that
 the key bound to the token is held by the client sending the token. This means that if an
 operator sends an update with a token to an update server which forwards the update and
@@ -380,11 +379,11 @@ operator.
 
 In order to remedy this, the operator's authorization token will be used to authorize the
 communication with the update server and then terminate. If the token is valid, the update
-server itself will ask for a new token which is used for transporting the update to the
-device. The device can then verify the token's key with the update server which should be
-the holder of that key. What about when operators send manifests directly to devices and
-when devices pull updates from the update server? There are four scenarios where tokens
-must be requested from the different parties:
+server will store the update then ask for a new token for itself which is used for
+transporting the update to the device. The device can then verify the token's key with the
+update server which should be the holder of that key. What about when operators send
+manifests directly to devices and when devices pull updates from the update server? There
+are four scenarios where tokens must be requested from the different parties:
 
 \begin{itemize}
     \item When an operator sends a signed image (and possibly manifest) to an update
@@ -396,14 +395,15 @@ must be requested from the different parties:
 
 Enforcing authorization is a security concern and the parties must be able to both request
 tokens and verify them. Because proof-of-possession tokens bound to cryptographic keys may
-be used, the tokens should be used for single hops when sending an update. If not, the
+be used, the tokens should be used for single hops when sending an update. If not the
 receiver of such a token will not be able to verify the holder of the key bound to the
 token. Authorization enables operators, update servers, and devices to send and receive
 updates and enables use cases such as differential updates. If a device is running several
-applications and only one of them is supposed to be updates, the update can be authorized
-for that particular application. Updates that affects the entire code of the device, i.e.
-writes an entirely new image, also need to be authorized to be valid as they are changing
-the code of the device.
+applications and an operator is only supposed to update one of them, the scope of the
+update's authorization token can be for that application only. Attempts to update other
+applications would fail due to authorization errors. Updates that affects the entire code
+of the device, i.e. writes an entirely new image, also need to be authorized as they are
+changing the code of the device.
 
 \section{Update Handling for Local Upgrades}
 \label{sec:upgrading}
