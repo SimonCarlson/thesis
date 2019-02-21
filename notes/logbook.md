@@ -3,6 +3,7 @@ Thinking about profiles. Obvious inclusions are choices of protocols for communi
 Found a quote in the SUIT architecture document leading me to believe they do in fact care about both firmware and application software (luckily)
 Trying to figure out how to structure the manifest. Optional elements are optional to implement so thinking of doing them as options like in CoAP and have all mandatory elements in the manifest always, allowing the conditional ones have a zero-code.
 Should the conclusions of the thesis contain security considerations naming threats identified in the suit model the architecture does not currently hinder?
+Spoke to Shahid. Absolutely fine to break out optional elements and only keep mandatory as baseline manifest. Niclas Finne can probably help with how to parse dynamically sized packet elements. Profiles should provide the information needed to run the protocols suggested. "Close to OSCORE for all SUIT things", for parts where SUIT suggests key algorithms etc choose to be close to OSCORE/DTLS. In CoAP there is a 128 bit elliptic curve hash.
 
 20/2-18:
 Spoke to Marco about citation, it is not needed.
