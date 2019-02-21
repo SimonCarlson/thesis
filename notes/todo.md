@@ -71,4 +71,5 @@ To do:
 - [x] Emphasize concepts when introduced in chapter 3
 - [ ] Look at the usage of the words "firmware" and "software"
   - [ ] Is SUIT truly only for firmware? Do they also mean software as in applications?
-
+- [ ] Which hash should be used in the manifest?
+  - [ ] Can you hash with elliptic curve and get smaller digests?
