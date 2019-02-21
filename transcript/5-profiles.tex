@@ -5,6 +5,35 @@
 
 \section{DTLS/CoAP profile}
 \label{sec:dtls-coap-profile}
+This section will introduce a profile for the architecture proposed in the thesis using
+CoAP and DTLS. The section will recommend protocols for secure communication, enrollment,
+and authorization. 
+
+Section~\ref{} bla bla.
+
+\subsection{Operator to Update Server Communication}
+\label{ssec:operator-to-update-server}
+% TODO: Which protocols are used in the profile? Should I present how they are used i.e.
+% message types and examples of transactions?
+
+\subsection{Update Server and Operator to Device Communication}
+\label{ssec:update-server-and-operator-to-device}
+% TODO: Which protocols are used in the profile? Should I present how they are used i.e.
+% message types and examples of transactions?
+% Proposed format of device profiles and how to infer protocols for them?
+
+\subsection{Update Server Endpoints}
+\label{ssec:update-server-endpoints}
+% TODO: Propose common endpoints for registering devices and pulling updates
+% Propose the message formats for those endpoint
+
+\subsection{Enrollment using EST-coaps}
+\label{ssec:enrollment-est}
+% TODO: Motivate the use of EST-coaps, explain how it fits in with the other protocols
+
+\subsection{Authorization using ACE}
+\label{ssec:authorization-ace}
+% TODO: Constraints on token capabilities for constrained devices
 % For when discussing ACE:
 How clients can access a protected resource through authorization tokens is described in
 \parencite{ace} and Figure \ref{fig:ace-flow} shows an adaptation of the protocol flow
@@ -28,5 +57,9 @@ however requires some extra communication which is power consuming for an IoT de
 use introspection or not is yet again an implementation issue, but authorization servers
 should be both enrolled and reachable for devices to send introspection requests if
 necessary.
+
+\subsection{Encoding and Signing}
+\label{ssec:encoding-signing}
+% TODO: CBOR and COSE objects
 
 \end{document}
