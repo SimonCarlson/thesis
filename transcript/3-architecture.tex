@@ -69,9 +69,10 @@ Section~\ref{sec:communication} describes how devices, update servers, and opera
 communicate and shows an example workflow of communicating an update.
 Section~\ref{sec:authorization} describes the purpose of issuing authorization tokens, how
 devices can use them, and who is to be authorized. Section~\ref{sec:upgrading} discusses
-different means of handling the payload when applying an update. Finally
-Section~\ref{sec:use-cases-examples-topologies} shows the architecture applied to
-different use cases.
+different means of handling the payload when applying an update.
+Section~\ref{sec:manifest-format} introduces the manifest format proposed by the
+architecture. Finally Section~\ref{sec:use-cases-examples-topologies} shows the
+architecture applied to different use cases.
 
 \section{Roles of Devices, Update Servers, and Operators}
 \label{sec:roles}
@@ -449,6 +450,17 @@ sequence numbers to ensure devices do not install older, possibly vulnerable ima
 in order to compare sequence numbers the most recent manifest has to be kept around.
 Manifests should be kept for the update handler to compare sequence numbers, and for the
 bootloader to verify images.
+
+\section{Manifest Format}
+\label{sec:manifest-format}
+% TODO: Mention that SUIT does not provide a format specification, only elements that
+% should be included
+% Point out mandatory vs optional, argue for putting optional elements in options
+% structure as in CoAp because of 1) smaller baseline manifest size 2) flexibility to add
+% new elements 3) enable custom manifest elements for niche deployments 4) less to
+% implement, simpler parser
+% Show holistic image of manifest building blocks and how they relate
+% Show packet format with byte sizes
 
 \section{Use Cases and Example Topologies}
 \label{sec:use-cases-examples-topologies}
