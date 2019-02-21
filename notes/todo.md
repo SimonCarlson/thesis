@@ -71,4 +71,5 @@ To do:
 - [x] Emphasize concepts when introduced in chapter 3
 - [x] Look at the usage of the words "firmware" and "software"
   - [x] Is SUIT truly only for firmware? Do they also mean software as in applications? <b>" Firmware Image: The firmware image is a binary that may contain      the complete software of a device or a subset of it.  The firmware      image may consist of multiple images, if the device contains more      than one microcontroller.  The image may consist of a differential      update for performance reasons.  Firmware is the more universal      term.  Both terms are used in this document and are      interchangeable."</b>
-
+- [ ] Which hash should be used in the manifest?
+  - [ ] Can you hash with elliptic curve and get smaller digests?
