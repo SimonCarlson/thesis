@@ -453,14 +453,68 @@ bootloader to verify images.
 
 \section{Manifest Format}
 \label{sec:manifest-format}
-% TODO: Mention that SUIT does not provide a format specification, only elements that
-% should be included
-% Point out mandatory vs optional, argue for putting optional elements in options
-% structure as in CoAp because of 1) smaller baseline manifest size 2) flexibility to add
-% new elements 3) enable custom manifest elements for niche deployments 4) less to
-% implement, simpler parser
-% Show holistic image of manifest building blocks and how they relate
-% Show packet format with byte sizes
+% TODO: Show packet format with byte sizes (not for this chapter but implementation?)
+Introduced in Section~\ref{ssec:information-model}, the manifest provides metadata about
+the update and allows devices to ensure they are the intended recepients of an update and
+that it can be trusted. Installing unauthorized or incorrect payloads can lead to a
+compromised or broken system. The manifest doubles down as a security mechanism preventing
+malicious or mismatched updates while enabling functionality such as running update
+handlers at specific times or describing a differential update. It is important that
+devices are able to parse the manifest efficiently as a large parser goes against the
+goals of SUIT since it can easily become complex and too large to handle for constrained
+devices. To use a simple parser the format itself must be simple.
+
+SUIT mentions elements of the manifest but does not specify a format nor implementation
+examples. When considering a format, certain points should be kept in mind:
+
+\begin{itemize}
+        \item The manifest should be as small as possible
+        \item The manifest should be easy to parse
+        \item It should be possible to add new elements to the manifest as this can enable
+                certain use cases for niche deployments
+\end{itemize}
+
+The manifest must be compact and simple while being flexible enough to allow for new
+additions. This calls for a baseline manifest containing the mission critical information
+that is required in most any update, while severing non-critical information to be
+implemented as options. In order to comply with the SUIT standard, elements that SUIT
+considers mandatory can be places in the baseline manifest and elements SUIT considers
+optional can be placed in the options. A parser implementation will thus always implement
+the functionality needed to parse the mandatory elements while implementing support for
+the optional elements is up to the implementer.
+
+Figure~\ref{fig:manifest-format} shows a schematic view of the manifest format this thesis
+proposes. The baseline manifest contains version ID, sequence number, precursor images,
+dependencies, payload information, key method, conditions, and options. The current option
+types are required image list, component identifier, URIs, aliases, and directives.
+
+\begin{figure}
+    \caption{The proposed manifest format.}
+    \label{fig:manifest-format}
+    %\includegraphics{images/manifest-format.pdf}
+\end{figure}
+
+Some of these elements are singular elements such as version ID and sequence number, they
+are simply numbers that are bound to some upper size depending on packet structure. Their
+sizes are deterministic and they are easy to parse. Other elements, for instance payload
+information and conditions, have dynamic sizes. This is because the amount of information
+needed for one update can differ quite drastically from another update. One update without
+dependencies that is targeted for one specific class of device with no optional elements
+can be described in a very small manifest. This small manifest would have no precursors,
+dependencies, or options. The payload information would contain just one URI/digest pair,
+and there are only two conditions, one vendor ID and one class ID.
+
+Another update that is specifying differential updates for a wide class of devices will
+need to specify much more information in the manifest. There will be several class IDs as
+several classes are targeted. The different classes might not be running the same versions
+of software or firmware and thus several dependencies are listed. Furthermore since
+devices might not be able to reach the same servers, the manifest contains a list of
+alises for the image, causing the manifest to contain many URI/digest pairs. This manifest
+will be larger than the previous one described and the fields of this manifest will have
+much different sizes. The dynamic nature of certain elements must be considered when
+implementing the manifest as the packet structure must be prepared for it. This is
+discussed in Section~\ref{sec:manifest-implementation}. % TODO: Reference section where
+% manifest implementation is shown
 
 \section{Use Cases and Example Topologies}
 \label{sec:use-cases-examples-topologies}
@@ -471,7 +525,6 @@ have valid certificates, and that updates can be authorized. The following examp
 assume devices are enrolled and registered, and re-enrollment and updating profiles are
 omitted to make the figures clearer.
 
-% TODO: Rewrite use cases, completely new figures
 Figure~\ref{fig:elderly-home} shows a use case where wearables of patients in an elderly
 home need their operating system updated. A technician from the operating system vendor
 assumes the role of an operator. The technician interacts with an authorization update
