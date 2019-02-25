@@ -2,6 +2,9 @@
 The profiles will most likely be very small. SUIT does not require very many configurations to be chosen apart from protocols. Key/hash algorithms are the obvious ones.
 Started writing a section about manifest format. 
 I feel manifest format and profiles are the two things left before doing an implementation and evaluating it. Two more weeks for those parts leaves six weeks for implementation before a month of evaluation. Reasonable?
+My initial spec of the manifest format seems sane. I have some arguments as of why I think it is a good format and it covers all elements mentioned in SUIT, so it ought to be good to go
+Unsure about the difference between precursor and dependencies, and why do they mention encrypting the image requires a symmetric key? Is it too large for (feasible) asymmetric encryption?
+Made a schematic image of the manifest format, still technology agnostic. No packet structure
 
 
 21/2-18:
