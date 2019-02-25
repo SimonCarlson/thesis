@@ -51,8 +51,8 @@ To do:
   - [x] When explaining the image, dive deep on each concept
     - [x] Also think in terms of what is needed to implement a certain role (what does a.n operator/server/device implementation need?)
 - [x] More descriptive chapter/section titles
-- [ ] Think of where to introduce the manifest used in the thesis
-  - [ ] Stick to SUIT 100% or propose changes? Does everything make sense? No options because of easier parsing?
+- [x] Think of where to introduce the manifest used in the thesis
+  - [x] Stick to SUIT 100% or propose changes? Does everything make sense? No options because of easier parsing?
 - [x] Show architecture instantiations with concrete use cases
   - [x] Rewrite the examples
 - [ ] New chapters (can be short):
@@ -64,10 +64,10 @@ To do:
   - [ ] Introspection
 - [x] Ask Marco about citing his input on different tokens. <b>"Just discussion, no need to cite, put me in the acknowledgements"</b>
 - [ ] Read a profile document to understand the scope of a profile
-- [ ] Manifest of the architecture
-  - [ ] Use SUIT manifest as described?
-  - [ ] Use elements described in SUIT with different structure? (What does mandatory mean?)
-  - [ ] Make own manifest structure? (Look at Moran's draft)
+- [x] Manifest of the architecture
+  - [x] Use SUIT manifest as described?
+  - [x] Use elements described in SUIT with different structure? (What does mandatory mean?)
+  - [x] Make own manifest structure? (Look at Moran's draft)
 - [x] Emphasize concepts when introduced in chapter 3
 - [x] Look at the usage of the words "firmware" and "software"
   - [x] Is SUIT truly only for firmware? Do they also mean software as in applications? <b>" Firmware Image: The firmware image is a binary that may contain      the complete software of a device or a subset of it.  The firmware      image may consist of multiple images, if the device contains more      than one microcontroller.  The image may consist of a differential      update for performance reasons.  Firmware is the more universal      term.  Both terms are used in this document and are      interchangeable."</b>

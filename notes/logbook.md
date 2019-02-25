@@ -1,5 +1,7 @@
 25/2-18:
 The profiles will most likely be very small. SUIT does not require very many configurations to be chosen apart from protocols. Key/hash algorithms are the obvious ones.
+Started writing a section about manifest format. 
+I feel manifest format and profiles are the two things left before doing an implementation and evaluating it. Two more weeks for those parts leaves six weeks for implementation before a month of evaluation. Reasonable?
 
 
 21/2-18:
