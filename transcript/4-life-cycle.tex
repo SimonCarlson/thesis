@@ -1,8 +1,6 @@
 \documentclass[0-thesis.tex]{subfiles}
 
 \begin{document}
-\section{Device Life Cycle}
-\label{sec:device-lifecycle}
 % Summarize earlier chapters in a life cycle view
 The five key areas discussed in sections \ref{sec:roles}-\ref{sec:upgrading} are all part
 of the life cycle of a device. From the moment a new device is deployed in a network to
@@ -13,7 +11,7 @@ Figure~\ref{fig:lifecycle} summarizes the life cycle of a device from an update
 perspective. The figure shows the different stages of a device from being manufactured to
 ending its service. The figure also contains annotations showing what needs to be done in
 each stage. These stages are discussed in further detail in this sections
-\ref{ssec:predetermined-information}-\ref{ssec:maintenance}. 
+\ref{sec:predetermined-information}-\ref{sec:maintenance}. 
 
 \begin{figure}
     \caption{The life cycle of a device.}
@@ -26,8 +24,8 @@ short lived compared to certificates and profiles to be of concern in the life c
 Requesting and verifying tokens would happen in the maintenance stage when a device is
 being updated, but it is a level of detail too fine for the life cycle model.
 
-\subsection{Predetermined Information}
-\label{ssec:predetermined-information}
+\section{Predetermined Information}
+\label{sec:predetermined-information}
 A factory new device that is to be installed in an IoT network needs to be shipped with
 some information in order to enroll and register at a server and trust future
 communications. A pre-shared key and CA certificate are needed for the device to trust the
@@ -38,8 +36,8 @@ well-known endpoint implemented by all update servers. Lastly, the device needs 
 of operators and update servers in order to trust traffic originating from them. Any
 operator or update server that is not whitelisted is to be ignored.
 
-\subsection{Enrollment and Registering}
-\label{ssec:enrollment-registering}
+\section{Enrollment and Registering}
+\label{sec:enrollment-registering}
 With the required information a device can enter the enrollment stage. Devices obtain
 certificates by enrolling at the CA, which as previously mentioned requires a pre-shared
 key and CA certificate. After obtaining a certificate the device can be trusted by the
@@ -53,8 +51,8 @@ upon a successful update. Update servers must handle devices re-registering by e
 updating the relevant parts of the profile or creating an entirely new one. The approach
 chosen is implementation dependant.
 
-\subsection{Maintenance}
-\label{ssec:maintenance}
+\section{Maintenance}
+\label{sec:maintenance}
 After a device is enrolled and registered it enters the maintenance stage. The maintenance
 stage can be expected to last for several years and this is where the device performs its
 duties as well as receives and applies updates. After an update, a device will either move
