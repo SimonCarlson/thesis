@@ -223,14 +223,15 @@ Section~\ref{ssec:information-model} presents the SUIT information model.
 
 \subsection{Architecture}
 \label{ssec:architecture}
-There is an Internet Draft by the SUIT group focusing on the architecture of an IoT update
-mechanism \parencite{suit-architecture}. This draft describes the goals and requirements
-of such an architecture, although makes no mention of any particular technology. The
-overarching goals of the update process is to thwart any attempts to flash unauthorized,
-possibly malicious firmware images as well as protecting the firmware image's
-confidentiality and integrity. These goals reduces the possibility of an attacker either
-getting control over a device or reverse engineering a malicious but valid firmware image
-as an attempt to mount an attack.
+There is an Internet-Draft by the SUIT group focusing on the architecture of an IoT update
+mechanism \parencite{suit-architecture}. Internet-Drafts are works in progress and may be
+altered or obsoleted at any time, the thesis references the architecture draft issued
+January 16 2019. This draft describes the goals and requirements of such an architecture,
+although makes no mention of any particular technology. The overarching goals of the
+update process is to thwart any attempts to flash unauthorized, possibly malicious
+firmware images as well as protecting the firmware image's confidentiality and integrity.
+These goals reduces the possibility of an attacker either getting control over a device or
+reverse engineering a malicious but valid firmware image as an attempt to mount an attack.
 
 In order to accept an image and update itself, a device must make several decisions about
 the validity and suitability of the image. The information needed comes in form of a
@@ -313,15 +314,17 @@ that an update mechanism must support both types.
 
 \subsection{Information Model}
 \label{ssec:information-model}
-The Internet Draft for the SUIT information model presents the information needed in the
-manifest to secure a firmware update mechanism \parencite{suit-information-model}. A
-manifest is needed for a device to make a decision about whether or not to update itself,
-and if the image related to the manifest is valid and its integrity ensured. The draft
-also presents threats, classifies them according to the STRIDE model, and presents
-security requirements that map to the threats \parencite{stride}. Finally it presents use
-cases and maps usability requirements to the use cases in order to motivate the presence
-of each manifest element. Note that the information model does not discuss threats outside
-of transporting the updates, such as physical attacks.
+The Internet-Draft for the SUIT information model presents the information needed in the
+manifest to secure a firmware update mechanism \parencite{suit-information-model}. As
+mentioned in the previous section, Internet-Drafts are works in progress and the thesis
+references the information model draft from January 18 2019. A manifest is needed for a
+device to make a decision about whether or not to update itself, and if the image related
+to the manifest is valid and its integrity ensured. The draft also presents threats,
+classifies them according to the STRIDE model, and presents security requirements that map
+to the threats \parencite{stride}. Finally it presents use cases and maps usability
+requirements to the use cases in order to motivate the presence of each manifest element.
+Note that the information model does not discuss threats outside of transporting the
+updates, such as physical attacks.
 
 The proposed mandatory and recommended manifest elements and their brief motivations can
 be seen in Table~\ref{tab:manifest-elements}. For the optional elements and more detailed
