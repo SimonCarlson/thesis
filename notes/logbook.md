@@ -1,5 +1,8 @@
 26/2-19:
 I'm not sure git branches are worth using in this project. Notes and the rendered thesis are a hassle to handle between branches and they don't really add anything since I have complete control over the repo anyway
+Added acknowledgements placeholder
+Separated RISE supevisor from KTH supervisor
+Added keywords in Swedish as well
 
 25/2-19:
 The profiles will most likely be very small. SUIT does not require very many configurations to be chosen apart from protocols. Key/hash algorithms are the obvious ones.
