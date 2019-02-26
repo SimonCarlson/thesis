@@ -455,7 +455,7 @@ bootloader to verify images.
 \label{sec:manifest-format}
 % TODO: Show packet format with byte sizes (not for this chapter but implementation?)
 Introduced in Section~\ref{ssec:information-model}, the manifest provides metadata about
-the update and allows devices to ensure they are the intended recepients of an update and
+the update and allows devices to ensure they are the intended recipients of an update and
 that it can be trusted. Installing unauthorized or incorrect payloads can lead to a
 compromised or broken system. The manifest doubles down as a security mechanism preventing
 malicious or mismatched updates while enabling functionality such as running update
@@ -509,7 +509,7 @@ need to specify much more information in the manifest. There will be several cla
 several classes are targeted. The different classes might not be running the same versions
 of software or firmware and thus several dependencies are listed. Furthermore since
 devices might not be able to reach the same servers, the manifest contains a list of
-alises for the image, causing the manifest to contain many URI/digest pairs. This manifest
+aliases for the image, causing the manifest to contain many URI/digest pairs. This manifest
 will be larger than the previous one described and the fields of this manifest will have
 much different sizes. The dynamic nature of certain elements must be considered when
 implementing the manifest as the packet structure must be prepared for it. 
