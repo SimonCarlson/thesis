@@ -110,7 +110,8 @@
 \renewenvironment{abstract}{\section*{\abstractname}}{\clearpage}
 
 % Define commands for setting the user definable parts of the title page
-\newcommand{\supervisor}[1]{\def\@supervisor{#1}}
+\newcommand{\kthsupervisor}[1]{\def\@kthsupervisor{#1}}
+\newcommand{\risesupervisor}[1]{\def\@risesupervisor{#1}}
 \newcommand{\examiner}[1]{\def\@examiner{#1}}
 \let\@secondauthor\@empty
 \newcommand{\secondauthor}[1]{\def\@secondauthor{#1}}
@@ -178,7 +179,8 @@
   \else
     \@programme\\
     \ifx\@date\@empty\relax\else Date: \@date\\\fi
-    Supervisor: \@supervisor\\
+    Supervisor at KTH: \@kthsupervisor\\
+    Supervisor at RISE: \@risesupervisor\\
     Examiner: \@examiner\\
     \ifx\@principal\@empty\relax\else Principal: \@principal\\\fi
     \ifx\@alttitle\empty\relax\else Swedish title: %
