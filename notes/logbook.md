@@ -1,4 +1,7 @@
-25/2-18:
+26/2-19:
+I'm not sure git branches are worth using in this project. Notes and the rendered thesis are a hassle to handle between branches and they don't really add anything since I have complete control over the repo anyway
+
+25/2-19:
 The profiles will most likely be very small. SUIT does not require very many configurations to be chosen apart from protocols. Key/hash algorithms are the obvious ones.
 Started writing a section about manifest format. 
 I feel manifest format and profiles are the two things left before doing an implementation and evaluating it. Two more weeks for those parts leaves six weeks for implementation before a month of evaluation. Reasonable?
@@ -6,8 +9,7 @@ My initial spec of the manifest format seems sane. I have some arguments as of w
 Unsure about the difference between precursor and dependencies, and why do they mention encrypting the image requires a symmetric key? Is it too large for (feasible) asymmetric encryption?
 Made a schematic image of the manifest format, still technology agnostic. No packet structure
 
-
-21/2-18:
+21/2-19:
 Thinking about profiles. Obvious inclusions are choices of protocols for communication, enrollment, and authorization. What else? Should I define message types and message exchanges? Endpoints? Format of registration requests and update polling? Key algorithms?
 Found a quote in the SUIT architecture document leading me to believe they do in fact care about both firmware and application software (luckily)
 Trying to figure out how to structure the manifest. Optional elements are optional to implement so thinking of doing them as options like in CoAP and have all mandatory elements in the manifest always, allowing the conditional ones have a zero-code.
@@ -15,7 +17,7 @@ Should the conclusions of the thesis contain security considerations naming thre
 Spoke to Shahid. Absolutely fine to break out optional elements and only keep mandatory as baseline manifest. Niclas Finne can probably help with how to parse dynamically sized packet elements. Profiles should provide the information needed to run the protocols suggested. "Close to OSCORE for all SUIT things", for parts where SUIT suggests key algorithms etc choose to be close to OSCORE/DTLS.
 In CoAP there is a 128 bit elliptic curve hash.
 
-20/2-18:
+20/2-19:
 Spoke to Marco about citation, it is not needed.
 Restructured the repo a bit and made READMEs for all directories
 Removed ACE specifics from architecture part
