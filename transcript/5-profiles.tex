@@ -3,25 +3,23 @@
 \begin{document}
 \label{chap:profiles}
 % TODO: Write short introduction
-This chapter will 
-
-\section{DTLS/CoAP profile}
-\label{sec:dtls-coap-profile}
 When implementing the architecture, one choice of protocols could be using DTLS and CoAP
 for constrained communication between operators or servers and devices. There are existing
 profiles for TLS and DTLS in IoT contexts, see \parencite{rfc7925}. These profiles define
 credential types, error handling, compression and so on for TLS and DTLS. The DTLS/CoAP
 profile of the proposed architecture aims to stay as close as possible to the technologies
 presented in the DTLS IoT profiles while still complying with the requirements of SUIT.
-The DTLS/CoAP profile of the proposed architecture needs to cover four things:
+The DTLS/CoAP profile of the proposed architecture needs to cover three things:
 
 \begin{itemize}
     \item Key algorithms for encrypted communication
     \item Hashing algorithms for image digests
-    \item Encoding of manifest and image
-    \item Encryption of manifest and image
+    \item Encoding and encrypting manifest and image
 \end{itemize}
 
+
+\section{Ciphersuites and Hash Algorithms}
+\label{sec:ciphersuites-hash}
 As the architecture will use both pre-shared keys for enrollment and then certificates,
 credential types for both of these modes must be specified. The CoAP specification
 specifies the ciphersuite TLS\_PSK\_WITH\_AES\_128\_CCM\_8{} to be mandatory to implement
@@ -38,6 +36,8 @@ constrained network such as operators and servers can use HTTP over TLS and thus
 same ciphersuites for all kinds of communication. Since these ciphersuites enforce the use
 of SHA-256 for hashing, SHA-256 can be used to calculate image digests.
 
+\section{Encoding and Encryption of Application Data}
+\label{sec:encoding-encryption}
 For encoding, \gls{cbor} is an efficient binary encoding \parencite{rfc7049}. CBOR aims to
 be a extensible data format providing very small code sizes. It supports simple values as
 well as arrays and maps meaning it is easy to map to and from JSON while being more
@@ -45,8 +45,23 @@ compact than JSON. The use of CBOR also enables the use of \gls{cose}. COSE prov
 encryption for CBOR encoded objects, which in the architecture will be the manifest and
 image.
 
+The architecture does not impose restrictions towards broadcasting updates, but as this
+particular profile is based on the security granted by DTLS it does not support
+broadcasting. DTLS only provides transport layer security which is not compatible with
+broadcasting messages. In order to support broadcasting, OSCORE can be used instead.
+
 % TODO: Asymmetric/symmetric keys for manifest/image?
 
+\gls{oscore} provides end-to-end protection for CoAP messages using COSE. By providing
+end-to-end encryption CoAP message security is not terminated at a proxy or update server
+as with DTLS. This means a compromised proxy or update server cannot be leveraged to
+eavesdrop or manipulate data. The difference between using OSCORE and using COSE objects
+in normal CoAP is that OSCORE protects the entire CoAP message end-to-end while COSE and
+CoAP protects the payloads through COSE signing but not the CoAP message. Without using
+OSCORE, messages are only protected during transport.
+
+\section{Enrollment and Authorization}
+\label{sec:enrollment-authorization}
 For enrollment, EST-coaps is a suitable protocol that can be used to (re)enroll and
 transport certificates or keys in case of server-side key generation
 \parencite{est-coaps}. EST has already been profiled to fit with DTLS. For authorization
@@ -59,8 +74,9 @@ mechanisms used in individual protocol interactions." This fits with the propose
 architecture as all entities involved will need to authorize but will use different
 protocols to communicate. The security of the architecture is however not bound to
 characteristics of any of these protocols, ensuring the architecture is not easily
-attacked.
+attacked. ACE has also been profiled to fit with DTLS \parencite{ace-dtls-profile}.
 
-% TODO: Broadcasting woes
+At the time of writing, there are two Internet-Drafts aiming to specify profiles for ACE
+and EST using OSCORE \parencite{ace-oscore, est-oscore}.
 
 \end{document}
