@@ -2,43 +2,54 @@
 
 \begin{document}
 \label{chap:profiles}
+% TODO: Write short introduction
+This chapter will 
 
 \section{DTLS/CoAP profile}
 \label{sec:dtls-coap-profile}
-This section will introduce a profile for the architecture proposed in the thesis using
-CoAP and DTLS. The section will recommend protocols for secure communication, enrollment,
-and authorization. 
+When implementing the architecture, one choice of protocols could be using DTLS and CoAP
+for constrained communication. There are existing profiles for TLS and DTLS in IoT
+contexts, see \parencite{rfc7925}. These profiles define credential tyes, error
+handling, compression and so on for TLS and DTLS. The DTLS/CoAP profile of the proposed
+architecture aims to stay as close as possible to the technologies presented in the DTLS
+IoT profiles while still complying with the requirements of SUIT. The DTLS/CoAP profile of
+the proposed architecture needs to cover four things:
 
-Section~\ref{} bla bla.
+\begin{itemize}
+    \item Key algorithms for encrypted communication
+    \item Hashing algorithms for image digests
+    \item Encoding of manifest and image
+    \item Encryption of manifest and image
+\end{itemize}
 
-\subsection{Operator to Update Server Communication}
-\label{ssec:operator-to-update-server}
-% TODO: Which protocols are used in the profile? Should I present how they are used i.e.
-% message types and examples of transactions?
+As the architecture will use both pre-shared keys for enrollment and then certificates,
+credential types for both of these modes must be specified. The CoAP specification
+specifices the ciphersuite TLS\_PSK\_WITH\_AES\_128\_CCM\_8{} to be mandatory to implement
+for CoAP \parencite{rfc7252}. For certificates, the (D)TLS profiles in \parencite{rfc7925}
+recommends the use of TLS\_ECDHE\_ECDSA\_WITH\_AES\_128\_CCM\_8{} using the secp256r1
+curve. TLS\_PSK\_WITH\_AES\_128\_CCM\_8{} uses SHA-256 for hashing and
+TLS\_ECDHE\_ECDSA\_WITH\_AES\_128\_CCM\_8{} should support SHA-256 as well \parencite{rfc7251}.
+The same algorithms can be used for pre-shared keys and certificate keys in the update
+architecture, meaning devices that already support CoAP and DTLS do not have to
+reimplement cryptography libraries. Since these ciphersuites enforce the use of SHA-256
+for hashing, SHA-256 can be used to calculated image digests.
 
-\subsection{Update Server and Operator to Device Communication}
-\label{ssec:update-server-and-operator-to-device}
-% TODO: Which protocols are used in the profile? Should I present how they are used i.e.
-% message types and examples of transactions?
-% Proposed format of device profiles and how to infer protocols for them?
-
-\subsection{Update Server Endpoints}
-\label{ssec:update-server-endpoints}
-% TODO: Propose common endpoints for registering devices and pulling updates
-% Propose the message formats for those endpoint
-
-\subsection{Enrollment using EST-coaps}
-\label{ssec:enrollment-est}
-% TODO: Motivate the use of EST-coaps, explain how it fits in with the other protocols
-
-\subsection{Authorization using ACE}
-\label{ssec:authorization-ace}
-% TODO: Constraints on token capabilities for constrained devices
-% For when discussing ACE:
+For encoding, \gls{cbor} is an efficient binary encoding \parencite{rfc7049}. CBOR aims to
+be a extensible data format providing very small code sizes. It supports simple values as
+well as arrays and maps meaning it is easy to map to and from JSON while being more
+compact than JSON. The use of CBOR also enables the use of \gls{cose}. COSE provides
+encryption for CBOR encoded objects, which in the architecture will be the manifest and
+image.
 
 
-\subsection{Encoding and Signing}
-\label{ssec:encoding-signing}
-% TODO: CBOR and COSE objects
+
+% TODO: Asymmetric/symmetric keys for manifest/image?
+
+% TODO: 
+% EST-coaps for enrollment
+% ACE for authorization
+% HTTP/CoAP for application
+% TLS/DTLS for transport
+% Broadcasting woes
 
 \end{document}
