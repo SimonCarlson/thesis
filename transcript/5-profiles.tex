@@ -8,12 +8,12 @@ This chapter will
 \section{DTLS/CoAP profile}
 \label{sec:dtls-coap-profile}
 When implementing the architecture, one choice of protocols could be using DTLS and CoAP
-for constrained communication. There are existing profiles for TLS and DTLS in IoT
-contexts, see \parencite{rfc7925}. These profiles define credential tyes, error
-handling, compression and so on for TLS and DTLS. The DTLS/CoAP profile of the proposed
-architecture aims to stay as close as possible to the technologies presented in the DTLS
-IoT profiles while still complying with the requirements of SUIT. The DTLS/CoAP profile of
-the proposed architecture needs to cover four things:
+for constrained communication between operators or servers and devices. There are existing
+profiles for TLS and DTLS in IoT contexts, see \parencite{rfc7925}. These profiles define
+credential types, error handling, compression and so on for TLS and DTLS. The DTLS/CoAP
+profile of the proposed architecture aims to stay as close as possible to the technologies
+presented in the DTLS IoT profiles while still complying with the requirements of SUIT.
+The DTLS/CoAP profile of the proposed architecture needs to cover four things:
 
 \begin{itemize}
     \item Key algorithms for encrypted communication
@@ -24,15 +24,19 @@ the proposed architecture needs to cover four things:
 
 As the architecture will use both pre-shared keys for enrollment and then certificates,
 credential types for both of these modes must be specified. The CoAP specification
-specifices the ciphersuite TLS\_PSK\_WITH\_AES\_128\_CCM\_8{} to be mandatory to implement
+specifies the ciphersuite TLS\_PSK\_WITH\_AES\_128\_CCM\_8{} to be mandatory to implement
 for CoAP \parencite{rfc7252}. For certificates, the (D)TLS profiles in \parencite{rfc7925}
 recommends the use of TLS\_ECDHE\_ECDSA\_WITH\_AES\_128\_CCM\_8{} using the secp256r1
 curve. TLS\_PSK\_WITH\_AES\_128\_CCM\_8{} uses SHA-256 for hashing and
-TLS\_ECDHE\_ECDSA\_WITH\_AES\_128\_CCM\_8{} should support SHA-256 as well \parencite{rfc7251}.
-The same algorithms can be used for pre-shared keys and certificate keys in the update
-architecture, meaning devices that already support CoAP and DTLS do not have to
-reimplement cryptography libraries. Since these ciphersuites enforce the use of SHA-256
-for hashing, SHA-256 can be used to calculated image digests.
+TLS\_ECDHE\_ECDSA\_WITH\_AES\_128\_CCM\_8{} should support SHA-256 as well
+\parencite{rfc7251}. 
+
+These ciphersuites can be used for pre-shared keys and certificate keys in the update
+architecture, meaning devices that already support CoAP and DTLS do not have to implement
+additional cryptography libraries. Entities communicating with each other outside the
+constrained network such as operators and servers can use HTTP over TLS and thus use the
+same ciphersuites for all kinds of communication. Since these ciphersuites enforce the use
+of SHA-256 for hashing, SHA-256 can be used to calculate image digests.
 
 For encoding, \gls{cbor} is an efficient binary encoding \parencite{rfc7049}. CBOR aims to
 be a extensible data format providing very small code sizes. It supports simple values as
@@ -41,15 +45,22 @@ compact than JSON. The use of CBOR also enables the use of \gls{cose}. COSE prov
 encryption for CBOR encoded objects, which in the architecture will be the manifest and
 image.
 
-
-
 % TODO: Asymmetric/symmetric keys for manifest/image?
 
-% TODO: 
-% EST-coaps for enrollment
-% ACE for authorization
-% HTTP/CoAP for application
-% TLS/DTLS for transport
-% Broadcasting woes
+For enrollment, EST-coaps is a suitable protocol that can be used to (re)enroll and
+transport certificates or keys in case of server-side key generation
+\parencite{est-coaps}. EST has already been profiled to fit with DTLS. For authorization
+tokens, ACE is a fitting protocol. Section 6.4 of \parencite{ace} states that "There may
+be use cases were different profiles of this framework are combined.  For example, an
+MQTT-TLS profile is used between the client and the RS in combination with a CoAP-DTLS
+profile for interactions between the client and the AS.  Ideally, profiles should be
+designed in a way that the security of system should not depend on the specific security
+mechanisms used in individual protocol interactions." This fits with the proposed
+architecture as all entities involved will need to authorize but will use different
+protocols to communicate. The security of the architecture is however not bound to
+characteristics of any of these protocols, ensuring the architecture is not easily
+attacked.
+
+% TODO: Broadcasting woes
 
 \end{document}
