@@ -195,18 +195,25 @@ large sizes of certificates.
 % TODO: Put ACE image here to explain? Better than text?
 \gls{ace} is a framework for authorization and authentication for IoT contexts, based on
 the OAuth 2.0 framework \parencite{ace}. ACE allows for clients in a network to access
-protected resources through authorization tokens. An authorization server is used to
-distribute tokens to clients, which they then pass on to resource servers. If a token is
-valid and the resource requested matches the level of authority associated with the token,
-access to the resource is granted. The framework is flexible regarding topologies, and
-clients can independently verify the validity of tokens or ask the authorization server
-for more information through an introspection request.
+protected resources through authorization tokens. 
 
-The ACE framework can be used to authorize clients in an IoT context. Authorization is
-important and distinct from identification, which can be achieve through for instance a
-PKI. As the architecture proposed in this thesis aims to be standardized it should prepare
-for different parties assuming different roles in the context of updating devices. Using
-authorization tokens is a scalable and configurable way of achieving that.
+A client can request an authorization token from an authorization server and then make a
+request with the token to a resource server. If the token is valid and the resource
+requested matches the level of authority associated with the token, access to the resource
+is granted. The resource server can perform an introspection request to the authorization
+server if it needs extra information to verify the token. The exchange is depicted in
+Figure~\ref{fig:ace-flow}.
+
+\begin{figure}
+    \caption{The protocol flow of ACE. Adapted from \parencite{ace}.}
+    \label{fig:ace-flow}
+    \includegraphics{images/ace.pdf}
+\end{figure}
+
+Authorization is important and distinct from identification, which can be achieve through
+for instance a PKI. As the architecture proposed in this thesis aims to be standardized it
+should prepare for different parties assuming different roles in the context of updating
+devices. Using authorization tokens is a scalable and configurable way of achieving that.
 
 \section{SUIT}
 \label{sec:suit}
