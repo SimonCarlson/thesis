@@ -1,3 +1,13 @@
+27/2-19:
+Managed to define what I think the profile should cover (key algorithms for communication, hashing algorithms, encoding of payloads, encryption of payloads)
+Added discussion on choice of ciphersuites and hashing algorithm
+Mentioned EST-coaps and its compability
+Mentioned ACE and its compability
+Restructured the profile chapter as the DTLS/OSCORE profiles are much too intertwined to make sense as different section. Instead, sectioning on content of profile like in the RFCs
+Almost got the hang of it but still not
+Spoke to Marco. Out of scope for this profile to specify ciphersuites. Enough to use COSE signatures over DTLS/OSCORE, how would COSE encryption handle keys between all devices? COSE in CoAP (no OSCORE) is still not end-to-end. Group OSCORE enables multicast but does not secure channel like with DTLS.
+
+
 26/2-19:
 I'm not sure git branches are worth using in this project. Notes and the rendered thesis are a hassle to handle between branches and they don't really add anything since I have complete control over the repo anyway
 Added acknowledgements placeholder

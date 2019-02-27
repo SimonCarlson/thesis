@@ -55,15 +55,15 @@ To do:
   - [x] Stick to SUIT 100% or propose changes? Does everything make sense? No options because of easier parsing?
 - [x] Show architecture instantiations with concrete use cases
   - [x] Rewrite the examples
-- [ ] New chapters (can be short):
-  - [ ] Chapter containing at least one profile (DTLS, OSCORE)
+- [x] New chapters (can be short):
+  - [x] Chapter containing at least one profile (DTLS, OSCORE)
   - [x] Make the life cycle its own chapter
 - [ ] Read ACE, focus on:
   - [ ] Scope
   - [x] Proof-of-possession
   - [ ] Introspection
 - [x] Ask Marco about citing his input on different tokens. <b>"Just discussion, no need to cite, put me in the acknowledgements"</b>
-- [ ] Read a profile document to understand the scope of a profile
+- [x] Read a profile document to understand the scope of a profile
 - [x] Manifest of the architecture
   - [x] Use SUIT manifest as described?
   - [x] Use elements described in SUIT with different structure? (What does mandatory mean?)
@@ -72,8 +72,19 @@ To do:
 - [x] Emphasize concepts when introduced in chapter 3
 - [x] Look at the usage of the words "firmware" and "software"
   - [x] Is SUIT truly only for firmware? Do they also mean software as in applications? <b>" Firmware Image: The firmware image is a binary that may contain      the complete software of a device or a subset of it.  The firmware      image may consist of multiple images, if the device contains more      than one microcontroller.  The image may consist of a differential      update for performance reasons.  Firmware is the more universal      term.  Both terms are used in this document and are      interchangeable."</b>
-- [ ] Find out which parts of SUIT needs to be covered in a profile
-  - [ ] Which hash should be used in the manifest?
+- [x] Find out which parts of SUIT needs to be covered in a profile
+  - [x] Which hash should be used in the manifest?
     - [ ] Can you hash with elliptic curve and get smaller digests?
+  - [x] What encodings should be used for payloads?
+    - [x] CBOR
+  - [ ] What encryption should be used for payloads?
+    - [x] COSE
+    - [ ] COSE can be used in CoAP right guys?
+    - [ ] Different keys for different COSE objects? Already established asymmetric key for manifest which contains key method for image COSE object?
+  - [x] Enrollment
+  - [x] Authorization
+  - [x] Broadcasting
+    - [x] Use as segway for OSCORE
 - [x] Add a page for acknowledgements
 - [x] Mention the SUIT documents are internet drafts and must be considered work in progress, that they expire, and that they may change
+- [x] Put all ACE information in background
