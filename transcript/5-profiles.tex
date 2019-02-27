@@ -3,8 +3,8 @@
 \begin{document}
 \label{chap:profiles}
 % TODO: Write short introduction
-When implementing the architecture, one choice of protocols could be using DTLS and CoAP
-for constrained communication between operators or servers and devices. There are existing
+When implementing the architecture, one choice of protocols is using DTLS and CoAP for
+constrained communication between operators or servers and devices. There are existing
 profiles for TLS and DTLS in IoT contexts, see \parencite{rfc7925}. These profiles define
 credential types, error handling, compression and so on for TLS and DTLS. The DTLS/CoAP
 profile of the proposed architecture aims to stay as close as possible to the technologies
@@ -23,9 +23,9 @@ The DTLS/CoAP profile of the proposed architecture needs to cover three things:
 As the architecture will use both pre-shared keys for enrollment and then certificates,
 credential types for both of these modes must be specified. The CoAP specification
 specifies the ciphersuite TLS\_PSK\_WITH\_AES\_128\_CCM\_8{} to be mandatory to implement
-for CoAP \parencite{rfc7252}. For certificates, the (D)TLS profiles in \parencite{rfc7925}
-recommends the use of TLS\_ECDHE\_ECDSA\_WITH\_AES\_128\_CCM\_8{} using the secp256r1
-curve. TLS\_PSK\_WITH\_AES\_128\_CCM\_8{} uses SHA-256 for hashing and
+for pre-shared keys in CoAP \parencite{rfc7252}. For certificates, the (D)TLS profiles in
+\parencite{rfc7925} recommends the use of TLS\_ECDHE\_ECDSA\_WITH\_AES\_128\_CCM\_8{}
+using the secp256r1 curve. TLS\_PSK\_WITH\_AES\_128\_CCM\_8{} uses SHA-256 for hashing and
 TLS\_ECDHE\_ECDSA\_WITH\_AES\_128\_CCM\_8{} should support SHA-256 as well
 \parencite{rfc7251}. 
 
@@ -43,7 +43,8 @@ be a extensible data format providing very small code sizes. It supports simple 
 well as arrays and maps meaning it is easy to map to and from JSON while being more
 compact than JSON. The use of CBOR also enables the use of \gls{cose}. COSE provides
 encryption for CBOR encoded objects, which in the architecture will be the manifest and
-image.
+image. The COSE standard describes how to encrypt or sign payloads using COSE objects and
+also handles message authentication codes.
 
 The architecture does not impose restrictions towards broadcasting updates, but as this
 particular profile is based on the security granted by DTLS it does not support
@@ -79,4 +80,14 @@ attacked. ACE has also been profiled to fit with DTLS \parencite{ace-dtls-profil
 At the time of writing, there are two Internet-Drafts aiming to specify profiles for ACE
 and EST using OSCORE \parencite{ace-oscore, est-oscore}.
 
+\section{Summary}
+To summarize, DTLS with CoAP can be used for communication in a constrained network.
+DTLS-based security terminates at a proxy or server and is thus not end-to-end, which also
+means broadcasting is not supported. Instead OSCORE can be used which provides end-to-end
+security. For pre-shared keys the ciphersuite TLS\_PSK\_WITH\_AES\_128\_CCM\_8{} is
+proposed and for certificates TLS\_ECDHE\_ECDSA\_WITH\_AES\_128\_CCM\_8{}. For calculating
+digests SHA-256 is proposed. Payloads can be encoded and encrypted using COSE no matter if
+DTLS or OSCORE is used. For enrollment and authorization, EST and ACE are proposed, with
+standards for CoAP/OSCORE profiles for EST and ACE  being developed at the time of
+writing.
 \end{document}
