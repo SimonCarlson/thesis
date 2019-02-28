@@ -7,8 +7,9 @@ constrained communication to and from devices. For enrollment and authorization,
 ACE can be used with their respective suitable profiles. However, as DTLS provides
 security at the transport layer it cannot be used for broadcasting, \gls{oscore} is an
 option better suited for broadcasting. This chapter will discuss choice of image digest
-algorithm, payload encoding and encryption, and considerations when choosing between
-DTLS/CoAP and OSCORE for an update architecture profile.
+algorithm, vendor and class ID generation, payload encoding and encryption, and
+considerations when choosing between DTLS/CoAP and OSCORE for an update architecture
+profile.
 
 DTLS is already profiled for use in IoT contexts and EST and ACE profiles are works in
 progress \parencite{rfc7925, est-coaps, ace-dtls-profile}. The update architecture needs
@@ -23,6 +24,8 @@ implement the \textbf{SHA-256} hash function which can be used to calculate the 
 an image. Since the digest is just supposed to verify the integrity of the image, SHA-256
 is an adequate choice and does not require implementing new hash algorithms for devices
 already running DTLS.
+
+% TODO: UUID generation?
 
 \section{Encoding and Encryption of Application Data}
 \label{sec:encoding-encryption}

@@ -175,8 +175,6 @@ important points no matter the topology of choice:
 
 \subsection{What Is an Operator and What Do They Do?}
 \label{ssec:what-is-an-operator}
-% TODO: Operators need a way of creating manifests, querying update servers, and using the
-% queried device profiles to send updates either directly or through the update server.
 Operators are people authorized to upload manifests and images to an update server. They
 can also optionally upload manifests directly to a device depending on the network
 topology. Operators prepare manifests and images, signs and transports them with an
@@ -453,7 +451,6 @@ bootloader to verify images.
 
 \section{Manifest Format}
 \label{sec:manifest-format}
-% TODO: Show packet format with byte sizes (not for this chapter but implementation?)
 Introduced in Section~\ref{ssec:information-model}, the manifest provides metadata about
 the update and allows devices to ensure they are the intended recipients of an update and
 that it can be trusted. Installing unauthorized or incorrect payloads can lead to a
