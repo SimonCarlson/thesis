@@ -3,46 +3,65 @@
 \begin{document}
 \label{chap:profiles}
 When implementing the architecture, one choice of protocols is using DTLS and CoAP for
-constrained communication between operators or servers and devices. For enrollment and
-authorization, EST-coaps and ACE can be used. As DTLS provides security at the transport
-layer it cannot be used for broadcasting. \gls{oscore} is an option better suited for
-broadcasting as it provides end-to-end security of messages and is not bound to the secure
-channel of DTLS. This chapter will discuss choice of hash algorithm, payload encoding and
-encryption, and considerations when choosing between DTLS/CoAP and OSCORE for a update
-architecture profile.
+constrained communication to and from devices. For enrollment and authorization, EST and
+ACE can be used with their respective suitable profiles. However, as DTLS provides
+security at the transport layer it cannot be used for broadcasting, \gls{oscore} is an
+option better suited for broadcasting. This chapter will discuss choice of image digest
+algorithm, payload encoding and encryption, and considerations when choosing between
+DTLS/CoAP and OSCORE for an update architecture profile.
 
-DTLS is already profiled for use in IoT contexts and EST and ACE profiles are work in
+DTLS is already profiled for use in IoT contexts and EST and ACE profiles are works in
 progress \parencite{rfc7925, est-coaps, ace-dtls-profile}. The update architecture needs
-little extra profiling in addition to these protocols, namely image digest algorithms,
+little extra profiling in addition to these protocols, namely image digest algorithm,
 payload encoding, and payload encryption. The security of the architecture is not bound to
 characteristics of any of these protocols and others can be used instead, this is just one
 possible profile.
 
 The DTLS profile suggests ciphersuites for the use of pre-shared keys and certificates and
 EST-coaps has been profiled to use the same ciphersuites for certificates. These suites
-implement the \textbf{SHA-256} hash function which can be used to calculate the digest of an image.
-Since the digest is just supposed to verify the integrity of the image, SHA-256 is a fine
-choice and does not require implementing new hash algorithms for devices already running
-DTLS.
+implement the \textbf{SHA-256} hash function which can be used to calculate the digest of
+an image. Since the digest is just supposed to verify the integrity of the image, SHA-256
+is an adequate choice and does not require implementing new hash algorithms for devices
+already running DTLS.
 
 \section{Encoding and Encryption of Application Data}
 \label{sec:encoding-encryption}
 For encoding, \gls{cbor} is an efficient binary encoding \parencite{rfc7049}. CBOR aims to
-be a extensible data format providing very small code sizes. It supports simple values as
+be an extensible data format providing very small code sizes. It supports simple values as
 well as arrays and maps meaning it is easy to map to and from JSON while being more
 compact than JSON. 
 
 The use of CBOR also enables the use of \gls{cose}. COSE provides encryption and signing
-for CBOR encoded objects, which in the architecture will be the manifest and image. As
-DTLS secures the channel, the manifest and image can be signed using COSE objects to
-ensure their integrity during transport. 
+for CBOR encoded objects, which in the architecture will be the manifest and image
+\parencite{rfc8152}. As DTLS secures the channel, the manifest and image can be signed
+using COSE objects to ensure their integrity during transport. 
 
-\section{Broadcasting}
-\label{sec:broadcasting}
-The architecture itself does not impose restrictions towards broadcasting updates, but a
-profile based on the security granted by DTLS will not support broadcasting. DTLS only
-provides transport layer security which is not compatible with broadcasting messages. In
-order to support broadcasting, OSCORE can be used instead.
+\section{DTLS/CoAP or OSCORE?}
+\label{sec:dtls-coap-or-oscore}
+The main difference between using CoAP over DTLS and OSCORE is on which level the
+communication is secured. DTLS provides transport layer security setting up a secure
+channel between each hop in the protected network. This means payloads are encrypted but
+the secure channel ends at for instance a proxy or update server. DTLS does not provide
+end-to-end security and as the security provided is on a transport level it is not
+compatible with broadcasting. The architecture itself does not impose restrictions towards
+broadcasting updates, but a profile based on the security granted by DTLS will not support
+it. In order to support broadcasting, OSCORE can be used instead.
+
+OSCORE provides end-to-end protection for CoAP messages using COSE \parencite{oscore}. By
+providing end-to-end encryption CoAP message security is not terminated at a proxy or
+update server as with DTLS. This means a compromised proxy or update server cannot be
+leveraged to eavesdrop or manipulate data. The difference between using OSCORE and using
+COSE objects in CoAP with DTLS is that OSCORE protects the entire CoAP message end-to-end
+while COSE and CoAP protects the payloads through COSE signing but not the CoAP message
+itself, it relies on a secure channel established by DTLS.
+
+OSCORE can run directly on top of UDP and supports broadcasting as well as unicast. In the
+case of broadcasting, a security context must be defined \parencite{oscore-group}.
+Defining a security context is out of scope for the architecture as it is for a specific
+piece of technology. If a security context is in place, unicast OSCORE is still possible.
+At the time of writing, there are two Internet-Drafts aiming to specify profiles for ACE
+and EST using OSCORE, meaning these protocols can be used for enrollment and authorization
+with OSCORE \parencite{ace-oscore, est-oscore}.
 
 Broadcasting is of interest in the update architecture as communication between update
 servers and devices can be one-to-one, many-to-one, one-to-many, or many-to-many. It is
@@ -52,21 +71,20 @@ same class or from the same vendor, broadcasting can be employed. The informatio
 manifest makes sure that devices receiving broadcasted updates not intended for them does
 not erroneously install the update.
 
-OSCORE provides end-to-end protection for CoAP messages using COSE. By providing
-end-to-end encryption CoAP message security is not terminated at a proxy or update server
-as with DTLS. This means a compromised proxy or update server cannot be leveraged to
-eavesdrop or manipulate data. The difference between using OSCORE and using COSE objects
-in CoAP with DTLS is that OSCORE protects the entire CoAP message end-to-end while COSE
-and CoAP protects the payloads through COSE signing but not the CoAP message itself, it
-relies on a secure channel established by DTLS.
-
-OSCORE can run directly on top of UDP and supports broadcasting as well as unicast. In the
-case of broadcasting, a security context must be defined \parencite{oscore-group}.
-Defining a security context is out of scope for the architecture as it is for a specific
-piece of technology. If a security context is in place, unicast OSCORE is still possible.
-At the time of writing, there are two Internet-Drafts aiming to specify profiles for ACE
-and EST using OSCORE \parencite{ace-oscore, est-oscore}.
+While being better suited for broadcasting and providing end-to-end security, OSCORE is
+not yet standardised. The specification (\parencite{oscore}) is a work in progress as is
+many of the profiles mentioned in this chapter. DTLS and its IoT profiles are standardised
+and Contiki-NG features a fully working DTLS implementation. If implementing the
+architecture using OSCORE, it is worth noting the incomplete status of the standard.
 
 \section{Summary}
+\label{sec:profile-summary}
+This chapter suggested the use of DTLS, CoAP, EST-coaps, and ACE DTLS profiles to realize
+the update architecture. SHA-256 is the algorithm of choice for calculating image digests,
+and payloads can be encoded and signed using CBOR and COSE respectively. DTLS does not
+support broadcasting however which might be of importance, for this purpose OSCORE can be
+used instead. OSCORE does not rely on a secure channel established by DTLS but instead
+provides end-to-end security for CoAP messages using COSE. OSCORE, unlike DTLS, is not yet
+standardised and the author is not aware of any OSCORE implementation in Contiki-NG. 
 
 \end{document}

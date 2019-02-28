@@ -315,7 +315,7 @@
 	publisher =	{Internet Engineering Task Force},
 	note =		{Work in Progress},
 	url =		{https://datatracker.ietf.org/doc/html/draft-ietf-ace-coap-est-08},
-        author =	{Peter Van der Stok and Panos Kampanakis and Michael Richardson and Shahid Raza},
+	author =	{Peter Van der Stok and Panos Kampanakis and Michael Richardson and Shahid Raza},
 	title =		{{EST over secure CoAP (EST-coaps)}},
 	pagetotal =	49,
 	year =		2019,
@@ -323,7 +323,6 @@
 	day =		6,
 	abstract =	{Enrollment over Secure Transport (EST) is used as a certificate provisioning protocol over HTTPS. Low-resource devices often use the lightweight Constrained Application Protocol (CoAP) for message exchanges. This document defines how to transport EST payloads over secure CoAP (EST-coaps), which allows constrained devices to use existing EST functionality for provisioning certificates.},
 }
-
 
 @misc{rfc7030,
 	series =	{Request for Comments},
@@ -356,8 +355,6 @@
 	abstract =	{This specification defines a framework for authentication and authorization in Internet of Things (IoT) environments called ACE- OAuth. The framework is based on a set of building blocks including OAuth 2.0 and CoAP, thus making a well-known and widely used authorization solution suitable for IoT devices. Existing specifications are used where possible, but where the constraints of IoT devices require it, extensions are added and profiles are defined.},
 }
 
-
-
 @techreport{sha256,
 	title={Secure hash standard},
 	author={Dang, Quynh H},
@@ -388,7 +385,7 @@
 	publisher =	{RFC Editor},
 	doi =		{10.17487/RFC7049},
 	url =		{https://rfc-editor.org/rfc/rfc7049.txt},
-    author =	{Carsten Bormann and Paul E. Hoffman},
+	author =	{Carsten Bormann and Paul E. Hoffman},
 	title =		{{Concise Binary Object Representation (CBOR)}},
 	pagetotal =	54,
 	year =		2013,
@@ -418,7 +415,7 @@
 	publisher =	{RFC Editor},
 	doi =		{10.17487/RFC7251},
 	url =		{https://rfc-editor.org/rfc/rfc7251.txt},
-        author =	{David McGrew and Daniel Bailey and Matthew Campagna and Robert Dugal},
+	author =	{David McGrew and Daniel Bailey and Matthew Campagna and Robert Dugal},
 	title =		{{AES-CCM Elliptic Curve Cryptography (ECC) Cipher Suites for TLS}},
 	pagetotal =	10,
 	year =		2014,
@@ -481,11 +478,42 @@
 	publisher =	{Internet Engineering Task Force},
 	note =		{Work in Progress},
 	url =		{https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-03},
-        author =	{Marco Tiloca and Göran Selander and Francesca Palombini and Jiye Park},
+	author =	{Marco Tiloca and Göran Selander and Francesca Palombini and Jiye Park},
 	title =		{{Group OSCORE - Secure Group Communication for CoAP}},
 	pagetotal =	32,
 	year =		2018,
 	month =		oct,
 	day =		22,
 	abstract =	{This document describes a mode for protecting group communication over the Constrained Application Protocol (CoAP). The proposed mode relies on Object Security for Constrained RESTful Environments (OSCORE) and the CBOR Object Signing and Encryption (COSE) format. In particular, it defines how OSCORE is used in a group communication setting, while fulfilling the same security requirements for group requests and responses. Source authentication of all messages exchanged within the group is provided by means of digital signatures produced by the sender and embedded in the protected CoAP messages.},
+}
+
+@techreport{oscore,
+	number =	{draft-ietf-core-object-security-15},
+	type =		{Internet-Draft},
+	institution =	{Internet Engineering Task Force},
+	publisher =	{Internet Engineering Task Force},
+	note =		{Work in Progress},
+	url =		{https://datatracker.ietf.org/doc/html/draft-ietf-core-object-security-15},
+	author =	{Göran Selander and John Mattsson and Francesca Palombini and Ludwig Seitz},
+	title =		{{Object Security for Constrained RESTful Environments (OSCORE)}},
+	pagetotal =	84,
+	year =		2018,
+	month =		aug,
+	day =		31,
+	abstract =	{This document defines Object Security for Constrained RESTful Environments (OSCORE), a method for application-layer protection of the Constrained Application Protocol (CoAP), using CBOR Object Signing and Encryption (COSE). OSCORE provides end-to-end protection between endpoints communicating using CoAP or CoAP-mappable HTTP. OSCORE is designed for constrained nodes and networks supporting a range of proxy operations, including translation between different transport protocols.},
+}
+
+@misc{rfc8152,
+	series =	{Request for Comments},
+	number =	8152,
+	howpublished =	{RFC 8152},
+	publisher =	{RFC Editor},
+	doi =		{10.17487/RFC8152},
+	url =		{https://rfc-editor.org/rfc/rfc8152.txt},
+	author =	{Jim Schaad},
+	title =		{{CBOR Object Signing and Encryption (COSE)}},
+	pagetotal =	121,
+	year =		2017,
+	month =		jul,
+	abstract =	{Concise Binary Object Representation (CBOR) is a data format designed for small code size and small message size. There is a need for the ability to have basic security services defined for this data format. This document defines the CBOR Object Signing and Encryption (COSE) protocol. This specification describes how to create and process signatures, message authentication codes, and encryption using CBOR for serialization. This specification additionally describes how to represent cryptographic keys using CBOR.},
 }
