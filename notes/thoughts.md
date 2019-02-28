@@ -35,3 +35,9 @@ Prototypes should make assumptions about protocols, tokens, and certificates as 
 If the same key pair is used for different services, it becomes more valuable. Losing that key means higher risk.
 Keys for device-to-device communication stay in the constrained network. Keys for update might leave the constrained network when servers and operators identify devices.
 Might be too expensive to have several certificates per device. Also would that make enrollment more difficult, one PSK per key pair?
+
+# Appendices
+
+Include the manifest used in the prototype both in JSON and CBOR format for comparison
+
+Github links to code repos (manifest and contiki-ng fork I guess)

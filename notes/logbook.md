@@ -1,3 +1,12 @@
+28/2-19:
+I've felt motivated the past week or so but now it's dwindling again. Strange how motivation seems to come and go. Is motivation the lack of hardship?
+Profile chapter feels done, I really don't know what else to put in it outside its current state
+Want to move on to implementation. Do I start with Contiki development? Maybe I should just to understand how to use the DTLS/CoAP stack. Should lay out a plan for the prototype
+Installed libcoap, managed to use DTLS via OpenSSL and PSK. Don't know if I can use that or if TinyDTLS is required, we'll see. Also, difference in using PSK and cert concerning my evaluation?
+Managed to generate a X.509 cert with openssl and I think use it for a PKI-based coaps exchange in libcoap
+Added paragraph about vendor and class ID generation, put it in a section with choice of hash algorithm
+
+
 27/2-19:
 Managed to define what I think the profile should cover (key algorithms for communication, hashing algorithms, encoding of payloads, encryption of payloads)
 Added discussion on choice of ciphersuites and hashing algorithm

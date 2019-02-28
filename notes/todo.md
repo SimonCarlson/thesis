@@ -77,10 +77,10 @@ To do:
     - [ ] Can you hash with elliptic curve and get smaller digests?
   - [x] What encodings should be used for payloads?
     - [x] CBOR
-  - [ ] What encryption should be used for payloads?
+  - [x] What encryption should be used for payloads?
     - [x] COSE
-    - [ ] COSE can be used in CoAP right guys?
-    - [ ] Different keys for different COSE objects? Already established asymmetric key for manifest which contains key method for image COSE object?
+    - [x] COSE can be used in CoAP right guys?
+    - [x] Different keys for different COSE objects? Already established asymmetric key for manifest which contains key method for image COSE object?
   - [x] Enrollment
   - [x] Authorization
   - [x] Broadcasting
