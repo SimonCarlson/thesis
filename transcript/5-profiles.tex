@@ -2,30 +2,42 @@
 
 \begin{document}
 \label{chap:profiles}
+This chapter will discuss choice of image digest algorithm, vendor and class ID
+generation, payload encoding and encryption, and considerations when choosing between
+DTLS/CoAP and OSCORE for an update architecture profile.
+
 When implementing the architecture, one choice of protocols is using DTLS and CoAP for
 constrained communication to and from devices. For enrollment and authorization, EST and
 ACE can be used with their respective suitable profiles. However, as DTLS provides
 security at the transport layer it cannot be used for broadcasting, \gls{oscore} is an
-option better suited for broadcasting. This chapter will discuss choice of image digest
-algorithm, vendor and class ID generation, payload encoding and encryption, and
-considerations when choosing between DTLS/CoAP and OSCORE for an update architecture
-profile.
+option better suited for broadcasting. 
 
 DTLS is already profiled for use in IoT contexts and EST and ACE profiles are works in
 progress \parencite{rfc7925, est-coaps, ace-dtls-profile}. The update architecture needs
 little extra profiling in addition to these protocols, namely image digest algorithm,
-payload encoding, and payload encryption. The security of the architecture is not bound to
-characteristics of any of these protocols and others can be used instead, this is just one
-possible profile.
+vendor and class ID generation, payload encoding, and payload encryption. The security of
+the architecture is not bound to characteristics of any of these protocols and others can
+be used instead, this is just one possible profile.
 
+\section{ID generation and hash algorithms}
+\label{sec:hash-id-algorithm}
 The DTLS profile suggests ciphersuites for the use of pre-shared keys and certificates and
-EST-coaps has been profiled to use the same ciphersuites for certificates. These suites
-implement the \textbf{SHA-256} hash function which can be used to calculate the digest of
-an image. Since the digest is just supposed to verify the integrity of the image, SHA-256
-is an adequate choice and does not require implementing new hash algorithms for devices
-already running DTLS.
+EST has been profiled with CoAPs to use the same ciphersuites for certificates. These
+suites implement the \textbf{SHA-256} hash function which can be used to calculate the
+digest of an image. Since the digest is just supposed to verify the integrity of the
+image, SHA-256 is an adequate choice and does not require implementing new hash algorithms
+for devices already running DTLS.
 
-% TODO: UUID generation?
+Generating vendor and class IDs should be done so that devices get unique identifiers and
+devices with the same names from different vendors do not clash. For this purpose,
+\textbf{UUIDs} can be used \parencite{rfc4122}. Version 3 and 5 of UUID are "name-based"
+version meaning they operate in a given namespace. By using a registered domain name of
+the vendor, already guaranteed to be unique, as a namespace a unique UUID can be generated
+for that vendor. By using the vendor UUID as the namespace for the class IDs, devices from
+different vendors can share names but still have different class IDs. Section 4.3 of the
+UUID specification states that "Choose either MD5 or SHA-1 as the hash algorithm; If
+backward compatibility is not an issue, SHA-1 is preferred". This means UUID5 should be
+used.
 
 \section{Encoding and Encryption of Application Data}
 \label{sec:encoding-encryption}
@@ -82,12 +94,16 @@ architecture using OSCORE, it is worth noting the incomplete status of the stand
 
 \section{Summary}
 \label{sec:profile-summary}
-This chapter suggested the use of DTLS, CoAP, EST-coaps, and ACE DTLS profiles to realize
-the update architecture. SHA-256 is the algorithm of choice for calculating image digests,
-and payloads can be encoded and signed using CBOR and COSE respectively. DTLS does not
-support broadcasting however which might be of importance, for this purpose OSCORE can be
-used instead. OSCORE does not rely on a secure channel established by DTLS but instead
-provides end-to-end security for CoAP messages using COSE. OSCORE, unlike DTLS, is not yet
-standardised and the author is not aware of any OSCORE implementation in Contiki-NG. 
+This chapter identified two options for implementing the architecture: either CoAP over
+DTLS or OSCORE. TLS does not support broadcasting however which might be of importance,
+for this purpose OSCORE can be used instead. OSCORE does not rely on a secure channel
+established by DTLS but instead provides end-to-end security for CoAP messages using COSE.
+OSCORE, unlike DTLS, is not yet standardised and the author is not aware of any OSCORE
+implementation in Contiki-NG. 
+
+Both approaches would use SHA-256 for calculating image digests, UUID5 for vendor and
+class IDs using registered vendor domains, EST with its corresponding profile for
+enrollment, and ACE with its corresponding profile for authorization. Payloads are encoded
+and signed using CBOR and COSE for both approaches, ensuring integrity.
 
 \end{document}
