@@ -87,8 +87,8 @@ manifest makes sure that devices receiving broadcasted updates not intended for 
 not erroneously install the update.
 
 While being better suited for broadcasting and providing end-to-end security, OSCORE is
-not yet standardised. The specification (\parencite{oscore}) is a work in progress as is
-many of the profiles mentioned in this chapter. DTLS and its IoT profiles are standardised
+not yet standardized. The specification (\parencite{oscore}) is a work in progress as is
+many of the profiles mentioned in this chapter. DTLS and its IoT profiles are standardized
 and Contiki-NG features a fully working DTLS implementation. If implementing the
 architecture using OSCORE, it is worth noting the incomplete status of the standard.
 
@@ -98,7 +98,7 @@ This chapter identified two options for implementing the architecture: either Co
 DTLS or OSCORE. TLS does not support broadcasting however which might be of importance,
 for this purpose OSCORE can be used instead. OSCORE does not rely on a secure channel
 established by DTLS but instead provides end-to-end security for CoAP messages using COSE.
-OSCORE, unlike DTLS, is not yet standardised and the author is not aware of any OSCORE
+OSCORE, unlike DTLS, is not yet standardized and the author is not aware of any OSCORE
 implementation in Contiki-NG. 
 
 Both approaches would use SHA-256 for calculating image digests, UUID5 for vendor and
