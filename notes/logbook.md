@@ -1,3 +1,12 @@
+1/3-19:
+Added paragraph on sustainability
+Sent a mail to Shahid asking for his thoughts on my profile chapter
+Looking for resources that can help development. Found a CBOR library and a COSE library, the latter depending on the former. The COSE implementation uses either openssl or MbedTLS, I guess openssl is too large and that one of the two must be present on the device. Libcoap can be used to make a server if I don't use native Contiki code, maybe that is easier?
+I just want to go and squat
+Looking at the CoAP examples in Contiki, seems fine to make both server and device implementation in it. Only uncertain part is how to send large payloads, cannot seem to get block transfers to work
+The chunks example seems like a good start for a resource handler for the server
+Maybe I should start with manifest generator, then when I have an example manifest try to send it without COSE, then send with COSE, then move on to device update handler?
+
 28/2-19:
 I've felt motivated the past week or so but now it's dwindling again. Strange how motivation seems to come and go. Is motivation the lack of hardship?
 Profile chapter feels done, I really don't know what else to put in it outside its current state
