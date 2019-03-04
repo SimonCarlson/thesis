@@ -1,8 +1,13 @@
 4/3-19:
 Proper formatting of section 5.1 title
+
 Clarified why UUID5 is used over UUID3
+
 Improved formatting of SUIT architecture requirements list
+
 Spoke to Shahid. Profile chapter should still be split up in two, in the second part refer to the mutual information from the first. Instantiate the procedure flow image with protocols or profiles so an implementor knows where to look for what. DTLS and its standards are much more mature than OSCORE and its standards. Tie together chapters with short summaries and introductions stating why this chapter. For application development, start with native. Flipping image - if time allows, not the highest priority. Differential updates are ambitious to pursue. Regarding COSE in Contiki: Martin Gunnarsson and Santiago (through Marco), there is a Java implementation.
+
+Meeting with Farhad. Research question should be rephrased so that it is actually possible to answer it, current is too broad. Title is too broad (already aware). Problem statement should be shortened. Consider putting all my contributions in a single method chapter. Possibly mention related solutions, including any work done on SUIT. Fix citation style, be consistent, no need for links to documents. For discussion chapter, mention other aspects of IoT security. Make sure introduction is understandable for people without prior knowledge. Mention weak parts of SUIT (authorization?). 
 
 1/3-19:
 Added paragraph on sustainability
