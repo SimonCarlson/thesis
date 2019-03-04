@@ -19,7 +19,7 @@ vendor and class ID generation, payload encoding, and payload encryption. The se
 the architecture is not bound to characteristics of any of these protocols and others can
 be used instead, this is just one possible profile.
 
-\section{ID generation and hash algorithms}
+\section{ID Generation and Hash Algorithms}
 \label{sec:hash-id-algorithm}
 The DTLS profile suggests ciphersuites for the use of pre-shared keys and certificates and
 EST has been profiled with CoAPs to use the same ciphersuites for certificates. These
@@ -31,13 +31,14 @@ for devices already running DTLS.
 Generating vendor and class IDs should be done so that devices get unique identifiers and
 devices with the same names from different vendors do not clash. For this purpose,
 \textbf{UUIDs} can be used \parencite{rfc4122}. Version 3 and 5 of UUID are "name-based"
-version meaning they operate in a given namespace. By using a registered domain name of
-the vendor, already guaranteed to be unique, as a namespace a unique UUID can be generated
-for that vendor. By using the vendor UUID as the namespace for the class IDs, devices from
-different vendors can share names but still have different class IDs. Section 4.3 of the
-UUID specification states that "Choose either MD5 or SHA-1 as the hash algorithm; If
-backward compatibility is not an issue, SHA-1 is preferred". This means UUID5 should be
-used.
+versions meaning they operate in a given namespace. By using a registered domain name of
+the vendor, which is already guaranteed to be unique, as namespace a unique UUID can be
+generated for that vendor. By using the vendor UUID as the namespace for the class IDs,
+devices from different vendors can share names but still have different class IDs. Section
+4.3 of the UUID specification states that "Choose either MD5 or SHA-1 as the hash
+algorithm; If backward compatibility is not an issue, SHA-1 is preferred". This means
+UUID5 should be used as it uses SHA-1 for hashing. A hierarchical namespace structure is
+suggested by SUIT.
 
 \section{Encoding and Encryption of Application Data}
 \label{sec:encoding-encryption}
@@ -46,15 +47,15 @@ be an extensible data format providing very small code sizes. It supports simple
 well as arrays and maps meaning it is easy to map to and from JSON while being more
 compact than JSON. 
 
-The use of CBOR also enables the use of \gls{cose}. COSE provides encryption and signing
-for CBOR encoded objects, which in the architecture will be the manifest and image
+The use of CBOR enables the use of \gls{cose}. COSE provides encryption and signing for
+CBOR encoded objects, which in the architecture will be the manifest and image
 \parencite{rfc8152}. As DTLS secures the channel, the manifest and image can be signed
 using COSE objects to ensure their integrity during transport. 
 
 \section{DTLS/CoAP or OSCORE?}
 \label{sec:dtls-coap-or-oscore}
 The main difference between using CoAP over DTLS and OSCORE is on which level the
-communication is secured. DTLS provides transport layer security setting up a secure
+communication is secured. DTLS provides transport layer security by setting up a secure
 channel between each hop in the protected network. This means payloads are encrypted but
 the secure channel ends at for instance a proxy or update server. DTLS does not provide
 end-to-end security and as the security provided is on a transport level it is not
@@ -66,7 +67,7 @@ OSCORE provides end-to-end protection for CoAP messages using COSE \parencite{os
 providing end-to-end encryption CoAP message security is not terminated at a proxy or
 update server as with DTLS. This means a compromised proxy or update server cannot be
 leveraged to eavesdrop or manipulate data. The difference between using OSCORE and using
-COSE objects in CoAP with DTLS is that OSCORE protects the entire CoAP message end-to-end
+COSE payloads in CoAP with DTLS is that OSCORE protects the entire CoAP message end-to-end
 while COSE and CoAP protects the payloads through COSE signing but not the CoAP message
 itself, it relies on a secure channel established by DTLS.
 
