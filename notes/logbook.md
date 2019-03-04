@@ -1,3 +1,9 @@
+4/3-19:
+Proper formatting of section 5.1 title
+Clarified why UUID5 is used over UUID3
+Improved formatting of SUIT architecture requirements list
+Spoke to Shahid. Profile chapter should still be split up in two, in the second part refer to the mutual information from the first. Instantiate the procedure flow image with protocols or profiles so an implementor knows where to look for what. DTLS and its standards are much more mature than OSCORE and its standards. Tie together chapters with short summaries and introductions stating why this chapter. For application development, start with native. Flipping image - if time allows, not the highest priority. Differential updates are ambitious to pursue. Regarding COSE in Contiki: Martin Gunnarsson and Santiago (through Marco), there is a Java implementation.
+
 1/3-19:
 Added paragraph on sustainability
 Sent a mail to Shahid asking for his thoughts on my profile chapter
