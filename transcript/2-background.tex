@@ -1,7 +1,12 @@
  \documentclass[0-thesis.tex]{subfiles}
 
 \begin{document}
-This chapter presents the background needed to understand the thesis.
+Understanding the need for IoT updates a solution must be proposed. In order to propose a
+solution for however, the current state of the art must be understood. IoT networks use
+different protocols compared to traditional computing for reasons such as reliability and
+performance. This chapter presents the background needed to understand the solutions
+presented in the thesis. 
+
 Section~\ref{sec:network} introduces the network protocols used and motivates their use
 over other protocols in an IoT context. The following section, Section~\ref{sec:suit}
 presents and explains the SUIT architecture and information model and their respective
@@ -38,6 +43,7 @@ Instead, \gls{coap} is a common protocol for the application layer in IoT networ
 \ref{fig:stack-comparison} shows the equivalent protocols for IoT network stacks versus
 traditional network stacks. 
 
+% TODO: Include for OSCORE
 In this chapter, Section~\ref{ssec:udp} explains UDP and why it is the preferred transport
 protocol in IoT networks. Section~\ref{ssec:dtls} briefly explains TLS, why it is
 unsuitable for IoT networks, the differences between TLS and DTLS and why DTLS is used
@@ -60,17 +66,17 @@ and ACE framework, enabling asymmetric cryptography and authorization in an IoT 
 
 \subsection{UDP}
 \label{ssec:udp}
-UDP is a stateless and asynchronous transfer protocol for IP \parencite{rfc768}. It does
-not provide any reliability mechanisms but is instead a best-effort protocol. It also does
-not guarantee delivery of messages. For general purposes in unconstrained environments TCP
-is usually the favored transport protocol as it is robust and reliable, but in
-environments where resources are scarce and networks unreliable, a stateful protocol like
-TCP could face issues. Since TCP wants to ensure packet delivery, it will retransmit
-packages generating a lot of traffic and processing required for a receiver. Also, if the
-connection is too unstable TCP will not work at all since it can no longer guarantee the
-packets arrival. The best-effort approach of UDP is favorable in these situations, in
-addition to UDP being a lightweight protocol requiring a smaller memory footprint to
-implement.
+\acrfull{udp} is a stateless and asynchronous transfer protocol for IP \parencite{rfc768}.
+It does not provide any reliability mechanisms but is instead a best-effort protocol. It
+also does not guarantee delivery of messages. For general purposes in unconstrained
+environments TCP is usually the favored transport protocol as it is robust and reliable,
+but in environments where resources are scarce and networks unreliable, a stateful
+protocol like TCP could face issues. Since TCP wants to ensure packet delivery, it will
+retransmit packages generating a lot of traffic and processing required for a receiver.
+Also, if the connection is too unstable TCP will not work at all since it can no longer
+guarantee the packets arrival. The best-effort approach of UDP is favorable in these
+situations, in addition to UDP being a lightweight protocol requiring a smaller memory
+footprint to implement.
 
 Figure~\ref{fig:udp-header} shows the UDP header format. The source port is optional, the
 length denotes the length of the datagram (including the header), and the checksum is
@@ -91,14 +97,15 @@ not many features available.
 
 \subsection{DTLS}
 \label{ssec:dtls}
-DTLS is a protocol which adds confidentiality and integrity to datagram protocols like UDP
-\parencite{rfc6347}. The protocol is designed to prevent eavesdropping, tampering, or
-message forgery. DTLS is based on TLS, a similar protocol for stateful transport protocols
-such as TCP, which would not work well on unreliable networks as previously discussed. The
-main issues with using TLS over unreliable networks is that TLS decryption is dependant on
-previous packets, meaning the decryption of a packet would fail if the previous packet was
-not received. In addition, the TLS handshake procedure assumes all handshake messages are
-delivered reliably which is rarely the case in IoT networks using UDP.
+\acrfull{dtls} is a protocol which adds confidentiality and integrity to datagram
+protocols like UDP \parencite{rfc6347}. The protocol is designed to prevent eavesdropping,
+tampering, or message forgery. DTLS is based on TLS, a similar protocol for stateful
+transport protocols such as TCP, which would not work well on unreliable networks as
+previously discussed. The main issues with using TLS over unreliable networks is that TLS
+decryption is dependant on previous packets, meaning the decryption of a packet would fail
+if the previous packet was not received. In addition, the TLS handshake procedure assumes
+all handshake messages are delivered reliably which is rarely the case in IoT networks
+using UDP.
 
 DTLS solves this by banning stream ciphers, effectively making decryption an independent
 operation between packets, as well as adding explicit sequence numbers. Furthermore, DTLS
@@ -130,8 +137,8 @@ is as the TLS handshake.
 
 \subsection{CoAP}
 \label{ssec:coap}
-CoAP is an application layer protocol designed to be used by constrained devices over
-networks with low throughput and possibly high unreliability for machine-to-machine
+\acrfull{coap} is an application layer protocol designed to be used by constrained devices
+over networks with low throughput and possibly high unreliability for machine-to-machine
 communication \parencite{rfc7252}. While designed for constrained networks, a design
 feature of CoAP is how it is easily interfaced with HTTP so that communication over
 traditional networks can be proxied. CoAP uses a request/response model similar to HTTP
@@ -177,6 +184,10 @@ flexible. Another option of interest is the observe option, which allows a clien
 notified by the server when a particular resource changes. This option can be used in a
 pull or hybrid update architecture, meaning the device does not have to continuously poll
 the server for a new update.
+
+\subsection{OSCORE}
+\label{ssec:oscore}
+% TODO: Very brief intro to OSCORE
 
 \subsection{EST-coaps}
 \label{ssec:est-coaps}
@@ -529,5 +540,14 @@ devices the SUIT standard specifies as a lower bound. This is not an issue but s
 kept in mind as less capable devices are supposed to be able to use an update mechanism
 that is complying with SUIT. Furthermore the board supports IEEE 802.15.4 communication in
 the 2.4 GHz band and SHA2 and RSA hardware acceleration \parencite{firefly-datasheet}.
+
+\section{Summary}
+\label{sec:2-summary}
+This chapter has introduced and motivated the use of common network protocols in IoT
+networks. The SUIT standard, which is agnostic of any specific technology, was also
+introduced. This standard can be expanded and profiled in order to propose a possible
+solution. The thesis will develop a prototype of such a solution using the Contiki-NG
+operating system. The next chapter will expand upon the works of SUIT, discussing topics
+such as roles, authorization, and communication of updates.
 
 \end{document}
