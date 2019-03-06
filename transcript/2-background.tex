@@ -236,13 +236,13 @@ devices. Using authorization tokens is a scalable and configurable way of achiev
 
 \section{SUIT}
 \label{sec:suit}
-The IETF Software Updates for Internet of Things (SUIT) working group aims to define a
-firmware update solution for IoT devices that is interoperable and non-proprietary
-\parencite{suit}. The working group does not however try to define new transport,
-discovery, or security mechanisms making their proposal agnostic of any particular
-technology. The solution shall be usable on Class 1 devices, defined by ~10 KiB RAM and
-~100 KiB code size \parencite{rfc7228}. The solution may be applied to more powerful
-devices, such as the one used in this thesis described in Section~\ref{ssec:firefly}.
+The IETF \acrfull{suit} working group aims to define a firmware update solution for IoT
+devices that is interoperable and non-proprietary \parencite{suit}. The working group does
+not however try to define new transport, discovery, or security mechanisms making their
+proposal agnostic of any particular technology. The solution shall be usable on Class 1
+devices, defined by ~10 KiB RAM and ~100 KiB code size \parencite{rfc7228}. The solution
+may be applied to more powerful devices, such as the one used in this thesis described in
+Section~\ref{ssec:firefly}.
 
 Section~\ref{ssec:architecture} presents the SUIT architecture and
 Section~\ref{ssec:information-model} presents the SUIT information model.
@@ -550,12 +550,12 @@ the 2.4 GHz band and SHA2 and RSA hardware acceleration \parencite{firefly-datas
 
 \section{Summary}
 \label{sec:2-summary}
-This chapter has introduced and motivated the use of common network protocols in IoT
-networks. The SUIT standard, which is agnostic of any specific technology, was also
-introduced. This standard can be expanded and profiled in order to propose a possible
-solution. The thesis will develop a prototype of such a solution using the Contiki-NG
-operating system. The next chapter will expand upon the works of SUIT discussing topics
-such as roles, authorization, and communication of updates, apply a life cycle view to
-IoT updates, and define profiles for implementing an update architecture.
+This chapter has introduced and motivated the use of network protocols common in IoT
+networks. The SUIT standard for providing updates, which is agnostic of any specific
+technology, was also introduced. This standard can be expanded and profiled in order to
+propose a possible solution. The thesis will develop a prototype of such a solution using
+the Contiki-NG operating system. The next chapter will expand upon the works of SUIT
+discussing topics such as roles, authorization, and communication of updates, apply a life
+cycle view to IoT updates, and define profiles for implementing an update architecture.
 
 \end{document}

@@ -119,18 +119,19 @@ worth noting the incomplete status of the standard.
 \subsection{Summary}
 \label{sec:profiles-summary}
 This section identified two options for implementing the architecture: either CoAP over
-DTLS or OSCORE. TLS does not support broadcasting however which might be of importance,
+DTLS or OSCORE. DTLS does not support broadcasting however which might be of importance,
 for this purpose OSCORE can be used instead. OSCORE does not rely on a secure channel
 established by DTLS but instead provides end-to-end security for CoAP messages using COSE.
-OSCORE, unlike DTLS, is not yet standardized and the author is not aware of any OSCORE
-implementation in Contiki-NG. 
+OSCORE is, unlike DTLS, not yet standardized and the author is not aware of any OSCORE
+implementation in Contiki-NG. Profiles surrounding DTLS for EST-coaps and ACE are also
+closer to standardization than their OSCORE counterparts.
 
-Both approaches would use SHA-256 for calculating image digests, UUID5 for vendor and
-class IDs using registered vendor domains, EST with its corresponding profile for
-enrollment, and ACE with its corresponding profile for authorization. Payloads are encoded
-and signed using CBOR and COSE for both approaches, ensuring integrity.
+Both profiles use SHA-256 for calculating image digests, UUID5 for vendor and class IDs
+using registered vendor domains, EST with its corresponding profile for enrollment, and
+ACE with its corresponding profile for authorization. Payloads are encoded and signed
+using CBOR and COSE for both approaches, ensuring integrity.
 
 With the proposed profiles, a prototype can be implemented and evaluated. Implementation
-of the prototype is the topic of the next chapter.
+of a prototype is the topic of the next chapter.
 
 \end{document}
