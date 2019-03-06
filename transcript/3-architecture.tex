@@ -449,6 +449,8 @@ bootloader to verify images.
 
 \section{Manifest Format}
 \label{sec:manifest-format}
+% TODO: Further motivate the design of the format? Mandatory part etc
+% TODO: Consider splitting conditions and directives into pre/post? Semantics
 Introduced in Section~\ref{ssec:information-model}, the manifest provides metadata about
 the update and allows devices to ensure they are the intended recipients of an update and
 that it can be trusted. Installing unauthorized or incorrect payloads can lead to a
@@ -499,28 +501,27 @@ can be described in a very small manifest. This small manifest would have no pre
 dependencies, or options. The payload information would contain just one URI/digest pair,
 and there are only two conditions, one vendor ID and one class ID.
 
-Another update that is specifying differential updates for a wide class of devices will
-need to specify much more information in the manifest. There will be several class IDs as
-several classes are targeted. The different classes might not be running the same versions
-of software or firmware and thus several dependencies are listed. Furthermore since
-devices might not be able to reach the same servers, the manifest contains a list of
-aliases for the image, causing the manifest to contain many URI/digest pairs. This manifest
-will be larger than the previous one described and the fields of this manifest will have
-much different sizes. The dynamic nature of certain elements must be considered when
-implementing the manifest as the packet structure must be prepared for it. 
+A different update that is specifying differential updates for a wide class of devices
+will need to specify much more information in the manifest. There will be several class
+IDs as several classes are targeted. The different classes might not be running the same
+versions of software or firmware and thus several dependencies are listed. Furthermore
+since devices might not be able to reach the same servers, the manifest contains a list of
+aliases for the image, causing the manifest to contain many URI/digest pairs. This
+manifest will be larger than the previous one described and the fields of this manifest
+will have much different sizes. The dynamic nature of certain elements must be considered
+when implementing the manifest as the packet structure must be prepared for it. 
 
 The condition type, directive type, and option type structures provides flexibility to
 implementers. The manifest format as it is specifies the optional elements of SUIT as
 option types as well as vendor ID and class ID for condition type. It is easy to add new
-types and thus add new conditions, options, or directives. The meaning of custom
-conditions and directives are the same as the specified ones, conditions are either
+types and thus add new conditions, options, or directives. Conditions are either
 parameters that must match some property of the device or invariants that must be true
-before or after the update, and directives give instructions as how to unpack the update,
-how to install it etc if so needed. The meaning of options though are completely dependant
-on the specific option in mind, so new functionality can be embedded as an option. If the
-current manifest format lacks some functionality for a specific deployment, an implementer
-can add that piece of functionality in the form of an option, updating the server
-preparing the manifest as well as the parser on the device.
+before or after the update, while directives provide instructions as how to unpack the
+update, how to install it etc if so needed. The meaning of options though are completely
+dependant on the specific option in mind, so new functionality can be embedded as an
+option. If the current manifest format lacks some functionality for a specific deployment,
+an implementer can add that piece of functionality in the form of an option, updating the
+server preparing the manifest as well as the parser on the device.
 Section~\ref{sec:manifest-implementation} discusses the manifest implementation used in
 the thesis.
 % TODO: Reference section where manifest implementation is shown
