@@ -10,7 +10,7 @@ Figure~\ref{fig:lifecycle} summarizes the life cycle of a device from an update
 perspective. The figure shows the different stages of a device from being manufactured to
 ending its service. The figure also contains annotations showing what needs to be done in
 each stage. These stages are discussed in further detail in this sections
-\ref{sec:predetermined-information}-\ref{sec:maintenance}. 
+\ref{ssec:predetermined-information}-\ref{ssec:maintenance}. 
 
 \begin{figure}
     \caption{The life cycle of a device.}
@@ -24,7 +24,7 @@ Requesting and verifying tokens would happen in the maintenance stage when a dev
 being updated, but it is a level of detail too fine for the life cycle model.
 
 \subsection{Predetermined Information}
-\label{sec:predetermined-information}
+\label{ssec:predetermined-information}
 A factory new device that is to be installed in an IoT network needs to be shipped with
 some information in order to enroll and register at a server and trust future
 communications. A pre-shared key and CA certificate are needed for the device to trust the
@@ -36,7 +36,7 @@ of operators and update servers in order to trust traffic originating from them.
 operator or update server that is not whitelisted is to be ignored.
 
 \subsection{Enrollment and Registering}
-\label{sec:enrollment-registering}
+\label{ssec:enrollment-registering}
 With the required information a device can enter the enrollment stage. Devices obtain
 certificates by enrolling at the CA, which as previously mentioned requires a pre-shared
 key and CA certificate. After obtaining a certificate the device can be trusted by the
@@ -51,12 +51,12 @@ updating the relevant parts of the profile or creating an entirely new one. The 
 chosen is implementation dependant.
 
 \subsection{Maintenance}
-\label{sec:maintenance}
+\label{ssec:maintenance}
 After a device is enrolled and registered it enters the maintenance stage. The maintenance
 stage can be expected to last for several years and this is where the device performs its
 duties as well as receives and applies updates. After an update, a device will either move
 back to the enrollment or registration stage. If the certificate is broken after updating,
-as discussed in Section~\ref{sec:key-management}, the device moves back to the enrollment
+as discussed in Section~\ref{ssec:key-management}, the device moves back to the enrollment
 stage to obtain a new certificate. After obtaining a new, valid certificate it can update
 its profile in the registration stage. 
 
@@ -68,7 +68,7 @@ you are a manufacturer of IoT devices please consider recycling or (securely) re
 devices, starting the life cycle anew.
 
 \subsection{Summary}
-\label{sec:life-cycle-summary}
+\label{ssec:life-cycle-summary}
 This section has presented a life cycle view of a device in need of updates. Understanding
 the life cycle helps preparing the device for updates as well as letting it react
 accordingly to being updates. To continue being operational is a security concern and
