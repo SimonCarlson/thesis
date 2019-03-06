@@ -43,13 +43,13 @@ Instead, \gls{coap} is a common protocol for the application layer in IoT networ
 \ref{fig:stack-comparison} shows the equivalent protocols for IoT network stacks versus
 traditional network stacks. 
 
-% TODO: Include for OSCORE
 In this chapter, Section~\ref{ssec:udp} explains UDP and why it is the preferred transport
 protocol in IoT networks. Section~\ref{ssec:dtls} briefly explains TLS, why it is
 unsuitable for IoT networks, the differences between TLS and DTLS and why DTLS is used
-instead. Section~\ref{ssec:coap} describes the CoAP protocol. Lastly,
-Sections~\ref{ssec:est-coaps} and \ref{ssec:ace} briefly introduces the EST-coaps protocol
-and ACE framework, enabling asymmetric cryptography and authorization in an IoT context.
+instead. Section~\ref{ssec:coap} describes the CoAP protocol while
+Section~\ref{ssec:oscore} briefly introduces OSCORE. Lastly, Sections~\ref{ssec:est-coaps}
+and \ref{ssec:ace} briefly introduces the EST-coaps protocol and ACE framework, enabling
+asymmetric cryptography and authorization in an IoT context.
 
 \begin{figure}
     \begin{bytefield}[bitformatting=\small, bitwidth=1.1em]{30}
@@ -187,25 +187,34 @@ the server for a new update.
 
 \subsection{OSCORE}
 \label{ssec:oscore}
-% TODO: Very brief intro to OSCORE
+\gls{oscore} is a way of protecting CoAP messages at the application level
+\parencite{oscore}. When using CoAP secured by DTLS, security is terminated at
+intermediate proxies meaning data can be eavesdropped or modified. OSCORE avoids this by
+protecting sensitive parts of CoAP messages, but does not fully protect the entire CoAP
+message. The mapping capabilities between CoAP and HTTP are not affected by the use of
+OSCORE and OSOCORE protected messages can be translated to use different transport
+protocols as well. OSCORE is therefore suited to use within constrained networks but also
+for interfacing with traditional networks while retaining end-to-end security. The OSCORE
+standard is a work in progress.
 
 \subsection{EST-coaps}
 \label{ssec:est-coaps}
-EST-coaps is a protocol for certificate enrollment in constrained environments using CoAP.
-\parencite{est-coaps}. By allowing IoT devices to enroll for certificates, asymmetric
-encryption can be used even in a constrained environment. EST-coaps is heavily based on
-\gls{est} which was developed for traditional, less constrained networks and is thus
-incompatible with the SUIT standard, which is specified to work on very small devices
-\parencite{rfc7030}. EST-coaps retains much of the functionality and structure of EST but
-modifies it slightly to work over CoAP, DTLS, and UDP instead of HTTP, TLS, and TCP, for
-instance by making use of CoAP's block requests and responses to remedy the relatively
-large sizes of certificates.
+EST-coaps is a protocol being standardized for certificate enrollment in constrained
+environments using CoAP. \parencite{est-coaps}. By allowing IoT devices to enroll for
+certificates, asymmetric encryption can be used even in a constrained environment.
+EST-coaps is heavily based on \gls{est} which was developed for traditional, less
+constrained networks and is thus incompatible with the SUIT standard, which is specified
+to work on very small devices \parencite{rfc7030}. EST-coaps retains much of the
+functionality and structure of EST but modifies it slightly to work over CoAP, DTLS, and
+UDP instead of HTTP, TLS, and TCP, for instance by making use of CoAP's block requests and
+responses to remedy the relatively large sizes of certificates. A corresponding profile
+for OSCORE is in development \parencite{est-oscore}.
 
 \subsection{ACE}
 \label{ssec:ace}
-\gls{ace} is a framework for authorization and authentication for IoT contexts, based on
-the OAuth 2.0 framework \parencite{ace}. ACE allows for clients in a network to access
-protected resources through authorization tokens. 
+\gls{ace} is a framework being standardized for authorization and authentication for IoT
+contexts, based on the OAuth 2.0 framework \parencite{ace}. ACE allows for clients in a
+network to access protected resources through authorization tokens. 
 
 A client can request an authorization token from an authorization server and then make a
 request with the token to a resource server. If the token is valid and the resource
@@ -260,7 +269,6 @@ manifest itself, and that both manifest and update image must be distributed in 
 trusted architecture. The draft \parencite{suit-architecture} presents ten qualitative
 requirements this architecture should have:
 
-% TODO: Descriptive list instead?
 \begin{description}
     \item [Agnostic to how firmware images are distributed:]
             the mechanism should not assume a particular technology is used to distributed
