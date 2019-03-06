@@ -2,11 +2,11 @@
 
 \begin{document}
 \label{chap:profiles}
-The previous two chapters have proposed a technology agnostic update architecture and a
+The previous two sections have proposed a technology agnostic update architecture and a
 life cycle perspective for devices. It is time to show concrete incarnations of this
-architecture using state of the art IoT protocols. This chapter is aimed towards
+architecture using state of the art IoT protocols. This section is aimed towards
 implementers needing to make decisions about how to implement the update architecture.
-This chapter will discuss choice of image digest algorithm, vendor and class ID
+This section will discuss choice of image digest algorithm, vendor and class ID
 generation, payload encoding and encryption, and considerations when choosing between
 DTLS/CoAP and OSCORE for an update architecture profile.
 
@@ -112,13 +112,13 @@ not erroneously install the update.
 
 While being better suited for broadcasting and providing end-to-end security, OSCORE is
 not yet standardized. The specification (\parencite{oscore}) is a work in progress as is
-many of the profiles mentioned in this chapter. DTLS and its related IoT profiles are
+many of the profiles mentioned in this section. DTLS and its related IoT profiles are
 standardized and much more mature. If implementing the architecture using OSCORE, it is
 worth noting the incomplete status of the standard.
 
 \subsection{Summary}
 \label{sec:5-summary}
-This chapter identified two options for implementing the architecture: either CoAP over
+This section identified two options for implementing the architecture: either CoAP over
 DTLS or OSCORE. TLS does not support broadcasting however which might be of importance,
 for this purpose OSCORE can be used instead. OSCORE does not rely on a secure channel
 established by DTLS but instead provides end-to-end security for CoAP messages using COSE.
