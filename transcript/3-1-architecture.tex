@@ -77,9 +77,6 @@ architecture applied to different use cases.
 \label{ssec:roles}
 This section explains the notion of devices, update servers, and operators in the
 architecture, their responsibilities, and their intended functionality.
-Section~\ref{sssec:what-is-a-device} briefly covers devices,
-Section~\ref{sssec:what-is-an-update-server} covers the topic of update servers, and
-Section~\ref{sssec:what-is-an-operator} covers operators.
 
 \subsubsection{What Is a Device and What Do They Do?}
 \label{sssec:what-is-a-device}
@@ -181,12 +178,11 @@ authorization token to an update server, which then forwards them to a device. T
 ensures end-to-end security for images and manifests between operators and devices.
 Authorization is further discussed in Section~\ref{ssec:authorization}.
 
-Like a list of update servers introduced in Section~\ref{sssec:what-is-a-device}, devices
-also need a list of operators. This is because if an operator wishes to send a manifest
-directly to a device, the device needs to be aware of the operator and permit traffic from
-that operator. Just like with mapping devices to update servers, devices can receive
-manifests from several operators and different devices may interact with different
-operators. 
+In addition to a list of update servers, devices also need a list of operators. This is
+because if an operator wishes to send a manifest directly to a device, the device needs to
+be aware of the operator and permit traffic from that operator. Just like with mapping
+devices to update servers, devices can receive manifests from several operators and
+different devices may interact with different operators. 
 
 Mapping devices to different operators creates opportunities to logically divide a network
 between operators. An example use case is a constrained network supported by different
@@ -450,7 +446,7 @@ bootloader to verify images.
 
 \subsection{Manifest Format}
 \label{ssec:manifest-format}
-Introduced in Section~\ref{sssec:information-model}, the manifest provides metadata about
+Introduced in Section~\ref{ssec:information-model}, the manifest provides metadata about
 the update and allows devices to ensure they are the intended recipients of an update and
 that it can be trusted. Installing unauthorized or incorrect payloads can lead to a
 compromised or broken system. The manifest doubles down as a security mechanism preventing

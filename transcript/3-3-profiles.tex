@@ -41,7 +41,7 @@ and not part of the profile.
 \end{figure}
 
 \subsection{ID Generation and Hash Algorithms}
-\label{sssec:hash-id-algorithm}
+\label{ssec:hash-id-algorithm}
 The DTLS IoT profile suggests ciphersuites for the use of pre-shared keys and certificates
 and EST has been profiled with CoAPs to use the same ciphersuites for certificates. These
 suites implement the \textbf{SHA-256} hash function which can be used to calculate the
@@ -65,7 +65,7 @@ devices themselves, devices only need to be prepared with their IDs for comparin
 manifest.
 
 \subsection{Payload Encoding and Encryption}
-\label{sssec:encoding-encryption}
+\label{ssec:encoding-encryption}
 For encoding, \textbf{\gls{cbor}} is an efficient binary encoding \parencite{rfc7049}.
 CBOR aims to be an extensible data format providing very small code sizes. It supports
 simple values as well as arrays and maps meaning it is easy to map to and from JSON while
@@ -112,7 +112,7 @@ there are two Internet-Drafts aiming to specify profiles for ACE and EST using O
 meaning these protocols can be used for enrollment and authorization with OSCORE as well
 \parencite{ace-oscore, est-oscore}. ID generation, hash algorithms, and payload encoding
 and signing in the OSCORE profile is the same as in the DTLS profile, see section
-\ref{sssec:hash-id-algorithm} and \ref{sssec:encoding-encryption}.
+\ref{ssec:hash-id-algorithm} and \ref{ssec:encoding-encryption}.
 
 While being better suited for broadcasting and providing end-to-end security, OSCORE is
 not yet standardized. The specification (\parencite{oscore}) is a work in progress as is
