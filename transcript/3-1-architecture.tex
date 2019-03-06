@@ -72,7 +72,7 @@ Section~\ref{sec:manifest-format} introduces the manifest format proposed by the
 architecture. Finally Section~\ref{sec:use-cases-examples-topologies} shows the
 architecture applied to different use cases.
 
-\section{Roles of Devices, Update Servers, and Operators}
+\subsection{Roles of Devices, Update Servers, and Operators}
 \label{sec:roles}
 This section explains the notion of devices, update servers, and operators in the
 architecture, their responsibilities, and their intended functionality.
@@ -80,7 +80,7 @@ Section~\ref{ssec:what-is-a-device} briefly covers devices,
 Section~\ref{ssec:what-is-an-update-server} covers the topic of update servers, and
 Section~\ref{ssec:what-is-an-operator} covers operators.
 
-\subsection{What Is a Device and What Do They Do?}
+\subsubsection{What Is a Device and What Do They Do?}
 \label{ssec:what-is-a-device}
 Devices are constrained, low-power IoT appliances connected to a constrained network. They
 are running the applications of the network and performs simple tasks such as measurement
@@ -107,7 +107,7 @@ handler is responsible for decrypting manifests and images, parsing and verifyin
 manifest, and preparing the image for boot. How and where the device stores manifest and
 image is discussed in further detail in Section~\ref{sec:upgrading}.
 
-\subsection{What Is an Update Server and What Do They Do?}
+\subsubsection{What Is an Update Server and What Do They Do?}
 \label{ssec:what-is-an-update-server}
 Update servers are responsible for transporting manifests and images to the devices,
 acting as image repositories, and keeping track of device profiles. After enrollment
@@ -171,7 +171,7 @@ important points no matter the topology of choice:
             to query device status and upload manifests and images
 \end{itemize}
 
-\subsection{What Is an Operator and What Do They Do?}
+\subsubsection{What Is an Operator and What Do They Do?}
 \label{ssec:what-is-an-operator}
 Operators are people authorized to upload manifests and images to an update server. They
 can also optionally upload manifests directly to a device depending on the network
@@ -221,7 +221,7 @@ As with update servers, the essence of being an operator can be captured in a fe
             manifests and images to the update server
 \end{itemize}
 
-\section{Key Management of IoT Update Procedure}
+\subsection{Key Management of IoT Update Procedure}
 \label{sec:key-management}
 % TODO: Consider updates breaking certificates. Why would they? Lack of understanding concerning
 % certificates perhaps
@@ -277,7 +277,7 @@ if it was factory new. The process of issuing pre-shared keys might be difficult
 automate as the CA must be aware of which keys to accept, but it is needed to ensure the
 security of future device communication.
 
-\section{Device Profiles and Update Communication}
+\subsection{Device Profiles and Update Communication}
 \label{sec:communication}
 In heterogeneous networks of IoT devices, each device might sport a specific protocol
 stack. In order to enable different devices to be updated, update servers must be aware of
@@ -342,7 +342,7 @@ use case of pushing updates which could be critical if a vulnerability must be p
 right away. Operators must be given the choice to push updates to their devices, and thus
 update servers must be able to initiate contact with devices.
 
-\section{Update Procedure Authorization}
+\subsection{Update Procedure Authorization}
 \label{sec:authorization}
 A flexible architecture enables different configurations of update servers, operators, and
 devices. An operator might be authorized to update all parts of all devices, or be
@@ -402,7 +402,7 @@ applications would fail due to authorization errors. Updates that affects the en
 of the device, i.e. writes an entirely new image, also need to be authorized as they are
 changing the code of the device.
 
-\section{Update Handling for Local Upgrades}
+\subsection{Update Handling for Local Upgrades}
 \label{sec:upgrading}
 % TODO: How to handle decryption and verification
 % I like the idea of decrypting once and storing decrypted image with its hash for smaller
@@ -447,7 +447,7 @@ in order to compare sequence numbers the most recent manifest has to be kept aro
 Manifests should be kept for the update handler to compare sequence numbers, and for the
 bootloader to verify images.
 
-\section{Manifest Format}
+\subsection{Manifest Format}
 \label{sec:manifest-format}
 Introduced in Section~\ref{ssec:information-model}, the manifest provides metadata about
 the update and allows devices to ensure they are the intended recipients of an update and
@@ -528,7 +528,7 @@ as the parser on the device. Section~\ref{sec:manifest-implementation} discusses
 manifest implementation used in the thesis.
 % TODO: Reference section where manifest implementation is shown
 
-\section{Use Cases and Example Topologies}
+\subsection{Use Cases and Example Topologies}
 \label{sec:use-cases-examples-topologies}
 As discussed, operators, update servers, and devices can interact in many ways. The
 architecture tries to be flexible allowing for different network topologies and
@@ -602,7 +602,7 @@ may be necessary to communicate with the often UDP based constrained networks. T
 server can act as a proxy, or a dedicated proxy could be used. If the operator has the
 proper protocols implemented, they can communicate manifests directly to a device.
 
-\section{Summary}
+\subsection{Summary}
 \label{sec:3-summary}
 This chapter presented the proposed architecture of the thesis. The architecture added
 notions of identification and authorization of all entities involved, defined the roles

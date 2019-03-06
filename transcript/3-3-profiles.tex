@@ -10,7 +10,7 @@ This chapter will discuss choice of image digest algorithm, vendor and class ID
 generation, payload encoding and encryption, and considerations when choosing between
 DTLS/CoAP and OSCORE for an update architecture profile.
 
-\section{DTLS Profile}
+\subsection{DTLS Profile}
 \label{sec:dtls-profile}
 When implementing the architecture, one choice of protocols is using DTLS and CoAP for
 constrained communication to and from devices. For enrollment and authorization, EST and
@@ -67,7 +67,7 @@ CBOR encoded objects, which in the architecture will be the manifest and image
 \parencite{rfc8152}. As DTLS secures the channel, the manifest and image can be signed
 using COSE objects to ensure their integrity during transport. 
 
-\section{OSCORE Profile}
+\subsection{OSCORE Profile}
 \label{sec:oscore-profile}
 The main difference between using CoAP over DTLS and OSCORE is on which level the
 communication is secured. DTLS provides transport layer security by setting up a secure
@@ -116,7 +116,7 @@ many of the profiles mentioned in this chapter. DTLS and its related IoT profile
 standardized and much more mature. If implementing the architecture using OSCORE, it is
 worth noting the incomplete status of the standard.
 
-\section{Summary}
+\subsection{Summary}
 \label{sec:5-summary}
 This chapter identified two options for implementing the architecture: either CoAP over
 DTLS or OSCORE. TLS does not support broadcasting however which might be of importance,
