@@ -449,7 +449,6 @@ bootloader to verify images.
 
 \section{Manifest Format}
 \label{sec:manifest-format}
-% TODO: Consider splitting conditions and directives into pre/post? Semantics
 Introduced in Section~\ref{ssec:information-model}, the manifest provides metadata about
 the update and allows devices to ensure they are the intended recipients of an update and
 that it can be trusted. Installing unauthorized or incorrect payloads can lead to a
@@ -516,13 +515,17 @@ option types as well as vendor ID and class ID for condition type. It is easy to
 types and thus add new conditions, options, or directives. Conditions are either
 parameters that must match some property of the device or invariants that must be true
 before or after the update, while directives provide instructions as how to unpack the
-update, how to install it etc if so needed. The meaning of options though are completely
-dependant on the specific option in mind, so new functionality can be embedded as an
-option. If the current manifest format lacks some functionality for a specific deployment,
-an implementer can add that piece of functionality in the form of an option, updating the
-server preparing the manifest as well as the parser on the device.
-Section~\ref{sec:manifest-implementation} discusses the manifest implementation used in
-the thesis.
+update, how to install it etc if so needed. Conditions and directives are split into
+pre/post variants to avoid erroneously adding for instance vendor ID as a post condition.
+The structure of pre- and postconditions are the same being separated only for stronger
+semantics, the same for pre- and postdirectives.
+
+The meaning of options are completely dependant on the specific option in mind, so new
+functionality can be embedded as an option. If the current manifest format lacks some
+functionality for a specific deployment, an implementer can add that piece of
+functionality in the form of an option, updating the server preparing the manifest as well
+as the parser on the device. Section~\ref{sec:manifest-implementation} discusses the
+manifest implementation used in the thesis.
 % TODO: Reference section where manifest implementation is shown
 
 \section{Use Cases and Example Topologies}
