@@ -1,3 +1,14 @@
+5/3-19:
+Restructured chapter 5 into a DTLS and an OSCORE profile
+
+Fixed acronyms in chapter 2
+
+Prepared background section for OSCORE (very short)
+
+Every chapter starting from background now ties together the previous and following chapters
+
+First attempt at fixing problem statement
+
 4/3-19:
 Proper formatting of section 5.1 title
 
