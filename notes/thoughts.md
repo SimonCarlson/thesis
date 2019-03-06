@@ -41,3 +41,19 @@ Might be too expensive to have several certificates per device. Also would that 
 Include the manifest used in the prototype both in JSON and CBOR format for comparison
 
 Github links to code repos (manifest and contiki-ng fork I guess)
+
+
+
+# Security considerations
+
+- Battery-draining attacks by spamming manifests or something (partially mitigated by whitelists of operators/servers)
+
+- Other considerations for IoT security outside updates
+
+- Update servers being hijacked/repo of images modified
+
+# Titles
+
+- Interoperable Software and Firmware Updates for Internet of Things
+- A Software and Firmware Update Architecture for Internet of Things Based on SUIT
+- Software and Firmware Updates for Internet of Things - An Interoperable Architecture Based on SUIT

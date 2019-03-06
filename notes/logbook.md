@@ -1,3 +1,20 @@
+6/3-19:
+Added OSCORE section in background
+
+Made links in ToC
+
+Separated conditions and directives in manifest format into pre/post conditions and pre/post directives. Updated image and text accordingly
+
+Figures showing the protocols used in the DTLS and OSCORE profiles
+
+Put architecture, life cycle, and profiles in a method chapter. Made the use of "chapter" and "section" consistent.
+
+Should prepare some suggestions of titles and ask Shahid, maybe for research question as well?
+
+Improved the introductions and summaries of chapters
+
+Discussion about the protocol figures in the profile chapter
+
 5/3-19:
 Restructured chapter 5 into a DTLS and an OSCORE profile
 

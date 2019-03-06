@@ -88,3 +88,7 @@ To do:
 - [x] Add a page for acknowledgements
 - [x] Mention the SUIT documents are internet drafts and must be considered work in progress, that they expire, and that they may change
 - [x] Put all ACE information in background
+- [x] Improve summaries of chapters
+- [x] Put architecture, life cycle, and profiles in one methods chapter? (<b>I think it makes sense</b>)
+- [ ] Narrow down research question
+- [ ] Consider title: name the proposed architecture? Mention SUIT?
