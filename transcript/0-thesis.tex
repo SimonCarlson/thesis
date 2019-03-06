@@ -13,6 +13,8 @@
 \usepackage[acronym,nonumberlist,nomain,nopostdot]{glossaries} % For the glossary
 \usepackage{enumitem} % For changing enumerations
 \usepackage{microtype} % Long words and line breaking
+\usepackage{hyperref} % For links in table of contents
+\usepackage{color} % For coloring links
 
 \makeglossaries
 \newacronym{iot}{IoT}{Internet of Things}
@@ -65,6 +67,11 @@
 \providecommand{\keywords}[1]{\textbf{\textit{Keywords:}} #1}
 \providecommand{\nyckelord}[1]{\textbf{\textit{Nyckelord:}} #1}
 
+\hypersetup{
+    colorlinks=true,
+    linktoc=all,
+    linkcolor=black
+}
 
 % TODO: Remove WIP
 \title{Software and Firmware Updates for Internet of Things (WIP)}

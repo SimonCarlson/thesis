@@ -1,0 +1,48 @@
+\BOOKMARK [0][-]{chapter.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.1.1}{Problem Statement}{chapter.1}% 2
+\BOOKMARK [2][-]{subsection.1.1.1}{Problem}{section.1.1}% 3
+\BOOKMARK [2][-]{subsection.1.1.2}{Purpose}{section.1.1}% 4
+\BOOKMARK [2][-]{subsection.1.1.3}{Goal}{section.1.1}% 5
+\BOOKMARK [1][-]{section.1.2}{Methodologies}{chapter.1}% 6
+\BOOKMARK [1][-]{section.1.3}{Risks, Ethics, and Sustainability}{chapter.1}% 7
+\BOOKMARK [1][-]{section.1.4}{Scope}{chapter.1}% 8
+\BOOKMARK [1][-]{section.1.5}{Outline}{chapter.1}% 9
+\BOOKMARK [0][-]{chapter.2}{Background}{}% 10
+\BOOKMARK [1][-]{section.2.1}{IoT Network Stack}{chapter.2}% 11
+\BOOKMARK [2][-]{subsection.2.1.1}{UDP}{section.2.1}% 12
+\BOOKMARK [2][-]{subsection.2.1.2}{DTLS}{section.2.1}% 13
+\BOOKMARK [2][-]{subsection.2.1.3}{CoAP}{section.2.1}% 14
+\BOOKMARK [2][-]{subsection.2.1.4}{OSCORE}{section.2.1}% 15
+\BOOKMARK [2][-]{subsection.2.1.5}{EST-coaps}{section.2.1}% 16
+\BOOKMARK [2][-]{subsection.2.1.6}{ACE}{section.2.1}% 17
+\BOOKMARK [1][-]{section.2.2}{SUIT}{chapter.2}% 18
+\BOOKMARK [2][-]{subsection.2.2.1}{Architecture}{section.2.2}% 19
+\BOOKMARK [2][-]{subsection.2.2.2}{Information Model}{section.2.2}% 20
+\BOOKMARK [1][-]{section.2.3}{Contiki-NG}{chapter.2}% 21
+\BOOKMARK [2][-]{subsection.2.3.1}{Firefly}{section.2.3}% 22
+\BOOKMARK [1][-]{section.2.4}{Summary}{chapter.2}% 23
+\BOOKMARK [0][-]{chapter.3}{Software Updates for Internet of Things Architecture}{}% 24
+\BOOKMARK [1][-]{section.3.1}{Roles of Devices, Update Servers, and Operators}{chapter.3}% 25
+\BOOKMARK [2][-]{subsection.3.1.1}{What Is a Device and What Do They Do?}{section.3.1}% 26
+\BOOKMARK [2][-]{subsection.3.1.2}{What Is an Update Server and What Do They Do?}{section.3.1}% 27
+\BOOKMARK [2][-]{subsection.3.1.3}{What Is an Operator and What Do They Do?}{section.3.1}% 28
+\BOOKMARK [1][-]{section.3.2}{Key Management of IoT Update Procedure}{chapter.3}% 29
+\BOOKMARK [1][-]{section.3.3}{Device Profiles and Update Communication}{chapter.3}% 30
+\BOOKMARK [1][-]{section.3.4}{Update Procedure Authorization}{chapter.3}% 31
+\BOOKMARK [1][-]{section.3.5}{Update Handling for Local Upgrades}{chapter.3}% 32
+\BOOKMARK [1][-]{section.3.6}{Manifest Format}{chapter.3}% 33
+\BOOKMARK [1][-]{section.3.7}{Use Cases and Example Topologies}{chapter.3}% 34
+\BOOKMARK [1][-]{section.3.8}{Summary}{chapter.3}% 35
+\BOOKMARK [0][-]{chapter.4}{Internet of Things Update Life Cycle}{}% 36
+\BOOKMARK [1][-]{section.4.1}{Predetermined Information}{chapter.4}% 37
+\BOOKMARK [1][-]{section.4.2}{Enrollment and Registering}{chapter.4}% 38
+\BOOKMARK [1][-]{section.4.3}{Maintenance}{chapter.4}% 39
+\BOOKMARK [1][-]{section.4.4}{Summary}{chapter.4}% 40
+\BOOKMARK [0][-]{chapter.5}{Internet of Things UpdateArchitecture Profiles}{}% 41
+\BOOKMARK [1][-]{section.5.1}{DTLS Profile}{chapter.5}% 42
+\BOOKMARK [2][-]{subsection.5.1.1}{ID Generation and Hash Algorithms}{section.5.1}% 43
+\BOOKMARK [2][-]{subsection.5.1.2}{Payload Encoding and Encryption}{section.5.1}% 44
+\BOOKMARK [1][-]{section.5.2}{OSCORE Profile}{chapter.5}% 45
+\BOOKMARK [1][-]{section.5.3}{Summary}{chapter.5}% 46
+\BOOKMARK [0][-]{chapter.6}{Implementation}{}% 47
+\BOOKMARK [0][-]{chapter*.6}{Bibliography}{}% 48
