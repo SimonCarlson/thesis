@@ -40,8 +40,8 @@ and not part of the profile.
     \includegraphics{images/dtls-profile.pdf}
 \end{figure}
 
-\subsection{ID Generation and Hash Algorithms}
-\label{ssec:hash-id-algorithm}
+\subsubsection{ID Generation and Hash Algorithms}
+\label{sssec:hash-id-algorithm}
 The DTLS IoT profile suggests ciphersuites for the use of pre-shared keys and certificates
 and EST has been profiled with CoAPs to use the same ciphersuites for certificates. These
 suites implement the \textbf{SHA-256} hash function which can be used to calculate the
@@ -60,20 +60,20 @@ hierarchical namespace structure is suggested also by SUIT.
 
 Section 4.3 of the UUID specification states that "Choose either MD5 or SHA-1 as the hash
 algorithm; If backward compatibility is not an issue, SHA-1 is preferred". This means
-\textbf{UUID5} should be used as it uses SHA-1 for hashing. ID generation will not occur on the
-devices themselves, devices only need to be prepared with their IDs for comparing with the
-manifest.
+\textbf{UUID5} should be used as it uses SHA-1 for hashing. ID generation will not occur
+on the devices themselves, devices only need to be prepared with their IDs for comparing
+with the manifest.
 
-\subsection{Payload Encoding and Encryption}
-\label{ssec:encoding-encryption}
+\subsubsection{Payload Encoding and Encryption}
+\label{sssec:encoding-encryption}
 For encoding, \textbf{\gls{cbor}} is an efficient binary encoding \parencite{rfc7049}.
 CBOR aims to be an extensible data format providing very small code sizes. It supports
 simple values as well as arrays and maps meaning it is easy to map to and from JSON while
 being more compact than JSON. 
 
-The use of CBOR enables the use of \textbf{\gls{cose}}. COSE provides encryption and signing for
-CBOR encoded objects, which in the architecture will be the manifest and image
-\parencite{rfc8152}. As DTLS secures the channel, the manifest and image can be signed
+The use of CBOR enables the use of \textbf{\gls{cose}} \parencite{rfc8152}. COSE provides
+encryption and signing for CBOR encoded objects, which in the architecture will be the
+manifest and image. As DTLS secures the channel, the manifest and image can be signed
 using COSE objects to ensure their integrity during transport. 
 
 \subsection{OSCORE Profile}
@@ -112,7 +112,7 @@ there are two Internet-Drafts aiming to specify profiles for ACE and EST using O
 meaning these protocols can be used for enrollment and authorization with OSCORE as well
 \parencite{ace-oscore, est-oscore}. ID generation, hash algorithms, and payload encoding
 and signing in the OSCORE profile is the same as in the DTLS profile, see section
-\ref{ssec:hash-id-algorithm} and \ref{ssec:encoding-encryption}.
+\ref{ssec:dtls-profile}.
 
 While being better suited for broadcasting and providing end-to-end security, OSCORE is
 not yet standardized. The specification (\parencite{oscore}) is a work in progress as is

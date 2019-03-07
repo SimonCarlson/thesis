@@ -13,6 +13,7 @@
 *.lof
 *.lol
 *.lot
+*.out
 *~
 .~lock.*
 Template-exjobb.zip
