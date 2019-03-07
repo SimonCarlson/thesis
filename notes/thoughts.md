@@ -57,3 +57,11 @@ Github links to code repos (manifest and contiki-ng fork I guess)
 - Interoperable Software and Firmware Updates for Internet of Things
 - A Software and Firmware Update Architecture for Internet of Things Based on SUIT
 - Software and Firmware Updates for Internet of Things - An Interoperable Architecture Based on SUIT
+- Enhancing and Applying SUIT for Internet of Things Software and Firmware Updates
+- Designing and Prototyping an Internet of Things Software and Firmware Update Architecture Based on SUIT
+- An Internet of Things Software and Firmware Update Architecture Based on SUIT
+
+# Research question
+
+- How can the SUIT standard be applied to provide secure updates to heterogeneous networks of constrained IoT devices?
+- How can the SUIT standard be applied to develop a technology agnostic, interoperable update architecture for heterogeneous networks of IoT devices?

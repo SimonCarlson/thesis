@@ -90,16 +90,21 @@ To do:
 - [x] Put all ACE information in background
 - [x] Improve summaries of chapters
 - [x] Put architecture, life cycle, and profiles in one methods chapter? (<b>I think it makes sense</b>)
-- [ ] Introduction:
-  - [ ] More descriptive title (maybe use a subtitle?)
-  - [ ] More "scientific sources"
-  - [ ] Make sure it is accessible for someone who is uninitiated
-  - [ ] Improve research question to be more easily answerable
-- [ ] Bibliography:
-  - [ ] Use a standard bibliography style
+- [x] Introduction:
+  - [x] More descriptive title (maybe use a subtitle?) <b>An Internet of Things Software and Firmware Update Architecture Based on SUIT</b>
+  - [x] More "scientific sources"
+  - [x] Make sure it is accessible for someone who is uninitiated
+  - [x] Improve research question to be more easily answerable. <b>How can the SUIT standard be applied to develop a technology agnostic and interoperable update architecture for heterogeneous networks of Internet of Things devices?</b>
+- [x] Bibliography:
+  - [x] Use a standard bibliography style
 - [ ] Evaluation:
   - [ ] Present threats from SUIT standard, discuss if they are fulfilled
   - [ ] Mention new/other threats covered by the architecture
   - [ ] Mention security considerations from SUIT, discuss if they are fulfilled
   - [ ] Show measurements of packet drop rates, packet sizes, radio duty cycles, energy drain
   - [ ] Other IoT security concerns outside of updates
+- [ ] End-to-end security
+  - [ ] Expand discussion about issues achieveing end-to-end
+  - [ ] Group contexts and keys
+  - [ ] Remote receiving of update, local decryption at devices
+  - [ ] Encrypt symm key of update with asym key of device, all parts encrypted but update is only encrypted once (size considerations)

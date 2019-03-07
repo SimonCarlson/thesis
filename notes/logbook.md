@@ -1,6 +1,15 @@
 7/3-19:
 Restructured DTLS profile a bit
 
+Spoke with Marco and Rikard. Large difficulties achieving true end-to-end encryption. How do you manage keys? How do you account for devices being deployed after an update is created but still needing that update? In Marco's and Ludwig's paper they introduce a dispatcher that can mediate between devices and users, allowing an update to be applied reactively instead of completely proactively (precondition timestamp is proactive). Having a local dispatcher (my case update server) receive a remote update then obtain a decryption key before encrypting it with a group context key works. Only encrypt0 in Contiki-ng (no sign0, encrypt1, or sign1). Can still be used for my purposes. If necessary can try to port sign0 from the Java impl. CBOR should be at least partially available in Contiki-ng as part of encrypt0.
+
+Improved introduction with new sources on IoT security
+
+Refined research question, made it narrower
+
+Trying a new title, hopefully it sticks
+
+No links to RFCs in bibliography
 
 6/3-19:
 Added OSCORE section in background
