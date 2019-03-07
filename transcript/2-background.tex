@@ -39,15 +39,15 @@ networks still need confidentiality and integrity through some means and thus us
 \gls{dtls}, which is a version of TLS enhanced for use in datagram oriented protocols.
 HTTP can be used over UDP for the application layer, but as HTTP is encoded in human
 readable plaintext it is unnecessarily verbose and not optimal for constrained networks.
-Instead, \gls{coap} is a common protocol for the application layer in IoT networks. Figure
-\ref{fig:stack-comparison} shows the equivalent protocols for IoT network stacks versus
-traditional network stacks. 
+Instead, \gls{coap} is a common protocol for the application layer in IoT networks.
+Figure~\ref{fig:stack-comparison} shows the equivalent protocols for IoT network stacks
+versus traditional network stacks. 
 
 In this chapter, Section~\ref{ssec:udp} explains UDP and why it is the preferred transport
 protocol in IoT networks. Section~\ref{ssec:dtls} briefly explains TLS, why it is
 unsuitable for IoT networks, the differences between TLS and DTLS and why DTLS is used
 instead. Section~\ref{ssec:coap} describes the CoAP protocol while
-Section~\ref{ssec:oscore} briefly introduces OSCORE. Lastly, Sections~\ref{ssec:est-coaps}
+Section~\ref{ssec:oscore} briefly introduces OSCORE. Lastly, sections \ref{ssec:est-coaps}
 and \ref{ssec:ace} briefly introduces the EST-coaps protocol and ACE framework, enabling
 asymmetric cryptography and authorization in an IoT context.
 

@@ -71,9 +71,9 @@ context of the update architecture. Section~\ref{ssec:key-management} discusses 
 needed for devices to enroll in a PKI and how keys are handled during updates.
 Section~\ref{ssec:communication} describes how devices, update servers, and operators can
 communicate and shows an example workflow of communicating an update.
-Section~\ref{ssec:authorization} describes the purpose of issuing authorization tokens, how
-devices can use them, and who is to be authorized. Section~\ref{ssec:upgrading} discusses
-different means of handling the payload when applying an update.
+Section~\ref{ssec:authorization} describes the purpose of issuing authorization tokens,
+how devices can use them, and who is to be authorized. Section~\ref{ssec:upgrading}
+discusses different means of handling the payload when applying an update.
 Section~\ref{ssec:manifest-format} introduces the manifest format proposed by the
 architecture. Finally Section~\ref{ssec:use-cases-examples-topologies} shows the
 architecture applied to different use cases.
@@ -597,8 +597,8 @@ device has received an answer, it can proceed applying the update.
 \end{figure}
 
 What these three examples have in common is that the operator always resides outside the
-constrained network, devices always reside within the constrained network, and that
-update servers transport updates to devices alongside authorization tokens. Since operators
+constrained network, devices always reside within the constrained network, and that update
+servers transport updates to devices alongside authorization tokens. Since operators
 reside in traditional networks using traditional protocols such as HTTP over TCP, a proxy
 may be necessary to communicate with the often UDP based constrained networks. The update
 server can act as a proxy, or a dedicated proxy could be used. If the operator has the

@@ -27,10 +27,10 @@ vendor and class ID generation, payload encoding, and payload encryption. The se
 the architecture is not bound to characteristics of any of these protocols and others can
 be used instead, this is just one possible profile.
 
-Figure \ref{fig:dtls-profile} shows where in the constrained part of architecture the
+Figure~\ref{fig:dtls-profile} shows where in the constrained part of architecture the
 different protocols of the DTLS profile will be used. All communication to and from the
 device is reliant on DTLS, the only exception is the enrollment procedure which will
-require a pre-shared key as discussed in Section \ref{ssec:key-management}. The
+require a pre-shared key as discussed in Section~\ref{ssec:key-management}. The
 communication protocols in the non-constrained part of the architecture are suggestions
 and not part of the profile.
 
@@ -92,10 +92,10 @@ view or manipulate the protected contents. As update servers are in addition to
 transporting updates supposed to act as update repositories, a decision has to be made how
 updates are stored on the server. This is an implementation detail.
 
-Figure \ref{fig:oscore-profile} shows where in the constrained part of architecture the
+Figure~\ref{fig:oscore-profile} shows where in the constrained part of architecture the
 different protocols of the OSCORE profile will be used. All communication to and from the
 device is reliant on OSCORE, the only exception is the enrollment procedure which will
-require a pre-shared key as discussed in Section \ref{ssec:key-management}. The
+require a pre-shared key as discussed in Section~\ref{ssec:key-management}. The
 communication protocols in the non-constrained part of the architecture are suggestions
 and not part of the profile. 
 
@@ -111,8 +111,8 @@ security context is in place, unicast OSCORE is still possible. At the time of w
 there are two Internet-Drafts aiming to specify profiles for ACE and EST using OSCORE,
 meaning these protocols can be used for enrollment and authorization with OSCORE as well
 \parencite{ace-oscore, est-oscore}. ID generation, hash algorithms, and payload encoding
-and signing in the OSCORE profile is the same as in the DTLS profile, see section
-\ref{ssec:dtls-profile}.
+and signing in the OSCORE profile is the same as in the DTLS profile, see
+Section~\ref{ssec:dtls-profile}.
 
 While being better suited for broadcasting and providing end-to-end security, OSCORE is
 not yet standardized. The specification (\parencite{oscore}) is a work in progress as is
