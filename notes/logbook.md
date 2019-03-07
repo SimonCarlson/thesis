@@ -1,3 +1,7 @@
+7/3-19:
+Restructured DTLS profile a bit
+
+
 6/3-19:
 Added OSCORE section in background
 

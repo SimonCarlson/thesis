@@ -90,5 +90,16 @@ To do:
 - [x] Put all ACE information in background
 - [x] Improve summaries of chapters
 - [x] Put architecture, life cycle, and profiles in one methods chapter? (<b>I think it makes sense</b>)
-- [ ] Narrow down research question
-- [ ] Consider title: name the proposed architecture? Mention SUIT?
+- [ ] Introduction:
+  - [ ] More descriptive title (maybe use a subtitle?)
+  - [ ] More "scientific sources"
+  - [ ] Make sure it is accessible for someone who is uninitiated
+  - [ ] Improve research question to be more easily answerable
+- [ ] Bibliography:
+  - [ ] Use a standard bibliography style
+- [ ] Evaluation:
+  - [ ] Present threats from SUIT standard, discuss if they are fulfilled
+  - [ ] Mention new/other threats covered by the architecture
+  - [ ] Mention security considerations from SUIT, discuss if they are fulfilled
+  - [ ] Show measurements of packet drop rates, packet sizes, radio duty cycles, energy drain
+  - [ ] Other IoT security concerns outside of updates
