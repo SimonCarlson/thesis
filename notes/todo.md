@@ -102,9 +102,12 @@ To do:
   - [ ] Mention new/other threats covered by the architecture
   - [ ] Mention security considerations from SUIT, discuss if they are fulfilled
   - [ ] Show measurements of packet drop rates, packet sizes, radio duty cycles, energy drain
+    - [ ] Include wireshark captures?
   - [ ] Other IoT security concerns outside of updates
-- [ ] End-to-end security
-  - [ ] Expand discussion about issues achieveing end-to-end
-  - [ ] Group contexts and keys
-  - [ ] Remote receiving of update, local decryption at devices
-  - [ ] Encrypt symm key of update with asym key of device, all parts encrypted but update is only encrypted once (size considerations)
+- [x] End-to-end security
+  - [x] Expand discussion about issues achieveing end-to-end
+  - [x] Group contexts and keys
+  - [x] Remote receiving of update, local decryption at devices
+  - [x] Encrypt symm key of update with asym key of device, all parts encrypted but update is only encrypted once (size considerations)
+  - [x] Consider end-to-end security from update server to devices through constrained network only. Update server is trusted intermediary from the viewpoint of an operator
+- [x] Fix so that long table is not repeated in list of tables

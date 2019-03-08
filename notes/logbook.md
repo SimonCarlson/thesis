@@ -1,3 +1,16 @@
+8/3-19:
+Maybe I should use vim after all
+
+Added some discussion on achieving end-to-end encryption and key management
+
+Suppressed repetitions of tables in list of tables
+
+Forked Martin's contiki-ng repo containing cbor/cose/oscore code
+
+Tried to understand COSE sign objects. Maybe I do a little
+
+Sent the state of the thesis to Elena, Farhad, and Shahid and wished them all a nice weekend :-)
+
 7/3-19:
 Restructured DTLS profile a bit
 
