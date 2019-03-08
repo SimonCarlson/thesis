@@ -80,17 +80,12 @@ using COSE objects to ensure their integrity during transport.
 \label{ssec:oscore-profile}
 \acrfull{oscore} provides end-to-end protection for CoAP messages using COSE
 \parencite{oscore}. By providing end-to-end encryption CoAP message security is not
-terminated at a proxy or update server as with DTLS. This means a compromised proxy or
-update server cannot be leveraged to eavesdrop or manipulate data. The difference between
-using OSCORE and using COSE payloads in CoAP with DTLS is that OSCORE protects the entire
-CoAP message end-to-end while COSE and CoAP protects only the payloads but not the CoAP
-message itself, message security relies on a secure channel established by DTLS. 
-
-If updates are being pushed from an operator to a device directly, OSCORE can support
-HTTP/CoAP proxying to secure the entire transport. The update server will not be able to
-view or manipulate the protected contents. As update servers are in addition to
-transporting updates supposed to act as update repositories, a decision has to be made how
-updates are stored on the server. This is an implementation detail.
+terminated at a proxy or update server as with DTLS. If updates are being pushed from an
+operator to a device directly, OSCORE can support HTTP/CoAP proxying to secure the entire
+transport. The update server will not be able to view or manipulate the protected
+contents. As update servers are in addition to transporting updates supposed to act as
+update repositories, a decision has to be made how updates are stored on the server. This
+is an implementation detail.
 
 Figure~\ref{fig:oscore-profile} shows where in the constrained part of architecture the
 different protocols of the OSCORE profile will be used. All communication to and from the
@@ -114,11 +109,29 @@ meaning these protocols can be used for enrollment and authorization with OSCORE
 and signing in the OSCORE profile is the same as in the DTLS profile, see
 Section~\ref{ssec:dtls-profile}.
 
-While being better suited for broadcasting and providing end-to-end security, OSCORE is
-not yet standardized. The specification (\parencite{oscore}) is a work in progress as is
-many of the profiles mentioned in this section. DTLS and its related IoT profiles are
-standardized and much more mature. If implementing the architecture using OSCORE, it is
-worth noting the incomplete status of the standard.
+When trying to achieve end-to-end encryption key management becomes more difficult, how do
+you ensure end-to-end encryption will still allowing all intended recipients (devices) to
+decrypt the payload? One solution is to let the operator  encrypt the payload with a
+symmetric key which the update server then either encrypts with each intended recipients
+asymmetric key or with a group key. This avoids having to re-encrypt the payload (breaking
+end-to-end encryption) and allows storing the encrypted payload and just re-encrypting the
+key for new recipients. This approach means a trusted communication must be established
+between the operator and update server for securely exchanging the symmetric key of the
+payload and that update servers must be authorized to retrieve said key.
+
+Another interpretation of end-to-end encryption could be purely between the update server
+and devices. If a constrained network possesses some routing capabilities an update server
+might not know which intermediaries will be used for transporting a package. In this case,
+OSCORE can be used to achieve end-to-end security between the update server and the
+intended device, while leaving operator-to-update server communication to some other
+security mechanism. This is highly topology dependant.
+
+While being better suited for broadcasting and providing end-to-end security, OSCORE
+introduces some key management issues and is not yet standardized. The specification
+(\parencite{oscore}) is a work in progress as is many of the profiles mentioned in this
+section. DTLS and its related IoT profiles are standardized and much more mature. If
+implementing the architecture using OSCORE, it is worth noting the incomplete status of
+the standard.
 
 \subsection{Summary}
 \label{ssec:profiles-summary}
