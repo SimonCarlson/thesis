@@ -1,3 +1,14 @@
+11/3-19:
+I am exhausted
+
+Where do we go from here? Implementation? Refining the thesis further? The layout for sure needs work but I feel the content is there. Perhaps introduction sections on COSE but does it really provide anything? Also, does the UDP section provide anything? Doubt it
+
+What would the implementation start with? Creating a mock server and client exchanging COSE signed payloads over CoAP and DTLS perhaps. Then signing/encrypting payloads in COSE. Then move on to defining manifest packet structure, then implementing a small parser. Last piece is probably to do the actual update.
+
+Improved the layout of figures. They now align better with their describing text and tries not to make the thesis look awkward. Removed the UDP header figure.
+
+It's funny how the more you look at your thesis the less you like it, and looking at other people's thesis for the first time makes them look super.
+
 8/3-19:
 Maybe I should use vim after all
 

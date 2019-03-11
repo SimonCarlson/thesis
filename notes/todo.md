@@ -27,7 +27,7 @@ To do:
   - [ ] Figure out how to add options without making the entire thing clunky
 - [x] Rewrite the introduction regarding device management (architecture not implementation)
   - [x] Further push understanding of standardisation - needs flexibility, details left to implementation
-- [ ] Install libcoap
+- [x] Install libcoap
 - [x] Read ACE, talk to Ludwig about it
 - [x] Chapter 2:
   - [x] Fix any mention of device management: server side will care about finding devices, what versions they are running
