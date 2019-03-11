@@ -43,15 +43,7 @@ Instead, \gls{coap} is a common protocol for the application layer in IoT networ
 Figure~\ref{fig:stack-comparison} shows the equivalent protocols for IoT network stacks
 versus traditional network stacks. 
 
-In this chapter, Section~\ref{ssec:udp} explains UDP and why it is the preferred transport
-protocol in IoT networks. Section~\ref{ssec:dtls} briefly explains TLS, why it is
-unsuitable for IoT networks, the differences between TLS and DTLS and why DTLS is used
-instead. Section~\ref{ssec:coap} describes the CoAP protocol while
-Section~\ref{ssec:oscore} briefly introduces OSCORE. Lastly, sections \ref{ssec:est-coaps}
-and \ref{ssec:ace} briefly introduces the EST-coaps protocol and ACE framework, enabling
-asymmetric cryptography and authorization in an IoT context.
-
-\begin{figure}
+\begin{figure}[t]
     \begin{bytefield}[bitformatting=\small, bitwidth=1.1em]{30}
         \bitbox[]{12}{IoT stack} & \bitbox[]{4}{} & \bitbox[]{12}{Traditional stack}\\
         \bitbox{12}{CoAP(s)} & \bitbox[]{4}{$\Longleftrightarrow$} \bitbox{12}{HTTP(S)}\\
@@ -63,6 +55,14 @@ asymmetric cryptography and authorization in an IoT context.
     \caption{Comparison of network stacks between IoT networks and traditional networks.}
     \label{fig:stack-comparison}
 \end{figure}
+
+In this chapter, Section~\ref{ssec:udp} explains UDP and why it is the preferred transport
+protocol in IoT networks. Section~\ref{ssec:dtls} briefly explains TLS, why it is
+unsuitable for IoT networks, the differences between TLS and DTLS and why DTLS is used
+instead. Section~\ref{ssec:coap} describes the CoAP protocol while
+Section~\ref{ssec:oscore} briefly introduces OSCORE. Lastly, sections \ref{ssec:est-coaps}
+and \ref{ssec:ace} briefly introduces the EST-coaps protocol and ACE framework, enabling
+asymmetric cryptography and authorization in an IoT context.
 
 \subsection{UDP}
 \label{ssec:udp}
@@ -77,23 +77,6 @@ Also, if the connection is too unstable TCP will not work at all since it can no
 guarantee the packets arrival. The best-effort approach of UDP is favorable in these
 situations, in addition to UDP being a lightweight protocol requiring a smaller memory
 footprint to implement.
-
-Figure~\ref{fig:udp-header} shows the UDP header format. The source port is optional, the
-length denotes the length of the datagram (including the header), and the checksum is
-calculated on a pseudo-header constructed from both the IP header, UDP header, and data.
-UDP headers are minimalist which shows the point of it being a lightweight protocol with
-not many features available.
-
-\begin{figure}
-    \begin{bytefield}[bitformatting=\small, bitwidth=1.1em]{32}        
-        \bitheader{0-31}\\
-        \bitbox{16}{Source port} & \bitbox{16}{Destination port}\\
-        \bitbox{16}{Length} & \bitbox{16}{Checksum}\\
-        \bitbox[tlb]{32}{Data octets $\dots$}\\
-    \end{bytefield}
-    \caption{The UDP header format.}
-    \label{fig:udp-header}
-\end{figure}
 
 \subsection{DTLS}
 \label{ssec:dtls}

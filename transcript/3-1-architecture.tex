@@ -21,7 +21,7 @@ must define have been identified:
     \item Update handling for local upgrades
 \end{itemize}
 
-\begin{figure}
+\begin{figure}[t]
     \caption{Example workflow of an update procedure.}
     \label{fig:communication-workflow}
     \includegraphics{images/update-flow.pdf}
@@ -539,6 +539,12 @@ have valid certificates, and that updates can be authorized. The following examp
 assume devices are enrolled and registered, and re-enrollment and updating profiles are
 omitted to make the figures clearer.
 
+\begin{figure}[t]
+    \caption{An operating system vendor technician updates patient wearable in an elderly home.}
+    \label{fig:elderly-home}
+    \includegraphics{images/use-case-elderly-home.pdf}
+\end{figure}
+
 Figure~\ref{fig:elderly-home} shows a use case where wearables of patients in an elderly
 home need their operating system updated. A technician from the operating system vendor
 assumes the role of an operator. The technician interacts with an authorization update
@@ -550,12 +556,6 @@ thus the token request goes through a proxy on the edge of the network. After th
 has received the token, it pulls the signed manifest and image using the token to
 authorize the pull.
 
-\begin{figure}
-    \caption{An operating system vendor technician updates patient wearable in an elderly home.}
-    \label{fig:elderly-home}
-    \includegraphics{images/use-case-elderly-home.pdf}
-\end{figure}
-
 In Figure~\ref{fig:smart-home} a technician from a smart light bulb vendor is updating a
 light bulb controller in a smart home. The technician requests a token and sends it
 together with the signed manifest and image to a home automation server living on the edge
@@ -566,7 +566,7 @@ accept updates from the thermostat vendor, thus the light bulb vendor technician
 unauthorized to perform this update. The thermostat controller rejects the update while
 the light bulb controller accepts it and updates itself.
 
-\begin{figure}
+\begin{figure}[t]
     \caption{A light bulb vendor technician updates a light bulb controller in a smart
                 home, but the thermostat controller rejects it due to authorization
                 issues.}
@@ -588,7 +588,7 @@ perform the necessary calculations. The device opts to perform an introspection 
 through the proxy so the authorization server can help verifying the token. After the
 device has received an answer, it can proceed applying the update.
 
-\begin{figure}
+\begin{figure}[t]
     \caption{An on-site devops engineer updates a very constrained, critical temperature
                 sensor in an industry plant. The constrained sensor asks for introspection
                 data in order to verify the update server's token.}
