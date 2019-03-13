@@ -1,3 +1,13 @@
+13/3-19:
+It seems I am unable to run two concurrent native Contiki processes as they try to bind the same ip-address. Running the server and using the libcoap client works and wireshark can sniff the traffic, and just using the Contiki client but no server works in the sense that messages are sent and wireshark can sniff them. Starting the server and then the Contiki client yields nothing, the client cannot transmit.
+
+Should I use Cooja instead? Maybe it is easier but using pure native processes feels like development iteration is faster. Optimal would be to have them use different IPs as expected but don't know how to do so.
+
+Does using the blocking CoAP interface differ from using the callback one? I would guess no for my purposes since I'm not building an actual application. I could just use the blocking API to simulate a sequential process. Register -> get manifest -> verify -> get image. Sequential and easy.
+
+12/3-19:
+Started looking at how to implement a prototype in Contiki-NG
+
 11/3-19:
 I am exhausted
 
