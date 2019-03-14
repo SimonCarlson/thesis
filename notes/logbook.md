@@ -1,3 +1,16 @@
+14/3-19:
+Still trying to communicate between two native Contiki clients. Cooja simulations do not work either but it feels much more difficult to debug/test
+
+Launching the Contiki container with --net=host allows the container to use the same network stack as the host, meaning the container and host can send each other messages (tested with netcat)
+
+Got Sam's libcoap server but I still think a Contiki server is the way to go because of COSE objects
+
+Tried editing the global IPv6 address prefix in arch/platform/native/platform.c to no avail, cannot figure out how to change address itself
+
+Cooja is still not finding connectivity. Do I have to add routers and stuff too? Maybe just the motes aren't enough
+
+The implementation barring COSE seems so straight forward, if I make these problems work it should be much easier to proceed. I'm initiallity not doing any particular update handling, just communication
+
 13/3-19:
 It seems I am unable to run two concurrent native Contiki processes as they try to bind the same ip-address. Running the server and using the libcoap client works and wireshark can sniff the traffic, and just using the Contiki client but no server works in the sense that messages are sent and wireshark can sniff them. Starting the server and then the Contiki client yields nothing, the client cannot transmit.
 
