@@ -1,4 +1,6 @@
 - [ ] Send a CoAP message between a Contiki server and a Contiki client
+  - [ ] Native
+  - [ ] Cooja
 - [ ] Implement a callback handler for receiving a response
 - [ ] Generate a manifest
 - [ ] Talk to Martin about sending COSE encrypted payloads in CoAP (not using OSCORE)
