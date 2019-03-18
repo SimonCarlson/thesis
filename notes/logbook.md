@@ -1,3 +1,21 @@
+18/3-19:
+Rewrote my manifest generator to accommodate the new manifest structure
+
+How will my Contiki server implementation read the manifest from disk? I presume that will require either a standard library or using the Coffee filesystem. Maybe I just use the standard library and don't care
+
+Let the client GET manifest from well-known URL (such as update/manifest), implement server logic to determine which manifest it should receive based on its profile. The manifest contains URL for that specific update image (such as update/uniqueStringBasedOnSomething)
+
+Implement and experiment in Cooja, port to Firefly, evaluate on Firefly?
+
+If I don't run Cooja in the Contiki container I get tons of run-time errors during simulation but it compiles and launches well..
+
+15/3-19:
+Grapes
+
+If a Contiki application run natively is opening a tun interface, can it still communicate over other interfaces? I guess yes.
+
+In contiki-ng/os/net/app-layer/coap/coap-uip.c, changing the function coap_endpoint_is_connected to return 1 despite not having a RPL graph makes server and client communicate over CoAP. Obviously really shoddy method but it seems to work. I can now send messages in Cooja between two nodes.
+
 14/3-19:
 Still trying to communicate between two native Contiki clients. Cooja simulations do not work either but it feels much more difficult to debug/test
 
