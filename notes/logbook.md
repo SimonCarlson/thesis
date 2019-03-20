@@ -1,3 +1,10 @@
+20/3-19:
+The RESOURCE macro accepts four handlers, one for each request type. 
+
+When POSTing queries, it seems the message becomes malformed when exceeding 62 bytes. I suspect block transfer is needed since the vendor and class IDs are relatively large. When using short dummy values it works fine
+
+The workflow of registering, GETing a manifest, and GETing an image works but is just a simple skeleton. Not sending the manifest, no DTLS, no parsing of manifest etc
+
 18/3-19:
 Rewrote my manifest generator to accommodate the new manifest structure
 
