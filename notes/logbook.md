@@ -1,3 +1,12 @@
+21/3-19:
+project-conf.h configs for CoAP chunk size and header size seem to have no effect on including the entire vendor and class ID strings, I think they still are too long. Block option?
+
+By initiating the update server as a RPL DAG root connectivity seems to work without using my ugly hack in the coap driver
+
+make with MAKE_WITH_DTLS=1 MAKE_COAP_DTLS_KEYSTORE=MAKE_COAP_DTLS_KEYSTORE_SIMPLE and define PSK user and key in project-conf.h for DTLS. DTLS connectivity does not work still though, cannot find peer (whatever that is and for whatever reason)
+
+Shahid thinks native processes is a better idea because Cooja motes are old and for some reason asymmetric crypto will be harder to achieve. Using a PSK is probably symmetric crypto, no? Anyways native processes still don't work, must ask Joel.. My guess is still that the client can't send since it binds to the same IP of the server
+
 20/3-19:
 The RESOURCE macro accepts four handlers, one for each request type. 
 
