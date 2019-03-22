@@ -1,3 +1,12 @@
+22/3-19:
+Still don't understand how native processes are supposed to work. I can find no indication of IPv6 address configuration or anything of the sort, only configurations for IPv4 that have no effect
+
+Do I really need parsing in my implementation? It would be nice to just skip it since it has no actual effect on transport and security of updates, just simulating an actual update flow. However, if I measure code size the presence/absence of a parser must be taken into account
+
+Feels more and more hopeless to finish in time, especially if I can't find any concrete help. Getting tips like "dig around in the IP stack" doesn't help when I don't know what I'm doing at all
+
+The behaviour of the server will be the same no matter if I run it in Cooja or not except for maybe DTLS configurations. The resources should act the same no matter what. I can spend productive time implementing their behaviour and understanding how to sign/encrypt payloads in COSE.
+
 21/3-19:
 project-conf.h configs for CoAP chunk size and header size seem to have no effect on including the entire vendor and class ID strings, I think they still are too long. Block option?
 
