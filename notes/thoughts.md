@@ -19,9 +19,13 @@ Certificates = identity but not authorization. Tokens for authorization, talk to
 The architecture needs to account for: roles, key distribution and management, means of communication (profiles), access control, local updating and patching. These are the key ingredients
 
 <b>Roles of operators, servers, and devices</b>: How to define servers, operators, and devices
+
 <b>Key management for IoT update procedure:</b> pre-shared secrets, PKI w/ CA, certificates
+
 <b>Device communication and profiles:</b> registering devices at server, updating profile after update, operators querying servers
+
 <b>Update authorization:</b> ACE tokens. Somehow authorize parts of code? Authorize memory access? How to define roles?
+
 <b>Update handling:</b> extract image and prepare bootloader, restart. Is it possible to hotswap code by changing memory addresses? Feels really wonky
 
 # Prototypes
