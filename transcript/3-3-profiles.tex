@@ -139,8 +139,9 @@ This section identified two options for implementing the architecture: either Co
 DTLS or OSCORE. DTLS does not support broadcasting however which might be of importance,
 for this purpose OSCORE can be used instead. OSCORE does not rely on a secure channel
 established by DTLS but instead provides end-to-end security for CoAP messages using COSE.
-OSCORE is, unlike DTLS, not yet standardized and the author is not aware of any OSCORE
-implementation in Contiki-NG. Profiles surrounding DTLS for EST-coaps and ACE are also
+OSCORE is, unlike DTLS, not yet standardized and there is a partial implementation of
+OSCORE featuring only COSE encryption objects in a Contiki fork
+\parencite{contiki-oscore}. Profiles surrounding DTLS for EST-coaps and ACE are also
 closer to standardization than their OSCORE counterparts.
 
 Both profiles use SHA-256 for calculating image digests, UUID5 for vendor and class IDs
