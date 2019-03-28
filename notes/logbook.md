@@ -1,3 +1,39 @@
+28/3-19:
+Rewrote parts of the manifest generator to reduce size of keys in manifest (also generated new example)
+
+Spoke to Shahid, he got a call from Combitech. Writing a paper in August is feasible but could be tight on time (also few people are there).
+
+Started a manifest parser. Its more of a naive pattern matcher because I'm not actually parsing and lexing etc, too heavy and time consuming. Idea is to extract keys from the manifest string, depending on the key extract value and fit into a manifest modeleled from structs. Final result will be a struct with smaller (nested) structs analogous to the format image in the thesis. Trying to avoid memory allocations at all if possible, doing some ugly stuff just to get it working.
+
+27/3-19:
+Listening to the IETF SUIT meeting. Nothing new so far, some liaison mentioned status trackers. My architecture contains a kind of status tracker implied in server logic, won't take action. 
+
+They keys in the manifest should be mapped to integer values to reduce size. Why encode the value "1" with the key "version", waste of space.
+
+Server endpoints must be static!!! That's the reason for my previous bug where the address of an endpoint would change. Also why block transfers did not work, the second block request would go to an invalid address and time out.
+
+With Niclas' fix in coap-uip.c (adding case DTLS_PSK_HINT:) in get_psk_info function DTLS works with PSK. Now, how to make it work with certificates?
+
+26/3-19:
+Listening to live IETF summit about COSE. I am not familiar enough with the standard to understand the discussion as it is too technical, but it is interesting to see how the IETF operates and what they discuss.
+
+The branch containing COSE/OSCORE code is older than the others and there has been changes in the network stack of Contiki since. Initiating the RPL DAG root is using a different function. Might be other inconsistencies, should probably stick to the COSE/OSCORE branch and explain in the report it is of a slightly older Contiki version.
+
+Mailed Martin, he showed another repo with COSE/CBOR standalone files. Maybe I can just use those instead with the newer Contiki?
+
+Spoke to Niclas. Native processes are the way they are, but there is a way to remove the Contiki network stack from the OS itself and run it using POSIX API. Joel knows more about DTLS and certificates in Contiki. According to Niclas callbacks for block transfers are fine, can't figure out the issue.
+
+25/3-19:
+Meeting Niclas tomorrow, hopefully he can help with native processes and DTLS
+
+Trying to understand the block option of CoAP. It seems rather simple, your callback handler receives a buffer, offset, and preferred block size and it's up to the handler to copy data into the buffer accordingly. I assume for the prototype it is fine to open the manifest file and copy blockwise into the buffer. However, the handler function is repeatedly called upon, how to manage state of file? Static offset of file pointer? Same offset as for the message buffer?
+
+Stacked view in i3 (super+s) is really neat when you want a window to be accessible yet not occupy space all the time
+
+Cannot open files in filesystem while simulating in Cooja. For now the manifest is encoded as a string in the source code.
+
+When using COSE, will the entire object be loaded and signed/encrypted and then buffered through CoAP blocks? Declare it as static, if null load and sign the payload, if not null send it block by block, when done set it null again.
+
 22/3-19:
 Still don't understand how native processes are supposed to work. I can find no indication of IPv6 address configuration or anything of the sort, only configurations for IPv4 that have no effect
 
