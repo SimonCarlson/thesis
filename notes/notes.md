@@ -11,3 +11,7 @@ openssl req -in client.csr -text -noout
 ### Server certificate
 
 Same as client but change all occurences of 'client' to 'server'
+
+# Example manifest
+
+./manifest.py example-manifest.json -i memtest86+.elf -v test -c test -u update/image -m 1
