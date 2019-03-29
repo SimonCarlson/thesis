@@ -1,3 +1,6 @@
+29/3-19:
+Been working on the "parser" all day. Not much success. Traversing the nested structures is really tricky and building linked structures of the data is harder than it seems. I've issues with the stack being corrupted, don't know how to debug.
+
 28/3-19:
 Rewrote parts of the manifest generator to reduce size of keys in manifest (also generated new example)
 
