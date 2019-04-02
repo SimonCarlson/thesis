@@ -1,3 +1,13 @@
+2/4-19:
+Still struggling with some stack-related issues. I don't know but I think I'm somehow ruining the stack so that removing arbitrary statements (thus changing the layout of the stack) causes segfaults. The code feels very brittle but I really don't know how to troubleshoot it.
+
+Apart from still using malloc and not MEMB, the parser is running in the update client. I probably should try to fix that before looking at certificates and COSE. Maybe I should mail Joel meanwhile incase he is not available soon.
+
+1/4-19:
+Decided to opt for a functional "parser" instead of a good one, meaning I'm just handling the use case of one specific manifest (example-manifest.json). It is however easy to generalise it, you only need to loop the fields that are nested and that's it. I would rather have a working one for the purpose of an evaluation than a nice looking one with no time left to evaluate.
+
+Maybe it is feasible to compare CoAP + DTLS vs OSCORE considering Martin's implementation? Would be interesting. Unsure if it is fair however since OSCORE will most likely not use certificates but rather PSK. Maybe I can do a certificate-based CoAP + DTLS evaluation then compare CoAP + DTLS with PSK to OSCORE.
+
 29/3-19:
 Been working on the "parser" all day. Not much success. Traversing the nested structures is really tricky and building linked structures of the data is harder than it seems. I've issues with the stack being corrupted, don't know how to debug.
 
