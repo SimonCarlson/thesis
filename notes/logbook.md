@@ -1,3 +1,8 @@
+3/4-19:
+Parser runs in Contiki and Cooja using only MEMB and its related functions to allocate memory. I'm wasting a bit of memory partially because I don't fully understand MEMB allocation, it did not work as expected. It's fine for now, better to spend time getting COSE and certificates to work.
+
+Issues when building the OSCORE (COSE) code, cannot find references to security libs that are standard in Contiki. Also haven't been able to run just the COSE code, difficult dependencies. Gotta mail Martin.
+
 2/4-19:
 Still struggling with some stack-related issues. I don't know but I think I'm somehow ruining the stack so that removing arbitrary statements (thus changing the layout of the stack) causes segfaults. The code feels very brittle but I really don't know how to troubleshoot it.
 
