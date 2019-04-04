@@ -13,13 +13,17 @@ is using a pull model where the device initiates the update procedure. The notio
 operator is cut out as it will not be used in a real deployment, as such there is only the
 update server and client.
 
-Contiki-NG, introduced in Section~\ref{sec:contiki-ng}, is the operating system of choice.
-It is an operating system suitable for constrained devices such as those of wireless
-sensor networks. Contiki-NG comes with a network stack featuring CoAP(s) and DTLS which
-are the target protocols for the prototype. During development, Contiki-NG processes can
-be compiled to either run as native processes on a development machine, as processes on a
-selection of target boards including the Firefly board, or as simulated processes in the
-Cooja simulator.
+Contiki-NG, introduced in Section~\ref{sec:contiki-ng}, is the operating system of choice
+for both the client and server. It is an operating system suitable for constrained devices
+such as those of wireless sensor networks. Contiki-NG comes with a network stack featuring
+CoAP(s) and DTLS which are the target protocols for the prototype. The reason for
+implementing the update server prototype in Contiki-NG is as a proof of concept that a
+more capable IoT device in a network could act as an update server. Of course, storage for
+the firmware images hosted on the server must be accomodated for, a real deployment might
+opt to use the Coffee filesystem together with Contiki-NG \parencite{coffee}. The server
+prototype of this thesis will run as a native Contiki-NG process on a host computer (thus
+using the computers' filesystem), while the client will be developed natively then ported
+to a Firefly board.
 
 The interactions of the client and server are simplistic and the client has no other
 behaviour than to initialize and complete the update procedure. As shown in
