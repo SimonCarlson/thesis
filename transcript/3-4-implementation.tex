@@ -6,7 +6,6 @@ and security considerations such as identity and access control. This section wi
 a prototype implementation of the architecture as well as a manifest generator. 
 
 \subsection{Prototype Design}
-% Assumptions: pre-distributed certificates (no enrollment)
 The prototype is developed as a means of evaluating the efficiency of the transport during
 an update procedure. It consists of an update server and a client (device). The prototype
 is using a pull model where the device initiates the update procedure. The notion of an
@@ -26,12 +25,21 @@ behaviour than to initialize and complete the update procedure. As shown in
 Figure~\ref{fig:client-server-interaction}, the interaction starts with a POST request
 from the client to the registration endpoint of the server. The registration is sent as a
 confirmable CoAP packet and is thus acknowledged. Afterwards, the client sends a GET
-request for a manifest. The idea is that the endpoint "update/manifest" is a well known
-endpoint just like "update/register" and all devices in the network register and poll for
-manifests there. It is up to the server upon a request to "update/manifest" to decide
-whether there is a suitable manifest or not. The prototype only makes use of one manifest
-thus such logic is not implemented, but in real deployments the "update/manifest" resource
-would handle that (using the information from the devices' profile).
+request for a manifest. The idea is that the endpoint \texttt{update/manifest} is a well
+known endpoint just like \texttt{update/register} and all devices in the network register
+and poll for manifests at these endpoints. Upon a request to \texttt{update/manifest} it
+is up to the server to decide whether there is a suitable manifest or not, the decision
+making is offloaded from the device. The prototype only makes use of one manifest thus
+such logic is not implemented, but in real deployments the \texttt{update/manifest}
+resource would handle that (using the information from the devices' profile).
+
+% TODO: Mention keys and certs for DTLS and COSE once it is figured out
+
+\begin{figure}
+    \caption{The interactions of client and server during an update procedure.}
+    \label{fig:client-server-interaction}
+    \includegraphics{images/client-server-sequence.pdf}
+\end{figure}
 
 If a suitable manifest is found, it is then transferred back to the client. As most
 manifests will be too large for a single CoAP message, the server makes use of the block
@@ -50,7 +58,14 @@ received the image, it calculates the SHA-256 hash of it, comparing it to the ha
 contained in the manifest. This concludes the transfer of an update.
 
 \subsection{Manifest Generation}
-% Introduce the manifest generator, explain why it is needed, and what it does
-
+As manifests contain certain information difficult for humans to provide such as
+monotonically increasing sequence numbers and digests, a manifest generator was created to
+help test the prototype. It is a Python script which accepts information about vendor and
+class namespace, version, image, and associated URL to generate, format, and output a
+manifest both in JSON and CBOR. The outputted manifest follows the format specified in
+Section~\ref{ssec:manifest-format} and features all required fields although many left
+blank. It is a bare-bones manifest containing only the required information for a
+singular, monolithic update. There are no dependencies or options. The example manifest
+used can be found in Appendix X. % TODO: Include example manifest in appendix.
 
 \end{document}
