@@ -1,5 +1,56 @@
 \documentclass[0-thesis.tex]{subfiles}
 
 \begin{document}
-    
+The previous sections proposed the update architecture of the thesis, its key components,
+and security considerations such as identity and access control. This section will discuss
+a prototype implementation of the architecture as well as a manifest generator. 
+
+\subsection{Prototype Design}
+% Assumptions: pre-distributed certificates (no enrollment)
+The prototype is developed as a means of evaluating the efficiency of the transport during
+an update procedure. It consists of an update server and a client (device). The prototype
+is using a pull model where the device initiates the update procedure. The notion of an
+operator is cut out as it will not be used in a real deployment, as such there is only the
+update server and client.
+
+Contiki-NG, introduced in Section~\ref{sec:contiki-ng}, is the operating system of choice.
+It is an operating system suitable for constrained devices such as those of wireless
+sensor networks. Contiki-NG comes with a network stack featuring CoAP(s) and DTLS which
+are the target protocols for the prototype. During development, Contiki-NG processes can
+be compiled to either run as native processes on a development machine, as processes on a
+selection of target boards including the Firefly board, or as simulated processes in the
+Cooja simulator.
+
+The interactions of the client and server are simplistic and the client has no other
+behaviour than to initialize and complete the update procedure. As shown in
+Figure~\ref{fig:client-server-interaction}, the interaction starts with a POST request
+from the client to the registration endpoint of the server. The registration is sent as a
+confirmable CoAP packet and is thus acknowledged. Afterwards, the client sends a GET
+request for a manifest. The idea is that the endpoint "update/manifest" is a well known
+endpoint just like "update/register" and all devices in the network register and poll for
+manifests there. It is up to the server upon a request to "update/manifest" to decide
+whether there is a suitable manifest or not. The prototype only makes use of one manifest
+thus such logic is not implemented, but in real deployments the "update/manifest" resource
+would handle that (using the information from the devices' profile).
+
+If a suitable manifest is found, it is then transferred back to the client. As most
+manifests will be too large for a single CoAP message, the server makes use of the block
+option in CoAP. The manifest is split in chunks that are sent one by one. The client
+receives these chunks and reassembles the manifest as it is received. After the manifest
+in its entirety has been transferred, the client parses the manifest and checks its
+validity by comparing vendor and class IDs. As described in
+Section~\ref{ssec:manifest-format} there can be more preconditions requiring more checks,
+again this is deployment specific. 
+
+If the client deems the manifest to be valid it requests the update image from the URL
+specified in the manifest. The endpoint is now specific for this particular class of
+device and version and is not known in advance, it must be in the manifest. The image,
+also too large for a single CoAP message, is transferred in blocks. When the client has
+received the image, it calculates the SHA-256 hash of it, comparing it to the hash
+contained in the manifest. This concludes the transfer of an update.
+
+\subsection{Manifest Generation}
+% Introduce the manifest generator, explain why it is needed, and what it does
+
+
 \end{document}
