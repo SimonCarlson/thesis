@@ -6,6 +6,7 @@ and security considerations such as identity and access control. This section wi
 a prototype implementation of the architecture as well as a manifest generator. 
 
 \subsection{Prototype Design}
+\label{ssec:prototype-design}
 The prototype is developed as a means of evaluating the efficiency of the transport during
 an update procedure. It consists of an update server and a client (device). The prototype
 is using a pull model where the device initiates the update procedure. The notion of an
@@ -58,6 +59,7 @@ received the image, it calculates the SHA-256 hash of it, comparing it to the ha
 contained in the manifest. This concludes the transfer of an update.
 
 \subsection{Manifest Generation}
+\label{ssec:manifest-generation}
 As manifests contain certain information difficult for humans to provide such as
 monotonically increasing sequence numbers and digests, a manifest generator was created to
 help test the prototype. It is a Python script which accepts information about vendor and
