@@ -1,3 +1,12 @@
+4/4-19:
+Attempting to use Martin's COSE code. No success, immediate segfault when encoding data to CBOR. No idea how the code is supposed to be used, mailed Martin. Feels like this can take a very long time to fix...
+
+Put implementation in methods chapter. Wrote shortly about the design of the prototype (including a sequence diagram of the server and client), and the manifest generator.
+
+Created placeholder for evaluation chapter.
+
+Added mention of developing server in Contiki-NG as proof of concept of capable IoT devices acting as update servers.
+
 3/4-19:
 Parser runs in Contiki and Cooja using only MEMB and its related functions to allocate memory. I'm wasting a bit of memory partially because I don't fully understand MEMB allocation, it did not work as expected. It's fine for now, better to spend time getting COSE and certificates to work.
 
