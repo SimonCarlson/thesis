@@ -362,10 +362,16 @@ device will thus not respond with a particular resource but instead if the token
 recognize the update as an authorized one and proceed with verifying it. 
 
 Devices will only allow communication from trusted sources specified in predetermined
-whitelists of update servers and operators, this tells devices which sources of
-communication to allow. This does not mean however that each of the trusted sources are
-allowed to apply any update they so wish, they need to provide tokens to prove
-authorization for such resources.
+whitelists of update servers and operators. This tells devices which sources of
+communication to allow which in itself may be a form of access control in certain
+deployments. For simple devices, for instance devices only running a single service using
+one microcontroller and a single means of storage, any update received might target the
+entire device. In this case, controlling update authorization using whitelists of update
+servers and operators might be sufficient as an allowed update can only update the entire
+system at once with no further granularity. However, for more complex devices or
+applications this will not suffice. If different applications, microcontrollers, or
+storage locations can be targeted, an author or update server must use tokens to access
+those specific resources they are supposed to access.
 
 Frameworks like OAuth 2.0 and ACE use proof-of-possession tokens that are bound to a
 cryptographic key. When receiving a proof-of-possession token, a receiver must verify that
@@ -393,16 +399,17 @@ are four scenarios where tokens must be requested from the different parties:
 \end{itemize}
 
 Enforcing authorization is a security concern and the parties must be able to both request
-tokens and verify them. Because proof-of-possession tokens bound to cryptographic keys may
-be used, the tokens should be used for single hops when sending an update. If not the
-receiver of such a token will not be able to verify the holder of the key bound to the
-token. Authorization enables operators, update servers, and devices to send and receive
-updates and enables use cases such as differential updates. If a device is running several
-applications and an operator is only supposed to update one of them, the scope of the
-update's authorization token can be for that application only. Attempts to update other
-applications would fail due to authorization errors. Updates that affects the entire code
-of the device, i.e. writes an entirely new image, also need to be authorized as they are
-changing the code of the device.
+tokens and verify them if necessary in that deployment. Because proof-of-possession tokens
+bound to cryptographic keys may be used, the tokens should be used for single hops when
+sending an update. If not, the receiver of such a token will not be able to verify the
+holder of the key bound to the token. Authorization enables operators, update servers, and
+devices to send and receive updates and enables use cases such as differential updates. If
+a device is running several applications and an operator is only supposed to update one of
+them, the scope of the update's authorization token can be for that application only. Any
+attempt to update other applications would fail due to authorization errors. Updates that
+affects the entire code of the device, i.e. writes an entirely new image, also need to be
+authorized as they are changing the code of the device, however for certain deployments
+this can be done using only whitelists.
 
 \subsection{Update Handling for Local Upgrades}
 \label{ssec:upgrading}
