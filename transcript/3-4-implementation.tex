@@ -81,9 +81,12 @@ Figure~\ref{fig:manifest-format}. The elements are in the same order as in the f
 the names of the fields have been substituted for integers in order to save space.
 Table~\ref{tab:manifest-substitution} shows this mapping. Nested structures such as
 preconditions are described as an array of maps, where each map in the array consitutes
-one precondition. Dependencies, precursor image lists, URL/digest pairs, and options are
-described in the same way even though the example manifest leaves most of these fields
-empty. The example manifest used can be found in Appendix X. 
+one precondition. The keys for these maps are also mapped to integers as in the main
+manifest structure, resetting the counter for each nested structure. The mapping of keys
+in nested structures is shown in Table~\ref{tab:nested-substitution}. Dependencies,
+precursor image lists, URL/digest pairs, and options are described in the same way even
+though the example manifest leaves most of these fields empty. The example manifest used
+can be found in Appendix X. 
 
 \begin{longtable}[]{@{}ll@{}}
     \caption{Mapping manifest elements to integers as keys in the JSON manifest.}
@@ -101,6 +104,26 @@ empty. The example manifest used can be found in Appendix X.
     precursorImage & 6\tabularnewline
     dependencies & 7\tabularnewline
     options & 8\tabularnewline
+    \bottomrule
+\end{longtable}
+
+\begin{longtable}[]{@{}ll@{}}
+    \caption{Mapping elements in nested structures to integers.}
+    \label{tab:nested-substitution}\\
+    \toprule
+    Element name (corresponding structure) & Integer\tabularnewline
+    \midrule
+    \endhead
+    type (conditions and options) & 0\tabularnewline
+    value (conditions and options) & 1\tabularnewline
+    \bottomrule
+    URL (URL/digest pair) & 0\tabularnewline
+    digest (URL/digest pair) & 1\tabularnewline
+    \bottomrule
+    format (payload info) & 0\tabularnewline
+    size (payload info) & 1\tabularnewline
+    storage (payload info) & 2\tabularnewline
+    URL/digest pair (payload info) & 3\tabularnewline
     \bottomrule
 \end{longtable}
 
