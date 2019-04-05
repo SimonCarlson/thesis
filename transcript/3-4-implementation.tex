@@ -24,7 +24,8 @@ the firmware images hosted on the server must be accomodated for, a real deploym
 opt to use the Coffee filesystem together with Contiki-NG \parencite{coffee}. The server
 prototype of this thesis runs as a native Contiki-NG process on a host computer (thus
 using the host computers' filesystem), while the client was developed natively then ported
-to a Firefly board. % TODO: Port not yet done, have no hardware
+to a Firefly board. The implementation is found in the \texttt{examples/suitup} directory
+of the project repository \parencite{suitup}. % TODO: Port not yet done, have no hardware
 
 The interactions of the client and server are simplistic and the client has no other
 behaviour than to initialize and complete the update procedure. As shown in
@@ -102,6 +103,17 @@ empty. The example manifest used can be found in Appendix X.
     options & 8\tabularnewline
     \bottomrule
 \end{longtable}
+
+In the client code, the manifest is received as a string, still formatted as JSON. In
+order to parse it, structs resembling the format of the manifest were created. Nested
+elements such as preconditions are implemented as linked lists, where each precondition
+contains a type, a value, and a pointer to the next. The manifest structure contains a
+pointer to the first precondition, from which the entire set of preconditions can be
+retrieved. The set of structs and their relations are as in
+Figure~\ref{fig:manifest-format}, where conditions, URL/digest pairs, and options are
+implemented in a linked list way. This kind of structuring is extensible, allowing
+implementors to easily add new conditions or options as well as specify an arbitrary
+amount of dependencies, precursors, and mirrors of images.
     
 
 % TODO: Include example manifest in appendix.
