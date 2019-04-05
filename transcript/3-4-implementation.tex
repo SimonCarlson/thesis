@@ -66,12 +66,13 @@ contained in the manifest. This concludes the transfer of an update.
 \label{ssec:manifest-generation}
 As manifests contain certain information difficult for humans to provide such as
 monotonically increasing sequence numbers and digests, a manifest generator was created to
-help test the prototype. It is a Python script which accepts information about vendor and
-class namespace, version, image, and associated URL to generate, format, and output a
-manifest both in JSON and CBOR. The outputted manifest follows the format specified in
-Section~\ref{ssec:manifest-format} and features all required fields although many left
-blank. It is a bare-bones manifest containing only the required information for a
-singular, monolithic update. There are no dependencies or options. The example manifest
-used can be found in Appendix X. % TODO: Include example manifest in appendix.
+help test the prototype \parencite{manifest-generator}. It is a Python script which
+accepts information about vendor and class namespace, version, image, and associated URL
+to generate, format, and output a manifest both in JSON and CBOR. The outputted manifest
+follows the format specified in Section~\ref{ssec:manifest-format} and features all
+required fields although many left blank. It is a bare-bones manifest containing only the
+required information for a singular, monolithic update. There are no dependencies or
+options. The example manifest used can be found in Appendix X. % TODO: Include example
+manifest in appendix.
 
 \end{document}
