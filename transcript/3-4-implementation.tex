@@ -7,6 +7,7 @@ a prototype implementation of the architecture as well as a manifest generator.
 
 \subsection{Prototype Design}
 \label{ssec:prototype-design}
+% TODO: Cite the repository (consider branches)
 The prototype is developed as a means of evaluating the efficiency of the transport during
 an update procedure. It consists of an update server and a client (device). The prototype
 is using a pull model where the device initiates the update procedure. The notion of an
@@ -21,9 +22,9 @@ implementing the update server prototype in Contiki-NG is as a proof of concept 
 more capable IoT device in a network could act as an update server. Of course, storage for
 the firmware images hosted on the server must be accomodated for, a real deployment might
 opt to use the Coffee filesystem together with Contiki-NG \parencite{coffee}. The server
-prototype of this thesis will run as a native Contiki-NG process on a host computer (thus
-using the computers' filesystem), while the client will be developed natively then ported
-to a Firefly board.
+prototype of this thesis runs as a native Contiki-NG process on a host computer (thus
+using the host computers' filesystem), while the client was developed natively then ported
+to a Firefly board. % TODO: Port not yet done, have no hardware
 
 The interactions of the client and server are simplistic and the client has no other
 behaviour than to initialize and complete the update procedure. As shown in
@@ -62,8 +63,8 @@ also too large for a single CoAP message, is transferred in blocks. When the cli
 received the image, it calculates the SHA-256 hash of it, comparing it to the hash
 contained in the manifest. This concludes the transfer of an update.
 
-\subsection{Manifest Generation}
-\label{ssec:manifest-generation}
+\subsection{Manifest Implementation}
+\label{ssec:manifest-implementation}
 As manifests contain certain information difficult for humans to provide such as
 monotonically increasing sequence numbers and digests, a manifest generator was created to
 help test the prototype \parencite{manifest-generator}. It is a Python script which
@@ -72,7 +73,37 @@ to generate, format, and output a manifest both in JSON and CBOR. The outputted 
 follows the format specified in Section~\ref{ssec:manifest-format} and features all
 required fields although many left blank. It is a bare-bones manifest containing only the
 required information for a singular, monolithic update. There are no dependencies or
-options. The example manifest used can be found in Appendix X. % TODO: Include example
-manifest in appendix.
+options. 
+
+The manifest is a JSON map featuring the required elements shown in
+Figure~\ref{fig:manifest-format}. The elements are in the same order as in the figure but
+the names of the fields have been substituted for integers in order to save space.
+Table~\ref{tab:manifest-substitution} shows this mapping. Nested structures such as
+preconditions are described as an array of maps, where each map in the array consitutes
+one precondition. Dependencies, precursor image lists, URL/digest pairs, and options are
+described in the same way even though the example manifest leaves most of these fields
+empty. The example manifest used can be found in Appendix X. 
+
+\begin{longtable}[]{@{}ll@{}}
+    \caption{Mapping manifest elements to integers as keys in the JSON manifest.}
+    \label{tab:manifest-substitution}\\
+    \toprule
+    Element name & Integer\tabularnewline
+    \midrule
+    \endhead
+    versionID & 0\tabularnewline
+    sequenceNumber & 1\tabularnewline
+    preConditions & 2\tabularnewline
+    postConditions & 3\tabularnewline
+    contentKeyMethod & 4\tabularnewline
+    payloadInfo & 5\tabularnewline
+    precursorImage & 6\tabularnewline
+    dependencies & 7\tabularnewline
+    options & 8\tabularnewline
+    \bottomrule
+\end{longtable}
+    
+
+% TODO: Include example manifest in appendix.
 
 \end{document}
