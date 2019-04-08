@@ -1,3 +1,8 @@
+5/4-19:
+Further described the manifest fomat, showed mappings of element names to integers, included (and formatted) an example manifest in JSON format. 
+
+Improved the README in the manifest-generator repo, citing it in thesis
+
 4/4-19:
 Attempting to use Martin's COSE code. No success, immediate segfault when encoding data to CBOR. No idea how the code is supposed to be used, mailed Martin. Feels like this can take a very long time to fix...
 
