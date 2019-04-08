@@ -1,3 +1,10 @@
+8/4-19:
+Mailed Joel about certificates and DTLS, apparently Contiki-NG does not yet support it. I wonder how it will work considering I'm working on an older fork of the OS... Maybe I can just extract my files since I (probably will be/) am using standalone files from Martin. Meeting proposed this Thursday.
+
+I must continue elsewhere. Martin has yet to contact me back about COSE. I can look at the callback for the image handler, it must allocate memory for and reassemble a large file. Statically allocating space for a file that large feels so wasteful, it could easily be more than half of the flash for a Firefly board...
+
+Really not sure how I am supposed to proceed. I don't understand the COSE code and Martin does not respond. DTLS won't happen until at least Thursday this week. Transferring a binary file won't work in Cooja as fopen() causes segfaults, and I have no hardware to run the client on with server on my computer. Do I try to qualitatively evaluate my architecture Tuesday and Wednesday maybe?
+
 5/4-19:
 Further described the manifest fomat, showed mappings of element names to integers, included (and formatted) an example manifest in JSON format. 
 
