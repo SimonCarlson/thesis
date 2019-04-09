@@ -10,9 +10,15 @@ was carried out, its results, and discussion about the results.
 
 \section{Qualitative Evaluation of Update Architecture}
 \label{sec:qual-evaluation}
-
+The proposed architecture can be evaluated in two parts, architecture and information
+model analogous to how the SUIT working group presented the parts. Using the requirements
+of each document, a qualitative evaluation of the proposed architecture can be done. The
+requirements are gathered from \parencite{suit-architecture, suit-information-model}.
 \subsection{Architecture}
 \label{ssec:arch-evaluation}
+The SUIT architecture document specified ten requirements a suitable update architecture
+should fulfill:
+
 \begin{description}
     \item[Agnostic to how firmware images are distributed:]
         The architecture does not make assumptions on underlying transport. The thesis
@@ -54,8 +60,21 @@ was carried out, its results, and discussion about the results.
         operator as well as a repository for images and device profiles, letting the
         operator query the server for device statuses.
 \end{description}
+
+The architecture was developed with these requirements in mind, and has succeeded in
+fulfilling them. Furthermore the architecture 
+% TODO: Add anything the architecture might have contributed with
   
 \subsection{Information Model}
 \label{ssec:information-evaluation}
-  
+The information model posed more requirements than the architecture and its implementation
+forms an important basis for carrying out safe updates. Evaluating the proposed manifest
+format and implementation against the requirements of the specification yields the
+following results:
+
+\begin{description}
+    \item[Placeholder]
+    % TODO: Descriptive list with requirements from information model document akin to the
+    % one above
+\end{description}
 \end{document}
