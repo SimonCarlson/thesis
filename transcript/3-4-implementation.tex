@@ -19,7 +19,7 @@ such as those of wireless sensor networks. Contiki-NG comes with a network stack
 CoAP(s) and DTLS which are the target protocols for the prototype. The reason for
 implementing the update server prototype in Contiki-NG is as a proof of concept that a
 more capable IoT device in a network could act as an update server. Of course, storage for
-the firmware images hosted on the server must be accomodated for, a real deployment might
+the firmware images hosted on the server must be accommodated for, a real deployment might
 opt to use the Coffee filesystem together with Contiki-NG \parencite{coffee}. The server
 prototype of this thesis runs as a native Contiki-NG process on a host computer (thus
 using the host computers' filesystem), while the client was developed natively then ported
@@ -80,7 +80,7 @@ The manifest is a JSON map featuring the required elements shown in
 Figure~\ref{fig:manifest-format}. The elements are in the same order as in the figure but
 the names of the fields have been substituted for integers in order to save space.
 Table~\ref{tab:manifest-substitution} shows this mapping. Nested structures such as
-preconditions are described as an array of maps, where each map in the array consitutes
+preconditions are described as an array of maps, where each map in the array constitutes
 one precondition. The keys for these maps are also mapped to integers as in the main
 manifest structure, resetting the counter for each nested structure. The mapping of keys
 in nested structures is shown in Table~\ref{tab:nested-substitution}. Dependencies,
@@ -135,7 +135,7 @@ pointer to the first precondition, from which the entire set of preconditions ca
 retrieved. The set of structs and their relations are as in
 Figure~\ref{fig:manifest-format}, where conditions, URL/digest pairs, and options are
 implemented in a linked list way. This kind of structuring is extensible, allowing
-implementors to easily add new conditions or options as well as specify an arbitrary
+implementers to easily add new conditions or options as well as specify an arbitrary
 amount of dependencies, precursors, and mirrors of images.
 
 \end{document}
