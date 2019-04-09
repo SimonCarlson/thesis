@@ -1,0 +1,24 @@
+- Agnostic to how firmware images are distributed:
+  - The architecture does not make assumptions on underlying transport. The thesis gives examples of two different profiles using different means of transport.
+- Friendly to broadcast delivery:
+  - Nothing in the architecture prevents broadcasting, however choice of security can limit it (for instance, DTLS).
+- Use state-of-the-art security mechanisms:
+  - The architecture is based on asymmetric cryptography using strong algorithms (preferably ECC) and possibly tokens for fine-grained authorization. 
+- Rollback attacks must be prevented:
+  - Prevented via manifest element sequence number. For each targeted class of devices, the sequence number of updates must be monotonically increasing (also version numbers?)
+- High reliability:
+  - This is an implementation specific requirement, however the storage element of the manifest aids in achieving safe storage of a new image.
+  - After a successful update, devices are to re-register at servers. No acknowledgement means the server knows the update still must be applied, thus an interrupted update can be redistributed.
+- Operate with a small bootloader:
+  - The thesis suggests to store an unencrypted image alongside its digest for the bootloader to be minimal, only needing support for SHA256.
+  - All information about whether or not to perform the update is encoded in conditions in the manifest, and can be stored with minimal memory usage.
+- Small parsers:
+  - The manifest format used in the thesis is minimal while still complying with SUIT, easily parsed, and extensible for extra functionality.
+- Minimal impact on existing firmware formats:
+  - The architecture makes no assumptions about firmware formats.
+- Robust permissions:
+  - The architecture proposes whitelists of operators and servers that device use to permit traffic.
+  - Authorization tokens are suggested as a way of achieving more finely grained level of authorization, for instance for differential updates. Different deployments can or different devices in the same deployment can have different authorization configurations.
+- Operating modes:
+  - The architecture supports the device initiated pull model, as well as the operator initiated push model. The update server acts as a mediator between device and operator as well as a repository for images and device profiles, letting the operator query the server for device statuses.
+

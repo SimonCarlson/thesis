@@ -3,7 +3,7 @@
   - [x] Cooja
 - [x] Implement a callback handler for receiving a response
 - [x] Generate a manifest
-- [ ] Talk to Martin about sending COSE encrypted payloads in CoAP (not using OSCORE)
+- [x] Talk to Martin about sending COSE encrypted payloads in CoAP (not using OSCORE)
   - [ ] Send a COSE encrypted payload in CoAP
   - [ ] Send a COSE encrypted manifest in CoAP
   - [ ] Send a COSE encrypted firmware image in CoAP

@@ -1,3 +1,14 @@
+9/4-19:
+Made a GitHub Gist and sent to Martin, hopefully he can help with COSE.
+
+Got guidance on the COSE code from Martin, have a better understanding on how to use it. I think I've successfully encrypted a small message. Next step is to decrypt, and send it. Consider how to manage keys... Marco probably has an idea.
+
+"Encrypt has a MAC so that's some kind of authentication" - Martin
+
+Did a small preliminary qualitative evaluation of the architecture complying with SUIT. Should think of if it adds anything SUIT does not mention. Added it as a list in chapter 4
+
+Some progress with COSE, decryption still difficult
+
 8/4-19:
 Mailed Joel about certificates and DTLS, apparently Contiki-NG does not yet support it. I wonder how it will work considering I'm working on an older fork of the OS... Maybe I can just extract my files since I (probably will be/) am using standalone files from Martin. Meeting proposed this Thursday.
 
