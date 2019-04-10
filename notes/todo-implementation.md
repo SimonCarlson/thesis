@@ -7,7 +7,7 @@
   - [ ] Send a COSE encrypted payload in CoAP
   - [ ] Send a COSE encrypted manifest in CoAP
   - [ ] Send a COSE encrypted firmware image in CoAP
-- [ ] Establish a DTLS connection
+- [x] Establish a DTLS connection
   - [x] Using PSK
   - [ ] Using certificates
 - [ ] Calculate a SHA256 checksum of a data buffer

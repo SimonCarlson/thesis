@@ -1,3 +1,16 @@
+10/4-19:
+COSE decryption fails at validating the tag. Don't know how to solve, mailed Martin
+
+Sketching some questions for Joel and Niclas tomorrow. Hopefully they can also help with SHA256 in Contiki-NG and how MEMB works
+
+Mailed Elena and asked about booking time for presentation
+
+Getting a result from decoding and decrypting COSE but it does not match original plaintext.
+
+Since the manifest structure of the thesis is just following the recommendations of SUIT it should already fulfill the security requirements posted upon it. More interesting is looking at the use cases I think.
+
+Trying to encrypt COSE data in my manifest resource, if I memcpy from the cipher to some buffer it does not segfault, even if I don't use that buffer afterwards...
+
 9/4-19:
 Made a GitHub Gist and sent to Martin, hopefully he can help with COSE.
 
