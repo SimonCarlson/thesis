@@ -1,3 +1,10 @@
+11/4-19:
+Added Contiki-NG and manifest-generator repositories as an appendix
+
+Spoke with Joel and Niclas. They are looking into DTLS and certificates for Contiki-NG. Should I think of any requirements (non-functional) or configuration methods or the like I should tell them.
+
+Big progress with COSE. Can send an encrypted COSE payload and decrypt it at the client. Would consider COSE done with the exception of sending an image (because I don't know how to send the image).
+
 10/4-19:
 COSE decryption fails at validating the tag. Don't know how to solve, mailed Martin
 
