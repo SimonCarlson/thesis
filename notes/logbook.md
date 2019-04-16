@@ -1,3 +1,24 @@
+16/4-19:
+Something wrong in the COSE encryption, only first 71 bytes are encrypted. Ciphertext length gets at some point truncated to a uint8_t but I've yet to find a fix. Mailed Martin.
+
+The issue was using uint8_t for holding the length of the ciphertext. Changing uint8_t m_len to uint16_t where needed solved the issue.
+
+Decoding and decrypting image file
+
+Really hard to continue since I won't be able to send an actual file (Cooja).... Also how will I properly test my functionality? Hopefully there's some terminal I can connect to on the board whenever I can find one. Should speak to Shahid about it.
+
+Successfully calculated the hash of image buffer. Hopefully it will not be length restricted.
+
+15/4-19:
+:^)
+
+12/4-19:
+Stateful transfer of a file from server resource. Now to do it with a really large file... Client memory allocation is still a hurdle
+
+COSE encryption in image resource. Seems like not the entire data is encrypted, asked Martin about it. Maybe there is a limit and I should encrypt each block?
+
+Example of SHA256 digest thanks to a kind stranger in Gitter.
+
 11/4-19:
 Added Contiki-NG and manifest-generator repositories as an appendix
 

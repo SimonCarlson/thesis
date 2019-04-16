@@ -6,10 +6,10 @@
 - [x] Talk to Martin about sending COSE encrypted payloads in CoAP (not using OSCORE)
   - [x] Send a COSE encrypted payload in CoAP
   - [x] Send a COSE encrypted manifest in CoAP
-  - [ ] Send a COSE encrypted firmware image in CoAP
+  - [x] Send a COSE encrypted firmware image in CoAP
 - [x] Establish a DTLS connection
   - [x] Using PSK
   - [ ] Using certificates
-- [ ] Calculate a SHA256 checksum of a data buffer
+- [x] Calculate a SHA256 checksum of a data buffer
 - [ ] Allocate memory for and reassemble a large file (image)
 
