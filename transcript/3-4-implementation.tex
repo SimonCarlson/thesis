@@ -8,9 +8,9 @@ a prototype implementation of the architecture as well as a manifest generator.
 \subsection{Prototype Design}
 \label{ssec:prototype-design}
 The prototype is developed as a means of evaluating the efficiency of the transport during
-an update procedure. It consists of an update server and a client (device). The prototype
-is using a pull model where the device initiates the update procedure. The notion of an
-operator is cut out as it will not be used in a real deployment, as such there is only the
+an update procedure. It consists of an update server and a client. The prototype is using
+a pull model where the client initiates the update procedure. The notion of an operator is
+cut out as the prototype will not be used in a real deployment, as such there is only the
 update server and client.
 
 Contiki-NG, introduced in Section~\ref{sec:contiki-ng}, is the operating system of choice
@@ -25,20 +25,24 @@ prototype of this thesis runs as a native Contiki-NG process on a host computer 
 using the host computers' filesystem), while the client was developed natively then ported
 to a Firefly board. The implementation is found in the \texttt{examples/suitup} directory
 on the \texttt{oscore\_12} branch in the project repository \parencite{suitup}. 
-% TODO: lPort not yet done, have no hardware
+% TODO: Port not yet done, have no hardware
+
+% TODO: Mention COSE here and assumptions made to make it work
+The client makes use of Contiki-NGs blocking CoAP API. CoAP request
 
 The interactions of the client and server are simplistic and the client has no other
-behaviour than to initialize and complete the update procedure. As shown in
+behaviour than to initiate and complete the update procedure. As shown in
 Figure~\ref{fig:client-server-interaction}, the interaction starts with a POST request
 from the client to the registration endpoint of the server. The registration is sent as a
-confirmable CoAP packet and is thus acknowledged. Afterwards, the client sends a GET
-request for a manifest. The idea is that the endpoint \texttt{update/manifest} is a well
-known endpoint just like \texttt{update/register} and all devices in the network register
-and poll for manifests at these endpoints. Upon a request to \texttt{update/manifest} it
-is up to the server to decide whether there is a suitable manifest or not, the decision
-making is offloaded from the device. The prototype only makes use of one manifest thus
-such logic is not implemented, but in real deployments the \texttt{update/manifest}
-resource would handle that (using the information from the devices' profile).
+confirmable CoAP packet and is thus acknowledged by the server. Afterwards, the client
+sends a GET request for a manifest. The idea is that the endpoint \texttt{update/manifest}
+is a well known endpoint just like \texttt{update/register} and all devices in the network
+register and poll for manifests at these endpoints. Upon a request to
+\texttt{update/manifest} it is up to the server to decide whether there is a suitable
+manifest or not, offloading any decision making from the device. The prototype only makes
+use of one manifest thus such logic is not implemented, but in real deployments the
+\texttt{update/manifest} resource would handle that by using the information from the
+devices' profile.
 
 % TODO: Mention keys and certs for DTLS and COSE once it is figured out
 
@@ -51,9 +55,9 @@ resource would handle that (using the information from the devices' profile).
 If a suitable manifest is found, it is then transferred back to the client. As most
 manifests will be too large for a single CoAP message, the server makes use of the block
 option in CoAP. The manifest is split in chunks that are sent one by one. The client
-receives these chunks and reassembles the manifest as it is received. After the manifest
-in its entirety has been transferred, the client parses the manifest and checks its
-validity by comparing vendor and class IDs. As described in
+receives these chunks and reassembles the manifest. % TODO: Show callbacks in Contiki
+After the manifest in its entirety has been transferred, the client decrypts and parses
+the manifest and checks its validity by comparing vendor and class IDs. As described in
 Section~\ref{ssec:manifest-format} there can be more preconditions requiring more checks,
 again this is deployment specific. 
 
@@ -70,7 +74,7 @@ As manifests contain certain information difficult for humans to provide such as
 monotonically increasing sequence numbers and digests, a manifest generator was created to
 help test the prototype \parencite{manifest-generator}. It is a Python script which
 accepts information about vendor and class namespace, version, image, and associated URL
-to generate, format, and output a manifest both in JSON and CBOR. The outputted manifest
+in order to generate and format a manifest both in JSON and CBOR. The outputted manifest
 follows the format specified in Section~\ref{ssec:manifest-format} and features all
 required fields although many left blank. It is a bare-bones manifest containing only the
 required information for a singular, monolithic update. There are no dependencies or
@@ -127,6 +131,7 @@ can be found in Appendix~\ref{app:manifest}.
     \bottomrule
 \end{longtable}
 
+% TODO: Show pieces of manifest implementation
 In the client code, the manifest is received as a string, still formatted as JSON. In
 order to parse it, structs resembling the format of the manifest were created. Nested
 elements such as preconditions are implemented as linked lists, where each precondition
