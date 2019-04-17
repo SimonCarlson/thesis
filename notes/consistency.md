@@ -1,0 +1,4 @@
+- [ ] Capitalization of "ID"
+- [ ] Periods in captions
+- [ ] Spelling of URL/Digest pair
+- [ ] Usage of "section" and "chapter"
