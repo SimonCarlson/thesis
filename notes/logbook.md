@@ -1,3 +1,8 @@
+17/4-19:
+Spoke to Marco about hardware setup, will need a second board to act as border router due to differences in physical protocol
+
+Shahid gave me two boards to experiment with. One for a router, one for a client. Trying to understand the flashing process and ran into problems with code size exceeding the RAM for the client (server should run natively). Changed the project configuration in order to reduce the size (various network parameters were lowered). Unsure how a buffer for a large file will work out.. Maybe it won't
+
 16/4-19:
 Something wrong in the COSE encryption, only first 71 bytes are encrypted. Ciphertext length gets at some point truncated to a uint8_t but I've yet to find a fix. Mailed Martin.
 
