@@ -68,7 +68,59 @@ can be found in Appendix~\ref{app:manifest}.
     \bottomrule
 \end{longtable}
 
-% TODO: Show pieces of manifest implementation
+% TODO: Talk more in detail about the client: register and manifest from known endpoints,
+% parsing manifest (show structure here?), checking manifest and custom logic, decoding
+% payloads
+In the client code, the manifest is received as a string, still formatted as JSON. In
+order to parse it, structs resembling the format of the manifest were created, see
+Listing~\ref{lst:manifest}. The base manifest contains values of version ID, sequence
+number, and content key method alongside pointers to other parts of the manifest. These
+parts, represented as nested structs in the JSON string, implement linked lists in order
+to store an arbitrary amount of such elements. With the example manifest shown in
+Appendix~\ref{app:manifest}, the base manifest structure would for instance contain a two
+element long linked list of preconditions (vendor ID then class ID). Certain manifest
+elements, namely precursor image, dependencies, and URL/digest pair in payload info convey
+the same kind of information but are separated because of the difference in semantics.
+
+% TODO: Format nicely
+\begin{lstlisting}[language=c, caption={The client manifest implementation}, label=lst:manifest]
+    typedef struct manifest_s {
+        int versionID;
+        int sequenceNumber;
+        struct condition_s *preConditions;
+        struct condition_s *postConditions;
+        int contentKeyMethod;
+        struct payloadInfo_s *payloadInfo;
+        struct URLDigest_s *precursorImage;
+        struct URLDigest_s *dependencies;
+        struct option_s *options;
+    } manifest_t;
+
+    typedef struct condition_s {
+        int type;
+        char *value;
+        struct condition_s *next;
+    } condition_t;
+
+    typedef struct payloadInfo_s {
+        int format;
+        int size;
+        int storage;
+        struct URLDigest_s *URLDigest;
+    } payloadInfo_t;
+
+    typedef struct URLDigest_s {
+        char *URL;
+        char *digest;
+        struct URLDigest_s *next;
+    } URLDigest_t;
+
+    typedef struct option_s {
+        int type;
+        char *value;
+        struct option_s *next;
+    } option_t;
+\end{lstlisting}
 
 
 \subsection{Prototype Implementation}
@@ -133,28 +185,6 @@ also too large for a single CoAP message, is encoded, encrypted, and transferred
 blocks. When the client has received and decrypted the image, it calculates the SHA-256
 hash of it, comparing it to the hash contained in the manifest. This concludes the
 transfer of an update.
-
-\subsubsection{Server Specifics}
-\label{sssec:server-specifics}
-% TODO: Talk more in detail about how the server and its resources are implemented
-
-\subsubsection{Client Specifics}
-\label{sssec:client-specifics}
-% TODO: Talk more in detail about the client: register and manifest from known endpoints,
-% parsing manifest (show structure here?), checking manifest and custom logic, decoding
-% payloads
-In the client code, the manifest is received as a string, still formatted as JSON. In
-order to parse it, structs resembling the format of the manifest were created. Nested
-elements such as preconditions are implemented as linked lists, where each precondition
-contains a type, a value, and a pointer to the next. The manifest structure contains a
-pointer to the first precondition, from which the entire set of preconditions can be
-retrieved. The set of structs and their relations are as in
-Figure~\ref{fig:manifest-format}, where conditions, URL/digest pairs, and options are
-implemented in a linked list way. This kind of structuring is extensible, allowing
-implementers to easily add new conditions or options as well as specify an arbitrary
-amount of dependencies, precursors, and mirrors of images.
-
-
 
 
 \end{document}
