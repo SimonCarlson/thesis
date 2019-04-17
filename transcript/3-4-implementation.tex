@@ -5,69 +5,6 @@ The previous sections proposed the update architecture of the thesis, its key co
 and security considerations such as identity and access control. This section will discuss
 a prototype implementation of the architecture as well as a manifest generator. 
 
-\subsection{Prototype Design}
-\label{ssec:prototype-design}
-The prototype is developed as a means of evaluating the efficiency of the transport during
-an update procedure. It consists of an update server and a client. The prototype is using
-a pull model where the client initiates the update procedure. The notion of an operator is
-cut out as the prototype will not be used in a real deployment, as such there is only the
-update server and client.
-
-Contiki-NG, introduced in Section~\ref{sec:contiki-ng}, is the operating system of choice
-for both the client and server. It is an operating system suitable for constrained devices
-such as those of wireless sensor networks. Contiki-NG comes with a network stack featuring
-CoAP(s) and DTLS which are the target protocols for the prototype. The reason for
-implementing the update server prototype in Contiki-NG is as a proof of concept that a
-more capable IoT device in a network could act as an update server. Of course, storage for
-the firmware images hosted on the server must be accommodated for, a real deployment might
-opt to use the Coffee filesystem together with Contiki-NG \parencite{coffee}. The server
-prototype of this thesis runs as a native Contiki-NG process on a host computer (thus
-using the host computers' filesystem), while the client was developed natively then ported
-to a Firefly board. The implementation is found in the \texttt{examples/suitup} directory
-on the \texttt{oscore\_12} branch in the project repository \parencite{suitup}. 
-% TODO: Port not yet done, have no hardware
-
-% TODO: Mention COSE here and assumptions made to make it work
-The client makes use of Contiki-NGs blocking CoAP API. CoAP request
-
-The interactions of the client and server are simplistic and the client has no other
-behaviour than to initiate and complete the update procedure. As shown in
-Figure~\ref{fig:client-server-interaction}, the interaction starts with a POST request
-from the client to the registration endpoint of the server. The registration is sent as a
-confirmable CoAP packet and is thus acknowledged by the server. Afterwards, the client
-sends a GET request for a manifest. The idea is that the endpoint \texttt{update/manifest}
-is a well known endpoint just like \texttt{update/register} and all devices in the network
-register and poll for manifests at these endpoints. Upon a request to
-\texttt{update/manifest} it is up to the server to decide whether there is a suitable
-manifest or not, offloading any decision making from the device. The prototype only makes
-use of one manifest thus such logic is not implemented, but in real deployments the
-\texttt{update/manifest} resource would handle that by using the information from the
-devices' profile.
-
-% TODO: Mention keys and certs for DTLS and COSE once it is figured out
-
-\begin{figure}
-    \caption{The interactions of client and server during an update procedure.}
-    \label{fig:client-server-interaction}
-    \includegraphics{images/client-server-sequence.pdf}
-\end{figure}
-
-If a suitable manifest is found, it is then transferred back to the client. As most
-manifests will be too large for a single CoAP message, the server makes use of the block
-option in CoAP. The manifest is split in chunks that are sent one by one. The client
-receives these chunks and reassembles the manifest. % TODO: Show callbacks in Contiki
-After the manifest in its entirety has been transferred, the client decrypts and parses
-the manifest and checks its validity by comparing vendor and class IDs. As described in
-Section~\ref{ssec:manifest-format} there can be more preconditions requiring more checks,
-again this is deployment specific. 
-
-If the client deems the manifest to be valid it requests the update image from the URL
-specified in the manifest. The endpoint is now specific for this particular class of
-device and version and is not known in advance, it must be in the manifest. The image,
-also too large for a single CoAP message, is transferred in blocks. When the client has
-received the image, it calculates the SHA-256 hash of it, comparing it to the hash
-contained in the manifest. This concludes the transfer of an update.
-
 \subsection{Manifest Implementation}
 \label{ssec:manifest-implementation}
 As manifests contain certain information difficult for humans to provide such as
@@ -132,6 +69,80 @@ can be found in Appendix~\ref{app:manifest}.
 \end{longtable}
 
 % TODO: Show pieces of manifest implementation
+
+
+\subsection{Prototype Implementation}
+\label{ssec:prototype-implementation}
+% TODO: Overview of prototype: what it includes, protocols, largely how it works, assumptions
+The prototype used in the thesis is developed in order to measure the efficiency of
+transport during an update procedure. It consists of a server and a client both
+implemented in Contiki-NG. The prototype uses a pull model meaning the client running on a
+board initiates the update procedure and the server responds with its resources. The
+server is implemented in Contiki-NG as a proof-of-concept that a more capable IoT device
+could be used as an update server.
+
+% TODO: Check what I've already written about COSE in Contiki-NG (previous section)
+% TODO: Double check what an AAD is/does
+The prototype makes use of CoAPs over DTLS with COSE encryption of payloads. Ideally COSE
+would be used for signing payloads as confidentiality is provided by DTLS, but COSE
+implementations in Contiki-NG are limited and at the time of development did not support
+signing. Implementing COSE signing would prove too time consuming for a project of this
+scope, thus COSE encryption is used instead as a proof-of-concept of using COSE in the
+update architecture. Encrypting via COSE requires more information than signing such as
+keys, nonces, and AADs, these have been hard-coded into the client and server. Furthermore
+certificate support in Contiki-NG is lacking and the prototype thus uses hard-coded
+pre-shared keys in order to use DTLS. The last assumptions made are about the files being
+transfered. The prototype and evaluation only makes use of one certificate and firmware
+image, thus sizes of buffers in the client have been statically allocated in order to make
+implementation easier. In reality with manifests and images of varying sizes, dynamic
+memory allocation would be needed in order to accept varying updates.
+
+The interactions of the client and server are simplistic and the client has no other
+behaviour than to initiate and complete the update procedure. As shown in
+Figure~\ref{fig:client-server-interaction}, the interaction starts with a POST request
+from the client to the registration endpoint of the server. The registration is sent as a
+confirmable CoAP packet and is thus acknowledged by the server. Afterwards, the client
+sends a GET request for a manifest. The idea is that the endpoint \texttt{update/manifest}
+is a well known endpoint just like \texttt{update/register} and all devices in the network
+register and poll for manifests at these endpoints. Upon a request to
+\texttt{update/manifest} it is up to the server to decide whether there is a suitable
+manifest or not, offloading any decision making from the device. Since the prototype only
+makes use of one manifest such logic is not implemented, but in real deployments the
+\texttt{update/manifest} server resource would handle that by using the information from
+the devices' profile.
+
+\begin{figure}
+    \caption{The interactions of client and server during an update procedure.}
+    \label{fig:client-server-interaction}
+    \includegraphics{images/client-server-sequence.pdf}
+\end{figure}
+
+If the server finds a suitable manifest, it encodes and encrypts it using COSE and then
+sends it through CoAPs' block option. The reasoning for encrypting the entire payload at
+once instead of each block is that encrypting each block would not add any security as it
+uses the same key. By encrypting the entire payload once it will only be decrypted once,
+saving the client from running cryptographic functions many times. After the client has
+reassembled the manifest it decrypts and decodes it, and then runs a simple parser. After
+parsing is done the client must check the preconditions to make sure it is the intended
+recipient by comparing vendor and class IDs, and any other custom logic.
+
+If the client deems the manifest to be valid it requests the update image from the URL
+specified in the manifest. The endpoint is now specific for this particular class of
+device and version and is not known in advance, it must be in the manifest. The image,
+also too large for a single CoAP message, is encoded, encrypted, and transferred in
+blocks. When the client has received and decrypted the image, it calculates the SHA-256
+hash of it, comparing it to the hash contained in the manifest. This concludes the
+transfer of an update.
+
+\subsubsection{Server Specifics}
+\label{sssec:server-specifics}
+% TODO: Talk more in detail about how the server and its resources are implemented
+
+\subsubsection{Client Specifics}
+\label{sssec:client-specifics}
+% TODO: Talk more in detail about the client: register and manifest from known endpoints,
+% parsing manifest (show structure here?), checking manifest and custom logic, decoding
+% payloads
 In the client code, the manifest is received as a string, still formatted as JSON. In
 order to parse it, structs resembling the format of the manifest were created. Nested
 elements such as preconditions are implemented as linked lists, where each precondition
@@ -142,5 +153,8 @@ Figure~\ref{fig:manifest-format}, where conditions, URL/digest pairs, and option
 implemented in a linked list way. This kind of structuring is extensible, allowing
 implementers to easily add new conditions or options as well as specify an arbitrary
 amount of dependencies, precursors, and mirrors of images.
+
+
+
 
 \end{document}
