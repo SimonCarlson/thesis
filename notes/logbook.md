@@ -1,3 +1,12 @@
+18/4-19:
+Can have client and server communicate on boards without router. Does not solve problem with sending files as server does not have a filesystem.
+
+Some weird bugs are present on the client, seems to stem from comparing character pointers to literals. Did some ugly fixes. The client can parse the manifest correctly and run the COSE and SHA256 functions.
+
+How do I approach sending an image? I don't understand how the border router should work.
+
+Really high stress levels today. Can't find any solace.
+
 17/4-19:
 Spoke to Marco about hardware setup, will need a second board to act as border router due to differences in physical protocol
 
