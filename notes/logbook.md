@@ -1,3 +1,14 @@
+19/4-19:
+Running the server and a router on a board each: server and router can reach each other. When opening the tunslip6 interface, host can reach router, but not server. Does not work if server announces itself as DAG root.
+
+If I get native server + border router + embedded client working, maybe I can try blockwise COSE encryption and store the file on the client using Coffee?
+
+Is it interesting to compare energy consumption when encrypting an entire file at once or blockwise? Wouldn't that be evaluating the COSE implementation? Perhaps might still be useful.
+
+Is it the ELF or bin file that's flashed onto the board?
+
+Wrote a list on what needs fixing. Need help from people, probably Shahid and Rikard.
+
 18/4-19:
 Can have client and server communicate on boards without router. Does not solve problem with sending files as server does not have a filesystem.
 
