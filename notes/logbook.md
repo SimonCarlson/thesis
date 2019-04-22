@@ -1,3 +1,10 @@
+22/4-19:
+My thesis and SUIT tries to achieve similar but not equal things. I see SUIT as a pair of high-level requirement documents for someone wanting to design an architecture. I see my work as an architecture backed by high-level requirements. Someone implementing my architecture in a real deployment would still have to create their own requirements with their deployment in mind, but these requirements would/could be of another nature such as more functional and measurable requirements. Furthermore SUIT does not have any ambitions of defining profiles or implementations etc, whereas my work does. My thesis is (just) one step down the abstraction ladder.
+
+Is it the COSE code annihilating my stack? Trying to encrypt something in a simple for loop destroys the index variable when on the native platform.
+
+Looked at the energest and Coffee filesystem modules. Feel better equipped to make some sort of evaluation. Still need to speak to Shahid about way forward.
+
 19/4-19:
 Running the server and a router on a board each: server and router can reach each other. When opening the tunslip6 interface, host can reach router, but not server. Does not work if server announces itself as DAG root.
 

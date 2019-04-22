@@ -29,3 +29,13 @@ Tentative link-local IPv6 address: fe80::212:4b00:9df:9096 (from hello-world.upl
 Flashing one with the server and one with the client seems to work..??? They connect after a while. Manifest turns out ok except crap data at the end making the parsing wrong. Server announces itself as root. Using this, I won't be able to transfer files though. 
 
 Blue one on the right, blank on the left. Start server first, then client. Hope it works
+
+# Generate random strings
+
+import random
+
+import string
+
+random.seed(42)
+
+"".join(random.choice(string.ascii_letters + string.digits + string.punctuation) for _ in range(N))
