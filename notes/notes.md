@@ -39,3 +39,46 @@ import string
 random.seed(42)
 
 "".join(random.choice(string.ascii_letters + string.digits + string.punctuation) for _ in range(N))
+
+
+
+# Energy consumption
+
+*CPU energy:* cp = c*1.8/tm
+
+*LPM energy:* lp = l*0.0545/tm
+
+*Transmit energy:* lt = t*17.7/tm
+
+*Listen energy:* lr = r*20/tm
+
+*Total energy:* n = cp+lp+lt+lr
+
+tm = c+l
+
+where:
+*tm* is the total time,
+*c* is the time that the CPU was used.
+*l* is the the time that the sensor was in Low Power Mode (LPM)
+*t* is the transmit time  and
+*r* is the Listen time
+
+https://sourceforge.net/p/contiki/mailman/contiki-developers/?viewmonth=201701
+
+# Connectivity
+
+cd rpl-border-router
+
+make TARGET=zoul BOARD=firefly PORT=/dev/ttyUSB1 border-router.upload
+
+cd ../../tools/serial-os
+
+sudo ./tunslip6 -B 115200 -s /dev/ttyUSB1 -t tun1
+
+cd suitup
+
+sudo ./update-server.native
+
+cd hello-world
+
+make TARGET=zoul BOARD=firefly PORT=/dev/ttyUSB0 hello-world.upload && make TARGET=zoul BOARD=firefly PORT=/dev/ttyUSB0 login

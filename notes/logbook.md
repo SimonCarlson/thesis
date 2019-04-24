@@ -1,3 +1,19 @@
+24/4-19:
+The 'image' file is now encrypted and decrypted blockwise.
+
+The SHA256 ctx is updated blockwise, calculation works fine, but comparison is tricky because the hex representation of the ctx checksum equals the string representation of the manifest.
+
+Some signs of connectivity between native server and embedded client. Start border router and tunslip on a different interface (-t flag) than the native process, start native server (which will be tun0), start client and you can ping the server from client but CoAP does not work.
+
+23/4-19:
+Voltage will be constant when firefly is in use. How do I know the current? It will vary. Does a certain mode have a specific current, like x mA for low power mode and y mA for transmission?
+
+Spoke to Shahid. Gathered that locally upgrading an image would be very helpful for the thesis and might not be too complicated (speak to Niclas), but it would not be essential. Implementing and evaluating the communication would be enough.
+
+The bug preventing the registration message from being sent was due to disabling the sicslowpan fragmentation. Enabling it solved the issue but requires a significant amount of memory. Could lower other configurations to balance it out.
+
+Looking at encrypting and decrypting transfers block by block. Almost there, difficult since COSE adds 8 bits tag the content itself is only 24 bit, but the offset considers it 32 bits.
+
 22/4-19:
 My thesis and SUIT tries to achieve similar but not equal things. I see SUIT as a pair of high-level requirement documents for someone wanting to design an architecture. I see my work as an architecture backed by high-level requirements. Someone implementing my architecture in a real deployment would still have to create their own requirements with their deployment in mind, but these requirements would/could be of another nature such as more functional and measurable requirements. Furthermore SUIT does not have any ambitions of defining profiles or implementations etc, whereas my work does. My thesis is (just) one step down the abstraction ladder.
 
