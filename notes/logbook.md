@@ -1,3 +1,14 @@
+25/4-19:
+No further progress with connectivity. Wrote two stack overflow questions and mailed Martin about it. Seems the IP packets do reach the server from the client (ping) but not CoAP. Maybe some forwarding issue? Enabling ipv6 forwarding and new rules in ip6tables did nothing (actually broke ping connectivity).
+
+Some black magic stuff going on with the SHA256 update function, can seemingly update several thousands of KB worth of data before finalizing. Useful.
+
+Thinking of implementing the file system interaction over buffer and then calling it for the implementation. Routing issues is more about experimental setup and I can use the two boards only in worst case. Should finish implementation and probably implementation chapter, and as much as possible in results (qualitative stuff). Also make placeholder for discussion section? Where?
+
+Mailed zolertia support about electrical current values, am so uninitiated in the field that I don't even know proper terminology.
+
+Storing the image data in a file instead of buffer. Should somehow test my mechanism when sending larger amounts of data. Might be tricky to hard-code very large strings....
+
 24/4-19:
 The 'image' file is now encrypted and decrypted blockwise.
 
