@@ -1,3 +1,10 @@
+26/4-19:
+No further progress with connectivity. Starting tunslip as a tap interface only broke connectivity. CoAP messages to port 60001 does not work. Don't think I can bridge tun interfaces at all and don't know how to make native Contiki start as a tap instead.
+
+Generating data from image resource, can change arbitrarily. Difficult to buffer into a coffee file on client, causes segfault AFTER everything (literally everything) is done (right before PROCESS_END). Checksum works.
+
+What is the point of actually storing the file in this experiment? I'm just looking at transmissions anyways. Correctness? However, does it make transport more correct? It's a symptom of me not researching methods related to embedded file systems and flash storage. It doesn't feel like it hurts the thesis.
+
 25/4-19:
 No further progress with connectivity. Wrote two stack overflow questions and mailed Martin about it. Seems the IP packets do reach the server from the client (ping) but not CoAP. Maybe some forwarding issue? Enabling ipv6 forwarding and new rules in ip6tables did nothing (actually broke ping connectivity).
 
