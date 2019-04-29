@@ -50,6 +50,7 @@ each and every of the predicted 22.3 billion devices is not feasible. They need 
 remote updates which is a non-trivial task.
 
 \section{Problem Statement}
+\label{sec:problem-statement}
 There is a need for secure software and firmware updates for IoT devices as
 vulnerabilities must be patched. For many IoT devices this mean patches must be applied
 over long distances and possibly unreliable communication channels as sending a technician
@@ -61,6 +62,7 @@ upon the work of the SUIT group, a standardized update mechanism suitable for ba
 powered, constrained, and remote IoT devices can be developed.
 
 \subsection{Problem}
+\label{ssec:problem}
 The thesis aims to investigate the problem "How can the SUIT standard be applied to
 develop a technology agnostic and interoperable update architecture for heterogeneous
 networks of Internet of Things devices?". The thesis project will examine the architecture
@@ -69,11 +71,13 @@ mechanism for battery powered, constrained, and remote IoT devices with a life s
 exceeding five years. 
 
 \subsection{Purpose}
+\label{ssec:purpose}
 The purpose of the thesis project is to provide an open and interoperable update mechanism
 that complies with the standards suggested by the IETF SUIT working group. This will aid
 other projects trying to secure their IoT devices following accepted standards.
 
 \subsection{Goal}
+\label{ssec:goal}
 The goals of the thesis are to study current solutions and technologies and propose a
 technology agnostic update architecture based on the SUIT architecture, as well as
 proposing lightweight end-to-end protocols that instantiates the architecture, allowing
@@ -81,6 +85,7 @@ updates of IoT devices. The degree project shall deliver specifications and prot
 the protocols in an IoT testbed, as well as a thesis report.
 
 \section{Methodologies}
+\label{sec:methodologies}
 The thesis will follow a mix of qualitative and quantitative methodologies. The SUIT group
 defines some goals or constraints a suitable updating mechanism should follow, but as
 their proposed architecture is agnostic of any particular technology these goals cannot be
@@ -91,6 +96,7 @@ evaluation. The quantitative part of the evaluation will follow an objective, ex
 approach, while the qualitative part will follow a interpretative approach.
 
 \section{Risks, Ethics, and Sustainability}
+\label{sec:risks-ethics-sustainability}
 As IoT devices become more commonplace their security becomes more important. Incorrect or
 faulty firmware or software can lead to incorrect sensor readings, a common application of
 IoT devices, which in turn can lead to incorrect conclusions. This could have a large
@@ -112,12 +118,34 @@ replaced often it is a waste of resources. Updating devices is a crucial part in
 efficiency in how IoT devices are used.
 
 \section{Scope}
+\label{sec:scope}
 The thesis will primarily focus on the use case of applying an entire update to one single
 device consisting of only one microcontroller. The use case of applying differential
 updates is considered important and the architecture will enable these kinds of updates,
-but the prototype will only support it with respect to time. 
+but the prototype will only support it with respect to time.
+
+\section{Related Work}
+\label{sec:related-work}
+\textbf{SWUpdate} is an update agent for embedded Linux systems that supports different
+update strategies, payload formats, custom handlers, and other features
+\parencite{swupdate}. It is released under the GPL-2.0 license and is suitable for open
+source solutions. As mentioned however, it is only for more capable devices running Linux
+systems and is thus not compatible with SUIT.
+
+\textbf{Mender} is another software updater for embedded Linux devices released under the
+Apache license \parencite{mender}. Mender includes a client as well as management server
+and offers a paid, hosted solution in addition to their open source code base. As with
+SWUpdate, Mender targets more capable devices than SUIT focuses on.
+
+\textbf{MCUboot} is a secure bootloader for 32-bit microcontrollers released under the
+Apache-2.0 license \parencite{MCUboot}. It aims to define a common bootloader
+infrastructure as to enable secure software upgrades and is operating system and hardware
+independent. It does not however deal with transport of updates at all as it is only a
+bootloader.
+
 
 \section{Outline}
+\label{sec:outline}
 % TODO: Fix numbering
 Will be corrected when the outline is set.
 
