@@ -1,3 +1,14 @@
+29/4-19:
+Rewrote larger parts of the qualitative evaluation. Tried to be more explanatory and provide more angles.
+
+Mailed Farhad the current state of the thesis (with preliminary qualitative results) and asked about when he thinks it is ready for booking a time slot for defense.
+
+Started thinking about future work and security considerations.
+
+Should ask someone about how to measure communication overhead. I know the 8/32 bytes of COSE overhead but not with DTLS. Really, really, really, really hope not running the server natively will interfere. How do I even sniff packets over the air with this setup? If I need another board USB ports will be an issue.. Adapters?
+
+Energy consumption should be easier to solve, just gotta figure out the amps. Code size easy peasy.
+
 26/4-19:
 No further progress with connectivity. Starting tunslip as a tap interface only broke connectivity. CoAP messages to port 60001 does not work. Don't think I can bridge tun interfaces at all and don't know how to make native Contiki start as a tap instead.
 

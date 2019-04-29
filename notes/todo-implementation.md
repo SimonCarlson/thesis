@@ -11,6 +11,6 @@
   - [x] Using PSK
   - [ ] Using certificates
 - [x] Calculate a SHA256 checksum of a data buffer
-- [ ] Allocate memory for and reassemble a large file (image)
+- [x] Allocate memory for and reassemble a large file (image)
 - [ ] Consider datatypes in the manifest (dont use generic int etc)
 
