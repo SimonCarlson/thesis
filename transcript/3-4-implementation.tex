@@ -1,5 +1,5 @@
 \documentclass[0-thesis.tex]{subfiles}
-
+% TODO: Entire implementation section in past tense?
 \begin{document}
 The previous sections proposed the update architecture of the thesis, its key components,
 and security considerations such as identity and access control. This section will discuss
@@ -8,24 +8,24 @@ a prototype implementation of the architecture as well as a manifest generator.
 \subsection{Manifest Implementation}
 \label{ssec:manifest-implementation}
 As manifests contain certain information difficult for humans to provide such as
-monotonically increasing sequence numbers and digests, a manifest generator was created to
-help test the prototype \parencite{manifest-generator}. It is a Python script which
-accepts information about vendor and class namespace, version, image file, and associated
-URL in order to generate and format a manifest both in JSON and CBOR. The outputted
-manifest follows the format specified in Section~\ref{ssec:manifest-format} and features
-all required fields although some left blank. It is a bare-bones manifest containing only
-the required information for a singular, monolithic update. There are no dependencies or
-options specified.
+monotonically increasing sequence numbers and hash digests, a manifest generator was
+created to help test the prototype \parencite{manifest-generator}. It is a Python script
+which accepts information about vendor and class namespace, version, image file, and
+associated URL in order to generate and format a manifest both in JSON and CBOR. The
+outputted manifest follows the format specified in Section~\ref{ssec:manifest-format} and
+features all required fields although some left blank. It is a bare-bones manifest
+containing only the required information for a singular, monolithic update. There are no
+dependencies or options specified.
 
 The manifest is a JSON map featuring the required elements shown in
 Figure~\ref{fig:manifest-format}. The elements are in the same order as in the figure but
 the names of the fields have been substituted for integers in order to save space.
-Table~\ref{tab:manifest-substitution} shows this mapping. Nested structures such as
-preconditions are described as an array of maps, where each map in the array constitutes
-one instance of such an element. The keys in these nested maps are also mapped to integers
-as in the main manifest structure, but resetting the counter for each nested structure.
-The mapping of keys in nested structures is shown in Table~\ref{tab:nested-substitution}.
-The example manifest used can be found in Appendix~\ref{app:manifest}. 
+Table~\ref{tab:manifest-substitution} shows this mapping. Repeatable structures such as
+preconditions are described as a nested array of maps, where each map in the array
+constitutes one instance of such an element. The keys in these nested maps are also mapped
+to integers as in the main manifest structure, but resetting the counter for each map. The
+mapping of keys in nested structures is shown in Table~\ref{tab:nested-substitution}. The
+example manifest used can be found in Appendix~\ref{app:manifest}. 
 
 \begin{longtable}[]{@{}ll@{}}
     \caption{Mapping manifest elements to integers as keys in the JSON manifest.}
@@ -70,7 +70,7 @@ In the client code, the manifest is received as a string, still formatted as JSO
 order to parse it, structs resembling the format of the manifest were created, see
 Listing~\ref{lst:manifest}. The base manifest structure contains values of version ID,
 sequence number, and content key method alongside pointers to other parts of the manifest.
-These parts, represented as nested structs in the JSON string, are implemented as linked
+These parts, represented as repeated maps in the JSON string, are implemented as linked
 lists in order to store an arbitrary amount of such structures. With the example manifest
 shown in Appendix~\ref{app:manifest}, the base manifest structure would for instance
 contain a two element long linked list of preconditions (vendor ID then class ID). Certain
@@ -79,7 +79,7 @@ info convey the same kind of information but are separated into different lists 
 the differences in semantics.
 
 % TODO: Format nicely
-\begin{lstlisting}[language=c, caption={The client manifest implementation}, label=lst:manifest]
+\begin{lstlisting}[language=manifest, caption={The client manifest implementation}, label=lst:manifest]
     typedef struct manifest_s {
         int versionID;
         int sequenceNumber;
@@ -121,43 +121,44 @@ the differences in semantics.
 
 \subsection{Prototype Implementation}
 \label{ssec:prototype-implementation}
-% TODO: Overview of prototype: what it includes, protocols, largely how it works, assumptions
 The prototype used in the thesis is developed in order to measure the efficiency of
-transport during an update procedure. It consists of a server and a client both
-implemented in Contiki-NG. The prototype uses a pull model meaning the client  initiates
-the update procedure and the server responds with a corresponding resource. The server is
+transport during an update procedure as well as serving as a source of inspiration for
+other implementers. It consists of a server and a client both implemented in Contiki-NG,
+thus written purely in C. The prototype uses a pull model meaning the client initiates the
+update procedure and the server responds with a corresponding resource. The server is
 implemented in Contiki-NG as a proof-of-concept that a more capable IoT device could be
 used as an update server.
 
 % TODO: Check what I've already written about COSE in Contiki-NG (previous section)
 % TODO: Double check what an AAD is/does
 The prototype makes use of CoAPs over DTLS with COSE encryption of payloads. Ideally COSE
-would be used for signing payloads as confidentiality is provided by DTLS, but COSE
-implementations in Contiki-NG are limited and at the time of development did not support
-signing. Implementing COSE signing would prove too time consuming for a project of this
-scope, thus COSE encryption is used instead as a proof-of-concept of using COSE in the
-update architecture. Encrypting via COSE requires more information than signing such as
-nonces and Additional Authenticated Data (AAD), these have been hard-coded into the client
+would be used for signing payloads as confidentiality is already provided by DTLS, but
+COSE implementations in Contiki-NG are limited and at the time of development did not
+support signing. Implementing COSE signing would prove too time consuming for a project of
+this scope, thus COSE encryption is used instead as a proof-of-concept of using COSE in
+the update architecture. Encrypting via COSE requires more information than signing such
+as nonces and Additional Authenticated Data, these have been hard-coded into the client
 and server. The key has also been hard-coded. Furthermore, certificate support in
 Contiki-NG is lacking and the prototype thus uses hard-coded pre-shared keys in order to
 use DTLS. The last assumption made is about transferring the manifest. In the prototype
 only one specific manifest is used, and thus a statically allocated buffer has been used
-to make implementation easier. In a real deployment some sort of dynamic memory allocation
-would be needed in order to receive and reassemble manifests of varying sizes.
+to make implementation easier. In a real deployment dynamic memory allocation would be
+needed in order to receive and reassemble manifests of varying sizes.
 
+% TODO: Mention registration file if I implement it
 The interactions of the client and server are simplistic and the client has no other
 behaviour than to initiate and complete the update procedure. As shown in
 Figure~\ref{fig:client-server-interaction}, the interaction starts with a POST request
 from the client to the registration endpoint of the server. The registration is sent as a
 confirmable CoAP packet and is thus acknowledged by the server. Afterwards, the client
-sends a GET request for a manifest. The idea is that the endpoint \texttt{update/manifest}
-is a well known endpoint just like \texttt{update/register} and all devices in the network
-register and poll for manifests at these endpoints. Upon a request to
-\texttt{update/manifest} it is up to the server to decide whether there is a suitable
-manifest or not, offloading any decision making from the device. Since the prototype only
-makes use of one manifest such logic is not implemented, but in real deployments the
-\texttt{update/manifest} server resource would handle that by using the information from
-the devices' profile.
+sends a GET request for a manifest. The endpoints \texttt{update/manifest} and
+\texttt{update/register} are well known endpoints and all devices in the network register
+and poll for manifests at these endpoints. Upon a request to \texttt{update/manifest} it
+is up to the server to decide whether there is a suitable manifest or not, offloading any
+decision making from the device. Since the prototype only makes use of one manifest such
+logic is not implemented, but in real deployments the \texttt{update/manifest} server
+resource would handle that by using the information from the devices' profile created at
+the time of registration.
 
 \begin{figure}
     \caption{The interactions of client and server during an update procedure.}
@@ -168,12 +169,12 @@ the devices' profile.
 If the server finds a suitable manifest it encodes and encrypts it using COSE and then
 sends the ciphertext via CoAPs' block option. After the client has reassembled the
 manifest it decrypts and decodes it, and then runs a simple parser. When the parsing is
-done the client must check the preconditions to make sure it is the intended recipient by
-comparing vendor and class IDs, and any other custom logic. If the client deems the
-manifest to be valid it requests the update image from the URL specified in the manifest.
-The endpoint is now specific for this particular class of device and version and is not
-known in advance, it is specified in the manifest. After the image file has been received
-and reassembled, its SHA-256 digest is calculated and the procedure is finished.
+done the client checks the preconditions to make sure it is the intended recipient by
+comparing vendor and class IDs. If the client deems the manifest to be valid it requests
+the update image from the URL specified in the manifest. The endpoint is now specific for
+this particular class of device and version and is not known in advance, it is specified
+in the manifest. After the transfer of image data has concluded the SHA-256 digest is
+calculated and the procedure is finished.
 
 The manifest and image files are encrypted in different manners for practical reasons. The
 image file is relatively large and encrypting it at once requires a buffer large enough to
@@ -182,10 +183,10 @@ manifest is more lax. By encrypting the image file block per block the problem o
 sizes is circumvented but instead introduces a larger overhead. The COSE implementation
 makes use of 8 byte large tags in order to validate the ciphertext during decryption, this
 means 8 of 32 bytes sent per block is overhead and not actual data. The manifest, being
-encrypted in its entirety at once and then split up in blocks, only introduces this
+encrypted in its entirety at once and then split up in blocks only introduces this
 overhead once whereas the manifest transfers introduces it once per block sent. Encrypting
-the manifest this way also requires decrypting each block instead of just one encrypting
-as with the manifest. With the limited buffer sizes available however, encrypting and
+the image this way also requires decrypting each block instead of decrypting just once as
+with the manifest. With the limited buffer sizes available however, encrypting and
 decrypting the entire image file at once is not feasible using the hardware of the thesis.
 
 
