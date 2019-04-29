@@ -8,12 +8,29 @@ was carried out, its results, and discussion about the results.
 \section{Quantitative Evaluation of Update Architecture}
 \label{sec:quant-evaluation}
 
+Experimental setup.
+Describe what is running where and how it is connected
+Describe what is being sent by the server
+Describe how the project is built
+
+Code size.
+Describe how it is obtained
+Compare it against "bare bones" CoAP/DTLS Contiki-NG for reference?
+
+Energy consumption of update procedure.
+Describe how the measurements are obtained, what formula is used, what parts of the system
+are measured
+
+Communication overhead of update procedure.
+Describe how measurements are obtained
+
 \section{Qualitative Evaluation of Update Architecture}
 \label{sec:qual-evaluation}
-The proposed architecture can be evaluated in two parts, architecture and information
-model analogous to how the SUIT working group presented the parts. Using the requirements
-of each document, a qualitative evaluation of the proposed architecture can be done. The
-requirements are gathered from \parencite{suit-architecture, suit-information-model}.
+The proposed architecture can be evaluated in two parts analogous to how the SUIT working
+group presented their work, namely architecture and information model. Using the
+requirements of each document, a qualitative evaluation of the proposed architecture can
+be performed. The requirements are gathered from \parencite{suit-architecture,
+suit-information-model}.
 \subsection{Architecture}
 \label{ssec:arch-evaluation}
 The SUIT architecture document specified ten requirements a suitable update architecture
@@ -21,21 +38,33 @@ should fulfill:
 
 \begin{description}
     \item[Agnostic to how firmware images are distributed:]
-        The architecture does not make assumptions on underlying transport. The thesis
-        gives examples of two different profiles using different means of transport.
+        No parts of the architecture assumes a specific suite of protocols or algorithms
+        to ensure secure delivery of updates. The architecture does specify the usage of
+        technologies such as certificates, asymmetric encryption, and authorization
+        tokens, but these elements can be implemented in a wide variety of ways using
+        different protocols, algorithms, and certificate/token types. The profiles
+        provided in the thesis are examples of how specific incarnations of the
+        architecture could look like.
 
     \item[Friendly to broadcast delivery:]
-        Nothing in the architecture prevents broadcasting, however choice of security can
-        limit it (for instance, DTLS).
+        The architecture itself does not limit broadcast delivery and through correct
+        usage of the manifest broadcasted updates will not be incorrectly installed by
+        devices other than the intended recipients. Choice of technology can limit the
+        usage of broadcasting, such as DTLS, but this is implementation specific.
 
     \item[Use state-of-the-art security mechanisms:]
-        The architecture is based on asymmetric cryptography using strong algorithms
-        (preferably ECC) and possibly tokens for fine-grained authorization. 
+        The architecture is based on asymmetric cryptography using certificates as well as
+        access authorization through whitelists and possibly tokens for fine-grain
+        authorization. Choice of key algorithms and token types will affect the resilience
+        of the system, allowing for both smaller and less strong keys and tokens or larger
+        and strong keys and tokens. % TODO: Swap resilience for something like
+        % cryptographic strength
 
     \item[Rollback attacks must be prevented:]
-        Prevented via sequence numbers in the manifest. For each targeted class of
-        devices, the sequence number of updates must be monotonically increasing (also
-        version numbers?)
+        By specifying a monotonically increasing sequence number in the manifest, devices
+        can make sure they are installing fresh images. Manifests are signed through COSE
+        which ensures authenticity, an assailant would not be able to modify a manifest
+        and then recompute a valid signature.
 
     \item[High reliability:]
         This is an implementation specific requirement, however the storage element of the
@@ -45,101 +74,147 @@ should fulfill:
 
     \item[Operate with a small bootloader:]
         The thesis suggests to store an unencrypted image alongside its digest for the
-        bootloader to be minimal, only needing support for SHA256. All information about
-        whether or not to perform the update is encoded in conditions in the manifest, and
-        can be stored with minimal memory usage.
+        bootloader to be minimal, only needing support for calculating a SHA256 digest of
+        the image at boot. All information about whether or not to perform the update is
+        encoded in conditions in the manifest, and can be stored with small memory usage.
 
     \item[Small parsers:]
-        The manifest format used in the thesis is minimal while still complying with SUIT,
-        easily parsed, and extensible for extra functionality.
+        The manifest format used in the thesis is simple, complete, and extensible.
+        Parsing it requires storing the key/value pairs in predefined structures which is
+        possible with a very small parser.
 
     \item[Minimal impact on existing firmware formats:]
-        The architecture makes no assumptions about firmware formats.
+        The architecture makes no assumptions about firmware formats. It is up to the
+        implementer to ensure the images are prepared for updating and that the bootloader
+        contains the necessary functionality. Transporting the images is the same
+        regardless of content.
 
     \item[Robust permissions:]
-        The architecture proposes whitelists of operators and servers that device use to
-        permit traffic. Authorization tokens are suggested as a way of achieving more
-        finely grained level of authorization, for instance for differential updates.
-        Different deployments can or different devices in the same deployment can have
-        different authorization configurations.
+        The architecture is based on asymmetric cryptography using certificates for
+        identity and confidentiality, and whitelists of servers and operators as well as
+        tokens for authorization. Different deployments have different security and
+        performance requirements, the architecture is flexible by allowing different kinds
+        of key algorithms, encryption schemes, and token types. Some deployments may not
+        need tokens at all as authentication is done on a device level and whitelists are
+        sufficient, white other deployments wanting to update specific pieces of a device
+        may need fine-grained authorization through tokens. Different devices in the same
+        deployment can have different authorization configurations, for instance by
+        accepting different types of tokens.
 
     \item[Operating modes:]
-        The architecture supports the device initiated pull model, as well as the operator
+        The architecture supports the device initiated pull model as well as the operator
         initiated push model. The update server acts as a mediator between device and
         operator as well as a repository for images and device profiles, letting the
-        operator query the server for device statuses.
+        operator query the server for device statuses and devices query for updates
+        depending on the model used.
 \end{description}
 
-The architecture was developed with these requirements in mind, and has succeeded in
-fulfilling them. Furthermore the architecture 
+In addition to these requirements, the architecture discusses the following
+topics/introduces the following considerations:
+Servers as communication proxies between operator (unconstrained) and device (constrained)
+Life cycle approach of enrolling and re-enrolling in an update architecture
+Defined the notion of operators, update servers, and devices
+Profiles have been developed and one profile implemented in a prototype (with some
+constraints such as certificates and tokens)
+
 % TODO: Add anything the architecture might have contributed with (device
 % profiles/communication/targeting of updates, definitions of operators and update servers)
   
 \subsection{Information Model}
 \label{ssec:information-evaluation}
-The information model posed more requirements than the architecture and its implementation
-forms an important basis for carrying out safe updates. Evaluating the proposed manifest
-format and implementation against the requirements of the specification yields the
-following results:
-
-% TODO: Rewrite, explain further
-Since the manifest structure of the thesis is just following the recommendations of SUIT
-it should already fulfill the security requirements posted upon it. More interesting is
-looking at the use cases I think.
+The information model had more requirements posed upon it than the architecture and its
+implementation forms an important basis for carrying out safe updates. Evaluating the
+proposed manifest format and implementation against the requirements of the specification
+yields the following:
 
 \begin{description}
     \item[Installation instructions:]
-        Can be included as directives in the options field
+        Installation instructions or any sort of directive is not included in the base
+        manifest structure but can be implemented in the options field. Directives, shown
+        as an option in Figure~\ref{fig:manifest-format}, could be used to indicate
+        decompression algorithms, preparation of bootloader etc while other more specific
+        instructions can be implemented either as a directive or a new kind of option
+        element specific to that deployment.
+
     \item[Override non-critical manifest elements:]
         The proposed manifest format has the critical elements as a baseline and the rest
-        severed into the options field. Omitting options or defining new option types
-        allows for new information.
+        severed into the options field. Defining new option types allows for new
+        elements in the manifest, but the devices need to be updated for their parsers and
+        manifest checkers to be aware of the new elements.
+
     \item[Modular update:]
-        Supported through precursor images, dependencies, and the use of authorization
-        tokens for more granular updates.
+        Supported through precursor images, dependencies, URI aliases, and the use of
+        authorization tokens for more granular updates. For devices with several MCUs and
+        applications, possibly several operating systems, update access can be controlled
+        through authorization tokens such that a vendor can only update their respective
+        part.
 
     \item[Multiple authorizations:]
         Enforced via operator and update server whitelists and authorization tokens.
 
     \item[Multiple payload formats:]
         The architecture and manifest format does not make assumptions about the payload
-        formats. The mappings of formats to integers in the manifest is deployment
-        specific.
+        formats. The mappings of formats to keys in the manifest is deployment
+        specific and whatever formats a deployment might opt to use can be represented in
+        the manifest together with a SHA256 digest of said format.
 
     \item[Prevent confidential information disclosure:]
-        The architecture is based on state-of-the-art security mechanisms and suggests the
-        use of strong algorithms such as ECC. Both manifest and payload are encrypted and
-        authenticated.
+        The architecture is based on state-of-the-art security mechanisms and achieves
+        confidentiality through asymmetric cryptography. Both manifest and payload are
+        encrypted and then signed using COSE.
 
     \item[Prevent devices from unpacking unknown formats:]
-        Supported through the use of manifest format, overridable/custom directives, and
-        letting the update server pick if there is a suitable update for a device matching
-        against its registered profile
+        Supported through the use of the manifest format element, preconditions,
+        overridable/custom directives, and letting the update server decide if there is a
+        suitable update for a device by matching against its registered profile.
 
     \item[Specify version numbers of target firmware:]
-        Devices register their version alongside vendor and class ID, meaning operators
-        can query device statutes from the update server and then preparing updates
-        matching these categories.
+        Since devices are required to register their version alongside vendor and class
+        ID, operators can query device statutes from the update server and then prepare
+        updates matching these categories of devices.
 
     \item[Enable devices to choose between images:]
-        Several images can be included in a single manifest through the use of either
+        Several images can be specified in a single manifest through the use of either
         precursors, dependencies, URIs (mirror list), or aliases depending on the specific
         use case. New options can also be defined capturing this behaviour, such as a new
         option providing URL/Digest pairs intended for parallel storage.
 
     \item[Secure boot using manifests:]
-        - % TODO: No idea about secure boot, have not looked into it whatsoever (scope?)
+        The thesis has not examined bootloaders, thus this requirement is out of scope.
+        Investigating secure bootloaders could be part of future work in the topic.
+        % TODO: No idea about secure boot, have not looked into it whatsoever (scope?)
 
     \item[Decompress on load:]
         This behaviour can be encoded in the payload format of the manifest, or through
-        the use of a custom option indicating a compressed payload is stored
+        the use of a custom directive indicating a compressed payload is stored.
 
     \item[Payload in manifest:]
         Can be added as the optional "payload" element, the value would be the data of the
-        payload and the payloadInfo would contain its digest
+        payload and the regular payloadInfo element would contain its digest. Worth noting
+        is that for most deployments including the payload in the manifest will
+        dramatically increase the size of manifest, thus a manifest parser must be
+        prepared for it.
 
     \item[Simple parsing:]
-        The manifest format used is simple to parse even for embedded devices
+        As explained in the previous section, the manifest format is simple and easy to
+        parse even for constrained devices.
 \end{description}
+
+\section{Discussion}
+\label{sec:discussion}
+
+
+\subsection{Security Considerations}
+\label{ssec:security-considerations}
+
+
+\section{Future Work}
+\label{sec:future-work}
+Bootloader: preparing image for OTA update, preparing bootloader for OTA update, updating
+without cutting power? Updating safety critical systems?
+
+Prototype with certificates instead of PSK, tokens, and COSE signing instead of
+encryption.
+
 
 \end{document}
