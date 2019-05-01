@@ -1,3 +1,10 @@
+30/4-19:
+Can connect client on board with native server through UDP forwarding using socat.
+
+Cleaned up the code a little, made the register resource create a profile file and the manifest resource to read it.
+
+DTLS probably won't work with UDP forwarding as the client tries to connect to the fd00::1 peer and not fd00::302:304:506:708. The hello requests and verify as routed properly but since theyre going to/coming from the wrong peer it doesn't matter... Back to square one. Ask Rikard about the sniffer? Maybe it's not too hard to use..
+
 29/4-19:
 Rewrote larger parts of the qualitative evaluation. Tried to be more explanatory and provide more angles.
 

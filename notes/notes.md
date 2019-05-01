@@ -82,3 +82,23 @@ sudo ./update-server.native
 cd hello-world
 
 make TARGET=zoul BOARD=firefly PORT=/dev/ttyUSB0 hello-world.upload && make TARGET=zoul BOARD=firefly PORT=/dev/ttyUSB0 login
+
+# Native connectivity
+
+cd examples/rpl-border-router
+
+./run-router.sh
+
+sudo socat UDP6-RECVFROM:5683,fork UDP6-SENDTO:[fd00::302:304:506:708]
+
+cd tools/serial-io
+
+sudo ./tunslip6 -B 115200 -s /dev/ttyUSB1 -t tun1 aaaa::1/64
+
+cd examples/suitup
+
+sudo ./update-server.native
+
+cd examples/hello-world
+
+./run-hello.sh
