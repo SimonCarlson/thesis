@@ -222,10 +222,8 @@ devices. Using authorization tokens is a scalable and configurable way of achiev
 The IETF \acrfull{suit} working group aims to define a firmware update solution for IoT
 devices that is interoperable and non-proprietary \parencite{suit}. The working group does
 not however try to define new transport, discovery, or security mechanisms making their
-proposal agnostic of any particular technology. The solution shall be usable on Class 1
-devices, defined by ~10 KiB RAM and ~100 KiB code size \parencite{rfc7228}. The solution
-may be applied to more powerful devices, such as the one used in this thesis described in
-Section~\ref{ssec:firefly}.
+proposal agnostic of any particular technology. SUIT aims to define both a mechanism for
+transporting firmware images as well as meta-data needed to securely update an IoT system.
 
 Section~\ref{ssec:architecture} presents the SUIT architecture and
 Section~\ref{ssec:information-model} presents the SUIT information model.
@@ -533,13 +531,12 @@ with. With \texttt{HeapMem} memory can be reallocated and deallocated as if usin
 
 \subsection{Firefly}
 \label{ssec:firefly}
+% TODO: Move to experimental setup
 Zolertia Firefly is a supported hardware platform in Contiki-NG and the targeted board for
 this thesis. It is a breakout board designed for IoT application development sporting an
-ARM Cortex-M3 with 512 KB flash and 32 KB RAM, making it more powerful than the Class 1
-devices the SUIT standard specifies as a lower bound. This is not an issue but should be
-kept in mind as less capable devices are supposed to be able to use an update mechanism
-that is complying with SUIT. Furthermore the board supports IEEE 802.15.4 communication in
-the 2.4 GHz band and SHA2 and RSA hardware acceleration \parencite{firefly-datasheet}.
+ARM Cortex-M3 with 512 KB flash and 32 KB RAM. Furthermore the board supports IEEE
+802.15.4 communication in the 2.4 GHz band and SHA2 hardware acceleration
+\parencite{firefly-datasheet}.
 
 \section{Summary}
 \label{sec:2-summary}

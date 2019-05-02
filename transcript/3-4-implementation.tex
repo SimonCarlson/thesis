@@ -81,11 +81,11 @@ the differences in semantics.
 % TODO: Format nicely
 \begin{lstlisting}[language=manifest, caption={The client manifest implementation}, label=lst:manifest]
     typedef struct manifest_s {
-        int versionID;
-        int sequenceNumber;
+        uint8_t versionID;
+        uint32_t sequenceNumber;
         struct condition_s *preConditions;
         struct condition_s *postConditions;
-        int contentKeyMethod;
+        uint8_t contentKeyMethod;
         struct payloadInfo_s *payloadInfo;
         struct URLDigest_s *precursorImage;
         struct URLDigest_s *dependencies;
@@ -93,15 +93,15 @@ the differences in semantics.
     } manifest_t;
 
     typedef struct condition_s {
-        int type;
+        int8_t type;
         char *value;
         struct condition_s *next;
     } condition_t;
 
     typedef struct payloadInfo_s {
-        int format;
-        int size;
-        int storage;
+        uint8_t format;
+        uint32_t size;
+        uint8_t storage;
         struct URLDigest_s *URLDigest;
     } payloadInfo_t;
 
@@ -112,7 +112,7 @@ the differences in semantics.
     } URLDigest_t;
 
     typedef struct option_s {
-        int type;
+        int8_t type;
         char *value;
         struct option_s *next;
     } option_t;
@@ -130,7 +130,6 @@ implemented in Contiki-NG as a proof-of-concept that a more capable IoT device c
 used as an update server.
 
 % TODO: Check what I've already written about COSE in Contiki-NG (previous section)
-% TODO: Double check what an AAD is/does
 The prototype makes use of CoAPs over DTLS with COSE encryption of payloads. Ideally COSE
 would be used for signing payloads as confidentiality is already provided by DTLS, but
 COSE implementations in Contiki-NG are limited and at the time of development did not
