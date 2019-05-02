@@ -14,7 +14,7 @@ Same as client but change all occurences of 'client' to 'server'
 
 # Example manifest
 
-./manifest.py example-manifest.json -i memtest86+.elf -v test -c test -u update/image -m 1
+./manifest.py 500-blocks-manifest.json -i 500-blocks-data.txt -v test -c test -u update/image -m 1
 
 # Flash nodes
 

@@ -1,3 +1,13 @@
+2/5-19:
+Better day today. DTLS works when running client and server on boards.
+
+Spoke to Rikard, he can procure a sniffer by tomorrow afternoon. Hopefully it works to get some data to wireshark.
+
+Started measuring energy consumption of my prototypes. Measuring for 500, 2000, and 4000 blocks. Still not sure how to present it. Anything will work probably. Unsure about amps, but cc2538 datasheet should have it. Deep low power mode does not seem to be used.
+
+1/5-19:
+Forwarding via socat seems to break DTLS...
+
 30/4-19:
 Can connect client on board with native server through UDP forwarding using socat.
 
