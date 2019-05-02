@@ -21,8 +21,11 @@ Energy consumption of update procedure.
 Describe how the measurements are obtained, what formula is used, what parts of the system
 are measured
 
+$$ Energy (J) = \frac{ticks}{ticks/second} * V * A $$
+
 Communication overhead of update procedure.
-Describe how measurements are obtained
+Describe how measurements are obtained (latency and packet size? dont know how to do lossy
+stuff)
 
 \section{Qualitative Evaluation of Update Architecture}
 \label{sec:qual-evaluation}
@@ -182,7 +185,6 @@ yields the following:
     \item[Secure boot using manifests:]
         The thesis has not examined bootloaders, thus this requirement is out of scope.
         Investigating secure bootloaders could be part of future work in the topic.
-        % TODO: No idea about secure boot, have not looked into it whatsoever (scope?)
 
     \item[Decompress on load:]
         This behaviour can be encoded in the payload format of the manifest, or through
@@ -206,15 +208,41 @@ yields the following:
 
 \subsection{Security Considerations}
 \label{ssec:security-considerations}
+While the architecture uses encryption and signing to ensure the confidentiality and
+authenticity of manifest and image data, clients do not have any kind of error correction
+should packets become corrupted or altered during transport. Not being able to mend small
+errors means every incorrect packet must be retransmitted. If an assailant is purposely
+corrupting packets during transport, it could effectively lead to a DDoS attack, denying
+the device an update and wasting energy in the process.
+
+Despite being able to add timestamps in the manifest specifying a time of update it can
+prove difficult to install updates at the right moment. This is especially important for
+devices used in safety critical contexts such as in factories. Timestamps are also unable
+to account for if processes are being interrupted or not, one might want to postpone
+updates until a certain process or thread is idle. The architecture does also not account
+for scenarios where redundant devices are used to achieve the same goal, such as
+monitoring equipment. To update one of the devices while the other operates and then
+update the other would require manual intervention such as sending the devices updates one
+at a time.
+
+The architecture does not account for physical threats, only threats that arise during
+wireless transport. The discussion in Section~\ref{ssec:upgrading} does not account for
+scenarios where the physical storage of devices is compromised. Implementers are advised
+to store manifest and image data in a way that makes sense for their own deployment,
+whether that is unencrypted, encrypted, or encrypted manifest with unencrypted image.
 
 
 \section{Future Work}
 \label{sec:future-work}
-Bootloader: preparing image for OTA update, preparing bootloader for OTA update, updating
-without cutting power? Updating safety critical systems?
-
-Prototype with certificates instead of PSK, tokens, and COSE signing instead of
-encryption.
-
+Moving forward, developing a prototype using certificates instead of pre-shared DTLS keys,
+authorization tokens, and COSE signing instead of encryption would further aid the
+understanding of the architectures requirements on devices and how feasible it is to use
+for less constrained devices. If using Contiki-NG this would require some development work
+as none of the mentioned features exist in the operating system at time of writing.
+Furthermore, research about bootloaders, safe boot, and storage of firmware images is of
+interest as this thesis only covers transportation. How to upgrade a device, how to
+perform differential updates, and possibly how to update safety critical systems are all
+important topics that can utilize the proposed transport architecture and prototype as a
+starting point.
 
 \end{document}
