@@ -51,13 +51,13 @@ server over the thirty runs.
 \begin{figure}
     \caption{Average energy consumption for client operations.}
     \label{fig:client-operations-energy}
-    \includegraphics[scale=0.8]{images/server-operations-energy.pdf}
+    \includegraphics[scale=0.8]{images/client-operations-energy.pdf}
 \end{figure}
 
 \begin{figure}
     \caption{Average energy consumption for server operations.}
     \label{fig:server-operations-energy}
-    \includegraphics[scale=0.8]{images/client-operations-energy.pdf}
+    \includegraphics[scale=0.8]{images/server-operations-energy.pdf}
 \end{figure}
 
 Figure~\ref{fig:client-image-energy} shows average energy consumption for the client when
@@ -184,6 +184,8 @@ should fulfill:
         depending on the model used.
 \end{description}
 
+% TODO: Add anything the architecture might have contributed with (device
+% profiles/communication/targeting of updates, definitions of operators and update servers)
 In addition to these requirements, the architecture discusses the following
 topics/introduces the following considerations:
 Servers as communication proxies between operator (unconstrained) and device (constrained)
@@ -191,9 +193,6 @@ Life cycle approach of enrolling and re-enrolling in an update architecture
 Defined the notion of operators, update servers, and devices
 Profiles have been developed and one profile implemented in a prototype (with some
 constraints such as certificates and tokens)
-
-% TODO: Add anything the architecture might have contributed with (device
-% profiles/communication/targeting of updates, definitions of operators and update servers)
   
 \subsection{Information Model}
 \label{ssec:information-evaluation}
@@ -299,15 +298,14 @@ whether that is unencrypted, encrypted, or encrypted manifest with unencrypted i
 
 \section{Future Work}
 \label{sec:future-work}
-Moving forward, developing a prototype using certificates instead of pre-shared DTLS keys,
-authorization tokens, and COSE signing instead of encryption would further aid the
-understanding of the architectures requirements on devices and how feasible it is to use
-for less constrained devices. If using Contiki-NG this would require some development work
-as none of the mentioned features exist in the operating system at time of writing.
-Furthermore, research about bootloaders, safe boot, and storage of firmware images is of
-interest as this thesis only covers transportation. How to upgrade a device, how to
-perform differential updates, and possibly how to update safety critical systems are all
-important topics that can utilize the proposed transport architecture and prototype as a
-starting point.
+Moving forward, research on preparing bootloaders for upgrades and safe boot as well as
+performing differential updates would be of importance. As in the results, the largest
+source of energy consumption is the radio receiver during transfer of updates, largely
+because of the relatively large size of firmware images. By performing differential
+updates instead the size of images can be reduced and time to retrieve them and thus
+energy consumption will go down. Furthermore, developing a prototype using certificates
+instead of pre-shared DTLS keys, authorization tokens, and COSE signing instead of
+encryption would further aid the understanding of the architecture's requirements on
+devices and how feasible it is to use for less constrained devices. 
 
 \end{document}
