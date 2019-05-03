@@ -33,7 +33,7 @@ Listing~\ref{lst:energest}.
 \end{lstlisting}
 
 With the amount of ticks, the following formula can be used to obtain energy consumption
-(measure in Joule)
+(measured in Joule)
 
 $$ Energy (J) = \frac{ticks}{ticks/second} * V * A $$
 
@@ -61,7 +61,7 @@ server over the thirty runs.
 \end{figure}
 
 Figure~\ref{fig:client-image-energy} shows average energy consumption for the client when
-retreiving and decrypting image data per block size, ten runs per block size.
+retrieving and decrypting image data per block size, ten runs per block size.
 Figure~\ref{fig:server-image-energy} shows average energy consumption for the server when
 encrypting and sending image data per block size, ten runs per block size.
 
@@ -130,10 +130,9 @@ should fulfill:
     \item[Use state-of-the-art security mechanisms:]
         The architecture is based on asymmetric cryptography using certificates as well as
         access authorization through whitelists and possibly tokens for fine-grain
-        authorization. Choice of key algorithms and token types will affect the resilience
-        of the system, allowing for both smaller and less strong keys and tokens or larger
-        and strong keys and tokens. % TODO: Swap resilience for something like
-        % cryptographic strength
+        authorization. Choice of key algorithms and token types will affect the
+        cryptographic strength of the system, allowing for both smaller and less strong
+        keys and tokens or larger and strong keys and tokens. 
 
     \item[Rollback attacks must be prevented:]
         By specifying a monotonically increasing sequence number in the manifest, devices
@@ -275,7 +274,47 @@ yields the following:
 
 \section{Discussion}
 \label{sec:discussion}
+The thesis has presented a software and firmware update architecture for IoT. The
+architecture is based on requirements developed by the IETF SUIT working group and aims to
+be interoperable and usable for very constrained devices. The architecture is based on
+state-of-the art security mechanisms such as asymmetric cryptography, certificates, and
+authorization tokens. The architecture defines the roles of devices, update servers, and
+operators, discusses how these actors can authorize themselves and what tokens are needed,
+the operations of these actors such as registering devices, and briefly considers local
+upgrade handling. Furthermore the thesis discusses the device life cycle for new devices
+entering a network, being updated, and continuing their service for many years, where
+devices must re-register and possibly re-enroll following certain operations of an update
+procedure.
 
+Two possible profiles for an architecture based on DTLS/CoAP and OSCORE were presented.
+These profiles are using modern protocols used in IoT applications in order to realize
+possible implementations of the architecture. They both have their pros and cons
+discussed, with the major difference being suitability for broadcasting updates. The
+architecture itself does not prevent broadcasting, but choice of security (in this case
+DTLS) might. One of the profiles, the DTLS/CoAP profile, was implemented as a prototype in
+order to gain an understanding of metrics such as code size, energy consumption, and
+communication overhead for such an update mechanism. The prototype does not feature all
+parts of the architecture as certificates and COSE signing is not present in the used
+operating system Contiki-NG. Pre-shared keys and COSE encryption were used instead. Tokens
+were not used either as the prototype delivers a manifest for an entire, monolithic
+update, making more finely grained authorization redundant.
+
+% TODO: Talk about manifest and its format?
+
+The prototype was evaluated in a quantitative manner and the backing architecture in a
+qualitative manner. Experiments on energy consumption found that radio receiving during
+image transfer makes up the bulk of energy usage during an update procedure and exploring
+opportunities to reduce image sizes, for instance through deploying differential updates,
+would greatly reduce the energy spent. Code size was measured and found to be 91343 bytes
+for the client and 91643 bytes for the server. This does not include any other application
+code so fitting it onto Class 1 devices as defined in \parencite{rfc7228} with ~100 KiB
+code size could prove challenging but possible using Contiki-NG. 
+% TODO: Add about communication overhead
+
+% TODO: Summarize the overarching goals of the architecture
+The architecture does not make assumptions about protocols, firmware image formats, means
+of transport, or suggest a static topology. It is deliberately flexible in order to work in
+networks of different kinds using devices of different kinds.
 
 \subsection{Security Considerations}
 \label{ssec:security-considerations}
