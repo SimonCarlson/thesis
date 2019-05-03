@@ -8,10 +8,6 @@ was carried out, its results, and discussion about the results.
 \section{Quantitative Evaluation of Update Architecture}
 \label{sec:quant-evaluation}
 
-Experimental setup.
-Describe what is running where and how it is connected
-Describe what is being sent by the server
-Describe how the project is built
 
 \subsection{Energy Consumption}
 \label{ssec:energy-consumption}
@@ -20,12 +16,13 @@ ticks, is spent by a program. It is divided into five categories: CPU, Low Power
 Deep Low Power Mode, Transmit, and Listen. CPU, Low Power Mode, and Deep Low Power Mode
 are related to the work of the processor while Transmit and Listen measures the radio.
 Each type can be measured independently by calling the function
-energest\_type\_time(energest\_type\_t type) where type is the category you want to measure.
-For the experiment, the client measures the register callback, the manifest callback, the
-decoding and parsing of the manifest, and the image callback. The server measures the
-register resource, the manifest resource, and the image resource. The entire block
-transmission of the manifest and image resources are measured, and both client and server
-measures all five categories. Measurements are taken in the following way:
+energest\_type\_time(energest\_type\_t type) where type is the category you want to
+measure. For the experiment, the client measures the register callback, the manifest
+callback, the decoding and parsing of the manifest, and the image callback. The server
+measures the register resource, the manifest resource, and the image resource. The entire
+block transmission of the manifest and image resources are measured, and both client and
+server measures all five categories. How measurements are taken is shown in
+Listing~\ref{lst:energest}.
 
 \begin{lstlisting}[language=manifest, caption={How to measure ticks in energest.}, label=lst:energest]
     energest_flush();   // To update values
@@ -41,12 +38,15 @@ With the amount of ticks, the following formula can be used to obtain energy con
 $$ Energy (J) = \frac{ticks}{ticks/second} * V * A $$
 
 where ticks per second is defined in the platform dependant ENERGEST\_SECOND macro. When
-measuring, the amount of blocks sent by the image resource varied between 500, 2000, and
-4000 with ten runs per block size. The registration and manifest related operations were
-held constant as the client always registers with the same information and the server
-sends the same manifest. Figures \ref{fig:client-operations-energy} and
-\ref{fig:server-operations-energy} shows average energy consumption for registration and
-manifest related operations for both client and server over the thirty runs.
+gathering data about energy consumption, the client and server were flashed onto a Firefly
+board each and connected to a host laptop through USB. All communication was wireless and
+data was printed out to a terminal via serial port. The amount of blocks sent by the image
+resource varied between 500, 2000, and 4000 with ten runs per block size. The registration
+and manifest related operations were held constant as the client always registers with the
+same information and the server sends the same manifest. Figures
+\ref{fig:client-operations-energy} and \ref{fig:server-operations-energy} shows average
+energy consumption for registration and manifest related operations for both client and
+server over the thirty runs.
 
 \begin{figure}
     \caption{Average energy consumption for client operations.}
