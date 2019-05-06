@@ -176,10 +176,31 @@ file contains the server generated data for 500 blocks.
 \lstinputlisting[language=manifest, caption={The example manifest \texttt{500-blocks-manifest.json} used in the thesis.}]{500-blocks-manifest.json}
 
 \chapter{Repositories}
+\label{app:repos}
 Repository containing client and server update code, located in \texttt{examples/suitup}:
 \url{https://github.com/SimonCarlson/contiki-ng/tree/oscore_12}\\
 
 \noindent Repository for manifest generation:
 \url{https://github.com/SimonCarlson/manifest-generator}
+
+\chapter{Bare Bones Example Source Code}
+\label{app:bare-bones}
+\begin{lstlisting}[language=manifest, caption={Bare bones Contiki-NG example.} label=lst:bare-bones]
+    #include "contiki.h"
+    #include "contiki-net.h"
+    #include "coap-engine.h"
+    #include "coap-blocking-api.h"
+    #include "coap-keystore-simple.h"
+
+    PROCESS(bare_bones_process, "Bare bones process");
+    AUTOSTART_PROCESSES(&bare_bones_process);
+
+    PROCESS_THREAD(bare_bones_process, ev, data) {
+    PROCESS_BEGIN();
+
+    PROCESS_END();
+    }
+\end{lstlisting}
+
 
 \end{document}
