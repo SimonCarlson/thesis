@@ -410,11 +410,6 @@ this can be done using only whitelists.
 
 \subsection{Update Handling for Local Upgrades}
 \label{ssec:upgrading}
-% TODO: How to handle decryption and verification
-% I like the idea of decrypting once and storing decrypted image with its hash for smaller
-% bootloader procedure. Implementation specific though
-% Cite mailing list perhaps?
-% What happens locally + example update flow
 When an update has finally arrived to the device, it must be processed and then installed.
 The process of decrypting, verifying, and installing the image is heavily implementation
 specific with most of the details being out of scope for the architecture. However, since
@@ -479,10 +474,16 @@ The manifest must be compact and simple while being flexible enough to allow for
 additions. This calls for a baseline manifest containing the mission critical information
 that is required in most any update, while severing non-critical information to be
 implemented as options. In order to comply with the SUIT standard, elements that SUIT
-considers mandatory can be places in the baseline manifest and elements SUIT considers
-optional can be placed in the options. A parser implementation will thus always implement
-the functionality needed to parse the mandatory elements while implementing support for
-the optional elements is up to the implementer. % TODO: Mention the payload directive in options
+considers mandatory can be placed in the baseline manifest and elements SUIT considers
+optional placed in the options. A parser implementation will thus always implement the
+functionality needed to parse the mandatory elements while implementing support for the
+optional elements is up to the implementer. One such example is the payload option. The
+baseline manifest will contain information about the payload such as size and format, but
+certain deployments might find it useful to embed the image payload itself in the
+manifest. This could be the case for differential updates of very small images where the
+update code is small enough to fit. For these deployments, implementers can implement the
+optional payload option which a client will use instead of issuing another request to the
+server to fetch the image.
 
 Figure~\ref{fig:manifest-format} shows a schematic view of the manifest format this thesis
 proposes. The baseline manifest contains version ID, sequence number, precursor images,
