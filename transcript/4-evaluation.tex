@@ -7,10 +7,11 @@ was carried out, its results, and end with some conclusions.
 
 \section{Quantitative Evaluation of Update Architecture}
 \label{sec:quant-evaluation}
-% TODO: Move firefly here from background
 This section present the results of a experiment carried out to measure the energy
-consumption of the prototype on Firefly boards. In addition, code size and communication
-overhead is also reported. 
+consumption of the prototype on Firefly boards. The Firefly board features a ARM Cortex-M3
+with 512 KB flash and 32 KB RAM and supports IEEE 802.15.4 communication
+\parencite{firefly-datasheet}. In addition to energy consumption, code size and
+communication overhead is also reported. 
 
 \subsection{Energy Consumption}
 \label{ssec:energy-consumption}
@@ -282,6 +283,7 @@ yields the following:
 
 \section{Conclusions}
 \label{sec:Conclusions}
+% TODO: Conclusions drawn from qualitative evaluation?
 The thesis has presented a software and firmware update architecture for IoT. The
 architecture is based on requirements developed by the IETF SUIT working group and aims to
 be interoperable and usable for very constrained devices and state-of-the art security
@@ -312,8 +314,6 @@ is the radio in receive mode followed by the CPU in Low Power Mode. The amount o
 thus energy needed for the transfer scales linearly with the size of the data being sent,
 meaning opportunities to send less data are of importance when it comes to saving energy.
 
-% TODO: This is already discussed in the implementation part, maybe let that paragraph be
-% in results instead?
 The architecture introduces some communication overhead on the application layer when
 sending both manifest and image data. When encrypting with COSE a 8-byte tag is added for
 validation to the ciphertext. In the case of the manifest this tag is added once as the
