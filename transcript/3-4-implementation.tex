@@ -1,5 +1,4 @@
 \documentclass[0-thesis.tex]{subfiles}
-% TODO: Entire implementation section in past tense?
 \begin{document}
 The previous sections proposed the update architecture of the thesis, its key components,
 and security considerations such as identity and access control. This section will discuss
@@ -78,7 +77,6 @@ manifest elements, namely precursor image, dependencies, and URL/digest pair in 
 info convey the same kind of information but are separated into different lists because of
 the differences in semantics.
 
-% TODO: Format nicely
 \begin{lstlisting}[language=manifest, caption={The client manifest implementation}, label=lst:manifest]
     typedef struct manifest_s {
         uint8_t versionID;
