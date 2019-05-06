@@ -3,11 +3,14 @@
 \begin{document}
 The previous chapter introduced the update architecture proposed by the thesis and the
 design of a prototype aimed to evaluate it. This chapter will explain how the evaluation
-was carried out, its results, and discussion about the results.
+was carried out, its results, and end with some conclusions.
 
 \section{Quantitative Evaluation of Update Architecture}
 \label{sec:quant-evaluation}
-
+% TODO: Move firefly here from background
+This section present the results of a experiment carried out to measure the energy
+consumption of the prototype on Firefly boards. In addition, code size and communication
+overhead is also reported. 
 
 \subsection{Energy Consumption}
 \label{ssec:energy-consumption}
@@ -16,8 +19,8 @@ ticks, is spent by a program. It is divided into five categories: CPU, Low Power
 Deep Low Power Mode, Transmit, and Listen. CPU, Low Power Mode, and Deep Low Power Mode
 are related to the work of the processor while Transmit and Listen measures the radio.
 Each type can be measured independently by calling the function
-energest\_type\_time(energest\_type\_t type) where type is the category you want to
-measure. For the experiment, the client measures the register callback, the manifest
+\texttt{energest\_type\_time(energest\_type\_t type)} where type is the category you want
+to measure. For the experiment, the client measures the register callback, the manifest
 callback, the decoding and parsing of the manifest, and the image callback. The server
 measures the register resource, the manifest resource, and the image resource. The entire
 block transmission of the manifest and image resources are measured, and both client and
@@ -37,61 +40,76 @@ With the amount of ticks, the following formula can be used to obtain energy con
 
 $$ Energy (J) = \frac{ticks}{ticks/second} * V * A $$
 
-where ticks per second is defined in the platform dependant ENERGEST\_SECOND macro. When
-gathering data about energy consumption, the client and server were flashed onto a Firefly
-board each and connected to a host laptop through USB. All communication was wireless and
-data was printed out to a terminal via serial port. The amount of blocks sent by the image
-resource varied between 500, 2000, and 4000 with ten runs per block size. The registration
-and manifest related operations were held constant as the client always registers with the
-same information and the server sends the same manifest. Figures
-\ref{fig:client-operations-energy} and \ref{fig:server-operations-energy} shows average
-energy consumption for registration and manifest related operations for both client and
-server over the thirty runs.
+where ticks per second is defined in the platform dependant \texttt{ENERGEST\_SECOND}
+macro. When gathering data about energy consumption, the client and server were flashed
+onto a Firefly board each and connected to a host laptop through USB. All communication
+between client and server was wireless and data was printed out to a terminal via serial
+port. The amount of blocks sent by the image resource varied between 500, 2000, and 4000
+with ten runs per block size. The registration and manifest related operations were held
+constant as the client always registers with the same information and the server sends the
+same manifest. 
 
-\begin{figure}
+Figures \ref{fig:client-operations-energy} and \ref{fig:server-operations-energy} shows
+average energy consumption for registration and manifest related operations for both
+client and server over the thirty runs. Figures \ref{fig:client-image-energy} and
+\ref{fig:server-image-energy} shows average energy consumption for the client and server
+when encrypting, transferring, and decrypting image data per block size, ten runs per
+block size. 
+
+\begin{figure}[h!]
     \caption{Average energy consumption for client operations.}
     \label{fig:client-operations-energy}
-    \includegraphics[scale=0.8]{images/client-operations-energy.pdf}
+    \includegraphics[scale=0.65]{images/client-operations-energy.pdf}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[h!]
     \caption{Average energy consumption for server operations.}
     \label{fig:server-operations-energy}
-    \includegraphics[scale=0.8]{images/server-operations-energy.pdf}
+    \includegraphics[scale=0.65]{images/server-operations-energy.pdf}
 \end{figure}
 
-Figure~\ref{fig:client-image-energy} shows average energy consumption for the client when
-retrieving and decrypting image data per block size, ten runs per block size.
-Figure~\ref{fig:server-image-energy} shows average energy consumption for the server when
-encrypting and sending image data per block size, ten runs per block size.
-
-\begin{figure}
+\begin{figure}[h!]
     \caption{Average energy consumption for client during image transfer.}
     \label{fig:client-image-energy}
-    \includegraphics[scale=0.8]{images/client-image-energy.pdf}
+    \includegraphics[scale=0.65]{images/client-image-energy.pdf}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[h!]
     \caption{Average energy consumption for server during image transfer.}
     \label{fig:server-image-energy}
-    \includegraphics[scale=0.8]{images/server-image-energy.pdf}
+    \includegraphics[scale=0.65]{images/server-image-energy.pdf}
 \end{figure}
 
+% Force new page so previous graphs appear in order
+\newpage
 \subsection{Communication Overhead}
 \label{ssec:communication-overhead}
-Communication overhead of update procedure.
-Describe how measurements are obtained (latency and packet size? dont know how to do lossy
-stuff)
+As discussed in Section~\ref{ssec:prototype-implementation}, some overhead is introduced
+at the application layer as a consequence of using COSE encrypt. Each CoAP block sent by
+the server during image transfer contains 32 bytes of data of which 8 is a tag used to
+validate the ciphertext. Figure~\ref{fig:communication-overhead} shows this disparity.
+
+\begin{figure}[h!]
+    \caption{Bytes transfered vs actual data sent measured in bytes at the application layer.}
+    \label{fig:communication-overhead}
+    \includegraphics[scale=0.65]{images/communication-overhead.pdf}
+\end{figure}
 
 \subsection{Code Size}
 \label{ssec:code-size}
-When measuring code size, the code was compiled with all debug macros set to 0 and without
-the energest code. By running the tool arm-none-eabi-size on the ELF-files the code size
-can be obtained, which is shown in Table~\ref{tab:code-size}.
+When measuring code size the code was compiled with all debug macros set to 0, the
+energest measurements removed, and no other Contiki-NG modules except CoAP. As a point of
+reference, a bare-bones example was created. The bare-bones example only contains the
+necessary imports to Contiki-NG and its CoAP engine and declares a process with no code in
+it. It is the smallest runnable example for Firefly devices using the same project
+configuration as the other source files. Its source code is found in
+Appendix~\ref{app:bare-bones}. By running the tool arm-none-eabi-size on the ELF-files the
+code size can be obtained, which is shown in Table~\ref{tab:code-size}.
 
-\begin{table}
+\begin{table}[h!]
 \begin{tabular}{l c r r r l}
 text	&  data	 &  bss	 &  dec	 &  hex&filename\\
+69982	&  1772	 &11303	 &83057	 &14472&bare-bones.elf\\
 75956	&  1788	 &13599	 &91343	 &164cf&update-client.elf\\
 77924	&  1884	 &11835	 &91643	 &165fb&update-server.elf
 \end{tabular}
@@ -182,16 +200,6 @@ should fulfill:
         operator query the server for device statuses and devices query for updates
         depending on the model used.
 \end{description}
-
-% TODO: Add anything the architecture might have contributed with (device
-% profiles/communication/targeting of updates, definitions of operators and update servers)
-In addition to these requirements, the architecture discusses the following
-topics/introduces the following considerations:
-Servers as communication proxies between operator (unconstrained) and device (constrained)
-Life cycle approach of enrolling and re-enrolling in an update architecture
-Defined the notion of operators, update servers, and devices
-Profiles have been developed and one profile implemented in a prototype (with some
-constraints such as certificates and tokens)
   
 \subsection{Information Model}
 \label{ssec:information-evaluation}
@@ -272,61 +280,64 @@ yields the following:
         parse even for constrained devices.
 \end{description}
 
-\section{Discussion}
-\label{sec:discussion}
+\section{Conclusions}
+\label{sec:Conclusions}
 The thesis has presented a software and firmware update architecture for IoT. The
 architecture is based on requirements developed by the IETF SUIT working group and aims to
-be interoperable and usable for very constrained devices. The architecture is based on
-state-of-the art security mechanisms such as asymmetric cryptography, certificates, and
-authorization tokens. The architecture defines the roles of devices, update servers, and
-operators, discusses how these actors can authorize themselves and what tokens are needed,
-the operations of these actors such as registering devices, and briefly considers local
-upgrade handling. Furthermore the thesis discusses the device life cycle for new devices
-entering a network, being updated, and continuing their service for many years, where
-devices must re-register and possibly re-enroll following certain operations of an update
-procedure.
+be interoperable and usable for very constrained devices and state-of-the art security
+mechanisms such as asymmetric cryptography, certificates, and authorization tokens. The
+architecture defines the roles of devices, update servers, and operators, discusses how
+these actors can authorize themselves and what tokens are needed, the operations of these
+actors such as registering devices, and briefly considers local upgrade handling.
+Furthermore the thesis discusses the device life cycle for new devices entering a network,
+being updated, and continuing their service for many years, where devices must re-register
+and possibly re-enroll following certain operations of an update procedure. Two different
+profiles for the architecture, one using DTLS and CoAP and the other OSCORE, were
+presented and the DTLS/CoAP profile was implemented in a prototype with some restrictions.
 
-Two possible profiles for an architecture based on DTLS/CoAP and OSCORE were presented.
-These profiles are using modern protocols used in IoT applications in order to realize
-possible implementations of the architecture. They both have their pros and cons
-discussed, with the major difference being suitability for broadcasting updates. The
-architecture itself does not prevent broadcasting, but choice of security (in this case
-DTLS) might. One of the profiles, the DTLS/CoAP profile, was implemented as a prototype in
-order to gain an understanding of metrics such as code size, energy consumption, and
-communication overhead for such an update mechanism. The prototype does not feature all
-parts of the architecture as certificates and COSE signing is not present in the used
-operating system Contiki-NG. Pre-shared keys and COSE encryption were used instead. Tokens
-were not used either as the prototype delivers a manifest for an entire, monolithic
-update, making more finely grained authorization redundant.
+Measuring code size of the update client and server as well as a bare-bones Contiki-NG
+example, it is evident that the solution can be applied to very constrained systems. The
+difference in size between the client and bare-bones example is 8286 bytes and the server
+and bare-bones example is 8586 bytes. In a real deployment the code size will increase as
+the prototype's manifest parser is rudimentary and the client does not contain any code
+for preparing the bootloader, but applying the architecture to constrained devices is
+still feasible.
 
-% TODO: Talk about manifest and its format?
+Experiments on energy consumption found that transfering the image data makes up the vast
+majority of energy consumed during an update procedure. This is due to the register
+operations and sending/receiving of a manifest sends a lot less data. Also when the client
+parses the manifest the operations are entirely local to the client, not using any
+expensive radio operations. During image transfer the largest source of energy consumption
+is the radio in receive mode followed by the CPU in Low Power Mode. The amount of time
+thus energy needed for the transfer scales linearly with the size of the data being sent,
+meaning opportunities to send less data are of importance when it comes to saving energy.
 
-The prototype was evaluated in a quantitative manner and the backing architecture in a
-qualitative manner. Experiments on energy consumption found that radio receiving during
-image transfer makes up the bulk of energy usage during an update procedure and exploring
-opportunities to reduce image sizes, for instance through deploying differential updates,
-would greatly reduce the energy spent. Code size was measured and found to be 91343 bytes
-for the client and 91643 bytes for the server. This does not include any other application
-code so fitting it onto Class 1 devices as defined in \parencite{rfc7228} with ~100 KiB
-code size could prove challenging but possible using Contiki-NG. 
-% TODO: Add about communication overhead
-
-% TODO: Summarize the overarching goals of the architecture
-The architecture does not make assumptions about protocols, firmware image formats, means
-of transport, or suggest a static topology. It is deliberately flexible in order to work in
-networks of different kinds using devices of different kinds.
+% TODO: This is already discussed in the implementation part, maybe let that paragraph be
+% in results instead?
+The architecture introduces some communication overhead on the application layer when
+sending both manifest and image data. When encrypting with COSE a 8-byte tag is added for
+validation to the ciphertext. In the case of the manifest this tag is added once as the
+manifest is small enough to be encrypted at once. For the much larger image data, which
+cannot be encrypted all at once, each block is encrypted individually instead. This means
+that each block introduces 8 bytes of tag for each 32 bytes of data sent in a CoAP block.
+By sending less data a smaller amount of blocks must be transfered meaning less overhead
+is sent in total. This furthers the argument for exploring opportunities that reduce the
+amount of data sent, such as differential updates.
 
 \subsection{Security Considerations}
 \label{ssec:security-considerations}
 Despite being able to add timestamps in the manifest specifying a time of update it can
-prove difficult to install updates at the right moment. This is especially important for
-devices used in safety critical contexts such as in factories. Timestamps are also unable
-to account for if processes are being interrupted or not, one might want to postpone
-updates until a certain process or thread is idle. The architecture does also not account
-for scenarios where redundant devices are used to achieve the same goal, such as
-monitoring equipment. To update one of the devices while the other operates and then
-update the other would require manual intervention such as sending the devices updates one
-at a time.
+prove difficult to install updates at the right moment. Timestamps are also unable to
+account for if processes are being interrupted or not, one might want to postpone updates
+until a certain process or thread is idle. Not having fine-grained controlled over when an
+update is installed is especially important for devices used in safety critical contexts
+such as in factories
+
+The architecture does not support scenarios where redundant devices are used to achieve
+the same goal, such as monitoring equipment. To update one of the devices while the other
+operates and then update the other would require manual intervention such as sending the
+devices updates one at a time. This is a rather brittle approach and having support for
+twinned devices would help safety critical contexts.
 
 The architecture does not account for physical threats, only threats that arise during
 wireless transport. The discussion in Section~\ref{ssec:upgrading} does not account for
@@ -334,17 +345,17 @@ scenarios where the physical storage of devices is compromised. Implementers are
 to store manifest and image data in a way that makes sense for their own deployment,
 whether that is unencrypted, encrypted, or encrypted manifest with unencrypted image.
 
-
 \section{Future Work}
 \label{sec:future-work}
 Moving forward, research on preparing bootloaders for upgrades and safe boot as well as
-performing differential updates would be of importance. As in the results, the largest
+performing differential updates would be of importance. As the results showed, the largest
 source of energy consumption is the radio receiver during transfer of updates, largely
 because of the relatively large size of firmware images. By performing differential
 updates instead the size of images can be reduced and time to retrieve them and thus
 energy consumption will go down. Furthermore, developing a prototype using certificates
 instead of pre-shared DTLS keys, authorization tokens, and COSE signing instead of
 encryption would further aid the understanding of the architecture's requirements on
-devices and how feasible it is to use for less constrained devices. 
+devices and how feasible it is to use for less constrained devices conscerning code size
+and energy consumption. 
 
 \end{document}
