@@ -18,7 +18,7 @@ To do:
   - [x] Does it change conditions for key management? How do keys reach the device? (Can use <b>predistributed certificate</b> to authenticate on EST server)
   - [x] Further explain why it is needed (from SUIT)
 - [x] Fix presentation so that someone with no prior knowledge can understand what SUIT is
-- [ ] Start looking at a minimal C manifest parser
+- [x] Start looking at a minimal C manifest parser
 - [ ] JSON to CBOR converter
   - [x] Create script that accepts version, vendor, class, device, and image that generates all mandatory fields
   - [x] Let script derive version, vendor, class, and device from an existing JSON manifest
@@ -104,3 +104,19 @@ To do:
   - [x] Encrypt symm key of update with asym key of device, all parts encrypted but update is only encrypted once (size considerations)
   - [x] Consider end-to-end security from update server to devices through constrained network only. Update server is trusted intermediary from the viewpoint of an operator
 - [x] Fix so that long table is not repeated in list of tables
+- [x] Conclusions
+  - [x] Make sure it properly draws in the research question
+  - [ ] Add any extra security considerations you might think of
+- [x] Summary in 3.4
+- [x] Abstracts
+  - [x] English
+  - [x] Swedish
+- [ ] Acknowledgements
+- [ ] Presentation material
+  - [ ] Slides
+  - [ ] Notes
+- [ ] Make tokens optional, update text accordingly
+  - [ ] Chapter 3
+  - [ ] Chapter 4?
+  - [ ] Chapter 5
+  - [ ] Figure 3.1 (communication-flow)

@@ -1,3 +1,32 @@
+7/5-19:
+Remade the descriptive lists in the qualitative evaluation to tables (long tables)
+
+Good progress on conclusions. Maybe leave it here until Shahid/Farhad comments further on it.
+
+Added summary section to implementation
+
+Meeting with Shahid. He's giving some good feedback mainly on figures to make the thing more understandable. And it even looks like a report! In general: make figures really clear and explicit even from just the caption (use full sentences as in the use case examples). Be clear when referencing/building upon SUIT. Mention COSE in the background (maybe alongside OSCORE?). Examine the size reporting tools of Contiki-NG to make the code size results more contextualized (maybe better than the bare-bones example?).
+
+Wrote Swedish and English abstracts
+
+Added some numbers related to the energy consumption of radio receive during image transfer (up to 67% and 64% client and server respectively)
+
+Various fixes per Shahid's feedback
+
+I must decide where to draw the line on certain topics. Some things can be discussed to no end but with diminishing returns of how much it actually contributes to the thesis. The way forward is to get literally every single section of the thesis in an acceptable state, then fix the things receiving the most criticism, then fixing the various things I feel like. Probably won't have time for the third part though but that's fine.
+
+How personal do I get in ackonowledgements? Also, is it weird to write them beforehand since I'll be thanking my examiner (before she's passed me?). Do I write them after my defence?
+
+I'll very most likely abandon actual upgrades entirely as 1) it requires a lot of preparation with the image which in turn 2) requires a lot of work with the build system 3) it requires a alot of work with the bootloader, of which none I've done so far. It's too much work and I honestly feel it should be a separate thesis entirely
+
+6/5-19:
+Working more on my results. Cannot for the life of me get the sniffer working. Communication overhead results feel weak. At the same time, would checking packet sizes and latency really evaluate my solution and not DTLS in Contiki-NG? Not so sure about that.
+
+Spoke to Farhad, this Wednesday I'll send him an almost complete draft and hopefully get some feedback and book a timeslot for presentation. Need to finish the results, conclusion, and abstract.
+
+3/5-19:
+:^)
+
 2/5-19:
 Better day today. DTLS works when running client and server on boards.
 

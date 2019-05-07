@@ -1,5 +1,5 @@
 - [x] Send a CoAP message between a Contiki server and a Contiki client
-  - [ ] ~~Native~~
+  - [x] ~~Native~~
   - [x] Cooja
 - [x] Implement a callback handler for receiving a response
 - [x] Generate a manifest
@@ -12,5 +12,5 @@
   - [ ] Using certificates
 - [x] Calculate a SHA256 checksum of a data buffer
 - [x] Allocate memory for and reassemble a large file (image)
-- [ ] Consider datatypes in the manifest (dont use generic int etc)
+- [x] Consider datatypes in the manifest (dont use generic int etc)
 
