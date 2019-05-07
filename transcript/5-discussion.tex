@@ -42,7 +42,8 @@ reasoning was to provide a minimal manifest implementation thus reducing size an
 complexity while allowing for custom implementations of new pre/postconditions,
 directives, and other information. The flexibility should provide more robustness as the
 update mechanism can operate in a way that makes most sense in a specific deployment while
-keeping the baseline manifest thus ensuring a minimum level of security. 
+keeping the baseline manifest intact, thus ensuring the minimum level of security needed
+is reached. 
 
 With the qualitative results in mind, the proposed architecture is a way of applying the
 SUIT specification to constrained, heterogeneous networks of devices in order to provide
@@ -67,10 +68,10 @@ majority of energy consumed during an update procedure. This is due to the regis
 operations and sending/receiving of a manifest sending, comparatively, very little data.
 Also when the client parses the manifest the operations are entirely local to the client,
 not using any expensive radio operations. During image transfer the largest source of
-energy consumption is the radio in receive mode followed by the CPU in Low Power Mode. The
-amount of time thus energy needed for the transfer scales linearly with the size of the
-data being sent, meaning opportunities to send less data are of importance when it comes
-to saving energy.
+energy consumption is the radio in receive mode, which for the client was up to 67\% and
+server 64\% of total energy consumption during image transfer. The amount of time thus energy needed for the transfer scales linearly with
+the size of the data being sent, meaning opportunities to send less data are of importance
+when it comes to saving energy.
 
 The architecture introduces some communication overhead on the application layer when
 sending both manifest and image data. When encrypting with COSE a 8-byte tag is added to
