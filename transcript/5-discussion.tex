@@ -1,5 +1,7 @@
 \documentclass[0-thesis.tex]{subfiles}
 
+% TODO: Tense (past tense?)
+
 \begin{document}
 % TODO: Introductory blurb
 
@@ -13,35 +15,65 @@ The thesis has presented a software and firmware update architecture for IoT. Th
 architecture is based on requirements developed by the IETF SUIT working group and aims to
 be interoperable and usable for very constrained devices and state-of-the art security
 mechanisms such as asymmetric cryptography, certificates, and authorization tokens. The
-architecture defines the roles of devices, update servers, and operators, discusses how
+architecture defines the roles of devices, update servers, and operators and discusses how
 these actors can authorize themselves and what tokens are needed, the operations of these
 actors such as registering devices, and briefly considers local upgrade handling.
 Furthermore the thesis discusses the device life cycle for new devices entering a network,
-being updated, and continuing their service for many years, where devices must re-register
-and possibly re-enroll following certain operations of an update procedure. Two different
-profiles for the architecture, one using DTLS and CoAP and the other OSCORE, were
-presented and the DTLS/CoAP profile was implemented in a prototype with some restrictions.
+being updated, and continuing their service for many years. Two different profiles for the
+architecture, one using DTLS and CoAP and the other OSCORE, were presented and the
+DTLS/CoAP profile was implemented in a prototype with some restrictions.
 
-Measuring code size of the update client and server as well as a bare-bones Contiki-NG
+The requirements from the SUIT architecture and information model specifications were
+evaluated against the proposed architecture. The requirements with the exception of
+bootloader specific requirements were all satisfied as the proposed architecture was
+developed with compliance with SUIT in mind. Fundamental requirements such as being
+agnostic to distribution methods, using state-of-the-art security mechanisms, and
+operating with robust permissions are part of the core architecture. Other requirements
+such as broadcast friendlyness and small parsers are implementation specific but prepared
+for and supported in the architecture.
+
+When it comes to the information model, the proposed architecture is designed for
+flexibility. This means the manifest implementation implements all mandatory elements as a
+baseline and severs remaining functionality into optional elements. Many requirements
+related to the information model are directly covered by the baseline manifest, while
+others are accounted for by enabling implementation of niche manifest elements. The
+reasoning was to provide a minimal manifest implementation thus reducing size and
+complexity while allowing for custom implementations of new pre/postconditions,
+directives, and other information. The flexibility should provide more robustness as the
+update mechanism can operate in a way that makes most sense in a specific deployment while
+keeping the baseline manifest thus ensuring a minimum level of security. 
+
+With the qualitative results in mind, the proposed architecture is a way of applying the
+SUIT specification to constrained, heterogeneous networks of devices in order to provide
+an interoperable update mechanism. The architecture fulfills the requirements developed by
+the SUIT specification, uses modern security solutions, and is flexible meaning it can be
+applied in various contexts. Networks of different devices with different applications and
+operating systems can all take part of the update architecture using the methods presented
+in the thesis.
+
+In order to contextualize the proposed architecture a DTLS/CoAPs prototype was developed.
+By measuring code size of the update client and server as well as a bare-bones Contiki-NG
 example, it is evident that the solution can be applied to very constrained systems. The
 difference in size between the client and bare-bones example is 8286 bytes and the server
 and bare-bones example is 8586 bytes. In a real deployment the code size will increase as
 the prototype's manifest parser is rudimentary and the client does not contain any code
-for preparing the bootloader, but applying the architecture to constrained devices is
-still feasible.
+for preparing the bootloader, and the server needs stronger logic for handling device
+profiles and manifests, but applying the architecture to constrained devices is still
+feasible.
 
 Experiments on energy consumption found that transfering the image data makes up the vast
 majority of energy consumed during an update procedure. This is due to the register
-operations and sending/receiving of a manifest sends a lot less data. Also when the client
-parses the manifest the operations are entirely local to the client, not using any
-expensive radio operations. During image transfer the largest source of energy consumption
-is the radio in receive mode followed by the CPU in Low Power Mode. The amount of time
-thus energy needed for the transfer scales linearly with the size of the data being sent,
-meaning opportunities to send less data are of importance when it comes to saving energy.
+operations and sending/receiving of a manifest sending, comparatively, very little data.
+Also when the client parses the manifest the operations are entirely local to the client,
+not using any expensive radio operations. During image transfer the largest source of
+energy consumption is the radio in receive mode followed by the CPU in Low Power Mode. The
+amount of time thus energy needed for the transfer scales linearly with the size of the
+data being sent, meaning opportunities to send less data are of importance when it comes
+to saving energy.
 
 The architecture introduces some communication overhead on the application layer when
-sending both manifest and image data. When encrypting with COSE a 8-byte tag is added for
-validation to the ciphertext. In the case of the manifest this tag is added once as the
+sending both manifest and image data. When encrypting with COSE a 8-byte tag is added to
+the ciphertext for validation. In the case of the manifest this tag is added once as the
 manifest is small enough to be encrypted at once. For the much larger image data, which
 cannot be encrypted all at once, each block is encrypted individually instead. This means
 that each block introduces 8 bytes of tag for each 32 bytes of data sent in a CoAP block.
