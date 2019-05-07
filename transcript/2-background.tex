@@ -168,9 +168,19 @@ notified by the server when a particular resource changes. This option can be us
 pull or hybrid update architecture, meaning the device does not have to continuously poll
 the server for a new update.
 
+\subsection{CBOR and COSE}
+\label{ssec:cbor-and-cose}
+\gls{cbor} aims to be an extensible data format providing very small code sizes
+\parencite{rfc7049}. It supports simple values as well as arrays and maps meaning it is
+easy to map to and from JSON while being more compact than JSON. It can be used to encode
+most common data formats from Internet standards while being easy to parse even for
+resource constrained systems. \gls{cose} defines some basic security services for CBOR
+objects such as encryption and signing \parencite{rfc8152}. COSE is also designed for use
+on constrained devices, as CBOR would primarily be used on these devices.
+
 \subsection{OSCORE}
 \label{ssec:oscore}
-\gls{oscore} is a way of protecting CoAP messages at the application level
+\gls{oscore} is a way of protecting CoAP messages at the application level using COSE
 \parencite{oscore}. When using CoAP secured by DTLS, security is terminated at
 intermediate proxies meaning data can be eavesdropped or modified. OSCORE avoids this by
 protecting sensitive parts of CoAP messages, but does not fully protect the entire CoAP

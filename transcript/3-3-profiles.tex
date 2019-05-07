@@ -66,12 +66,8 @@ with the manifest.
 
 \subsubsection{Payload Encoding and Encryption}
 \label{sssec:encoding-encryption}
-For encoding, \textbf{\gls{cbor}} is an efficient binary encoding \parencite{rfc7049}.
-CBOR aims to be an extensible data format providing very small code sizes. It supports
-simple values as well as arrays and maps meaning it is easy to map to and from JSON while
-being more compact than JSON. 
-
-The use of CBOR enables the use of \textbf{\gls{cose}} \parencite{rfc8152}. COSE provides
+For encoding, \textbf{CBOR} is an efficient binary encoding thats also easily parsed by
+constrained devices. Using CBOR also enables the use of \textbf{COSE}. COSE provides
 encryption and signing for CBOR encoded objects, which in the architecture will be the
 manifest and image. As DTLS secures the channel, the manifest and image can be signed
 using COSE objects to ensure their integrity during transport. 
