@@ -201,18 +201,15 @@ alongside their motivations.
     \midrule
     \endhead
 
-    \begin{minipage}[t]{0.41\columnwidth}\raggedright\strut
-    Installation instructions\strut
-    \end{minipage} & \begin{minipage}[t]{0.53\columnwidth}\raggedright\strut
-    Installation instructions or any sort of directive is not included in
-    the base manifest structure but can be implemented in the options field.
-    Directives, shown as an option in
-    Figure\textasciitilde{}\ref{fig:manifest-format}, could be used to
-    indicate decompression algorithms, preparation of bootloader etc while
-    other more specific instructions can be implemented either as a
-    directive or a new kind of option element specific to that
-    deployment.\strut
-    \end{minipage}\tabularnewline
+    \begin{minipage}[t]{0.41\columnwidth}\raggedright\strut Installation
+    instructions\strut \end{minipage} &
+    \begin{minipage}[t]{0.53\columnwidth}\raggedright\strut Installation instructions or
+    any sort of directive is not included in the base manifest structure but can be
+    implemented in the options field. Directives, shown as an option in
+    Figure~\ref{fig:manifest-format}, could be used to indicate decompression algorithms,
+    preparation of bootloader etc while other more specific instructions can be
+    implemented either as a directive or a new kind of option element specific to that
+    deployment.\strut \end{minipage}\tabularnewline
     \begin{minipage}[t]{0.41\columnwidth}\raggedright\strut
     Override non-critical manifest elements\strut
     \end{minipage} & \begin{minipage}[t]{0.53\columnwidth}\raggedright\strut
@@ -396,7 +393,7 @@ the server during image transfer contains 32 bytes of data of which 8 is a tag u
 validate the ciphertext. Figure~\ref{fig:communication-overhead} shows this disparity.
 
 \begin{figure}[h!]
-    \caption{Bytes transfered vs actual data sent measured in bytes at the application layer.}
+    \caption{Bytes transferred vs actual data sent measured in bytes at the application layer.}
     \label{fig:communication-overhead}
     \includegraphics[scale=0.65]{images/communication-overhead.pdf}
 \end{figure}

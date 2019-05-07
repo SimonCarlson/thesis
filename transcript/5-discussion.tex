@@ -29,7 +29,7 @@ bootloader specific requirements were all satisfied as the proposed architecture
 developed with compliance with SUIT in mind. Fundamental requirements such as being
 agnostic to distribution methods, using state-of-the-art security mechanisms, and
 operating with robust permissions are part of the core architecture. Other requirements
-such as broadcast friendlyness and small parsers are implementation specific but prepared
+such as broadcast friendliness and small parsers are implementation specific but prepared
 for and supported in the architecture.
 
 When it comes to the information model, the proposed architecture is designed for
@@ -61,7 +61,7 @@ for preparing the bootloader, and the server needs stronger logic for handling d
 profiles and manifests, but applying the architecture to constrained devices is still
 feasible.
 
-Experiments on energy consumption found that transfering the image data makes up the vast
+Experiments on energy consumption found that transferring the image data makes up the vast
 majority of energy consumed during an update procedure. This is due to the register
 operations and sending/receiving of a manifest sending, comparatively, very little data.
 Also when the client parses the manifest the operations are entirely local to the client,
@@ -77,7 +77,7 @@ the ciphertext for validation. In the case of the manifest this tag is added onc
 manifest is small enough to be encrypted at once. For the much larger image data, which
 cannot be encrypted all at once, each block is encrypted individually instead. This means
 that each block introduces 8 bytes of tag for each 32 bytes of data sent in a CoAP block.
-By sending less data a smaller amount of blocks must be transfered meaning less overhead
+By sending less data a smaller amount of blocks must be transferred meaning less overhead
 is sent in total. This furthers the argument for exploring opportunities that reduce the
 amount of data sent, such as differential updates.
 
@@ -112,7 +112,7 @@ updates instead the size of images can be reduced and time to retrieve them and 
 energy consumption will go down. Furthermore, developing a prototype using certificates
 instead of pre-shared DTLS keys, authorization tokens, and COSE signing instead of
 encryption would further aid the understanding of the architecture's requirements on
-devices and how feasible it is to use for less constrained devices conscerning code size
+devices and how feasible it is to use for less constrained devices concerning code size
 and energy consumption. 
 
 \end{document}
