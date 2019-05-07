@@ -179,12 +179,25 @@ of the image data. This concludes the transfer of the update.
 Figure~\ref{fig:client-server-interaction} summarizes the interactions between client and
 server.
 
-\begin{figure}
+% TODO: Consider placement of this figure. Maybe earlier, before the explaining text?
+\begin{figure}[h!]
     \caption{The interactions of client and server during an update procedure.}
     \label{fig:client-server-interaction}
     \includegraphics{images/client-server-sequence.pdf}
 \end{figure}
 
-% TODO: Summary of section?
+\subsection{Summary}
+\label{ssec:implementation-summary}
+This chapter has presented a DTLS/CoAPs prototype of the proposed architecture. The
+prototype is made up of a client and a server developed in Contiki-NG, as well as an
+instantiation of the manifest format presented in Section~\ref{ssec:manifest-format}. The
+prototype is based on the pull model, meaning it is client initiated, and goes through the
+steps of registering, receiving a manifest, and receiving image data. It uses COSE
+encryption and pre-shared DTLS keys and COSE signing and certificate support was at the
+time not available in Contiki-NG. It also does not use tokens as it represents a
+monolithic and not differential update. % TODO: This part assumes (by choice of words) tokens are optional
+The next chapter will evaluate the architecture in a qualitative manner and the prototype
+in a quantitative manner in order to see if it fulfills the goals of SUIT and
+contextualize the implementation.
 
 \end{document}
