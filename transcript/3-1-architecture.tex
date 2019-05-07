@@ -22,23 +22,24 @@ must define have been identified:
 \end{itemize}
 
 \begin{figure}[t]
-    \caption{Example workflow of an update procedure.}
+    \caption{A high-level view of the control flow in the architecture during an update procedure.}
     \label{fig:communication-workflow}
     \includegraphics{images/update-flow.pdf}
 \end{figure}
 
-By putting the five key areas together, Figure~\ref{fig:communication-workflow} shows an
-example update flow in the architecture. Note that where the SUIT specification would
-differentiate between the author of an update and an operators, this architecture will for
-simplicity regard them as the same entity, the operator. For the same reason, the
-architecture will not differentiate between device and network operators. An operator is
-an entity that tracks device statuses and prepares, signs, and sends updates to devices.
-Figure~\ref{fig:communication-workflow} gives a brief introduction to the concepts needed
-to understand the architecture, these concepts will be explained in more detail throughout
-sections \ref{ssec:roles}-\ref{ssec:upgrading}. In this particular example the update
-procedure is initiated by the operator by querying the update server for device status and
-then pushing an update. The manifest and image are distributed together. The steps can be
-briefly explained as:
+By putting the five key areas together, Figure~\ref{fig:communication-workflow} shows a
+high-level abstraction of the control flow in the architecture during an update procedure.
+Note that where the SUIT specification would differentiate between the author of an update
+and an operator, this architecture will for simplicity regard them as the same entity, the
+operator. For the same reason, the architecture will not differentiate between device
+operators and network operators. An operator is an entity that tracks device statuses and
+prepares, signs, and sends updates to devices. Figure~\ref{fig:communication-workflow}
+gives a brief introduction to the concepts needed to understand the architecture, these
+concepts will be explained in more detail throughout sections
+\ref{ssec:roles}-\ref{ssec:upgrading}. In this particular example the update procedure is
+initiated by the operator by querying the update server for device status and then pushing
+an update. The manifest and image are distributed together. The steps can be briefly
+explained as:
 
 \begin{enumerate}
     \setcounter{enumi}{-1}
@@ -485,13 +486,16 @@ update code is small enough to fit. For these deployments, implementers can impl
 optional payload option which a client will use instead of issuing another request to the
 server to fetch the image.
 
+As seen in Section~\ref{ssec:information-model} the SUIT specification mentions the
+elements of the manifest and their statuses but does not provide a format.
 Figure~\ref{fig:manifest-format} shows a schematic view of the manifest format this thesis
-proposes. The baseline manifest contains version ID, sequence number, precursor images,
-dependencies, payload information, key method, conditions, and options. The current option
-types are required image list, component identifier, URIs, aliases, and directives.
+proposes using the elements from SUIT. The baseline manifest contains version ID, sequence
+number, precursor images, dependencies, payload information, key method, conditions, and
+options. The current option types are required image list, component identifier, URIs,
+aliases, and directives.
 
 \begin{figure}
-    \caption{The proposed manifest format.}
+    \caption{A schematic view of the proposed manifest format. The elements themselves are from the SUIT specification.}
     \label{fig:manifest-format}
     \includegraphics{images/manifest-format.pdf}
 \end{figure}
@@ -500,7 +504,7 @@ Some of these elements are singular elements such as version ID and sequence num
 are simply numbers that are bound to some upper size depending on packet structure. Their
 sizes are deterministic and they are easy to parse. Other elements, for instance payload
 information and conditions, have dynamic sizes. This is because the amount of information
-needed for one update can differ quite drastically from another update. One update without
+needed for one update can differ quite drastically from another update. An update without
 dependencies that is targeted for one specific class of device with no optional elements
 can be described in a very small manifest. This small manifest would have no precursors,
 dependencies, or options. The payload information would contain just one URI/digest pair,
