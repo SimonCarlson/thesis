@@ -186,7 +186,7 @@ EST-coaps is a protocol being standardized for certificate enrollment in constra
 environments using CoAP. \parencite{est-coaps}. By allowing IoT devices to enroll for
 certificates, asymmetric encryption can be used even in a constrained environment.
 EST-coaps is heavily based on \gls{est} which was developed for traditional, less
-constrained networks and is thus incompatible with the SUIT standard, which is specified
+constrained networks and is thus incompatible with the SUIT specification, which is specified
 to work on very small devices \parencite{rfc7030}. EST-coaps retains much of the
 functionality and structure of EST but modifies it slightly to work over CoAP, DTLS, and
 UDP instead of HTTP, TLS, and TCP, for instance by making use of CoAP's block requests and
@@ -261,7 +261,7 @@ requirements this architecture should have:
             reliant on security on the transport layer or below. Also, devices receiving
             broadcast updates not meant for them should not incorrectly apply the update.
     \item [Use state-of-the-art security mechanisms:]
-            the SUIT standard assumes a \gls{pki} is in place. The PKI will allow for
+            the SUIT specification assumes a \gls{pki} is in place. The PKI will allow for
             trusted communication.
     \item [Rollback attacks must be prevented:]
             the manifest will contain metadata such as monotonically increasing sequence
@@ -533,7 +533,7 @@ with. With \texttt{HeapMem} memory can be reallocated and deallocated as if usin
 \section{Summary}
 \label{sec:2-summary}
 This chapter has introduced and motivated the use of network protocols common in IoT
-networks. The SUIT standard for providing updates, which is agnostic of any specific
+networks. The SUIT specification for providing updates, which is agnostic of any specific
 technology, was also introduced. This standard can be expanded and profiled in order to
 propose a possible solution. The thesis will develop a prototype of such a solution using
 the Contiki-NG operating system. The next chapter will expand upon the works of SUIT
