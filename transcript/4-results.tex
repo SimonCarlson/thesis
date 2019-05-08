@@ -8,10 +8,10 @@ the prototype, measuring energy consumption, communication overhead, and code si
 
 \section{Qualitative Evaluation of Update Architecture}
 \label{sec:qual-evaluation}
-The proposed architecture can be evaluated in two parts analogous to how the SUIT working
+The proposed architecture was evaluated in two parts analogous to how the SUIT working
 group presented their work, namely architecture and information model. Using the
-requirements of each document, a qualitative evaluation of the proposed architecture can
-be performed. The requirements are gathered from \parencite{suit-architecture,
+requirements of each document, a qualitative evaluation of the proposed architecture was
+performed. The requirements are gathered from \parencite{suit-architecture,
 suit-information-model}.
 
 \subsection{Architecture}
@@ -317,17 +317,18 @@ communication overhead is also reported.
 
 \subsection{Energy Consumption}
 \label{ssec:energy-consumption}
+% TODO: Cite energest paper?
 Contiki-NG provides a utility called Energest which can measure how much time, measured in
-ticks, is spent by a program. It is divided into five categories: CPU, Low Power Mode,
-Deep Low Power Mode, Transmit, and Listen. CPU, Low Power Mode, and Deep Low Power Mode
-are related to the work of the processor while Transmit and Listen measures the radio.
-Each type can be measured independently by calling the function
+ticks, is spent by a program. The measurement is divided into five categories: CPU, Low
+Power Mode, Deep Low Power Mode, Transmit, and Listen. CPU, Low Power Mode, and Deep Low
+Power Mode are related to the work of the processor while Transmit and Listen measures the
+radio. Each type can be measured independently by calling the function
 \texttt{energest\_type\_time(energest\_type\_t type)} where type is the category you want
-to measure. For the experiment, the client measures the register callback, the manifest
+to measure. For the experiment, the client measured the register callback, the manifest
 callback, the decoding and parsing of the manifest, and the image callback. The server
-measures the register resource, the manifest resource, and the image resource. The entire
-block transmission of the manifest and image resources are measured, and both client and
-server measures all five categories. How measurements are taken is shown in
+measured the register resource, the manifest resource, and the image resource. The entire
+block transmission of the manifest and image resources were measured, and both client and
+server measures all five categories. How measurements were taken is shown in
 Listing~\ref{lst:energest}.
 
 \begin{lstlisting}[language=manifest, caption={How to measure ticks in energest.}, label=lst:energest]
@@ -338,22 +339,22 @@ Listing~\ref{lst:energest}.
     t2 = energest_type_time(ENERGEST_TYPE_TO_MEASURE) - t1;
 \end{lstlisting}
 
-With the amount of ticks, the following formula can be used to obtain energy consumption
+With the amount of ticks, the following formula was used to obtain energy consumption
 (measured in Joule)
 
 $$ Energy (J) = \frac{ticks}{ticks/second} * V * A $$
 
-where ticks per second is defined in the platform dependant \texttt{ENERGEST\_SECOND}
+where ticks per second was defined in the platform dependant \texttt{ENERGEST\_SECOND}
 macro. When gathering data about energy consumption, the client and server were flashed
 onto a Firefly board each and connected to a host laptop through USB. All communication
 between client and server was wireless and data was printed out to a terminal via serial
-port. The amount of blocks sent by the image resource varied between 500, 2000, and 4000
-with ten runs per block size. The registration and manifest related operations were held
-constant as the client always registers with the same information and the server sends the
-same manifest. 
+connection. The amount of blocks sent by the image resource varied between 500, 2000, and
+4000 with ten runs per block size. The registration and manifest related operations were
+held constant as the client always registers with the same information and the server
+sends the same manifest. 
 
-Figures \ref{fig:client-operations-energy} and \ref{fig:server-operations-energy} shows
-average energy consumption for registration and manifest related operations for both
+Figures \ref{fig:client-operations-energy} and \ref{fig:server-operations-energy} show
+average energy consumption for registration and manifest related operations for the
 client and server over the thirty runs. Figures \ref{fig:client-image-energy} and
 \ref{fig:server-image-energy} shows average energy consumption for the client and server
 when encrypting, transferring, and decrypting image data per block size, ten runs per
@@ -401,13 +402,13 @@ validate the ciphertext. Figure~\ref{fig:communication-overhead} shows this disp
 \subsection{Code Size}
 \label{ssec:code-size}
 When measuring code size the code was compiled with all debug macros set to 0, the
-energest measurements removed, and no other Contiki-NG modules except CoAP. As a point of
-reference, a bare-bones example was created. The bare-bones example only contains the
-necessary imports to Contiki-NG and its CoAP engine and declares a process with no code in
-it. It is the smallest runnable example for Firefly devices using the same project
-configuration as the other source files. Its source code is found in
-Appendix~\ref{app:bare-bones}. By running the tool arm-none-eabi-size on the ELF-files the
-code size can be obtained, which is shown in Table~\ref{tab:code-size}.
+energest measurements removed, and no other Contiki-NG modules included except CoAP. As a
+point of reference, a bare-bones example was also created. The bare-bones example only
+contains the necessary imports to Contiki-NG and its CoAP engine and declares a process
+with no code in it. It is the smallest runnable example for Firefly devices using the same
+project configuration as the other source files. Its source code is found in
+Appendix~\ref{app:bare-bones}. By running the tool \texttt{arm-none-eabi-size} on the
+ELF-files the code size can be obtained, which is shown in Table~\ref{tab:code-size}.
 
 \begin{table}[h!]
 \begin{tabular}{l c r r r l}

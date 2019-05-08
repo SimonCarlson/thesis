@@ -33,22 +33,23 @@ be aware of its own vendor and class IDs in order to verify manifests and regist
 update server. Registration also requires a known registration endpoint, this can be a
 well-known endpoint implemented by all update servers. Lastly, the device needs whitelists
 of operators and update servers in order to trust traffic originating from them. Any
-operator or update server that is not whitelisted is to be ignored.
+operator or update server that is not whitelisted is to be ignored as a form of access
+control.
 
-\subsection{Enrollment and Registering}
-\label{ssec:enrollment-registering}
+\subsection{Enrollment and Registration}
+\label{ssec:enrollment-registration}
 With the required information a device can enter the enrollment stage. Devices obtain
 certificates by enrolling at the CA, which as previously mentioned requires a pre-shared
 key and CA certificate. After obtaining a certificate the device can be trusted by the
 servers and operators as well as other devices, allowing for secure communication.
 
-The next stage is registering. By sending vendor and class IDs alongside its firmware
+The next stage is registration. By sending vendor and class IDs alongside its firmware
 version to a registration endpoint, devices can register and have an update server create
-a profile for them. The information in the profile tells through which protocols to reach
-the device and which version it is running. This information is transient and will change
-upon a successful update. Update servers must handle devices re-registering by either
-updating the relevant parts of the profile or creating an entirely new one. The approach
-chosen is implementation dependant.
+a profile for them. The information in the profile tells what kind of device it is,
+through which protocols to reach the device, and which version of software it is running.
+This information is transient and will change upon a successful update. Update servers
+must handle devices re-registering by either updating the relevant parts of the profile or
+creating an entirely new one.
 
 \subsection{Maintenance}
 \label{ssec:maintenance}

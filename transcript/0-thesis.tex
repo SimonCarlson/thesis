@@ -123,16 +123,17 @@ specifications to gain an understanding of what such an architecture must provid
 high-level domains were identified and further on defined: roles of devices, servers, and
 operators, key management, device profiles, authorization, and update handling. Two
 profiles that instantiate the proposed architecture were defined and one of them
-implemented as a prototype. The architecture fulfills the requirements SUIT poses on the
-architecture and information model while being flexible and extensible. The prototype was
-measured for energy consumption, code size, and communication overhead. The client
-consumed 91343 bytes and server 91643 bytes on a Firefly device with 512 KB flash.
-Transferring image data was the largest source of energy consumption where the radio in
-receive mode accounted for up to 67\% of the total image transfer energy consumed in the
-client and 64\% on the server. The thesis found that applying the proposed architecture to
-constrained systems is feasible and would enable updates in heterogeneous IoT networks
-while maintaining the minimum security level, with the flexibility of creating a more
-rigorous system within the bounds of the architecture.\\
+implemented as a prototype. The architecture was shown to fulfill the requirements SUIT
+poses on the architecture and information model while being flexible and extensible. The
+prototype was measured for energy consumption, code size, and communication overhead. The
+client consumed 91343 bytes and server 91643 bytes on a Firefly device with 512 KB flash.
+Transferring image data was the largest source of energy consumption during an update
+procedure where the radio in receive mode accounted for up to 67\% of the total image
+transfer energy consumed in the client and 64\% on the server. The thesis found that
+applying the proposed architecture to constrained systems is feasible and would enable
+updates in heterogeneous IoT networks while maintaining the minimum level of security
+sought for, with the flexibility of creating a more rigorous system within the bounds of
+the architecture.\\
 
 \noindent\keywords{IoT, industrial IoT, security, Contiki-NG, embedded systems, 
                     software updates}
@@ -143,26 +144,27 @@ rigorous system within the bounds of the architecture.\\
         De senaste åren har allmänheten blivit mer informerad kring digitala attacker och
         intrång som påverkar deras vardagliga liv då samhället blir mer och mer
         uppkopplat. Säkerhet inom Internet of Things (IoT) är kritiskt och eftersom IoT
-        förväntas växa fort de kommande åren kan osäkrade enheter orsaka ännu större skada
-        i framtiden. Det finns ett behov för säkra mjukvaru- och firmwareuppdateringar för
-        IoT-enheter då sårbarheter måste lagas. För många IoT-enheter innebär detta att
-        uppdateringar måste appliceras över långa avstånd och möjligtvis opålitliga
-        nätverk då det vore orimligt att skicka en tekniker till var och varje enhet.
-        Denna uppsats ämnar att undersöka frågan "Hur kan SUIT-specifikationen appliceras
-        för att utveckla en teknologiskt agnostiskt och kompatibel uppdateringsarkitektur
-        för heterogena nätverk av Internet of Things-enheter?". Uppsatsen studerade
-        SUIT-specifikationen för att förstå vad en sådan arkitektur måste erbjuda. Fem
-        abstrakta domänområden identifierades och definierades: roller för enheter,
-        updateringsservrar, och operatörer, nyckelhantering, enhetsprofiler,
-        auktorisering, och lokal uppdateringshantering. Två profiler som instansierar den
-        föreslagna arkitekturen definierades och en av dem implementerades som en
-        prototyp. Arkitekturen fullföljer de krav SUIT ställer på en arkitekture och
-        informationsmodell medans den är flexibel och kan utökas. Prototypen utvärderades
-        för energikonsumption, kodstorlek, och kommunikations-overhead. Klienten använde
-        sig av 91343 bytes och servern av 91643 bytes på en Firefly-enhet med 512 KB
-        flash. Överföringen av avbildningar var den största källan av energikonsumption
-        där den mottagande radion stod för upp till 67\% av den totala energin i klienten
-        och up till 64\% på servern. Uppsatsen fann att det är rimligt att applicera den
+        förväntas växa hastigt de kommande åren kan osäkrade enheter orsaka ännu större
+        skada i framtiden. Det finns ett behov för säkra mjukvaru- och
+        firmwareuppdateringar för IoT-enheter då sårbarheter måste lagas. För många
+        IoT-enheter innebär detta att uppdateringar måste appliceras över långa avstånd
+        och möjligtvis opålitliga nätverk då det vore orimligt att skicka en tekniker till
+        var och varje enhet. Denna uppsats ämnar att undersöka frågan "Hur kan
+        SUIT-specifikationen appliceras för att utveckla en teknologiskt agnostisk och
+        kompatibel uppdateringsarkitektur för heterogena nätverk av Internet of
+        Things-enheter?". Uppsatsen studerade SUIT-specifikationen för att förstå vad en
+        sådan arkitektur måste erbjuda. Fem abstrakta domänområden identifierades och
+        definierades: roller för enheter, updateringsservrar, och operatörer,
+        nyckelhantering, enhetsprofiler, auktorisering, och lokal uppdateringshantering.
+        Två profiler som instansierar den föreslagna arkitekturen definierades och en av
+        dem implementerades som en prototyp. Arkitekturen visades uppfylla de krav SUIT
+        ställer på en arkitektur och informationsmodell samt var flexibel och kunde
+        utökas. Prototypen utvärderades för energikonsumption, kodstorlek, och
+        kommunikations-overhead. Klienten använde sig av 91343 bytes och servern av 91643
+        bytes på en Firefly-enhet med 512 KB flash. Överföringen av avbildningar var den
+        största källan av energikonsumption under en uppdateringsprocedur där den
+        mottagande radion stod för upp till 67\% av den totala energin i klienten och up
+        till 64\% på servern. Uppsatsen fann att det är rimligt att applicera den
         föreslagna arkitekturen på resursbegränsade enheter. Det skulle göra uppdateringar
         för heterogena IoT-nätverk möjliga samtidigt som den minsta acceptabla
         säkerhetsnivån upprätthålls, med möjligheter att skapa ett mer rigoröst system

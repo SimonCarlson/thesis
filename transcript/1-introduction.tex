@@ -37,8 +37,8 @@ mechanisms on devices due to software or hardware constraints. This means securi
 solutions for IoT must be lightweight and designed specifically with IoT in mind and not
 traditional networks.
 
-Security in IoT is also closely related to its business potential. According to Bain \&
-Company, the largest barrier for Internet of Things adaptation is security concerns, and
+Security in IoT is also closely related to its business potential. In a study by Bain \&
+Company, the largest barrier for Internet of Things adaptation was security concerns, and
 customers would buy an average of 70\% more IoT devices if they were secured
 \parencite{ali_bosche_ford_2018}. Despite security being lacking today in IoT, the field
 is expected to grow rapidly and an increase in unsecured devices could spell disaster.
@@ -46,8 +46,8 @@ Securing IoT equipment such as printers, baby monitors, and pacemakers is impera
 prevent future attacks. But what about the devices currently employed without security, or
 devices in which security vulnerabilities are discovered after deployment? They need to be
 updated and patched in order to fix these vulnerabilities, but sending a technician to
-each and every of the predicted 22.3 billion devices is not feasible. They need secure and
-remote updates which is a non-trivial task.
+each and every of the predicted 22.3 billion devices is not feasible. These devices would
+need secure and remote updates which is a non-trivial task.
 
 \section{Problem Statement}
 \label{sec:problem-statement}
@@ -68,7 +68,7 @@ develop a technology agnostic and interoperable update architecture for heteroge
 networks of Internet of Things devices?". The thesis project will examine the architecture
 and information model proposed by SUIT in order to create and evaluate an updating
 mechanism for battery powered, constrained, and remote IoT devices with a life span
-exceeding five years. 
+exceeding five years.
 
 \subsection{Purpose}
 \label{ssec:purpose}
@@ -89,11 +89,11 @@ the protocols in an IoT testbed, as well as a thesis report.
 The thesis will follow a mix of qualitative and quantitative methodologies. The SUIT group
 defines some goals or constraints a suitable updating mechanism should follow, but as
 their proposed architecture is agnostic of any particular technology these goals cannot be
-easily quantified. It is better to regard them as qualitative properties the mechanism
-should have. In addition there are some relevant measurements, such as reliability of the
-communication and memory and power requirements of the updates, that can be used in an
-evaluation. The quantitative part of the evaluation will follow an objective, experimental
-approach, while the qualitative part will follow a interpretative approach.
+easily quantified. It is more appropriate to regard them as qualitative properties the
+mechanism should have. In addition there are some relevant measurements, such as memory
+and power requirements of the updates, that can be used in an evaluation. The quantitative
+part of the evaluation will follow an objective, experimental approach, while the
+qualitative part will follow a interpretative approach.
 
 \section{Risks, Ethics, and Sustainability}
 \label{sec:risks-ethics-sustainability}
@@ -143,10 +143,8 @@ infrastructure as to enable secure software upgrades and is operating system and
 independent. It does not however deal with transport of updates at all as it is only a
 bootloader.
 
-
 \section{Outline}
 \label{sec:outline}
-% TODO: Fix numbering
 Chapter 2 will provide the relevant background about the used protocols and operating
 system as well as the SUIT specification. Following that, Chapter 3 presents the proposed
 architecture of the thesis, a life cycle approach for IoT updates, examples of profiles

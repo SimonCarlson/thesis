@@ -1,18 +1,17 @@
  \documentclass[0-thesis.tex]{subfiles}
 
 \begin{document}
-Understanding why IoT updates are needed a solution must be proposed. In order to propose
-a solution however, the current state of the art must be understood. IoT networks use
-different protocols compared to traditional computing for reasons such as reliability and
-performance. This chapter presents the background needed to understand the solutions
-presented in the thesis. 
+With an understanding of why IoT updates are needed a solution must be proposed. In order
+to propose a solution however, the current state of the art must be understood. IoT
+networks use different protocols compared to traditional computing for reasons such as
+reliability and performance. This chapter presents the background needed to understand the
+solutions presented in the thesis. 
 
-Section~\ref{sec:network} introduces the network protocols used and motivates their use
-over other protocols in an IoT context. The following section, Section~\ref{sec:suit}
+Section~\ref{sec:network} introduces the network protocols used in IoT contexts and
+motivates their use over other protocols. The following section, Section~\ref{sec:suit}
 presents and explains the SUIT architecture and information model and their respective
 requirements as formulated by the IETF. Finally, Section~\ref{sec:contiki-ng} presents the
-Contiki-NG operating system which the updating mechanism will be developed for as well as
-the target hardware.
+Contiki-NG operating system which the updating mechanism will be developed for.
 
 \section{IoT Network Stack}
 \label{sec:network}
@@ -59,7 +58,8 @@ versus traditional network stacks.
 In this chapter, Section~\ref{ssec:udp} explains UDP and why it is the preferred transport
 protocol in IoT networks. Section~\ref{ssec:dtls} briefly explains TLS, why it is
 unsuitable for IoT networks, the differences between TLS and DTLS and why DTLS is used
-instead. Section~\ref{ssec:coap} describes the CoAP protocol while
+instead. Section~\ref{ssec:coap} describes the CoAP protocol,
+Section~\ref{ssec:cbor-and-cose} the CBOR encoding and its security protocol COSE, and
 Section~\ref{ssec:oscore} briefly introduces OSCORE. Lastly, sections \ref{ssec:est-coaps}
 and \ref{ssec:ace} briefly introduces the EST-coaps protocol and ACE framework, enabling
 asymmetric cryptography and authorization in an IoT context.
@@ -85,7 +85,7 @@ protocols like UDP \parencite{rfc6347}. The protocol is designed to prevent eave
 tampering, or message forgery. DTLS is based on TLS, a similar protocol for stateful
 transport protocols such as TCP, which would not work well on unreliable networks as
 previously discussed. The main issues with using TLS over unreliable networks is that TLS
-decryption is dependant on previous packets, meaning the decryption of a packet would fail
+decryption is dependant on previous packets, meaning the decryption of a packet will fail
 if the previous packet was not received. In addition, the TLS handshake procedure assumes
 all handshake messages are delivered reliably which is rarely the case in IoT networks
 using UDP.
@@ -93,7 +93,7 @@ using UDP.
 DTLS solves this by banning stream ciphers, effectively making decryption an independent
 operation between packets, as well as adding explicit sequence numbers. Furthermore, DTLS
 supports packet retransmission, reordering, as well as fragmenting DTLS handshake messages
-into several DTLS records. These mechanisms makes the handshake process feasible over
+into several DTLS records. These mechanisms make the handshake process feasible over
 unreliable networks. 
 
 By splitting messages into different DTLS records, fragmentation at the IP level can be
@@ -116,7 +116,7 @@ finally verifies that their peer has the correct security parameters.
 The DTLS handshake adds to this a stateless cookie exchange to complicate DoS attacks,
 some modifications to the handshake header to make communication over UDP possible, and
 retransmission timers since the communication is unreliable. Otherwise the DTLS handshake
-is as the TLS handshake.
+is the same as the TLS handshake.
 
 \subsection{CoAP}
 \label{ssec:coap}
@@ -186,22 +186,22 @@ intermediate proxies meaning data can be eavesdropped or modified. OSCORE avoids
 protecting sensitive parts of CoAP messages, but does not fully protect the entire CoAP
 message. The mapping capabilities between CoAP and HTTP are not affected by the use of
 OSCORE and OSCORE protected messages can be translated to use different transport
-protocols as well. OSCORE is therefore suited to use within constrained networks but also
-for interfacing with traditional networks while retaining end-to-end security. The OSCORE
-standard is a work in progress.
+protocols as well. OSCORE is therefore well suited to use within constrained networks but
+also for interfacing with traditional networks while retaining end-to-end security. The
+OSCORE standard is a work in progress.
 
 \subsection{EST-coaps}
 \label{ssec:est-coaps}
 EST-coaps is a protocol being standardized for certificate enrollment in constrained
-environments using CoAP. \parencite{est-coaps}. By allowing IoT devices to enroll for
+environments using CoAP \parencite{est-coaps}. By allowing IoT devices to enroll for
 certificates, asymmetric encryption can be used even in a constrained environment.
 EST-coaps is heavily based on \gls{est} which was developed for traditional, less
-constrained networks and is thus incompatible with the SUIT specification, which is specified
-to work on very small devices \parencite{rfc7030}. EST-coaps retains much of the
-functionality and structure of EST but modifies it slightly to work over CoAP, DTLS, and
-UDP instead of HTTP, TLS, and TCP, for instance by making use of CoAP's block requests and
-responses to remedy the relatively large sizes of certificates. A corresponding profile
-for OSCORE is in development \parencite{est-oscore}.
+constrained networks and is thus incompatible with the SUIT specification, which is
+specified to work on constrained devices \parencite{rfc7030}. EST-coaps retains much of
+the functionality and structure of EST but modifies it slightly to work over CoAP, DTLS,
+and UDP instead of HTTP, TLS, and TCP, for instance by making use of CoAP's block requests
+and responses to remedy the relatively large sizes of certificates. A corresponding
+profile for OSCORE is in development \parencite{est-oscore}.
 
 \subsection{ACE}
 \label{ssec:ace}
@@ -223,9 +223,10 @@ Figure~\ref{fig:ace-flow}.
 \end{figure}
 
 Authorization is important and distinct from identification, which can be achieve through
-for instance a PKI. As the architecture proposed in this thesis aims to be standardized it
-should prepare for different parties assuming different roles in the context of updating
-devices. Using authorization tokens is a scalable and configurable way of achieving that.
+for instance a \gls{pki}. As the architecture proposed in this thesis aims to be
+standardized it should prepare for different parties assuming different roles in the
+context of updating devices. Using authorization tokens is a scalable and configurable way
+of achieving that.
 
 \section{SUIT}
 \label{sec:suit}
@@ -233,7 +234,8 @@ The IETF \acrfull{suit} working group aims to define a firmware update solution 
 devices that is interoperable and non-proprietary \parencite{suit}. The working group does
 not however try to define new transport, discovery, or security mechanisms making their
 proposal agnostic of any particular technology. SUIT aims to define both a mechanism for
-transporting firmware images as well as meta-data needed to securely update an IoT system.
+transporting firmware images as well as the meta-data needed to securely update an IoT
+system.
 
 Section~\ref{ssec:architecture} presents the SUIT architecture and
 Section~\ref{ssec:information-model} presents the SUIT information model.
@@ -242,13 +244,14 @@ Section~\ref{ssec:information-model} presents the SUIT information model.
 \label{ssec:architecture}
 There is an Internet-Draft by the SUIT group focusing on the architecture of an IoT update
 mechanism \parencite{suit-architecture}. Internet-Drafts are works in progress and may be
-altered or obsoleted at any time, the thesis references the architecture draft issued
-January 16 2019. This draft describes the goals and requirements of such an architecture,
-although makes no mention of any particular technology. The overarching goals of the
-update process is to thwart any attempts to flash unauthorized, possibly malicious
-firmware images as well as protecting the firmware image's confidentiality and integrity.
-These goals reduces the possibility of an attacker either getting control over a device or
-reverse engineering a malicious but valid firmware image as an attempt to mount an attack.
+altered or considered obsolete at any time, the thesis references the architecture draft
+issued January 16 2019. This draft describes the goals and requirements of such an
+architecture, although makes no mention of any particular technology. The overarching
+goals of the update process is to thwart any attempts to flash unauthorized, possibly
+malicious firmware images as well as protecting the firmware image's confidentiality and
+integrity. These goals reduces the possibility of an attacker either getting control over
+a device or reverse engineering a malicious but valid firmware image as an attempt to
+mount an attack.
 
 In order to accept an image and update itself, a device must make several decisions about
 the validity and suitability of the image. The information needed comes in form of a
@@ -260,6 +263,7 @@ manifest itself, and that both manifest and update image must be distributed in 
 trusted architecture. The draft \parencite{suit-architecture} presents ten qualitative
 requirements this architecture should have:
 
+% TODO: Format as a table? Decide or listen to Shahid/Farhad
 \begin{description}
     \item [Agnostic to how firmware images are distributed:]
             the mechanism should not assume a particular technology is used to distributed
@@ -271,10 +275,10 @@ requirements this architecture should have:
             reliant on security on the transport layer or below. Also, devices receiving
             broadcast updates not meant for them should not incorrectly apply the update.
     \item [Use state-of-the-art security mechanisms:]
-            the SUIT specification assumes a \gls{pki} is in place. The PKI will allow for
+            the SUIT specification assumes a PKI is in place. The PKI allows for
             trusted communication.
     \item [Rollback attacks must be prevented:]
-            the manifest will contain metadata such as monotonically increasing sequence
+            the manifest should contain metadata such as monotonically increasing sequence
             numbers and best-before timestamps to avoid rollback attacks.
     \item [High reliability:]
             the act of upgrading an image should not cause the device to break. This is an
@@ -335,12 +339,11 @@ manifest to secure a firmware update mechanism \parencite{suit-information-model
 mentioned in the previous section, Internet-Drafts are works in progress and the thesis
 references the information model draft from January 18 2019. A manifest is needed for a
 device to make a decision about whether or not to update itself, and if the image related
-to the manifest is valid and its integrity ensured. The draft also presents threats,
-classifies them according to the STRIDE model, and presents security requirements that map
-to the threats \parencite{stride}. Finally it presents use cases and maps usability
-requirements to the use cases in order to motivate the presence of each manifest element.
-Note that the information model does not discuss threats outside of transporting the
-updates, such as physical attacks.
+to the manifest is valid and its integrity ensured. The draft also presents threats and
+maps security requirements to the threats. Finally it presents use cases and maps
+usability requirements to the use cases in order to motivate the presence of each manifest
+element. Note that the information model does not discuss threats outside of transporting
+the updates, such as physical attacks.
 
 The proposed mandatory and recommended manifest elements and their brief motivations can
 be seen in Table~\ref{tab:manifest-elements}. For the optional elements and more detailed
@@ -461,7 +464,7 @@ motivations, use cases, and requirements refer to \parencite{suit-information-mo
     \bottomrule
 \end{longtable}
 
-As the SUIT architecture tries to be a standardized solution it must account for different
+As the SUIT architecture aims to be a standardized solution it must account for different
 use cases and different combinations of use cases. As a result many of the mandatory and
 recommended elements are there to enable certain use cases that might not always be
 relevant. This means certain information must be prepared for in advance even if it is not
@@ -472,7 +475,7 @@ manifest for the architecture proposed in this thesis must be designed to facili
 many different use cases as possible while keeping sizes to a minimum.
 
 To summarize, the SUIT information model proposes to use a signed manifest that is
-distributed to each device in need of an update through some method. The device then
+distributed through some method to each device in need of an update. The device then
 parses the manifest in order to determine if the update is trusted, suitable, and up to
 date, with many other optional elements such as if special processing steps or new URIs to
 fetch the images are needed. The model does not make assumptions about technology which is

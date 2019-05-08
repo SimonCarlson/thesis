@@ -29,10 +29,10 @@ be used instead, this is just one possible profile.
 
 Figure~\ref{fig:dtls-profile} shows where in the constrained part of architecture the
 different protocols of the DTLS profile will be used. All communication to and from the
-device is reliant on DTLS, the only exception is the enrollment procedure which will
-require a pre-shared key as discussed in Section~\ref{ssec:key-management}. The
-communication protocols in the non-constrained part of the architecture are suggestions
-and not part of the profile.
+device is reliant on DTLS with asymmetric cryptography, the only exception is the
+enrollment procedure which will require a pre-shared key as discussed in
+Section~\ref{ssec:key-management}. The communication protocols in the non-constrained part
+of the architecture are suggestions and not part of the profile.
 
 \begin{figure}[t]
     \caption{The various protocols used in the DTLS profile, as an instantiation of Figure~\ref{fig:communication-workflow}. Protocols outside the constrained networks are suggestions.}
@@ -56,9 +56,9 @@ versions meaning they operate in a given namespace. By using a registered domain
 the vendor, which is already guaranteed to be unique, as namespace a unique UUID can be
 generated for that vendor. By using the vendor UUID as the namespace for the class IDs,
 devices from different vendors can share names but still have different class IDs. A
-hierarchical namespace structure is suggested also by SUIT.
+hierarchical namespace structure is suggested by SUIT.
 
-Section 4.3 of the UUID specification states that "Choose either MD5 or SHA-1 as the hash
+Section 4.3 of the UUID specification states "Choose either MD5 or SHA-1 as the hash
 algorithm; If backward compatibility is not an issue, SHA-1 is preferred". This means
 \textbf{UUID5} should be used as it uses SHA-1 for hashing. ID generation will not occur
 on the devices themselves, devices only need to be prepared with their IDs for comparing
@@ -66,11 +66,11 @@ with the manifest.
 
 \subsubsection{Payload Encoding and Encryption}
 \label{sssec:encoding-encryption}
-For encoding, \textbf{CBOR} is an efficient binary encoding thats also easily parsed by
+For encoding, \textbf{CBOR} is an efficient binary encoding that's also easily parsed by
 constrained devices. Using CBOR also enables the use of \textbf{COSE}. COSE provides
 encryption and signing for CBOR encoded objects, which in the architecture will be the
-manifest and image. As DTLS secures the channel, the manifest and image can be signed
-using COSE objects to ensure their integrity during transport. 
+manifest and image. As DTLS secures the channel, the manifest and image can be encoded in
+CBOR and signed using COSE objects to ensure their integrity during transport. 
 
 \subsection{OSCORE Profile}
 \label{ssec:oscore-profile}
@@ -78,10 +78,10 @@ using COSE objects to ensure their integrity during transport.
 \parencite{oscore}. By providing end-to-end encryption CoAP message security is not
 terminated at a proxy or update server as with DTLS. If updates are being pushed from an
 operator to a device directly, OSCORE can support HTTP/CoAP proxying to secure the entire
-transport. The update server will not be able to view or manipulate the protected
-contents. As update servers are in addition to transporting updates supposed to act as
-update repositories, a decision has to be made how updates are stored on the server. This
-is an implementation detail.
+transport. The update server is not able to view or manipulate the protected contents. As
+update servers are in addition to transporting updates supposed to act as update
+repositories, a decision has to be made how updates are stored on the server. This is an
+implementation detail.
 
 Figure~\ref{fig:oscore-profile} shows where in the constrained part of architecture the
 different protocols of the OSCORE profile will be used. All communication to and from the
@@ -105,9 +105,9 @@ meaning these protocols can be used for enrollment and authorization with OSCORE
 and signing in the OSCORE profile is the same as in the DTLS profile, see
 Section~\ref{ssec:dtls-profile}.
 
-When trying to achieve end-to-end encryption key management becomes more difficult, how do
-you ensure end-to-end encryption will still allowing all intended recipients (devices) to
-decrypt the payload? One solution is to let the operator  encrypt the payload with a
+When trying to achieve end-to-end encryption key management becomes more difficult; how do
+you ensure end-to-end encryption while still allowing all intended recipients (devices) to
+decrypt the payload? One solution is to let the operator encrypt the payload with a
 symmetric key which the update server then either encrypts with each intended recipients
 asymmetric key or with a group key. This avoids having to re-encrypt the payload (breaking
 end-to-end encryption) and allows storing the encrypted payload and just re-encrypting the
@@ -135,10 +135,10 @@ This section identified two options for implementing the architecture: either Co
 DTLS or OSCORE. DTLS does not support broadcasting however which might be of importance,
 for this purpose OSCORE can be used instead. OSCORE does not rely on a secure channel
 established by DTLS but instead provides end-to-end security for CoAP messages using COSE.
-OSCORE is, unlike DTLS, not yet standardized and there is a partial implementation of
-OSCORE featuring only COSE encryption objects in a Contiki fork
-\parencite{contiki-oscore}. Profiles surrounding DTLS for EST-coaps and ACE are also
-closer to standardization than their OSCORE counterparts.
+OSCORE is, unlike DTLS, not yet standardized and in Contiki-NG there is to the best of the
+author's knowledge a fork with only a partial implementation of OSCORE featuring only COSE
+encryption objects \parencite{contiki-oscore}. Profiles surrounding DTLS for EST-coaps and
+ACE are also closer to standardization than their OSCORE counterparts.
 
 Both profiles use SHA-256 for calculating image digests, UUID5 for vendor and class IDs
 using registered vendor domains, EST with its corresponding profile for enrollment, and

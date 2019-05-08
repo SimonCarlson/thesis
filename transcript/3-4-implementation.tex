@@ -1,8 +1,9 @@
 \documentclass[0-thesis.tex]{subfiles}
 \begin{document}
 The previous sections proposed the update architecture of the thesis, its key components,
-and security considerations such as identity and access control. This section will discuss
-a prototype implementation of the architecture as well as a manifest generator. 
+and security considerations such as identity and access control. Two profiles
+instantiating the architecture were also presented. This section will discuss a prototype
+implementation of the architecture as well as a manifest generator. 
 
 \subsection{Manifest Implementation}
 \label{ssec:manifest-implementation}
@@ -24,7 +25,7 @@ preconditions are described as a nested array of maps, where each map in the arr
 constitutes one instance of such an element. The keys in these nested maps are also mapped
 to integers as in the main manifest structure, but resetting the counter for each map. The
 mapping of keys in nested structures is shown in Table~\ref{tab:nested-substitution}. The
-example manifest used can be found in Appendix~\ref{app:manifest}. 
+example manifest used in the thesis is found in Appendix~\ref{app:manifest}. 
 
 \begin{longtable}[]{@{}ll@{}}
     \caption{Mapping manifest elements to integers as keys in the JSON manifest.}
@@ -77,7 +78,7 @@ manifest elements, namely precursor image, dependencies, and URL/digest pair in 
 info convey the same kind of information but are separated into different lists because of
 the differences in semantics.
 
-\begin{lstlisting}[language=manifest, caption={The client manifest implementation}, label=lst:manifest]
+\begin{lstlisting}[language=manifest, caption={The client manifest implementation.}, label=lst:manifest]
     typedef struct manifest_s {
         uint8_t versionID;
         uint32_t sequenceNumber;
@@ -125,17 +126,17 @@ other implementers. It consists of a server and a client both implemented in Con
 thus written purely in C. The server is implemented in Contiki-NG as a proof-of-concept
 that a more capable IoT device could be used as an update server. The prototype uses a
 pull model meaning the client initiates the update procedure and the server responds with
-a corresponding resource. All traffic is sent via CoAPs, encrypted by DTLS. Certificate
-support in Contiki-NG was at the time of implementation missing, thus pre-shared keys were
-used instead.
+a corresponding resource. All traffic is sent via CoAPs encrypted by DTLS. Certificate
+support in Contiki-NG was at the time of implementation missing, thus pre-shared keys for
+DTLS were used instead.
 
-The server implements three resources mapped to the endpoints update/register,
-update/manifest, and update/image. The register resource listens to POST requests and upon
-a request extracts the vendor id, class id, and version number sent by the client and
-creates a profile file before answering with message code 2.01 CREATED. Other information
-can be put into the profile, such as choice of protocol and IP address, in order to reach
-the device again. For the prototype, such information is not needed, and the file is
-created just as proof-of-concept.
+The server implements three resources mapped to the endpoints \texttt{update/register},
+\texttt{update/manifest}, and \texttt{update/image}. The register resource listens to POST
+requests and upon a request extracts the vendor id, class id, and version number sent by
+the client and creates a profile file before answering with message code 2.01 CREATED.
+Other information can be put into the profile, such as choice of protocol and IP address,
+in order to reach the device again. For the prototype, such information is not needed, and
+the file is created just as proof-of-concept.
 
 In a real deployment with different devices, thus different manifests, the manifest
 resource is responsible for picking a suitable manifest based on the information in the
@@ -167,15 +168,16 @@ request is sent to the update/register endpoint. The client does not need to act
 response. Afterwards a GET request is sent to the update/manifest endpoint. The manifest
 callback buffers the manifest into memory block by block and when the callback finishes
 decrypts the entire manifest at once. After decryption it is parsed into structs shown in
-the previous section and pre-conditions are checked. If any other fields that need
-checking before proceeding, such as optional pre-directives, they are also checked now. 
+Listing~\ref{lst:manifest} and pre-conditions are checked. If any other fields that need
+checking before proceeding, such as optional pre-directives, they would also be checked at
+this point. 
 
 If the client deems the manifest to be correct it uses the URL found in the
-payloadInfo->URLDigest struct to call upon that endpoint. In this case it is update/image,
-but could be any endpoint hosting a resource specific for that class of device. The image
-callback decrypts each block and updates a SHA-256 context with the plaintext data. After
-transfer of all image data, the checksum calculation is carried out to generate a checksum
-of the image data. This concludes the transfer of the update.
+\texttt{payloadInfo->URLDigest} struct to call upon that endpoint. In this case it is
+\texttt{update/image}, but could be any endpoint hosting a resource specific for that
+class of device. The image callback decrypts each block and updates a SHA-256 context with
+the plaintext data. After transfer of all image data, the checksum calculation is carried
+out to generate a checksum of the image data. This concludes the transfer of the update.
 Figure~\ref{fig:client-server-interaction} summarizes the interactions between client and
 server.
 
@@ -189,11 +191,11 @@ server.
 \subsection{Summary}
 \label{ssec:implementation-summary}
 This chapter has presented a DTLS/CoAPs prototype of the proposed architecture. The
-prototype is made up of a client and a server developed in Contiki-NG, as well as an
+prototype is made up of a client and a server developed in Contiki-NG as well as an
 instantiation of the manifest format presented in Section~\ref{ssec:manifest-format}. The
 prototype is based on the pull model, meaning it is client initiated, and goes through the
 steps of registering, receiving a manifest, and receiving image data. It uses COSE
-encryption and pre-shared DTLS keys and COSE signing and certificate support was at the
+encryption and pre-shared DTLS keys as COSE signing and certificate support was at the
 time not available in Contiki-NG. It also does not use tokens as it represents a
 monolithic update and not differential update. The next chapter will evaluate the
 architecture in a qualitative manner and the prototype in a quantitative manner in order

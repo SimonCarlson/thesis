@@ -1,20 +1,14 @@
 \documentclass[0-thesis.tex]{subfiles}
 
-% TODO: Tense (past tense?)
-
 \begin{document}
 This chapter finishes the thesis with conclusions around the results, security
 considerations, and possible future work in the field.
 
 \section{Conclusions}
 \label{sec:Conclusions}
-% TODO: Conclusions drawn from qualitative evaluation?
-% Results to answer the research question
-% I think it will mostly be backed by the qualitative results (since the question is how)
-% Quantitative can be used to back up claims of feasability and future focus
 The thesis has presented a software and firmware update architecture for IoT. The
 architecture is based on requirements developed by the IETF SUIT working group and aims to
-be interoperable and usable for very constrained devices and state-of-the art security
+be interoperable and usable for constrained devices using state-of-the art security
 mechanisms such as asymmetric cryptography, certificates, and authorization tokens. The
 architecture defines the roles of devices, update servers, and operators and discusses how
 these actors can authorize themselves and what tokens might be needed, the operations of
@@ -30,58 +24,58 @@ bootloader specific requirements were all satisfied as the proposed architecture
 developed with compliance with SUIT in mind. Fundamental requirements such as being
 agnostic to distribution methods, using state-of-the-art security mechanisms, and
 operating with robust permissions are part of the core architecture. Other requirements
-such as broadcast friendliness and small parsers are implementation specific but prepared
-for and supported in the architecture.
+such as broadcast friendliness and small parsers are implementation specific but were
+prepared for and supported in the architecture.
 
-When it comes to the information model, the proposed architecture is designed for
-flexibility. This means the manifest implementation implements all mandatory elements as a
-baseline and severs remaining functionality into optional elements. Many requirements
-related to the information model are directly covered by the baseline manifest, while
-others are accounted for by enabling implementation of niche manifest elements. The
+When it comes to the information model, the proposed architecture was designed for
+flexibility. This means the manifest implementation implemented all mandatory elements as
+a baseline and severed remaining functionality into optional elements. Many requirements
+related to the information model were directly covered by the baseline manifest, while
+others were accounted for by enabling implementation of niche manifest elements. The
 reasoning was to provide a minimal manifest implementation thus reducing size and
 complexity while allowing for custom implementations of new pre/postconditions,
 directives, and other information. The flexibility should provide more robustness as the
 update mechanism can operate in a way that makes most sense in a specific deployment while
-keeping the baseline manifest intact, thus ensuring the minimum level of security needed
-is reached. 
+keeping the baseline manifest intact, thus ensuring the minimum level of security sought
+for is reached. 
 
 With the qualitative results in mind, the proposed architecture is a way of applying the
 SUIT specification to constrained, heterogeneous networks of devices in order to provide
-an interoperable update mechanism. The architecture fulfills the requirements developed by
-the SUIT specification, uses modern security solutions, and is flexible meaning it can be
-applied in various contexts. Networks of different devices with different applications and
-operating systems can all take part of the update architecture using the methods presented
-in the thesis.
+an interoperable update mechanism. The architecture fulfilled the requirements developed
+by the SUIT specification, used modern security solutions, and had a flexible design
+meaning it can be applied in various contexts. Networks of different devices with
+different applications and operating systems can all take part of the update architecture
+using the methods presented in the thesis.
 
 In order to contextualize the proposed architecture a DTLS/CoAPs prototype was developed.
 By measuring code size of the update client and server as well as a bare-bones Contiki-NG
-example, it is evident that the solution can be applied to very constrained systems. The
-difference in size between the client and bare-bones example is 8286 bytes and the server
-and bare-bones example is 8586 bytes. In a real deployment the code size will increase as
-the prototype's manifest parser is rudimentary and the client does not contain any code
-for preparing the bootloader, and the server needs stronger logic for handling device
-profiles and manifests, but applying the architecture to constrained devices is still
-feasible.
+example, it was evident that the solution can feasibly be applied to constrained systems.
+The difference in size between the client and bare-bones example is 8286 bytes and the
+server and bare-bones example is 8586 bytes. In a real deployment the code size will
+increase as the prototype's manifest parser is rudimentary and the client does not contain
+any code for preparing the bootloader and the server needs stronger logic for handling
+device profiles and manifests, but applying the architecture to constrained devices is
+still feasible.
 
 Experiments on energy consumption found that transferring the image data makes up the vast
 majority of energy consumed during an update procedure. This is due to the register
-operations and sending/receiving of a manifest sending, comparatively, very little data.
-Also when the client parses the manifest the operations are entirely local to the client,
-not using any expensive radio operations. During image transfer the largest source of
-energy consumption is the radio in receive mode, which for the client was up to 67\% and
-server 64\% of total energy consumption during image transfer. The amount of time thus energy needed for the transfer scales linearly with
-the size of the data being sent, meaning opportunities to send less data are of importance
-when it comes to saving energy.
+operations and sending and receiving of a manifest transfers, comparatively, very little
+data. Also when the client parses the manifest the operations are entirely local to the
+client, not using any expensive radio operations. During image transfer the largest source
+of energy consumption was the radio in receive mode, which for the client was up to 67\%
+and server 64\% of total energy consumption during image transfer. The amount of time thus
+energy needed for the transfer scaled linearly with the size of the data being sent,
+meaning opportunities to send less data are of importance when it comes to saving energy.
 
-The architecture introduces some communication overhead on the application layer when
-sending both manifest and image data. When encrypting with COSE a 8-byte tag is added to
-the ciphertext for validation. In the case of the manifest this tag is added once as the
-manifest is small enough to be encrypted at once. For the much larger image data, which
-cannot be encrypted all at once, each block is encrypted individually instead. This means
-that each block introduces 8 bytes of tag for each 32 bytes of data sent in a CoAP block.
-By sending less data a smaller amount of blocks must be transferred meaning less overhead
-is sent in total. This furthers the argument for exploring opportunities that reduce the
-amount of data sent, such as differential updates.
+The architecture introduced some communication overhead on the application layer when
+sending both manifest and image data. When encrypting with COSE a 8-byte tag was added to
+the ciphertext for validation. In the case of the manifest this tag was added once as the
+manifest was small enough to be encrypted at once. For the much larger image data, which
+could not be encrypted all at once, each block was encrypted individually instead. This
+meant that each block introduced 8 bytes of tag for each 32 bytes of data sent in a CoAP
+block. By sending less data a smaller amount of blocks have to be transferred meaning less
+overhead is sent in total. This furthers the argument for exploring opportunities that
+reduce the amount of data sent, such as differential updates.
 
 \section{Security Considerations}
 \label{sec:security-considerations}
@@ -90,7 +84,7 @@ prove difficult to install updates at the right moment. Timestamps are also unab
 account for if processes are being interrupted or not, one might want to postpone updates
 until a certain process or thread is idle. Not having fine-grained controlled over when an
 update is installed is especially important for devices used in safety critical contexts
-such as in factories
+such as in factories.
 
 The architecture does not support scenarios where redundant devices are used to achieve
 the same goal, such as monitoring equipment. To update one of the devices while the other

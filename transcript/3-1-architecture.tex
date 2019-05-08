@@ -11,7 +11,7 @@ cycles.
 The proposed architecture is technology agnostic and adds on top of SUIT certificates and
 whitelists and optionally tokens for identifying and authorizing entities and also defines
 what information is needed for a device to take part of an update procedure. Five key
-areas that the architecture must define have been identified:
+areas that the architecture must define were identified:
 
 \begin{itemize}
     \item Roles of devices, servers, and operators
@@ -21,7 +21,6 @@ areas that the architecture must define have been identified:
     \item Update handling for local upgrades
 \end{itemize}
 
-% TODO: Update what is optional, maybe highligt the non-optional stuff more?
 \begin{figure}[t]
     \caption{A high-level view of the control flow in the architecture during an update procedure. Normal face indicates pre-steps, bold face indicates core parts of the architecture, italic face indicates optional parts.}
     \label{fig:communication-workflow}
@@ -31,18 +30,18 @@ areas that the architecture must define have been identified:
 By putting the five key areas together, Figure~\ref{fig:communication-workflow} shows a
 high-level abstraction of the control flow in the architecture during an update procedure.
 Note that where the SUIT specification would differentiate between the author of an update
-and an operator, this architecture will for simplicity regard them as the same entity, the
-operator. For the same reason, the architecture will not differentiate between device
-operators and network operators. An operator is an entity that tracks device statuses and
-prepares, signs, and sends updates to devices. Figure~\ref{fig:communication-workflow}
-gives a brief introduction to the concepts needed to understand the architecture, these
-concepts will be explained in more detail throughout sections
-\ref{ssec:roles}-\ref{ssec:upgrading}. In this particular example the update procedure is
-initiated by the operator by querying the update server for device status and then pushing
-an update. The manifest and image are distributed together. The steps can be briefly
-explained as:
+and an operator, the proposed architecture does for simplicity regard them as the same
+entity, the operator. For the same reason, the architecture does not differentiate between
+device operators and network operators. An operator is an entity that tracks device
+statuses and prepares, signs, and sends updates to devices.
 
-% TODO: Add (optional) to optional items
+Figure~\ref{fig:communication-workflow} gives a brief introduction to the concepts needed
+to understand the architecture, these concepts are explained in more detail throughout
+sections \ref{ssec:roles}-\ref{ssec:upgrading}. In this particular example the update
+procedure is initiated by the operator by querying the update server for device status and
+then pushing an update. The manifest and image are distributed together. The steps can be
+briefly explained as:
+
 \begin{enumerate}
     \setcounter{enumi}{-1}
     \item The \textbf{device} enrolls at the \textbf{CA} and receives a
@@ -56,15 +55,15 @@ explained as:
             \textbf{authorization server} in order to gain access to applying the update.
     \item The signed manifest and image are sent to the update server with the
             authorization token.
-    \item (Optional) The update server requests an authorization token from the authorization server
-            in order to gain access to apply the update.
+    \item (Optional) The update server requests an authorization token from the
+            authorization server in order to gain access to apply the update.
     \item The signed manifest and image are sent to the device (optionally alongside the
             update server's authorization).
-    \item (Optional) The device requests introspection data from the authorization server to verify
-            the authorization token.
+    \item (Optional) The device requests introspection data from the authorization server
+            to verify the authorization token.
     \item The device decrypts and verifies the manifest and image and applies the update.
-    \item (Optional) The device's certificate broke as part of the update and it uses a new
-            pre-shared key included in the updated image to re-enroll.
+    \item (Optional) The device's certificate broke as part of the update and it uses a
+            new pre-shared key included in the updated image to re-enroll.
     \item The device updates its profile at the update server by re-registering.
 \end{enumerate}
 
@@ -72,13 +71,12 @@ Section~\ref{ssec:roles} defines what a device, update server, and operator mean
 context of the update architecture. Section~\ref{ssec:key-management} discusses what is
 needed for devices to enroll in a PKI and how keys are handled during updates.
 Section~\ref{ssec:communication} describes how devices, update servers, and operators can
-communicate and shows an example workflow of communicating an update.
-Section~\ref{ssec:authorization} describes the purpose of issuing authorization tokens,
-how devices can use them, and who is to be authorized. Section~\ref{ssec:upgrading}
-discusses different means of handling the payload when applying an update.
-Section~\ref{ssec:manifest-format} introduces the manifest format proposed by the
-architecture. Finally Section~\ref{ssec:use-cases-examples-topologies} shows the
-architecture applied to different use cases.
+communicate during an update procedure. Section~\ref{ssec:authorization} describes the
+purpose of issuing authorization tokens, how devices can use them, and who is to be
+authorized. Section~\ref{ssec:upgrading} discusses different means of handling the payload
+when applying an update. Section~\ref{ssec:manifest-format} introduces the manifest format
+proposed by the architecture. Finally Section~\ref{ssec:use-cases-examples-topologies}
+shows the architecture applied to different use cases.
 
 \subsection{Roles of Devices, Update Servers, and Operators}
 \label{ssec:roles}
@@ -88,9 +86,10 @@ architecture, their responsibilities, and their intended functionality.
 \subsubsection{What Is a Device and What Do They Do?}
 \label{sssec:what-is-a-device}
 Devices are constrained, low-power IoT appliances connected to a constrained network. They
-are running the applications of the network and performs simple tasks such as measurement
+are running the applications of the network and perform simple tasks such as measurement
 using sensors. The devices communicate wirelessly and must be secured from attackers while
-being able to be updated. They communicate with each other, update servers, and operators.
+being able to be updated. In the proposed architecture they communicate with update
+servers and operators.
 
 Devices have to trust update servers and operators wanting to send them updates. In order
 to do so, devices need predetermined whitelists of update servers and operators. The
@@ -104,7 +103,7 @@ know how to reach the devices if they want to initiate contact. Devices must thu
 profiles at the update servers, and must be enrolled in order to be trusted. In order to
 register a profile at an update server, the update server must offer an API that allows a
 device to POST its information (vendor and class ID as well as version) to the update
-server. How communication is handled and a further explanation of profiles is in
+server. How communication is handled and further explanation of profiles is found in
 Section~\ref{ssec:communication}.
 
 To properly handle updates a device needs to implement a local update handler. The update
@@ -122,15 +121,15 @@ This allows the update server to know through which protocols the device can be 
 and which version it should be updated to. Operators, discussed in the next section, send
 signed manifests and images to update servers, and can query them for device status.
 
-Devices must contain a whitelist of update servers and by trusting the certificate
-authority they can verify update server certificates. An update server is thus any machine
-that is enrolled, has a valid certificate, and is included in the device's whitelist of
-update servers. The reasoning behind this definition is that a standard solution for
-updates should not assume the topology of an IoT network. The update server may be a
-machine acting as a proxy between a traditional network containing the operator and a
-constrained network with IoT devices. The update server could be a more capable IoT device
-located entirely within the constrained network and be contacted through a proxy. The
-update server could be located entirely within the traditional network and use a proxy to
+Devices must contain a whitelist of update servers and by trusting the \gls{ca} they can
+verify certificates of update servers. An update server is thus any machine that is
+enrolled, has a valid certificate, and is included in the device's whitelist of update
+servers. The reasoning behind this definition is that a standard solution for updates
+should not assume the topology of an IoT network. The update server may be a machine
+acting as a proxy between a traditional network containing the operator and a constrained
+network with IoT devices. The update server could be a more capable IoT device located
+entirely within the constrained network and be contacted through a proxy. The update
+server could be located entirely within the traditional network and use a proxy to
 communicate with devices of the constrained network.
 Section~\ref{ssec:use-cases-examples-topologies} shows different use cases, highlighting
 this aspect.
@@ -142,18 +141,17 @@ requires some API the device can use for querying. The querying could be a GET r
 from the device upon which the update server matches the profile of the device with
 available manifests. The update server should offload the device as much as possible when
 it comes to picking an update as devices will typically have much tougher energy
-constraints. In addition, update servers act as repositories for updates and have much
-more information regarding which update is suitable.
+constraints and possess less information about updates than the update server.
 
 Additionally operators will also be querying the update server for statuses of devices.
-This functionality can be more fleshed out as it interacts with a human being and can
-offer filters for retrieving statuses of devices from a certain vendor or class, or
-devices running a certain firmware version. Allowing the operator to filter devices in the
-network while querying is important as IoT networks can contain a large amount of
-different devices, and it is imperative to find the ones in critical need of updates
-first.
+This functionality can be more fleshed out than the device API as it interacts with a
+human being and can offer filters for retrieving the status of devices from a certain
+vendor or class, or devices running a certain firmware version. Allowing the operator to
+filter devices in the network while querying is important as IoT networks can contain a
+large amount of different devices, and it is imperative to find the ones in critical need
+of updates first.
 
-A device can be aware of several update servers, and different devices can be mapped to
+A device can be aware of several update servers and different devices can be mapped to
 different update servers. Optionally, different devices can be mapped to different
 endpoints of the same physical update server. This can make device management easier as
 certain classes of devices can be handled by certain update servers. By allowing a device
@@ -226,21 +224,20 @@ As with update servers, the essence of being an operator can be captured in a fe
 
 \subsection{Key Management of IoT Update Procedure}
 \label{ssec:key-management}
-The architecture will, in order to align with the goals of SUIT, be based on asymmetric
+The architecture is, in order to align with the goals of SUIT, based on asymmetric
 cryptography. The availability of EST-coaps makes this feasible in IoT contexts but other
-enrollment protocols could also be used. This means a \gls{ca} is needed to act as a
-trusted third party distributing certificates. The certificates are linked to a public key
-which has a private key partner and are used to verify the correctness of a public key.
-Certificates are signed by the CA and in order to trust them, device have to trust the CA
-itself.
+enrollment protocols could also be used. This means a \acrfull{ca} is needed to act as
+a trusted third party distributing certificates. The certificates are linked to a public
+key which has a private key partner and are used to verify the correctness of a public
+key. Certificates are signed by the CA and in order to trust them, device have to trust
+the CA itself.
 
-In order to enroll, a pre-shared key is proposed. This is the approach used in EST-coaps,
-but it is not chosen for that reason. If a pre-shared key is not used the CA cannot be
-sure the device asking to enroll really should be part of the trusted network. Should an
-attacker obtains a valid certificate they could communicate with devices and update
-servers alike and no one would be able to tell it is a malicious actor. CAs must know they
-are issuing certificates to the correct devices and pre-shared keys gives devices a means
-of identifying themselves. Pre-shared keys could be used for encrypting all traffic but as
+In order to enroll, a pre-shared key is proposed. Without it the CA cannot be sure the
+device asking to enroll really should be part of the trusted network. Should an attacker
+obtain a valid certificate they could communicate with operators and update servers alike
+and no one would be able to tell it is a malicious actor. CAs must know they are issuing
+certificates to the correct devices and pre-shared keys gives devices a means of
+identifying themselves. Pre-shared keys could be used for encrypting all traffic but as
 they are less scalable and harder to manage than certificates, they are just used for
 enrolling.
 
@@ -254,14 +251,14 @@ CAs own certificate, a device can be certain they are using the correct keys.
 
 There are options concerning how many key pairs a device should have. Device-to-device
 communication might occur in the constrained network depending on the applications running
-and it would also require asymmetric cryptography for identification. Devices receiving
-updates might communicate with update servers or operators outside the constrained
-network. If the same key pair is used for device-to-device communication and updates and
-an attacker gets ahold of that key they can use it both inside and outside the constrained
-network. Using the same key pair for device-to-device communication and updates makes the
-consequences of losing keys greater. 
+and it would also require asymmetric cryptography for identification and confidentiality.
+Devices receiving updates might also communicate with update servers or operators outside
+the constrained network. If the same key pair is used for device-to-device communication
+as updates and an attacker gets ahold of that key they can use it both inside and outside
+the constrained network. Using the same key pair for device-to-device communication and
+updates makes the consequences of losing keys greater. 
 
-Some devices might not be able to handle different key pairs and therefore certificates,
+Some devices might not be able to handle different key pairs (and therefore certificates),
 either as a result of their constrained memory sizes or as a consequence of not having
 access to abstractions such as a file system. Using the same key pair for all kinds of
 device communication is acceptable but should be carefully considered. If many key pairs
@@ -269,13 +266,13 @@ can be used on the same device, an implementer should consider the granularity o
 pairs' scope; should they be used per device, per service, or per application?
 
 After applying updates, certificates might not be valid anymore. This is implementation
-dependant and might not always be a problem, but the architecture should be prepared for
-these situations. In the case an update breaks a certificate, the certificate cannot be
-used for communication and thus the device cannot use it to re-enroll either. In this
-case, a new pre-shared key should be part of the update so that the device can enroll as
-if it was factory new. The process of issuing pre-shared keys might be difficult to
-automate as the CA must be aware of which keys to accept, but it is needed to ensure the
-security of future device communication.
+dependant and might not always be a problem, but the architecture is prepared for these
+situations. In the case an update breaks a certificate, the certificate cannot be used for
+communication and thus the device cannot use it to re-enroll either. In this case, a new
+pre-shared key should be part of the update so that the device can enroll as if it was
+factory new. The process of issuing pre-shared keys might be difficult to automate as the
+CA must be aware of which keys to accept, but it is needed to ensure the security of
+future device communication.
 
 \subsection{Device Profiles and Update Communication}
 \label{ssec:communication}
@@ -286,25 +283,25 @@ containing information about device capabilities and software versions.
 
 When devices have enrolled and obtained a valid certificate, they must contact their
 respective update servers so the update servers can create profiles of the devices. The
-profiles will tell through which protocols to reach a device and what software versions
-the device is using. In order to achieve this, devices must first know which update
-servers to contact. This can be solved through shipping devices with a list of update
-servers. This list also acts as a whitelist of authorized update servers and can later on
-be updated like any other software. Furthermore, the SUIT information model specification
-uses vendor and class IDs to verify an update is intended for a specific device by
-matching the IDs. These IDs can be sent to an update server to tell it what kind of device
-is contacting it. The update server can infer a profile based on the IDs it is sent, or
-simply use the protocols the device chose to contact it. The devices also need to be aware
-of how to register, for instance by POSTing to a specific update server registration
-endpoint. 
+profiles describe through which protocols a device can be reached and what software
+versions the device is using. In order to achieve this, devices must first know which
+update servers to contact. This can be solved through shipping devices with a list of
+update servers. This list also acts as a whitelist of authorized update servers and can
+later on be updated like any other software. Furthermore, the SUIT information model
+specification uses vendor and class IDs to verify an update is intended for a specific
+device by matching the IDs. These IDs can be sent to an update server to tell it what kind
+of device is contacting it. The update server can infer a profile based on the IDs it is
+sent, or simply use the protocols the device chose to contact it. The devices also need to
+be aware of how to register, for instance by POSTing to a predetermined registration
+endpoint at an update server. 
 
-When updating there are possibilities regarding how the updating process is initiated. An
-operator can query the update server for the status of one or several devices, prepare an
-update for them, and have the update pushed through the update server. Optionally the
-operator could send a manifest to the device explaining when the update is to be applied
-and put the image on the update server. Later when the device should update, the device
-pulls the image from the update server, verifies it using the already received manifest,
-and updates. Both the pull and push approaches assume the devices are already enrolled and
+There are possibilities regarding how the updating process is initiated. An operator can
+query the update server for the status of one or several devices, prepare an update for
+them, and have the update pushed through the update server. Optionally the operator could
+send a manifest to a device explaining when the update is to be applied and put the
+image on the update server. Later when a device should update, the device pulls the
+image from the update server, verifies it using the already received manifest, and
+updates. Both the pull and push approaches assume the devices are already enrolled and
 registered at the update server.
 
 After updating, the device's capabilities might have changed, for instance by having a new
@@ -350,32 +347,32 @@ system vendors might be allowed to push security updates for the operating syste
 change the application code. Controlling access rights is a security issue and the
 architecture must support it.
 
-Devices will only allow communication from trusted sources specified in predetermined
-whitelists of update servers and operators. This tells devices which sources of
+Devices only allow communication from trusted sources specified in predetermined
+whitelists of update servers and operators. These lists tell devices which sources of
 communication to allow which in itself is a form of access control. For simple devices,
-for instance devices only running a single service using one microcontroller and a single
-means of storage, any update received might target the entire device. In this case
+for instance devices only running a single application using one microcontroller and a
+single means of storage, any update received might target the entire device. In this case
 controlling update authorization using whitelists of update servers and operators might be
 sufficient as an allowed update can only update the entire system at once with no further
 granularity. In these kinds of devices memory and energy requirements are tough and just
-using whitelists and not tokens might also help reach these requirements while retaining
-some means of authorization. The same holds for when operators directly send manifests to
-devices, a whitelist of operators may suffice for certain deployments. However, for more
-complex devices or applications this will not suffice. If different applications,
-microcontrollers, or storage locations can be targeted, an author or update server must
-use tokens to access those specific resources they are supposed to access.
+using whitelists and not authorization tokens might also help fulfill these requirements
+while retaining some means of authorization. The same holds for when operators directly
+send manifests to devices, a whitelist of operators may suffice for certain deployments.
+However, for more complex devices or applications this will not suffice. If different
+applications, microcontrollers, or storage locations can be targeted, an author or update
+server must use tokens to access those specific resources they are supposed to access.
 
 Note that communication between an operator and update server should always use tokens.
 Update servers will typically be unconstrained devices and thus not face the same memory
 and energy constraints meaning using tokens should not be an issue. Furthermore both
-operators and update server will in most cases operate in unconstrained networks that
-already have well-developed support for authorization tokens. Additionally using tokens
+operators and update servers will in most cases operate in unconstrained networks that
+already have well-developed support for authorization tokens. Additionally, using tokens
 between operators and update servers opens up opportunities for third party vendors to
 more easily patch IoT networks as they themselves can request tokens and be granted
 correct levels of access in the update architecture. Even in the case of the update server
-being a more capable yet embedded device, should it be powerful enough to act as an update
-server then handling tokens should not be an issue, but a lightweight token variant can be
-used to alleviate some energy and memory constraints if needed.
+being a more capable embedded device, if it is powerful enough to act as an update server
+then handling tokens should not be an issue, but a lightweight token variant can be used
+to alleviate some energy and memory constraints if needed.
 
 If used on the devices, the authorization token would have to be of a lightweight variant,
 but which variant is implementation specific. Tokens will be sent with signed manifests
@@ -385,12 +382,11 @@ it will recognize the update as an authorized one and proceed with verifying it.
 
 Frameworks like OAuth 2.0 and ACE use proof-of-possession tokens that are bound to a
 cryptographic key. When receiving a proof-of-possession token, a receiver must verify that
-the key bound to the token is held by the client sending the token. This means that if an
-operator sends an update with a token to an update server which forwards the update and
-token to a device, the device must be able to verify with the \textit{operator} that it
-holds the key bound to the token and not the update server. The device will in essence not
-be able to verify this as it received the message from the update server, and not the
-operator.
+the key bound to the token is held by the sender. This means that if an operator sends an
+update with a token to an update server which forwards the update and token to a device,
+the device must be able to verify with the \textit{operator} that it holds the key bound
+to the token and not the update server. The device would in essence not be able to verify
+this as it received the message from the update server, and not the operator.
 
 In order to remedy this, the operator's authorization token will be used to authorize the
 communication with the update server and then terminate. If the token is valid, the update
@@ -443,21 +439,21 @@ as possible. This is also a requirement stated by SUIT on the architecture. By d
 and verifying the image at every boot the boot procedure will be secure but quite complex.
 Decrypting the image as part of the update mechanism and writing it unencrypted to flash
 would allow for a simpler bootloader, but is less secure as the device would boot from an
-unencrypted image.
+unencrypted and unverified image.
 
 By storing the manifest containing the image digest, unencrypted images can be verified by
 comparing their digest to the one in the manifest. Calculating a digest is less demanding
 than decryption, and a power cycle would just interrupt the digest calculation instead of
 the decryption of the actual bootable image. In order to make sure the manifest is correct
 upon boot, the digest of the manifest can be calculated and stored alongside the manifest
-and image. Optionally the manifest can be encrypted instead as it typically will be much
-smaller than the image, but again a power cycle during decryption could lead to undefined
-behavior.
+and image. Optionally the manifest can be encrypted instead as it typically will be
+significantly smaller than the image, but again a power cycle during decryption could lead
+to undefined behavior.
 
 In addition to storing the manifest for verification upon boot, the manifest also has to
-be stored in order to prevent rollback attacks. It contains monotonically increasing
-sequence numbers to ensure devices do not install older, possibly vulnerable images, but
-in order to compare sequence numbers the most recent manifest has to be kept around.
+be stored in order to prevent rollback attacks. It contains a monotonically increasing
+sequence number to ensure devices do not install older, possibly vulnerable images, but in
+order to compare sequence numbers the most recent manifest has to be kept around.
 Manifests should be kept for the update handler to compare sequence numbers, and for the
 bootloader to verify images.
 
@@ -484,19 +480,19 @@ examples. When considering a format, certain points should be kept in mind:
 \end{itemize}
 
 The manifest must be compact and simple while being flexible enough to allow for new
-additions. This calls for a baseline manifest containing the mission critical information
-that is required in most any update, while severing non-critical information to be
-implemented as options. In order to comply with the SUIT specification, elements that SUIT
-considers mandatory can be placed in the baseline manifest and elements SUIT considers
-optional placed in the options. A parser implementation will thus always implement the
-functionality needed to parse the mandatory elements while implementing support for the
-optional elements is up to the implementer. One such example is the payload option. The
-baseline manifest will contain information about the payload such as size and format, but
-certain deployments might find it useful to embed the image payload itself in the
+additions. This lead to the development of a baseline manifest containing the mission
+critical information that is required in most any update, while severing non-critical
+information to be implemented as options. In order to comply with the SUIT specification,
+elements that SUIT considers mandatory were placed in the baseline manifest and elements
+SUIT considers optional in the options. A parser implementation will thus always implement
+the functionality needed to parse the mandatory elements while implementing support for
+the optional elements is up to the implementer. One such example is the payload option.
+The baseline manifest will contain information about the payload such as size and format,
+but certain deployments might find it useful to embed the image payload itself in the
 manifest. This could be the case for differential updates of very small images where the
-update code is small enough to fit. For these deployments, implementers can implement the
-optional payload option which a client will use instead of issuing another request to the
-server to fetch the image.
+update code is small enough to fit in a manifest. For these deployments, implementers can
+implement the optional payload option which a client will use instead of issuing another
+request to the server to fetch the image.
 
 As seen in Section~\ref{ssec:information-model} the SUIT specification mentions the
 elements of the manifest and their statuses but does not provide a format.
@@ -507,7 +503,7 @@ options. The current option types are required image list, component identifier,
 aliases, and directives.
 
 \begin{figure}
-    \caption{A schematic view of the proposed manifest format. The elements themselves are from the SUIT specification.}
+    \caption{A schematic view of the proposed manifest format. The elements themselves are from the SUIT information model specification.}
     \label{fig:manifest-format}
     \includegraphics{images/manifest-format.pdf}
 \end{figure}
@@ -520,28 +516,26 @@ needed for one update can differ quite drastically from another update. An updat
 dependencies that is targeted for one specific class of device with no optional elements
 can be described in a very small manifest. This small manifest would have no precursors,
 dependencies, or options. The payload information would contain just one URI/digest pair,
-and there are only two conditions, one vendor ID and one class ID.
+and there are only two preconditions, one vendor ID and one class ID.
 
 A different update that is specifying differential updates for a wide class of devices
 will need to specify much more information in the manifest. There will be several class
 IDs as several classes are targeted. The different classes might not be running the same
 versions of software or firmware and thus several dependencies are listed. Furthermore
-since devices might not be able to reach the same servers, the manifest contains a list of
-aliases for the image, causing the manifest to contain many URI/digest pairs. This
+since devices might not be able to reach the same servers, the manifest can thus contain a
+list of aliases for the image, causing the manifest to contain many URI/digest pairs. This
 manifest will be larger than the previous one described and the fields of this manifest
 will have much different sizes. The dynamic nature of certain elements must be considered
-when implementing the manifest as the packet structure must be prepared for it. 
+when implementing the manifest as the device must be prepared for it. 
 
-The condition type, directive type, and option type structures provides flexibility to
-implementers. The manifest format as it is specifies the optional elements of SUIT as
-option types as well as vendor ID and class ID for condition type. It is easy to add new
-types and thus add new conditions, options, or directives. Conditions are either
-parameters that must match some property of the device or invariants that must be true
-before or after the update, while directives provide instructions as how to unpack the
-update, how to install it etc if so needed. Conditions and directives are split into
-pre/post variants to avoid erroneously adding for instance vendor ID as a post condition.
-The structure of pre- and postconditions are the same being separated only for stronger
-semantics, the same for pre- and postdirectives.
+The condition types, directive types, and option type structures provides flexibility to
+implementers. It is easy to add new types and thus add new conditions, options, or
+directives. Conditions are either parameters that must match some property of the device
+or invariants that must be true before or after the update, while directives provide
+instructions as how to unpack the update, how to install it etc if so needed. Conditions
+and directives are split into pre/post variants to avoid erroneously adding for instance
+vendor ID as a post condition. The structure of pre- and postconditions are the same being
+separated only for stronger semantics, the same for pre- and postdirectives.
 
 The meaning of options are completely dependant on the specific option in mind, so new
 functionality can be embedded as an option. If the current manifest format lacks some
@@ -594,19 +588,18 @@ the light bulb controller accepts it and updates itself.
     \includegraphics{images/use-case-smart-home.pdf}
 \end{figure}
 
-The last example shown in Figure~\ref{fig:industry} shows an on-site devops engineer
+The last example shown in Figure~\ref{fig:industry} depicts an on-site devops engineer
 wanting to update a critical temperature sensor in an industry plant. The engineer first
 requests a token to send the signed manifest directly to the device and a token to send
 the signed image to the sensor update server. In this case, the update server is a more
 capable IoT device in the constrained network. It needs to request an authorization token
 to push the update to the device but is unable to speak the protocols used by the
 authorization server. The update server instead goes through a proxy to send the token
-request. With the token, the update can be sent to the device.
-
-The device needs to authorize the token, but as it is a very constrained device it cannot
-perform the necessary calculations. The device opts to perform an introspection request
-through the proxy so the authorization server can help verifying the token. After the
-device has received an answer, it can proceed applying the update.
+request. With the token, the update can be sent to the device. The device needs to
+authorize the token, but as it is a very constrained device it cannot perform the
+necessary calculations. The device opts to perform an introspection request through the
+proxy so the authorization server can help verifying the token. After the device has
+received an answer, it can proceed applying the update.
 
 \begin{figure}[t]
     \caption{An on-site devops engineer updates a very constrained, critical temperature
