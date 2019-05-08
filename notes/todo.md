@@ -115,8 +115,18 @@ To do:
 - [ ] Presentation material
   - [ ] Slides
   - [ ] Notes
-- [ ] Make tokens optional, update text accordingly
-  - [ ] Chapter 3
-  - [ ] Chapter 4?
-  - [ ] Chapter 5
-  - [ ] Figure 3.1 (communication-flow)
+- [x] Make tokens optional, update text accordingly
+  - [x] Chapter 3
+  - [x] Chapter 4?
+  - [x] Chapter 5
+  - [x] Figure 3.1 (communication-flow)
+- [x] Tense
+  - [x] Chap 1
+  - [x] Chap 2
+  - [x] Chap 3
+  - [x] Chap 4
+  - [x] Chap 5
+  - [x] Abstract
+- [ ] Consider how I report code size
+  - [ ] Use ramprof/flashprof instead?
+- [ ] Layout

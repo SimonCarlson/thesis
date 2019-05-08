@@ -1,3 +1,10 @@
+8/5-19:
+Fixed tokens, updated all text related to it and the high-level architecture image.
+
+Time to check tenses? Time-consuming stuff but should probably do before sending to Farhad. Don't know if anything else is more urgent at this point. Maybe layout of figure, tables etc
+
+Check tense, went through the entire report. Should be pretty good but I might have missed things, so prepare for feedback. Layout isn't entirely finished, two floats I'm unsure about how to place. It'll pan out though as the thesis will change based on feedback
+
 7/5-19:
 Remade the descriptive lists in the qualitative evaluation to tables (long tables)
 
@@ -15,7 +22,7 @@ Various fixes per Shahid's feedback
 
 I must decide where to draw the line on certain topics. Some things can be discussed to no end but with diminishing returns of how much it actually contributes to the thesis. The way forward is to get literally every single section of the thesis in an acceptable state, then fix the things receiving the most criticism, then fixing the various things I feel like. Probably won't have time for the third part though but that's fine.
 
-How personal do I get in ackonowledgements? Also, is it weird to write them beforehand since I'll be thanking my examiner (before she's passed me?). Do I write them after my defence?
+How personal do I get in acknowledgements? Also, is it weird to write them beforehand since I'll be thanking my examiner (before she's passed me?). Do I write them after my defense?
 
 I'll very most likely abandon actual upgrades entirely as 1) it requires a lot of preparation with the image which in turn 2) requires a lot of work with the build system 3) it requires a alot of work with the bootloader, of which none I've done so far. It's too much work and I honestly feel it should be a separate thesis entirely
 
@@ -25,7 +32,11 @@ Working more on my results. Cannot for the life of me get the sniffer working. C
 Spoke to Farhad, this Wednesday I'll send him an almost complete draft and hopefully get some feedback and book a timeslot for presentation. Need to finish the results, conclusion, and abstract.
 
 3/5-19:
-:^)
+Made the implementation description of client and server easier to follow
+
+Added energy consumption and code size measurements
+
+Started the discussion section
 
 2/5-19:
 Better day today. DTLS works when running client and server on boards.
