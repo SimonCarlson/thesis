@@ -291,11 +291,12 @@ alongside their motivations.
     \begin{minipage}[t]{0.41\columnwidth}\raggedright\strut
     Payload in manifest\strut
     \end{minipage} & \begin{minipage}[t]{0.53\columnwidth}\raggedright\strut
-    Can be added as the optional ``payload'' element, the value would be the
+    Can be added as the optional payload element. The value would be the
     data of the payload and the regular payloadInfo element would contain
-    its digest. Worth noting is that for most deployments including the
-    payload in the manifest will dramatically increase the size of manifest,
-    thus a manifest parser must be prepared for it.\strut
+    its digest. Worth noting is that for most deployments, including the
+    payload in the manifest will dramatically increase the size of manifest.
+    A manifest parser must be prepared for the difference in size between normal manifest
+    elements and the payload element.\strut
     \end{minipage}\tabularnewline
     \begin{minipage}[t]{0.41\columnwidth}\raggedright\strut
     Simple parsing\strut
