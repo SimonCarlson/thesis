@@ -1,3 +1,20 @@
+9/5-19:
+Had a discussion with Sam about energy estimations. We reached some numbers we both agreed to use in order to be consistent. Good to have it cleared up since he has an EE background and knows more about this stuff than I do
+
+Updated the graphs and numbers relating to energy consumption estimation in the thesis
+
+Divided the abstracts into paragraphs. Maybe they are quite long? Possibly the motivation can be shortened a bit, I think the point comes across anyways
+
+Should probably look into the code size measurements but I don't think it's that clear cut showing sizes of "modules", but rather entities in code that are implicitly connected to modules. I know approximately how large my application code is so maybe I can add the relevant sections up and get the same amount of bytes? Would help contextualizing it by comparing it to other modules in the operating system
+
+Added Energest citation, if anyone is wondering about the accuracy of the module they can go there
+
+Fixed formatting issues. Should I try to reformat the tables, perhaps restructure the split between columns?
+
+Exploring the ramprof and flashprof make targets to understand the sizes. Difficult to report on it correctly, how do I know I include everything included to my application and not other stuff? Also, do I account for all imports and COSE code? Thinking yes.
+
+Should ask about the license in the source files. Also, decide about energest code (macros?).
+
 8/5-19:
 Fixed tokens, updated all text related to it and the high-level architecture image.
 
