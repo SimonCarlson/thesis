@@ -317,12 +317,11 @@ communication overhead is also reported.
 
 \subsection{Energy Consumption}
 \label{ssec:energy-consumption}
-% TODO: Cite energest paper?
 Contiki-NG provides a utility called Energest which can measure how much time, measured in
-ticks, is spent by a program. The measurement is divided into five categories: CPU, Low
-Power Mode, Deep Low Power Mode, Transmit, and Listen. CPU, Low Power Mode, and Deep Low
-Power Mode are related to the work of the processor while Transmit and Listen measures the
-radio. Each type can be measured independently by calling the function
+ticks, is spent by a program \parencite{energest}. The measurement is divided into five
+categories: CPU, Low Power Mode, Deep Low Power Mode, Transmit, and Listen. CPU, Low Power
+Mode, and Deep Low Power Mode are related to the work of the processor while Transmit and
+Listen measures the radio. Each type can be measured independently by calling the function
 \texttt{energest\_type\_time(energest\_type\_t type)} where type is the category you want
 to measure. For the experiment, the client measured the register callback, the manifest
 callback, the decoding and parsing of the manifest, and the image callback. The server
