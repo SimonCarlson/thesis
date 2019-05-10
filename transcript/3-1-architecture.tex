@@ -230,7 +230,7 @@ cryptography. The availability of EST-coaps makes this feasible in IoT contexts 
 enrollment protocols could also be used. This means a \acrfull{ca} is needed to act as
 a trusted third party distributing certificates. The certificates are linked to a public
 key which has a private key partner and are used to verify the correctness of a public
-key. Certificates are signed by the CA and in order to trust them, device have to trust
+key. Certificates are signed by the CA and in order to trust them, devices have to trust
 the CA itself.
 
 In order to enroll, a pre-shared key is proposed. Without it the CA cannot be sure the
@@ -274,6 +274,14 @@ pre-shared key should be part of the update so that the device can enroll as if 
 factory new. The process of issuing pre-shared keys might be difficult to automate as the
 CA must be aware of which keys to accept, but it is needed to ensure the security of
 future device communication.
+
+Certificates allow for secure communication via DTLS. The payloads however, both manifest
+and image, are also to be signed during an update procedure using some key. The keys can
+be obtained through various methods, such as encrypting it with PKI and sending to the
+client, key derivation algorithms, and group keys. Key management for computing payload
+signatures is highly implementation dependant and which approach is chosen can be encoded
+in the content key method element of the manifest. Section~\ref{ssec:manifest-format}
+describes the manifest format of the proposed architecture in more detail.
 
 \subsection{Device Profiles and Update Communication}
 \label{ssec:communication}
@@ -536,7 +544,9 @@ or invariants that must be true before or after the update, while directives pro
 instructions as how to unpack the update, how to install it etc if so needed. Conditions
 and directives are split into pre/post variants to avoid erroneously adding for instance
 vendor ID as a post condition. The structure of pre- and postconditions are the same being
-separated only for stronger semantics, the same for pre- and postdirectives.
+separated only for stronger semantics, the same for pre- and postdirectives. The content
+key method element gives implementers flexibility in how they want to distribute keys to
+calculate manifest and image signatures.
 
 The meaning of options are completely dependant on the specific option in mind, so new
 functionality can be embedded as an option. If the current manifest format lacks some
