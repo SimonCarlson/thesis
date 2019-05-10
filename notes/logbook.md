@@ -1,3 +1,22 @@
+10/5-19:
+I don't know what to do with code size. Still so difficult to ensure I sum all correct parts. I obviously include my own code, and should include COSE. But where do I draw the line? I don't think I should include anything CoAP related. What about standard library imports? Don't know if some of them already are/would be imported. 
+
+Saw in Canvas there are submissions for alpha/beta draft, I have not submitted anything... Mailed Farhad about it
+
+The assessment template is rather long. I guess you only fill one in for yourself?
+
+According to Sam the energest measurements seem way off for certain measurements. CoAP request measurements seem trustworthy but stuff like encryption/decryption seem much too low. Would explain the low results I found when decoding and parsing. What to do?
+
+Energest issues might be related to the scale of operations being measured. Looking at my own results it seems like all messages and callbacks could be/are accurate and just the (entirely local) manifest decode and parsing is way too low. Maybe explain that in the thesis and don't include those measurements? Is that honest?
+
+Started thinking more about security considerations. How contrived can an example be? Obviously you can do a lot of implementation errors that causes issues but that feels irrelevant. What are the considerations on a high level?
+
+Added parts about content key distribution methods for COSE signing.
+
+I measured the decryption and parsing code. For one pass in the application (the measurements of the thesis) it would consistently yield 110-111 cycles (0.003 sec) which seems suspiciously low. Running the code 100000 times the measured wall time was 5m 32s which is 332 seconds. RTIMER_NOW() reported a diff of 10876410 ticks which is 331,9 seconds, and energest reported 10876095 ticks which is 331,9 seconds. 331,9/100000 ~= 0.003, which is in line with the previous results. It is also consistent with wall time meaning the timer itself seems reliable, even on smaller scales. Maybe I just keep the results anyways?
+
+Acknowledgements can be added later according to Farhad.
+
 9/5-19:
 Had a discussion with Sam about energy estimations. We reached some numbers we both agreed to use in order to be consistent. Good to have it cleared up since he has an EE background and knows more about this stuff than I do
 
