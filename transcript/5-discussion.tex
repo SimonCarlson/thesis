@@ -79,6 +79,8 @@ reduce the amount of data sent, such as differential updates.
 
 \section{Security Considerations}
 \label{sec:security-considerations}
+
+\subsubsection{Timing of Updates}
 Despite being able to add timestamps in the manifest specifying a time of update it can
 prove difficult to install updates at the right moment. Timestamps are also unable to
 account for if processes are being interrupted or not, one might want to postpone updates
@@ -86,17 +88,38 @@ until a certain process or thread is idle. Not having fine-grained controlled ov
 update is installed is especially important for devices used in safety critical contexts
 such as in factories.
 
+\subsubsection{Redundant Devices}
 The architecture does not support scenarios where redundant devices are used to achieve
 the same goal, such as monitoring equipment. To update one of the devices while the other
 operates and then update the other would require manual intervention such as sending the
-devices updates one at a time. This is a rather brittle approach and having support for
+devices updates one at a time. This is a rather brittle approach, and having support for
 twinned devices would help safety critical contexts.
 
+\subsubsection{Physical Threats}
 The architecture does not account for physical threats, only threats that arise during
 wireless transport. The discussion in Section~\ref{ssec:upgrading} does not account for
 scenarios where the physical storage of devices is compromised. Implementers are advised
 to store manifest and image data in a way that makes sense for their own deployment,
 whether that is unencrypted, encrypted, or encrypted manifest with unencrypted image.
+
+\subsubsection{Importance of the Certificate Authority}
+The certificate authority plays a central role in the architecture as everything is based
+on certificates being available. If the CA is breached, unavailable, or for some other
+reason deemed untrustworthy nothing will work properly. Providing devices with correct CA
+certificates and upholding the integrity of the CA is essential for the architecture to
+function.
+
+\subsubsection{Battery Draining Attacks}
+Battery draining attacks should be prevented due to devices keeping whitelists of
+operators and update servers, disallowing communication from other sources, in combination
+with certificates that can further prove their identity. Should an attacker be able to
+send messages to devices though, the presence of the push model makes it so devices would
+accept and parse manifests in order to check if the update is valid or not. If large
+amounts of data in form of manifests are sent to devices their batteries can deplete
+quicker due to repetitive decryption and parsing. The issue stems from devices immediately
+responding to pushed update with performing calculations, which enables these kinds of
+attacks.
+
 
 \section{Future Work}
 \label{sec:future-work}
