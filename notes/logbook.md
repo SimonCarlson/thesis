@@ -1,3 +1,16 @@
+13/05-19:
+As soon as dates for presentation gets mentioned I get so stressed. Having to wait for someones approval to book a date with another person with constraints on four people being there is so difficult to handle. Why can't I just pick a date?
+
+Starting work on presentation slides.
+
+Should I even prepare notes for the slides? I want to talk freely and I know enough about my own work (hyuk hyuk) to do so but it is rather long and having notes might help me pace better. Either way I should prepare notes for difficult questions I anticipate
+
+Banking on being able to mail Elena tomorrow about dates after meeting with Farhad.
+
+Got dates from Sam that works for both Elena and Shahid, it's rather soon... Doable but soon
+
+Presentation should be pretty easy to prepare for, I just have to pick out the most relevant parts. Good advice that presentation and report are two different things
+
 10/5-19:
 I don't know what to do with code size. Still so difficult to ensure I sum all correct parts. I obviously include my own code, and should include COSE. But where do I draw the line? I don't think I should include anything CoAP related. What about standard library imports? Don't know if some of them already are/would be imported. 
 

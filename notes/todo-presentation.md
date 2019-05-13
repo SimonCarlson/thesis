@@ -1,0 +1,48 @@
+- [ ] Introduction
+  - [x] Motivation/background
+  - [x] Research question
+  - [x] Purpose
+  - [x] Goals?
+  - [x] Methodologies?
+- [ ] Background
+  - [x] UDP/DTLS
+  - [x] CoAP
+  - [x] CBOR/COSE
+  - [x] OSCORE
+  - [x] EST/ACE for IoT
+  - [ ] SUIT
+    - [x] Architecture
+    - [x] Information model
+  - [x] Contiki-NG
+- [ ] Method
+  - [ ] Show high-level architecture and explain parts
+    - [x] Device
+    - [x] Update server
+    - [x] Operator
+    - [ ] CA
+    - [ ] Authorization server
+  - [x] Key management
+  - [x] Device profiles
+  - [x] Authorization
+  - [x] Update handling
+  - [x] Manifest format
+  - [ ] Use cases? Maybe just one?
+- [x] Life cycle
+- [ ] Profiles
+  - [ ] CoAP
+  - [ ] OSCORE
+- [ ] Implementation
+  - [x] Client
+  - [x] Server
+- [ ] Results
+  - [ ] Qualitative
+    - [x] Architecture
+    - [x] Information model
+  - [ ] Quantitative
+    - [x] Energy consumption
+    - [x] Overhead
+    - [x] Code size
+- [ ] Discussion
+  - [x] Conclusions
+  - [x] Security considerations
+  - [ ] Future work?

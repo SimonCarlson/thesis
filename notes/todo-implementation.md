@@ -9,7 +9,7 @@
   - [x] Send a COSE encrypted firmware image in CoAP
 - [x] Establish a DTLS connection
   - [x] Using PSK
-  - [ ] Using certificates
+  - [ ] ~~Using certificates~~
 - [x] Calculate a SHA256 checksum of a data buffer
 - [x] Allocate memory for and reassemble a large file (image)
 - [x] Consider datatypes in the manifest (dont use generic int etc)
