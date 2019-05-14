@@ -1,0 +1,95 @@
+\begin{longtable}[]{@{}ll@{}}
+\toprule
+\begin{minipage}[b]{0.37\columnwidth}\raggedright\strut
+Requirement\strut
+\end{minipage} & \begin{minipage}[b]{0.57\columnwidth}\raggedright\strut
+Motivation\strut
+\end{minipage}\tabularnewline
+\midrule
+\endhead
+\begin{minipage}[t]{0.37\columnwidth}\raggedright\strut
+Monotonic sequence numbers\strut
+\end{minipage} & \begin{minipage}[t]{0.57\columnwidth}\raggedright\strut
+The manifest contains monotonically increasing sequence numbers to
+prevent rollback attacks to older version of firmware. Signed manifests
+ensures an attacker cannot modify an old manifest to just update the
+sequence number and roll back the device firmware.\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.37\columnwidth}\raggedright\strut
+Vendor and device-type identifiers\strut
+\end{minipage} & \begin{minipage}[t]{0.57\columnwidth}\raggedright\strut
+The thesis used nested UUID5 identifiers as vendor and device
+identifiers where the vendor UUID is the namespace for the device UUID.
+Implemented as preconditions in the manifest format.\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.37\columnwidth}\raggedright\strut
+Best-before timestamps\strut
+\end{minipage} & \begin{minipage}[t]{0.57\columnwidth}\raggedright\strut
+Can be added as an option or precondition.\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.37\columnwidth}\raggedright\strut
+Cryptographic authenticity\strut
+\end{minipage} & \begin{minipage}[t]{0.57\columnwidth}\raggedright\strut
+Payloads are signed in COSE which ensures authenticity. The image digest
+is also calculated and checked against the digest in the manifest.\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.37\columnwidth}\raggedright\strut
+Authenticated payload type\strut
+\end{minipage} & \begin{minipage}[t]{0.57\columnwidth}\raggedright\strut
+Payload format is mandatory, carried in the signed manifest.\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.37\columnwidth}\raggedright\strut
+Authenticated storage location\strut
+\end{minipage} & \begin{minipage}[t]{0.57\columnwidth}\raggedright\strut
+Storage location is mandatory, carried in the signed manifest.\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.37\columnwidth}\raggedright\strut
+Authenticated remote resource location\strut
+\end{minipage} & \begin{minipage}[t]{0.57\columnwidth}\raggedright\strut
+URL is mandatory in the payloadInfo structure, carried in the signed
+manifest.\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.37\columnwidth}\raggedright\strut
+Secure boot\strut
+\end{minipage} & \begin{minipage}[t]{0.57\columnwidth}\raggedright\strut
+Information enabling secure boot such as image digest and size is
+included in the signed manifest.\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.37\columnwidth}\raggedright\strut
+Authenticated precursor images\strut
+\end{minipage} & \begin{minipage}[t]{0.57\columnwidth}\raggedright\strut
+All precursors must have their URLs and digests included in the signed
+manifest.\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.37\columnwidth}\raggedright\strut
+Authenticated vendor and class IDs\strut
+\end{minipage} & \begin{minipage}[t]{0.57\columnwidth}\raggedright\strut
+Both are implemented as preconditions in the signed manifest.\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.37\columnwidth}\raggedright\strut
+Rights require authenticity\strut
+\end{minipage} & \begin{minipage}[t]{0.57\columnwidth}\raggedright\strut
+Exercising different rights can be achieved through the use of
+certificates (identity), whitelists (coarse-grained access control), and
+tokens (fine-grained access control).\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.37\columnwidth}\raggedright\strut
+Firmware encryption\strut
+\end{minipage} & \begin{minipage}[t]{0.57\columnwidth}\raggedright\strut
+All communication in the architecture is encrypted and the payloads are
+signed. Keys for encryption are handled through certificates and for
+signing through the content key method manifest element.\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.37\columnwidth}\raggedright\strut
+Access control lists\strut
+\end{minipage} & \begin{minipage}[t]{0.57\columnwidth}\raggedright\strut
+Access control is achieved through whitelists of operators and update
+servers and possibly tokens.\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.37\columnwidth}\raggedright\strut
+Encrypted manifests\strut
+\end{minipage} & \begin{minipage}[t]{0.57\columnwidth}\raggedright\strut
+All communication in the architecture is encrypted and signed.\strut
+\end{minipage}\tabularnewline
+\bottomrule
+\end{longtable}

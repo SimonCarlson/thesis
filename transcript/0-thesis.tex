@@ -15,6 +15,7 @@
 \usepackage{microtype} % Long words and line breaking
 \usepackage{hyperref} % For links in table of contents
 \usepackage{color} % For coloring links
+\usepackage[font=normalsize]{caption} % To preserve caption size when shrinking table font size
 
 \makeglossaries
 \newacronym{iot}{IoT}{Internet of Things}
@@ -127,7 +128,7 @@ implemented as a prototype.
 
 The architecture was shown to fulfill the requirements SUIT poses on the architecture and
 information model while being flexible and extensible. The prototype was measured for
-energy consumption, code size, and communication overhead. The client consumed 91343 bytes
+energy consumption, code size, and communication overhead. The client occupied 91343 bytes
 and server 91643 bytes on a Firefly device with 512 KB flash. Transferring image data was
 the largest source of energy consumption during an update procedure where the radio in
 receive mode accounted for up to 83\% of the total image transfer energy consumed in the

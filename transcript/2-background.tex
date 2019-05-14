@@ -17,10 +17,10 @@ Contiki-NG operating system which the updating mechanism will be developed for.
 \label{sec:network}
 Network protocols in IoT networks operate under different circumstances compared to
 traditional computer networks. Whereas traditional networks enjoy high reliability, high
-throughput, and high computational performance IoT networks are defined by their low power
-requirements, low reliability, and low computational performance on edge devices. This
-posts some constraints on the protocols used in IoT as they must properly handle these
-characteristics.
+throughput, and high computational performance, IoT networks are defined by their low
+power requirements, low reliability, and low computational performance on edge devices.
+This posts some constraints on the protocols used in IoT as they must properly handle
+these characteristics.
 
 One of the most widely used network protocol stacks today in traditional networks is based
 on the \gls{ip}. The stack uses \gls{tcp} as a transportation protocol, usually with
@@ -64,7 +64,7 @@ Section~\ref{ssec:oscore} briefly introduces OSCORE. Lastly, sections \ref{ssec:
 and \ref{ssec:ace} briefly introduces the EST-coaps protocol and ACE framework, enabling
 asymmetric cryptography and authorization in an IoT context.
 
-\subsection{UDP}
+\subsection{User Datagram Protocol}
 \label{ssec:udp}
 \acrfull{udp} is a stateless and asynchronous transfer protocol for IP \parencite{rfc768}.
 It does not provide any reliability mechanisms but is instead a best-effort protocol. It
@@ -78,7 +78,7 @@ guarantee the packets arrival. The best-effort approach of UDP is favorable in t
 situations, in addition to UDP being a lightweight protocol requiring a smaller memory
 footprint to implement.
 
-\subsection{DTLS}
+\subsection{Datagram Transport Layer Security}
 \label{ssec:dtls}
 \acrfull{dtls} is a protocol which adds confidentiality and integrity to datagram
 protocols like UDP \parencite{rfc6347}. The protocol is designed to prevent eavesdropping,
@@ -118,7 +118,7 @@ some modifications to the handshake header to make communication over UDP possib
 retransmission timers since the communication is unreliable. Otherwise the DTLS handshake
 is the same as the TLS handshake.
 
-\subsection{CoAP}
+\subsection{Constrained Application Protocol}
 \label{ssec:coap}
 \acrfull{coap} is an application layer protocol designed to be used by constrained devices
 over networks with low throughput and possibly high unreliability for machine-to-machine
@@ -168,7 +168,7 @@ notified by the server when a particular resource changes. This option can be us
 pull or hybrid update architecture, meaning the device does not have to continuously poll
 the server for a new update.
 
-\subsection{CBOR and COSE}
+\subsection{Concise Binary Object Representation and CBOR Object Signing}
 \label{ssec:cbor-and-cose}
 \gls{cbor} aims to be an extensible data format providing very small code sizes
 \parencite{rfc7049}. It supports simple values as well as arrays and maps meaning it is
@@ -178,7 +178,7 @@ resource constrained systems. \gls{cose} defines some basic security services fo
 objects such as encryption and signing \parencite{rfc8152}. COSE is also designed for use
 on constrained devices, as CBOR would primarily be used on these devices.
 
-\subsection{OSCORE}
+\subsection{Object Security for Constrained RESTful Environments}
 \label{ssec:oscore}
 \gls{oscore} is a way of protecting CoAP messages at the application level using COSE
 \parencite{oscore}. When using CoAP secured by DTLS, security is terminated at
@@ -203,7 +203,7 @@ and UDP instead of HTTP, TLS, and TCP, for instance by making use of CoAP's bloc
 and responses to remedy the relatively large sizes of certificates. A corresponding
 profile for OSCORE is in development \parencite{est-oscore}.
 
-\subsection{ACE}
+\subsection{Authorization and Authentication for Constrained Environments}
 \label{ssec:ace}
 \gls{ace} is a framework being standardized for authorization and authentication for IoT
 contexts, based on the OAuth 2.0 framework \parencite{ace}. ACE allows for clients in a
@@ -228,7 +228,7 @@ standardized it should prepare for different parties assuming different roles in
 context of updating devices. Using authorization tokens is a scalable and configurable way
 of achieving that.
 
-\section{SUIT}
+\section{Software Updates for Internet of Things}
 \label{sec:suit}
 The IETF \acrfull{suit} working group aims to define a firmware update solution for IoT
 devices that is interoperable and non-proprietary \parencite{suit}. The working group does
@@ -349,6 +349,7 @@ The proposed mandatory and recommended manifest elements and their brief motivat
 be seen in Table~\ref{tab:manifest-elements}. For the optional elements and more detailed
 motivations, use cases, and requirements refer to \parencite{suit-information-model}.
 
+\begin{small}
 \begin{longtable}[]{@{}lll@{}}
     \caption{The proposed mandatory and recommended manifest elements of the SUIT information model. Adapted from \parencite{suit-information-model}.}
     \label{tab:manifest-elements}\\
@@ -463,6 +464,7 @@ motivations, use cases, and requirements refer to \parencite{suit-information-mo
     \end{minipage}\tabularnewline
     \bottomrule
 \end{longtable}
+\end{small}
 
 As the SUIT architecture aims to be a standardized solution it must account for different
 use cases and different combinations of use cases. As a result many of the mandatory and

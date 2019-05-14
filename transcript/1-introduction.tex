@@ -1,20 +1,19 @@
 \documentclass[0-thesis.tex]{subfiles}
 
 \begin{document}
-\gls{iot} is the notion of connecting physical objects to the
-world-spanning Internet in order to facilitate services and communication both
-machine-to-human and machine-to-machine. By having everything connected from everyday
-appliances to vehicles to critical parts of infrastructure, computing will be ubiquitous
-and the Internet of Things realized. The benefits from the IoT can range from quality of
-life services, such as controlling lights and thermostats from afar, to data gathering
-through wireless sensor networks, to enabling life critical operations such as monitoring
-a pacemaker or traffic system. IoT is a broad definition and fits many different devices
-in many different environments, what they all have in common is that they are physical and
-connected devices.
+\gls{iot} is the notion of connecting physical objects to the world-spanning Internet in
+order to facilitate services and communication both machine-to-human and
+machine-to-machine. By having everything connected from everyday appliances to vehicles to
+critical parts of infrastructure, computing will be ubiquitous and the IoT realized. The
+benefits from the IoT can range from quality of life services, such as controlling lights
+and thermostats from afar, to data gathering through wireless sensor networks, to enabling
+life critical operations such as monitoring a pacemaker or traffic system. IoT is a broad
+definition and fits many different devices in many different environments, what they all
+have in common is that they are physical and connected devices.
 
-The Internet of Things is expected to grow massively in the following years as devices get
-cheaper and more capable. Ericsson expects the amount of IoT connections to reach 22.3
-billion devices in 2024, of which the majority is short-range IoT devices
+The IoT is expected to grow massively in the following years as devices get cheaper and
+more capable. Ericsson expects the amount of IoT connections to reach 22.3 billion devices
+in 2024, of which the majority is short-range IoT devices
 \parencite{ericsson-mobility-report}. However, cellular IoT connections are expected to
 have the highest compound annual growth rate as 4G and new 5G networks enable even more
 use cases for IoT devices.
@@ -24,7 +23,7 @@ intrusions affecting their day to day lives. In 2016 the DNS provider Dyn was at
 a botnet consisting of heterogeneous IoT devices infected by the Mirai malware. Devices
 such as printers and baby monitors were leveraged to launch an attack on Dyn's services
 which affected sites like Airbnb, Amazon, and CNN \parencite{perlroth_2016}. Cardiac
-devices implanted in patients were also discovered to be unsafe, with hackers being able
+devices implanted in patients were also discovered to be at risk, with hackers being able
 to deplete the batteries of pacemakers prematurely \parencite{hern_2017}. These cases and
 many others make it clear that security in IoT is essential, and as IoT is expected to
 grow rapidly insecure devices can cause even more problems in the future.
@@ -70,14 +69,12 @@ and information model proposed by SUIT in order to create and evaluate an updati
 mechanism for battery powered, constrained, and remote IoT devices with a life span
 exceeding five years.
 
-\subsection{Purpose}
-\label{ssec:purpose}
+\subsection{Purpose and Goal}
+\label{ssec:purpose-goal}
 The purpose of the thesis project is to provide an open and interoperable update mechanism
 that complies with the standards suggested by the IETF SUIT working group. This will aid
 other projects trying to secure their IoT devices following accepted standards.
 
-\subsection{Goal}
-\label{ssec:goal}
 The goals of the thesis are to study current solutions and technologies and propose a
 technology agnostic update architecture based on the SUIT architecture, as well as
 proposing lightweight end-to-end protocols that instantiates the architecture, allowing
@@ -90,7 +87,7 @@ The thesis will follow a mix of qualitative and quantitative methodologies. The 
 defines some goals or constraints a suitable updating mechanism should follow, but as
 their proposed architecture is agnostic of any particular technology these goals cannot be
 easily quantified. It is more appropriate to regard them as qualitative properties the
-mechanism should have. In addition there are some relevant measurements, such as memory
+mechanism should have. In addition there are some performance measurements, such as memory
 and power requirements of the updates, that can be used in an evaluation. The quantitative
 part of the evaluation will follow an objective, experimental approach, while the
 qualitative part will follow a interpretative approach.
@@ -100,7 +97,7 @@ qualitative part will follow a interpretative approach.
 As IoT devices become more commonplace their security becomes more important. Incorrect or
 faulty firmware or software can lead to incorrect sensor readings, a common application of
 IoT devices, which in turn can lead to incorrect conclusions. This could have a large
-effect on businesses such as agriculture and healthcare. Insecure communication channels
+impact on businesses such as agriculture and healthcare. Insecure communication channels
 can expose confidential or personal data, something governments and international unions
 are taking more seriously. 
 
