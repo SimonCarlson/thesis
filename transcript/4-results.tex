@@ -169,143 +169,136 @@ alongside their motivations.
     \caption{The SUIT requirements on the information model and their motivations.}
     \label{tab:information-evaluation}\\
     \toprule
-    \begin{minipage}[b]{0.41\columnwidth}\raggedright\strut
+    \begin{minipage}[b]{0.37\columnwidth}\raggedright\strut
     Requirement\strut
-    \end{minipage} & \begin{minipage}[b]{0.53\columnwidth}\raggedright\strut
-    Motivation\strut
-    \end{minipage}\tabularnewline
-    \midrule
-    \endfirsthead
-    \toprule
-    \begin{minipage}[b]{0.41\columnwidth}\raggedright\strut
-    Requirement\strut
-    \end{minipage} & \begin{minipage}[b]{0.53\columnwidth}\raggedright\strut
-    Motivation\strut
-    \end{minipage}\tabularnewline
-    \midrule
-    \endhead
-    \toprule
-    \begin{minipage}[b]{0.41\columnwidth}\raggedright\strut
-    Requirement\strut
-    \end{minipage} & \begin{minipage}[b]{0.53\columnwidth}\raggedright\strut
-    Motivation\strut
-    \end{minipage}\tabularnewline
-    \midrule
-    \endhead
-    \toprule
-    \begin{minipage}[b]{0.41\columnwidth}\raggedright\strut
-    Requirement\strut
-    \end{minipage} & \begin{minipage}[b]{0.53\columnwidth}\raggedright\strut
+    \end{minipage} & \begin{minipage}[b]{0.57\columnwidth}\raggedright\strut
     Motivation\strut
     \end{minipage}\tabularnewline
     \midrule
     \endhead
 
-    \begin{minipage}[t]{0.41\columnwidth}\raggedright\strut Installation
-    instructions\strut \end{minipage} &
-    \begin{minipage}[t]{0.53\columnwidth}\raggedright\strut Installation instructions or
-    any sort of directive is not included in the base manifest structure but can be
-    implemented in the options field. Directives, shown as an option in
-    Figure~\ref{fig:manifest-format}, could be used to indicate decompression algorithms,
-    preparation of bootloader etc while other more specific instructions can be
-    implemented either as a directive or a new kind of option element specific to that
-    deployment.\strut \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.41\columnwidth}\raggedright\strut
-    Override non-critical manifest elements\strut
-    \end{minipage} & \begin{minipage}[t]{0.53\columnwidth}\raggedright\strut
-    The proposed manifest format has the critical elements as a baseline and
-    the rest severed into the options field. Defining new option types
-    allows for new elements in the manifest, but the devices need to be
-    updated for their parsers and manifest checkers to be aware of the new
-    elements.\strut
+    \begin{minipage}[t]{0.37\columnwidth}\raggedright\strut
+    Monotonic sequence numbers\strut
+    \end{minipage} & \begin{minipage}[t]{0.57\columnwidth}\raggedright\strut
+    The manifest contains monotonically increasing sequence numbers to
+    prevent rollback attacks to older version of firmware. Signed manifests
+    ensures an attacker cannot modify an old manifest to just update the
+    sequence number and roll back the device firmware.\strut
     \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.41\columnwidth}\raggedright\strut
-    Modular update\strut
-    \end{minipage} & \begin{minipage}[t]{0.53\columnwidth}\raggedright\strut
-    Supported through precursor images, dependencies, URI aliases, and the
-    use of authorization tokens for more granular updates. For devices with
-    several MCUs and applications, possibly several operating systems,
-    update access can be controlled through authorization tokens such that a
-    vendor can only update their respective part.\strut
+    \begin{minipage}[t]{0.37\columnwidth}\raggedright\strut
+    Vendor and device-type identifiers\strut
+    \end{minipage} & \begin{minipage}[t]{0.57\columnwidth}\raggedright\strut
+    The thesis used nested UUID5 identifiers as vendor and device
+    identifiers where the vendor UUID is the namespace for the device UUID.
+    Implemented as preconditions in the manifest format.\strut
     \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.41\columnwidth}\raggedright\strut
-    Multiple authorizations\strut
-    \end{minipage} & \begin{minipage}[t]{0.53\columnwidth}\raggedright\strut
-    Enforced via operator and update server whitelists and authorization
-    tokens.\strut
+    \begin{minipage}[t]{0.37\columnwidth}\raggedright\strut
+    Best-before timestamps\strut
+    \end{minipage} & \begin{minipage}[t]{0.57\columnwidth}\raggedright\strut
+    Can be added as an option or precondition.\strut
     \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.41\columnwidth}\raggedright\strut
-    Multiple payload formats\strut
-    \end{minipage} & \begin{minipage}[t]{0.53\columnwidth}\raggedright\strut
-    The architecture and manifest format does not make assumptions about the
-    payload formats. The mappings of formats to keys in the manifest is
-    deployment specific and whatever formats a deployment might opt to use
-    can be represented in the manifest together with a SHA256 digest of said
-    format.\strut
+    \begin{minipage}[t]{0.37\columnwidth}\raggedright\strut
+    Cryptographic authenticity\strut
+    \end{minipage} & \begin{minipage}[t]{0.57\columnwidth}\raggedright\strut
+    Payloads are signed in COSE which ensures authenticity. The image digest
+    is also calculated and checked against the digest in the manifest.\strut
     \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.41\columnwidth}\raggedright\strut
-    Prevent confidential information disclosure\strut
-    \end{minipage} & \begin{minipage}[t]{0.53\columnwidth}\raggedright\strut
-    The architecture is based on state-of-the-art security mechanisms and
-    achieves confidentiality through asymmetric cryptography. Both manifest
-    and payload are encrypted and then signed using COSE.\strut
+    \begin{minipage}[t]{0.37\columnwidth}\raggedright\strut
+    Authenticated payload type\strut
+    \end{minipage} & \begin{minipage}[t]{0.57\columnwidth}\raggedright\strut
+    Payload format is mandatory, carried in the signed manifest.\strut
     \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.41\columnwidth}\raggedright\strut
-    Prevent devices from unpacking unknown formats\strut
-    \end{minipage} & \begin{minipage}[t]{0.53\columnwidth}\raggedright\strut
-    Supported through the use of the manifest format element, preconditions,
-    overridable/custom directives, and letting the update server decide if
-    there is a suitable update for a device by matching against its
-    registered profile.\strut
+    \begin{minipage}[t]{0.37\columnwidth}\raggedright\strut
+    Authenticated storage location\strut
+    \end{minipage} & \begin{minipage}[t]{0.57\columnwidth}\raggedright\strut
+    Storage location is mandatory, carried in the signed manifest.\strut
     \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.41\columnwidth}\raggedright\strut
-    Specify version numbers of target firmware\strut
-    \end{minipage} & \begin{minipage}[t]{0.53\columnwidth}\raggedright\strut
-    Since devices are required to register their version alongside vendor
-    and class ID, operators can query device statutes from the update server
-    and then prepare updates matching these categories of devices.\strut
+    \begin{minipage}[t]{0.37\columnwidth}\raggedright\strut
+    Authenticated remote resource location\strut
+    \end{minipage} & \begin{minipage}[t]{0.57\columnwidth}\raggedright\strut
+    URL is mandatory in the payloadInfo structure, carried in the signed
+    manifest.\strut
     \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.41\columnwidth}\raggedright\strut
-    Enable devices to choose between images\strut
-    \end{minipage} & \begin{minipage}[t]{0.53\columnwidth}\raggedright\strut
-    Several images can be specified in a single manifest through the use of
-    either precursors, dependencies, URIs (mirror list), or aliases
-    depending on the specific use case. New options can also be defined
-    capturing this behaviour, such as a new option providing URL/digest
-    pairs intended for parallel storage.\strut
+    \begin{minipage}[t]{0.37\columnwidth}\raggedright\strut
+    Secure boot\strut
+    \end{minipage} & \begin{minipage}[t]{0.57\columnwidth}\raggedright\strut
+    Information enabling secure boot such as image digest and size is
+    included in the signed manifest.\strut
     \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.41\columnwidth}\raggedright\strut
-    Secure boot using manifests\strut
-    \end{minipage} & \begin{minipage}[t]{0.53\columnwidth}\raggedright\strut
-    The thesis has not examined bootloaders, thus this requirement is out of
-    scope. Investigating secure bootloaders could be part of future work in
-    the topic.\strut
+    \begin{minipage}[t]{0.37\columnwidth}\raggedright\strut
+    Authenticated precursor images\strut
+    \end{minipage} & \begin{minipage}[t]{0.57\columnwidth}\raggedright\strut
+    All precursors must have their URLs and digests included in the signed
+    manifest.\strut
     \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.41\columnwidth}\raggedright\strut
-    Decompress on load\strut
-    \end{minipage} & \begin{minipage}[t]{0.53\columnwidth}\raggedright\strut
-    This behaviour can be encoded in the payload format of the manifest, or
-    through the use of a custom directive indicating a compressed payload is
-    stored.\strut
+    \begin{minipage}[t]{0.37\columnwidth}\raggedright\strut
+    Authenticated vendor and class IDs\strut
+    \end{minipage} & \begin{minipage}[t]{0.57\columnwidth}\raggedright\strut
+    Both are implemented as preconditions in the signed manifest.\strut
     \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.41\columnwidth}\raggedright\strut
-    Payload in manifest\strut
-    \end{minipage} & \begin{minipage}[t]{0.53\columnwidth}\raggedright\strut
-    Can be added as the optional payload element. The value would be the
-    data of the payload and the regular payloadInfo element would contain
-    its digest. Worth noting is that for most deployments, including the
-    payload in the manifest will dramatically increase the size of manifest.
-    A manifest parser must be prepared for the difference in size between normal manifest
-    elements and the payload element.\strut
+    \begin{minipage}[t]{0.37\columnwidth}\raggedright\strut
+    Rights require authenticity\strut
+    \end{minipage} & \begin{minipage}[t]{0.57\columnwidth}\raggedright\strut
+    Exercising different rights can be achieved through the use of
+    certificates (identity), whitelists (coarse-grained access control), and
+    tokens (fine-grain access control).\strut
     \end{minipage}\tabularnewline
-    \begin{minipage}[t]{0.41\columnwidth}\raggedright\strut
-    Simple parsing\strut
-    \end{minipage} & \begin{minipage}[t]{0.53\columnwidth}\raggedright\strut
-    As explained in the previous section, the manifest format is simple and
-    easy to parse even for constrained devices.\strut
+    \begin{minipage}[t]{0.37\columnwidth}\raggedright\strut
+    Firmware encryption\strut
+    \end{minipage} & \begin{minipage}[t]{0.57\columnwidth}\raggedright\strut
+    All communication in the architecture is encrypted and the payloads are
+    signed. Keys for encryption are handled through certificates and for
+    signing through the content key method manifest element.\strut
+    \end{minipage}\tabularnewline
+    \begin{minipage}[t]{0.37\columnwidth}\raggedright\strut
+    Access control lists\strut
+    \end{minipage} & \begin{minipage}[t]{0.57\columnwidth}\raggedright\strut
+    Access control is achieved through whitelists of operators and update
+    servers and possibly tokens.\strut
+    \end{minipage}\tabularnewline
+    \begin{minipage}[t]{0.37\columnwidth}\raggedright\strut
+    Encrypted manifests\strut
+    \end{minipage} & \begin{minipage}[t]{0.57\columnwidth}\raggedright\strut
+    All communication in the architecture is encrypted and signed.\strut
     \end{minipage}\tabularnewline
     \bottomrule
 \end{longtable}
+    
+
+%    \caption{The SUIT requirements on the information model and their motivations.}
+%    \label{tab:information-evaluation}\\
+%    \toprule
+%    \begin{minipage}[b]{0.41\columnwidth}\raggedright\strut
+%    Requirement\strut
+%    \end{minipage} & \begin{minipage}[b]{0.53\columnwidth}\raggedright\strut
+%    Motivation\strut
+%    \end{minipage}\tabularnewline
+%    \midrule
+%    \endfirsthead
+%    \toprule
+%    \begin{minipage}[b]{0.41\columnwidth}\raggedright\strut
+%    Requirement\strut
+%    \end{minipage} & \begin{minipage}[b]{0.53\columnwidth}\raggedright\strut
+%    Motivation\strut
+%    \end{minipage}\tabularnewline
+%    \midrule
+%    \endhead
+%    \toprule
+%    \begin{minipage}[b]{0.41\columnwidth}\raggedright\strut
+%    Requirement\strut
+%    \end{minipage} & \begin{minipage}[b]{0.53\columnwidth}\raggedright\strut
+%    Motivation\strut
+%    \end{minipage}\tabularnewline
+%    \midrule
+%    \endhead
+%    \toprule
+%    \begin{minipage}[b]{0.41\columnwidth}\raggedright\strut
+%    Requirement\strut
+%    \end{minipage} & \begin{minipage}[b]{0.53\columnwidth}\raggedright\strut
+%    Motivation\strut
+%    \end{minipage}\tabularnewline
+%    \midrule
+%    \endhead
 
 
 \section{Quantitative Evaluation of Update Architecture}
@@ -401,6 +394,8 @@ validate the ciphertext. Figure~\ref{fig:communication-overhead} shows this disp
 
 \subsection{Code Size}
 \label{ssec:code-size}
+% TODO: Make sure the measurements are up to date and numbers in discussion 
+% (and abstract?) are correct
 When measuring code size the code was compiled with all debug macros set to 0, the
 energest measurements removed, and no other Contiki-NG modules included except CoAP. As a
 point of reference, a bare-bones example was also created. The bare-bones example only
