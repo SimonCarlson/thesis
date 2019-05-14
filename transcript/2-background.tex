@@ -263,7 +263,6 @@ manifest itself, and that both manifest and update image must be distributed in 
 trusted architecture. The draft \parencite{suit-architecture} presents ten qualitative
 requirements this architecture should have:
 
-% TODO: Format as a table? Decide or listen to Shahid/Farhad
 \begin{description}
     \item [Agnostic to how firmware images are distributed:]
             the mechanism should not assume a particular technology is used to distributed
@@ -320,7 +319,7 @@ the firmware can be downloaded from the firmware server. The SUIT architecture d
 enforce a specific method to be used when delivering the manifest and firmware, but states
 that an update mechanism must support both types.
 
-\begin{figure}
+\begin{figure}[h]
     \caption{Distributing both manifest and image through a firmware server.}   
     \label{fig:manifest-image-combined-distribution}
     \includegraphics{images/together.pdf}

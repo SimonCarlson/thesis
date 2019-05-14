@@ -178,6 +178,14 @@ alongside their motivations.
     Motivation\strut
     \end{minipage}\tabularnewline
     \midrule
+    \endfirsthead
+    \toprule
+    \begin{minipage}[b]{0.37\columnwidth}\raggedright\strut
+    Requirement\strut
+    \end{minipage} & \begin{minipage}[b]{0.57\columnwidth}\raggedright\strut
+    Motivation\strut
+    \end{minipage}\tabularnewline
+    \midrule
     \endhead
 
     \begin{minipage}[t]{0.37\columnwidth}\raggedright\strut
@@ -268,42 +276,6 @@ alongside their motivations.
 \end{longtable}
 \end{small}
 
-%    \caption{The SUIT requirements on the information model and their motivations.}
-%    \label{tab:information-evaluation}\\
-%    \toprule
-%    \begin{minipage}[b]{0.41\columnwidth}\raggedright\strut
-%    Requirement\strut
-%    \end{minipage} & \begin{minipage}[b]{0.53\columnwidth}\raggedright\strut
-%    Motivation\strut
-%    \end{minipage}\tabularnewline
-%    \midrule
-%    \endfirsthead
-%    \toprule
-%    \begin{minipage}[b]{0.41\columnwidth}\raggedright\strut
-%    Requirement\strut
-%    \end{minipage} & \begin{minipage}[b]{0.53\columnwidth}\raggedright\strut
-%    Motivation\strut
-%    \end{minipage}\tabularnewline
-%    \midrule
-%    \endhead
-%    \toprule
-%    \begin{minipage}[b]{0.41\columnwidth}\raggedright\strut
-%    Requirement\strut
-%    \end{minipage} & \begin{minipage}[b]{0.53\columnwidth}\raggedright\strut
-%    Motivation\strut
-%    \end{minipage}\tabularnewline
-%    \midrule
-%    \endhead
-%    \toprule
-%    \begin{minipage}[b]{0.41\columnwidth}\raggedright\strut
-%    Requirement\strut
-%    \end{minipage} & \begin{minipage}[b]{0.53\columnwidth}\raggedright\strut
-%    Motivation\strut
-%    \end{minipage}\tabularnewline
-%    \midrule
-%    \endhead
-
-
 \section{Quantitative Evaluation of Update Architecture}
 \label{sec:quant-evaluation}
 This section present the results of a experiment carried out to measure the energy
@@ -356,32 +328,31 @@ client and server over the thirty runs. Figures \ref{fig:client-image-energy} an
 when encrypting, transferring, and decrypting image data per block size, ten runs per
 block size. 
 
-\begin{figure}[h!]
+\begin{figure}[]
     \caption{Average energy consumption for client operations.}
     \label{fig:client-operations-energy}
     \includegraphics[scale=0.65]{images/client-operations-energy.pdf}
 \end{figure}
 
-\begin{figure}[h!]
+\begin{figure}[]
     \caption{Average energy consumption for server operations.}
     \label{fig:server-operations-energy}
     \includegraphics[scale=0.65]{images/server-operations-energy.pdf}
 \end{figure}
 
-\begin{figure}[h!]
+\begin{figure}[]
     \caption{Average energy consumption for client during image transfer.}
     \label{fig:client-image-energy}
     \includegraphics[scale=0.65]{images/client-image-energy.pdf}
 \end{figure}
 
-\begin{figure}[h!]
+\begin{figure}[]
     \caption{Average energy consumption for server during image transfer.}
     \label{fig:server-image-energy}
     \includegraphics[scale=0.65]{images/server-image-energy.pdf}
 \end{figure}
 
-% Force new page so previous graphs appear in order
-\newpage
+\newpage    % Force new page so previous graphs appear in order
 \subsection{Communication Overhead}
 \label{ssec:communication-overhead}
 As discussed in Section~\ref{ssec:prototype-implementation}, some overhead is introduced
@@ -397,8 +368,6 @@ validate the ciphertext. Figure~\ref{fig:communication-overhead} shows this disp
 
 \subsection{Code Size}
 \label{ssec:code-size}
-% TODO: Make sure the measurements are up to date and numbers in discussion 
-% (and abstract?) are correct
 When measuring code size the code was compiled with all debug macros set to 0, the
 energest measurements removed, and no other Contiki-NG modules included except CoAP. As a
 point of reference, a bare-bones example was also created. The bare-bones example only
@@ -408,7 +377,7 @@ project configuration as the other source files. Its source code is found in
 Appendix~\ref{app:bare-bones}. By running the tool \texttt{arm-none-eabi-size} on the
 ELF-files the code size can be obtained, which is shown in Table~\ref{tab:code-size}.
 
-\begin{table}[h!]
+\begin{table}[!t]
 \begin{tabular}{l c r r r l}
 text	&  data	 &  bss	 &  dec	 &  hex&filename\\
 69982	&  1772	 &11303	 &83057	 &14472&bare-bones.elf\\

@@ -24,11 +24,12 @@ areas that the architecture must define were identified:
 
 By putting the five key areas together, Figure~\ref{fig:communication-workflow} shows a
 high-level abstraction of the control flow in the architecture during an update procedure.
-Note that where the SUIT specification would differentiate between the author of an update
-and an operator, the proposed architecture does for simplicity regard them as the same
-entity, the operator. For the same reason, the architecture does not differentiate between
-device operators and network operators. An operator is an entity that tracks device
-statuses and prepares, signs, and sends updates to devices.
+The steps are explained below. Note that where the SUIT specification would differentiate
+between the author of an update and an operator, the proposed architecture does for
+simplicity regard them as the same entity, the operator. For the same reason, the
+architecture does not differentiate between device operators and network operators. An
+operator is an entity that tracks device statuses and prepares, signs, and sends updates
+to devices.
 
 Figure~\ref{fig:communication-workflow} gives a brief introduction to the concepts needed
 to understand the architecture, these concepts are explained in more detail throughout
@@ -503,7 +504,7 @@ Figure~\ref{fig:manifest-format} shows a schematic view of the manifest format t
 proposes using the elements from SUIT. The baseline manifest contains version ID, sequence
 number, precursor images, dependencies, payload information, key method, conditions, and
 options. The current option types are required image list, component identifier, URIs,
-aliases, and directives.
+aliases, payload, and directives.
 
 \begin{figure}
     \caption{A schematic view of the proposed manifest format. The elements themselves are from the SUIT information model specification.}
