@@ -1,3 +1,14 @@
+14/05-19:
+Farhad mailed me his feedback. It was surprisingly few and small comments, however I don't know what I base that judgement on (being pessimistic?) Will fix quickly
+
+I realized I had put the use case requirements in the information model evaluation. Changed it to security requirements, motivated them in the same way. Should probably go through one more time at least
+
+Implemented changes based on Farhad's feedback. Smaller font size in tables did look really nice actually
+
+Fixed most (all) floats, unsure about the last table taking up an entire page... Something will, but maybe it looks odd
+
+Mailed Elena the draft, asked about May 23rd, she confirmed 9:00 would work, just waiting for Shahid now. Should inform Sam (tomorrow perhaps) and give him the draft
+
 13/05-19:
 As soon as dates for presentation gets mentioned I get so stressed. Having to wait for someones approval to book a date with another person with constraints on four people being there is so difficult to handle. Why can't I just pick a date?
 
