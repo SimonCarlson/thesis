@@ -2,7 +2,7 @@
 \begin{document}
 The previous sections proposed the update architecture of the thesis, its key components,
 and security considerations such as identity and access control. Two profiles
-instantiating the architecture were also presented. This section will discuss a prototype
+instantiating the architecture were also presented. This section discusses a prototype
 implementation of the architecture as well as a manifest generator. 
 
 \subsection{Manifest Implementation}
@@ -191,15 +191,15 @@ calculated and compared to the one in the manifest.
 
 \subsection{Summary}
 \label{ssec:implementation-summary}
-This chapter has presented a DTLS/CoAPs prototype of the proposed architecture. The
-prototype is made up of a client and a server developed in Contiki-NG as well as an
-instantiation of the manifest format presented in Section~\ref{ssec:manifest-format}. The
-prototype is based on the pull model, meaning it is client initiated, and goes through the
-steps of registering, receiving a manifest, and receiving image data. It uses COSE
-encryption and pre-shared DTLS keys as COSE signing and certificate support was at the
-time not available in Contiki-NG. It also does not use tokens as it represents a
-monolithic update and not differential update. The next chapter will evaluate the
-architecture in a qualitative manner and the prototype in a quantitative manner in order
-to see if it fulfills the goals of SUIT and contextualize the implementation.
+This chapter presented a DTLS/CoAPs prototype of the proposed architecture. The prototype
+is made up of a client and a server developed in Contiki-NG as well as an instantiation of
+the manifest format presented in Section~\ref{ssec:manifest-format}. The prototype is
+based on the pull model, meaning it is client initiated, and goes through the steps of
+registering, receiving a manifest, and receiving image data. It uses COSE encryption and
+pre-shared DTLS keys as COSE signing and certificate support was at the time not available
+in Contiki-NG. It also does not use tokens as it represents a monolithic update and not
+differential update. The next chapter will evaluate the architecture in a qualitative
+manner and the prototype in a quantitative manner in order to see if it fulfills the goals
+of SUIT and contextualize the implementation.
 
 \end{document}
