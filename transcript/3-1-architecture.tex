@@ -16,8 +16,10 @@ areas that the architecture must define were identified:
 \end{itemize}
 
 \begin{figure}[t]
-    \caption{A high-level view of the control flow in the architecture during an update
-    procedure. Normal face indicates pre-steps, bold face indicates core parts of the architecture, italic face indicates optional parts.}
+    \caption[A high-level view of the control flow in the architecture during an update
+    procedure.]
+        {A high-level view of the control flow in the architecture during an update
+                procedure. Normal face indicates pre-steps, bold face indicates core parts of the architecture, italic face indicates optional parts.}
     \label{fig:communication-workflow}
     \includegraphics{images/update-flow.pdf}
 \end{figure}
@@ -507,7 +509,8 @@ options. The current option types are required image list, component identifier,
 aliases, payload, and directives.
 
 \begin{figure}
-    \caption{A schematic view of the proposed manifest format. The elements themselves are from the SUIT information model specification.}
+    \caption[A schematic view of the proposed manifest format.]
+        {A schematic view of the proposed manifest format. The elements themselves are from the SUIT information model specification.}
     \label{fig:manifest-format}
     \includegraphics{images/manifest-format.pdf}
 \end{figure}
@@ -560,7 +563,8 @@ assume devices are enrolled and registered, and re-enrollment and updating profi
 omitted to make the figures clearer.
 
 \begin{figure}[t]
-    \caption{An operating system vendor technician updates patient wearable in an elderly home. The figure assumes the device is enrolled and registered.}
+    \caption[An operating system vendor technician updates patient wearable in an elderly home.]
+        {An operating system vendor technician updates patient wearable in an elderly home. The figure assumes the device is enrolled and registered.}
     \label{fig:elderly-home}
     \includegraphics{images/use-case-elderly-home.pdf}
 \end{figure}
@@ -587,7 +591,9 @@ unauthorized to perform this update. The thermostat controller rejects the updat
 the light bulb controller accepts it and updates itself.
 
 \begin{figure}[t]
-    \caption{A light bulb vendor technician updates a light bulb controller in a smart
+    \caption[A light bulb vendor technician updates a light bulb controller in a smart
+    home.]
+        {A light bulb vendor technician updates a light bulb controller in a smart
                 home, but the thermostat controller rejects it due to authorization
                 issues. The figure assumes the device is enrolled and registered.}
     \label{fig:smart-home}
@@ -608,7 +614,9 @@ proxy so the authorization server can help verifying the token. After the device
 received an answer, it can proceed applying the update.
 
 \begin{figure}[t]
-    \caption{An on-site devops engineer updates a very constrained, critical temperature
+    \caption[An on-site devops engineer updates a very constrained, critical temperature
+    sensor in an industry plant.]
+        {An on-site devops engineer updates a very constrained, critical temperature
                 sensor in an industry plant. The constrained sensor asks for introspection
                 data in order to verify the update server's token. The figure assumes the device is enrolled and registered.}
     \label{fig:industry}
