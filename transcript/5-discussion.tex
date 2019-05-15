@@ -1,11 +1,6 @@
 \documentclass[0-thesis.tex]{subfiles}
 
 \begin{document}
-This chapter finishes the thesis with conclusions around the results, security
-considerations, and possible future work in the field.
-
-\section{Conclusions}
-\label{sec:Conclusions}
 The thesis has presented a software and firmware update architecture for IoT. The
 architecture is based on requirements developed by the IETF SUIT working group and aims to
 be interoperable and usable for constrained devices using state-of-the art security
@@ -57,14 +52,14 @@ any code for preparing the bootloader, and the server needs stronger logic for h
 device profiles and manifests, but applying the architecture to constrained devices is
 still feasible.
 
-Experiments on energy consumption found that transferring the image data makes up the vast
+Experiments on energy consumption found that receiving the image data makes up the vast
 majority of energy consumed during an update procedure. This is due to the register
-operations and sending and receiving of a manifest transfers, comparatively, very little
-data. Also when the client parses the manifest the operations are entirely local to the
-client, not using any expensive radio operations. During image transfer the largest source
-of energy consumption was the radio in receive mode, which for the client was up to 83\%
-and server 81\% of total energy consumption during image transfer. The amount of time thus
-energy needed for the transfer scaled linearly with the size of the data being sent,
+operations and sending and receiving of a manifest transfers uses, comparatively, very
+little data. Also when the client parses the manifest the operations are entirely local to
+the client, not using any expensive radio operations. During image transfer the largest
+source of energy consumption was the radio in receive mode, which for the client was up to
+83\% and server 81\% of total energy consumption during image transfer. The amount of time
+thus energy needed for the transfer scaled linearly with the size of the data being sent,
 meaning opportunities to send less data are of importance when it comes to saving energy.
 
 The architecture introduced some communication overhead on the application layer when
