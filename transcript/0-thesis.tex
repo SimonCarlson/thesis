@@ -15,7 +15,7 @@
 \usepackage{microtype} % Long words and line breaking
 \usepackage{hyperref} % For links in table of contents
 \usepackage{color} % For coloring links
-\usepackage[font=normalsize]{caption} % To preserve caption size when shrinking table font size
+\usepackage[font=small]{caption} % To preserve caption size when shrinking table font size
 
 \makeglossaries
 \newacronym{iot}{IoT}{Internet of Things}
@@ -128,13 +128,14 @@ implemented as a prototype.
 The architecture was shown to fulfill the requirements SUIT poses on the architecture and
 information model while being flexible and extensible. The prototype was measured for
 energy consumption, code size, and communication overhead. The client occupied 91343 bytes
-and server 91643 bytes on a Firefly device with 512 KB flash. Transferring image data was
-the largest source of energy consumption during an update procedure where the radio in
-receive mode accounted for up to 83\% of the total image transfer energy consumed in the
-client and 81\% on the server. The thesis found that applying the proposed architecture to
-constrained systems is feasible and would enable updates in heterogeneous IoT networks
-while maintaining the minimum level of security sought for, with the flexibility of
-creating a more rigorous system within the bounds of the architecture.\\
+and server 91643 bytes, including the operating system, on a Firefly device with 512 KB
+flash. Transferring image data was the largest source of energy consumption during an
+update procedure where the radio in receive mode accounted for up to 83\% of the total
+image transfer energy consumed in the client and 81\% on the server. The thesis found that
+applying the proposed architecture to constrained systems is feasible and would enable
+updates in heterogeneous IoT networks while maintaining the minimum level of security
+sought for, with the flexibility of creating a more rigorous system within the bounds of
+the architecture.\\
 
 \noindent\keywords{IoT, industrial IoT, security, Contiki-NG, embedded systems, 
                     software updates}
@@ -165,14 +166,15 @@ creating a more rigorous system within the bounds of the architecture.\\
         Arkitekturen visades uppfylla de krav SUIT ställer på en arkitektur och
         informationsmodell samt var flexibel och kunde utökas. Prototypen utvärderades för
         energikonsumption, kodstorlek, och kommunikations-overhead. Klienten använde sig
-        av 91343 bytes och servern av 91643 bytes på en Firefly-enhet med 512 KB flash.
-        Överföringen av avbildningar var den största källan av energikonsumption under en
-        uppdateringsprocedur där den mottagande radion stod för upp till 83\% av den
-        totala energin i klienten och up till 81\% på servern. Uppsatsen fann att det är
-        rimligt att applicera den föreslagna arkitekturen på resursbegränsade enheter. Det
-        skulle göra uppdateringar för heterogena IoT-nätverk möjliga samtidigt som den
-        minsta acceptabla säkerhetsnivån upprätthålls, med möjligheter att skapa ett mer
-        rigoröst system inom ramarna för arkitekturen.\\
+        av 91343 bytes och servern av 91643 bytes, inklusive operativsystemet, på en
+        Firefly-enhet med 512 KB flash. Överföringen av avbildningar var den största
+        källan av energikonsumption under en uppdateringsprocedur där den mottagande
+        radion stod för upp till 83\% av den totala energin i klienten och up till 81\% på
+        servern. Uppsatsen fann att det är rimligt att applicera den föreslagna
+        arkitekturen på resursbegränsade enheter. Det skulle göra uppdateringar för
+        heterogena IoT-nätverk möjliga samtidigt som den minsta acceptabla säkerhetsnivån
+        upprätthålls, med möjligheter att skapa ett mer rigoröst system inom ramarna för
+        arkitekturen.\\
 
         \noindent\nyckelord{IoT, industriell IoT, säkerhet, Contiki-NG, inbyggda system,
                             mjukvaruuppdateringar}
