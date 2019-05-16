@@ -1,3 +1,51 @@
+16/05-19:
+TSCH and DTLS does not work. Best results so far is that they exchange keys and nothing more. It fits though, somehow, but without UIP fragmentation. I hope that isn't needed...
+
+How should I structure the presentation? Maybe pick out the most important parts from each section? Many things will have to be omitted but that's fine. Consider what the most important parts that constitutes the thesis are and present just those?
+
+Got the templates for assessment and opposition. Should probably have the assessment thing with me when I present, I don't really understand how it works but wanna be on the safe side.
+
+DTLS and TSCH is apparently very tricky. Joel put me in touch with Nicolas who has managed to use both at the same time, I hope he can help (yet to answer).
+
+Sent the current draft (old results) to Elena and Farhad. Also gave Elena information about the presentation so she can announce it.
+
+Made it so the chunk sizes in the client and on the server works based on the project conf chunk size. Can send chunks of 32 or 64.
+
+Turns out DTLS cannot handle chunk sizes of 64 without fragmentation, and I cannot fit all three of fragmentation, TSCH, and DTLS
+
+Spoke to Niclas about TSCH and DTLS. He doesn't know much about it but gave some helpful suggestions. It seems, through TSCH logging, that the server just stops receiving and transferring messages at some point when using DTLS. Tried increasing incoming buffer size to no avail.
+
+Response from Nicolas: TSCH latency can be adjusted through ORCHESTRA_CONF_UNICAST_PERIOD (should be prime). RAM can be doubled by disabling sleep mode 2 (DLPM?) through LPM_CONF_MAX_PM 1, limiting it to sleep mode 1 (LPM?). 
+
+Debugging the DTLS and TSCH thing for nine hours today. No results. Tips from Niclas and Nicolas did not seem to help. Maybe I'm missing something. But no progress.
+
+15/05-19:
+Changed header in results tables
+
+Included mention of operating system in abstract (code sizes)
+
+Removed the conclusions header
+
+Decreased font size in headers, better readability
+
+Apparently Contiki-NG does not use time slotted channel hopping as a default. This means the receiver will be on a much larger portion of the time. Enabling it would cause the energy consumption by the radio in receive mode to be relative smaller and the transfer mode relatively larger. CPU times should be completely unaffected I believe. I cannot for the life of me manage to enable it. Despite changing memory allocator for the parser and eliminating about 1 K bytes in the stack region, TSCH and its service consumes so much memory. I am 688 bytes short, despite allocating roughly 500 in my client... I don't undestand
+
+Maybe it's not too horrible if I present the setup properly, i.e. that I'm using the default MAC settings. Reasoning why is just that I didn't know, and didn't become aware of it until after the presentation was booked and I've gotten the draft approved and everything. It feels horrible
+
+Still, the current results would have to be presented with it mind and with the note that relative receive energy use should go down and transfer energy use go up. It weakens the point of delving into differential updates from an energy consumption view but that's still valid because of use cases, stronger authentication model, and overhead.
+
+Have to speak to Shahid. Until I can catch him, finish whatever else with the report.
+
+Spoke to Shahid. For the presentation it is ok but still less good. I will have time after to fix it, meaning it really has to be fixed...
+
+Will get feedback from Elena. Priority is to fix that and give Sam draft tomorrow. Prepare presentation. Try to fix the code asap. Finish the thesis.
+
+Feedback from Elena was very positive. She had just a few corrections about tense mainly. She complimented me on my writing. Felt nice.
+
+I have TSCH working in my application and server. Unbelievable. I'm actually getting DLPM measurements now, mA for that? Power mode 3? Introduced CoAP bug where the first register message is not responded to, inflates (CPU) energest register numbers for client.
+
+In order to fit TSCH UIP fragmenting had to be turned off. This in turn means sending vendor id, class id, and version as a URI query does not work (breaks without fragmentation). I did not figure out how to receive block-wise messages at the server. Thus, the server just recieves the first parts of the attributes and writes very little to a profile. The profile was just for concept anyways and is not used, hence I opted to just continue with the evaluation.
+
 14/05-19:
 Farhad mailed me his feedback. It was surprisingly few and small comments, however I don't know what I base that judgement on (being pessimistic?) Will fix quickly
 
