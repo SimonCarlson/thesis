@@ -1,0 +1,84 @@
+\begin{longtable}[]{@{}ll@{}}
+\toprule
+\begin{minipage}[b]{0.41\columnwidth}\raggedright\strut
+Requirement\strut
+\end{minipage} & \begin{minipage}[b]{0.53\columnwidth}\raggedright\strut
+Description\strut
+\end{minipage}\tabularnewline
+\midrule
+\endhead
+\begin{minipage}[t]{0.41\columnwidth}\raggedright\strut
+Agnostic to how firmware images are distributed\strut
+\end{minipage} & \begin{minipage}[t]{0.53\columnwidth}\raggedright\strut
+The mechanism should not assume a particular technology is used to
+distributed manifests and images, but instead be able to be carried over
+different mediums.This means decisions about formats and distribution
+methods must not rely on features of a particular technology.\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.41\columnwidth}\raggedright\strut
+Friendly to broadcast delivery\strut
+\end{minipage} & \begin{minipage}[t]{0.53\columnwidth}\raggedright\strut
+The mechanism should be broadcast friendly, meaning the mechanism can
+not be reliant on security on the transport layer or below. Also,
+devices receiving broadcast updates not meant for them should not
+incorrectly apply the update.\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.41\columnwidth}\raggedright\strut
+Use state-of-the-art security mechanisms\strut
+\end{minipage} & \begin{minipage}[t]{0.53\columnwidth}\raggedright\strut
+The SUIT specification assumes a PKI is in place. The PKI allows for
+trusted communication.\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.41\columnwidth}\raggedright\strut
+Rollback attacks must be prevented\strut
+\end{minipage} & \begin{minipage}[t]{0.53\columnwidth}\raggedright\strut
+The manifest should contain metadata such as monotonically increasing
+sequence numbers and best-before timestamps to avoid rollback
+attacks.\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.41\columnwidth}\raggedright\strut
+High reliability\strut
+\end{minipage} & \begin{minipage}[t]{0.53\columnwidth}\raggedright\strut
+The act of upgrading an image should not cause the device to break. This
+is an implementation requirement.\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.41\columnwidth}\raggedright\strut
+Operate with a small bootloader\strut
+\end{minipage} & \begin{minipage}[t]{0.53\columnwidth}\raggedright\strut
+The bootloader should be minimal. This is also an implementation
+requirement.\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.41\columnwidth}\raggedright\strut
+Small parser\strut
+\end{minipage} & \begin{minipage}[t]{0.53\columnwidth}\raggedright\strut
+It must be easy to parse the fields of the update manifest as large
+parser can get quite complex. Validation of the manifest will happen on
+the constrained devices which further motivates a small parser and thus
+less complex manifests.\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.41\columnwidth}\raggedright\strut
+Minimal impact on existing firmware formats\strut
+\end{minipage} & \begin{minipage}[t]{0.53\columnwidth}\raggedright\strut
+The update mechanism itself must not make assumptions of the current
+format of firmware images, but be able to support different types of
+firmware image formats.\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.41\columnwidth}\raggedright\strut
+Robust permissions\strut
+\end{minipage} & \begin{minipage}[t]{0.53\columnwidth}\raggedright\strut
+Updates must be authorized before they are applied, and different
+configurations might have different requirements for authorization. The
+architecture should enable a flexible and robust permission model.\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.41\columnwidth}\raggedright\strut
+Operating modes\strut
+\end{minipage} & \begin{minipage}[t]{0.53\columnwidth}\raggedright\strut
+The draft presents three broad modes of updates: client-initiated
+updates, server-initiated updates, and hybrid updates, where hybrids are
+mechanisms that require interaction between the device and firmware
+provider before updating. The thesis will look into all three of these
+broad classes. Some classes may be preferred over others based on the
+technologies chosen in the thesis.\strut
+\end{minipage}\tabularnewline
+\bottomrule
+\end{longtable}
