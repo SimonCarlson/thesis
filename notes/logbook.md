@@ -1,3 +1,14 @@
+17/05-19:
+I don't know if I can solve the TSCH and DTLS issue. I created a minimal example only sending one request and nothing else. The server gets stuck after "server hello verify was sent" and at the same time the client reports udp: bad checksum. Not using TSCH does not cause this, not using TSCH with DTLS does not cause this. Only TSCH and DTLS causes this. It does not seem to be related to the application, but is an issue in the OS itself. 
+
+Asked for help in Gitter, hopefully someone picks it up. Saw they released a new version, 4.3, cloned it and tried my minimal example, no visible difference.
+
+Running it with and without TSCH but always with DTLS: it looks basically identical up until the point the servers send a verify hello message and the client complains about bad checksum. Is it something in TSCH that causes the server hello verify to break? Fragmenting? I don't think that's a consideration for the MAC-layer. SICSLOWPAN_CONF_FRAG 1 still causes bad checksum. Dramatically increasing QUEUEBUF_CONF_NUM (3 to 16) still causes bad checksum. TSCH_CONF_MAX_INCOMING_PACKETS 16 (from 4) does not help. TSCH_SCHEDULE_CONF_MAX_SLOTFRAMES 16 (from 4) does not help. TSCH_PACKET_EACK_WITH_SRC_ADDR 1 (from 0) does not help. TSCH_CCA_ENABLED 1 (from 0) does not help. TSCH_RADIO_ON_DURING_TIMESLOT 1 (from 0) does not help.
+
+Setting TSCH_CONF_MAX INCOMING_PACKETS 16, TSCH_SCHEDULE_CONF_MAX_SLOTFRAMES 16, TSCH_CCA_ENABLED 1, and TSCH_RADIO_ON_DURING_TIMESLOT 1 together does not help.
+
+No progress today.
+
 16/05-19:
 TSCH and DTLS does not work. Best results so far is that they exchange keys and nothing more. It fits though, somehow, but without UIP fragmentation. I hope that isn't needed...
 
