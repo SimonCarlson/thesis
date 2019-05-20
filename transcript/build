@@ -6,5 +6,6 @@ echo "Running biber"
 biber 0-thesis | grep -v 'INFO - '
 echo "Biber finished"
 pdflatex -interaction batchmode -halt-on-error 0-thesis.tex | grep '^!.*' -A200 --color=always
+pdflatex -interaction batchmode -halt-on-error 0-thesis.tex | grep '^!.*' -A200 --color=always
 rm 0-thesis.aux 0-thesis.bbl 0-thesis.bcf 0-thesis.blg 0-thesis.run.xml 0-thesis.toc
 rm 0-thesis.acn 0-thesis.acr 0-thesis.alg 0-thesis.ist 0-thesis.lof 0-thesis.lol 0-thesis.lot
