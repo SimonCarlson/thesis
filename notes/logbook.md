@@ -1,3 +1,14 @@
+20/5-19:
+Got opposition report and feedback from Sam. Nice to have a native speaker correct the language. Some things are obvious must fix, such as proper delimitations of the work, removing some of the repeated content, and moving experimental setup into the implementation section. Others I'm not sure about. The work is based on SUIT as that is the entire premise of the thesis project (it has to start somewhere) and SUIT itself contains a lot of motivation around threats and issues concerning updates. I don't feel I would do a better job describing these things or that copying them into my thesis would add anything to it, hence explicitly mentioning these things are in SUIT.  I feel the security considerations mentioned are specific to my protocol/implementation, however I might find some more from SUIT. 
+
+Way forward: completely prepare the presentation. Fill in the assessment template. Start working on Sam's feedback (although leave a copy of the thesis submitted for presentation). Start looking at TSCH and DTLS again.
+
+Presentation is at ~21 minutes rehearsed but I'm talking very quickly. I wonder if it's even possible to cut more content at this point. Key management, profiles, and authorization are all really key. Roles are short already. Update handling, just mention it's not really covered but as long as you store parts of the manifest you're good? Going through the requirements of SUIT takes a lot of time but I have to present my results. I don't feel the life cycle is that important for the presentation.
+
+Mailed Elena, she did not think of the assessment template as necessary. It is for grading, but nowadays thesis projects are P/F. It is sufficient to have examiners mail her of my participation as an active listener. Where do I find these projects? Not many are posted on Canvas. Should start looking.
+
+Fixed the build script so ToC includes bibliography.
+
 17/05-19:
 I don't know if I can solve the TSCH and DTLS issue. I created a minimal example only sending one request and nothing else. The server gets stuck after "server hello verify was sent" and at the same time the client reports udp: bad checksum. Not using TSCH does not cause this, not using TSCH with DTLS does not cause this. Only TSCH and DTLS causes this. It does not seem to be related to the application, but is an issue in the OS itself. 
 
