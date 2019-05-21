@@ -3,41 +3,40 @@
 \begin{document}
 \gls{iot} is the notion of connecting physical objects to the world-spanning Internet in
 order to facilitate services and communication both machine-to-human and
-machine-to-machine. By having everything connected from everyday appliances to vehicles to
-critical parts of infrastructure, computing will be ubiquitous and the IoT realized. The
-benefits from the IoT can range from quality of life services, such as controlling lights
-and thermostats from afar, to data gathering through wireless sensor networks, to enabling
-life critical operations such as monitoring a pacemaker or traffic system. IoT is a broad
-definition and fits many different devices in many different environments, what they all
-have in common is that they are physical and connected devices.
+machine-to-machine. By having everything connected, from everyday appliances to vehicles
+to critical parts of infrastructure, computing will be ubiquitous and the IoT realized.
+The benefits of the IoT can range from quality of life services, such as controlling
+lights and thermostats from afar, to data gathering through wireless sensor networks, to
+enabling life critical operations such as monitoring a pacemaker or traffic system. IoT is
+a broad definition and fits many different devices in many different environments. What
+they all have in common is that they are physical and connected devices.
 
 The IoT is expected to grow massively in the following years as devices get cheaper and
 more capable. Ericsson expects the amount of IoT connections to reach 22.3 billion devices
-in 2024, of which the majority is short-range IoT devices
+in 2024, of which the majority are short-range IoT devices
 \parencite{ericsson-mobility-report}. However, cellular IoT connections are expected to
 have the highest compound annual growth rate as 4G and new 5G networks enable even more
 use cases for IoT devices.
 
-In recent years the general public has become increasingly aware of digital attacks and
+In recent years, the general public has become increasingly aware of digital attacks and
 intrusions affecting their day to day lives. In 2016 the DNS provider Dyn was attacked by
 a botnet consisting of heterogeneous IoT devices infected by the Mirai malware. Devices
 such as printers and baby monitors were leveraged to launch an attack on Dyn's services
 which affected sites like Airbnb, Amazon, and CNN \parencite{perlroth_2016}. Cardiac
-devices implanted in patients were also discovered to be at risk, with hackers being able
-to deplete the batteries of pacemakers prematurely \parencite{hern_2017}. These cases and
-many others make it clear that security in IoT is essential, and as IoT is expected to
+devices implanted in patients were also discovered to be at risk, with attackers being
+able to deplete the batteries of pacemakers prematurely \parencite{hern_2017}. These cases
+and many others make it clear that security in IoT is essential, and as IoT is expected to
 grow rapidly insecure devices can cause even more problems in the future.
 
 In addition to malware there are many other security concerns in IoT networks. These
 issues include authentication, access control, multi-protocol networking, and updates
-\parencite{jing2014, hossain2015, alrawais2017}. Many security issues are results of the
-nature of IoT devices, for instance not being able to implement complex security
+\parencite{jing2014, hossain2015, alrawais2017}. Many security issues are the result of
+the nature of IoT devices, for instance not being able to implement complex security
 mechanisms on devices due to software or hardware constraints. This means security
-solutions for IoT must be lightweight and designed specifically with IoT in mind and not
-traditional networks.
+solutions for IoT must be lightweight and designed specifically with IoT in mind.
 
 Security in IoT is also closely related to its business potential. In a study by Bain \&
-Company, the largest barrier for Internet of Things adaptation was security concerns, and
+Company, the largest barrier for Internet of Things adoption was security concerns, and
 customers would buy an average of 70\% more IoT devices if they were secured
 \parencite{ali_bosche_ford_2018}. Despite security being lacking today in IoT, the field
 is expected to grow rapidly and an increase in unsecured devices could spell disaster.
@@ -46,24 +45,22 @@ prevent future attacks. But what about the devices currently employed without se
 devices in which security vulnerabilities are discovered after deployment? They need to be
 updated and patched in order to fix these vulnerabilities, but sending a technician to
 each and every of the predicted 22.3 billion devices is not feasible. These devices would
-need secure and remote updates which is a non-trivial task.
+need secure and remote updates.
 
 \section{Problem Statement}
 \label{sec:problem-statement}
 There is a need for secure software and firmware updates for IoT devices as
-vulnerabilities must be patched. For many IoT devices this mean patches must be applied
-over long distances and possibly unreliable communication channels as sending a technician
-to each and every device is unfeasible. There are non-open, proprietary solutions
-developed for specific devices but no open and interoperable standard. The \gls{ietf}
-\gls{suit} working group aims to define an architecture for such a mechanism without
-defining new transport, discovery, or security mechanisms \parencite{suit}. By expanding
-upon the work of the SUIT group, a standardized update mechanism suitable for battery
-powered, constrained, and remote IoT devices can be developed.
+vulnerabilities must be patched. There are closed, proprietary solutions developed for
+specific devices but no open and interoperable standard. The \gls{ietf} \gls{suit} working
+group aims to define an architecture for such a mechanism without defining new transport,
+discovery, or security mechanisms \parencite{suit}. By expanding upon the work of the SUIT
+group, a standardized update mechanism suitable for battery-powered, constrained, and
+remote IoT devices can be developed.
 
 \subsection{Problem}
 \label{ssec:problem}
 The thesis aims to investigate the problem "How can the SUIT specification be applied to
-develop a technology agnostic and interoperable update architecture for heterogeneous
+develop a technology-agnostic and interoperable update architecture for heterogeneous
 networks of Internet of Things devices?". The thesis project will examine the architecture
 and information model proposed by SUIT in order to create and evaluate an updating
 mechanism for battery powered, constrained, and remote IoT devices with a life span
@@ -84,13 +81,13 @@ the protocols in an IoT testbed, as well as a thesis report.
 \section{Methodologies}
 \label{sec:methodologies}
 The thesis will follow a mix of qualitative and quantitative methodologies. The SUIT group
-defines some goals or constraints a suitable updating mechanism should follow, but as
-their proposed architecture is agnostic of any particular technology these goals cannot be
-easily quantified. It is more appropriate to regard them as qualitative properties the
-mechanism should have. In addition there are some performance measurements, such as memory
-and power requirements of the updates, that can be used in an evaluation. The quantitative
-part of the evaluation will follow an objective, experimental approach, while the
-qualitative part will follow a interpretative approach.
+defines some goals or constraints that a suitable updating mechanism should follow, but as
+their proposed architecture is agnostic of any particular technology, these goals cannot
+be easily quantified. It is more appropriate to regard them as qualitative properties the
+mechanism should have. In addition, there are some performance measurements, such as
+memory and power requirements of the updates, that can be used in an evaluation. The
+quantitative part of the evaluation will follow an objective, experimental approach, while
+the qualitative part will follow a interpretative approach.
 
 \section{Risks, Ethics, and Sustainability}
 \label{sec:risks-ethics-sustainability}
@@ -104,13 +101,13 @@ are taking more seriously.
 As these devices might be connected on networks with other computers such as laptops, a
 compromised IoT device can cause an attack to proliferate throughout an entire network.
 This can affect other IoT devices as well as traditional computers, putting every
-connected device at risk. Furthermore hacked devices can leak data to attackers and cause
+connected device at risk. Furthermore, hacked devices can leak data to attackers and cause
 service disruptions. All of these risks and more have to be accounted for as IoT is
 expected to boom.
 
 By providing updates for devices their life expectancy can increase. As IoT devices are
 produced in the billions, increasing the lifespan of devices is important from a
-sustainability perspective. If devices cannot be updated but instead have to be completely
+sustainability perspective. If devices cannot be updated, but instead have to be completely
 replaced often it is a waste of resources. Updating devices is a crucial part in achieving
 efficiency in how IoT devices are used.
 
@@ -136,14 +133,14 @@ SWUpdate, Mender targets more capable devices than SUIT focuses on.
 
 \textbf{MCUboot} is a secure bootloader for 32-bit microcontrollers released under the
 Apache-2.0 license \parencite{MCUboot}. It aims to define a common bootloader
-infrastructure as to enable secure software upgrades and is operating system and hardware
-independent. It does not however deal with transport of updates at all as it is only a
-bootloader.
+infrastructure as to enable secure software upgrades and is operating system-and
+hardware-independent. It does not, however, deal with transport of updates at all, as it
+is only a bootloader.
 
 \section{Outline}
 \label{sec:outline}
-Chapter 2 will provide the relevant background about the used protocols and operating
-system as well as the SUIT specification. Following that, Chapter 3 presents the proposed
+Chapter 2 will provide the relevant background about the protocols and operating system
+used as well as the SUIT specification. Following that, Chapter 3 presents the proposed
 architecture of the thesis, a life cycle approach for IoT updates, examples of profiles
 for implementing the architecture, and a description of a prototype implementation.
 Chapter 4 shows the results from evaluating the proposed architecture in both a
