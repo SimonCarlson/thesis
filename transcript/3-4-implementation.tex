@@ -7,15 +7,13 @@ implementation of the architecture, as well as a manifest generator.
 
 \subsection{Manifest Implementation}
 \label{ssec:manifest-implementation}
-As manifests contain certain information difficult for humans to provide such as
-monotonically increasing sequence numbers and hash digests, a manifest generator was
-created to test the prototype \parencite{manifest-generator}. It is a Python script which
-accepts information about vendor and class namespace, version, image file, and associated
-URL, in order to generate and format a manifest both in JSON and CBOR. The resulting
-manifest follows the format specified in Section~\ref{ssec:manifest-format}, and features
-all required fields, although are some left blank. It is a bare-bones manifest containing
-only the required information for a singular, monolithic update. There are no dependencies
-or options specified.
+A manifest generator was created to test the prototype \parencite{manifest-generator}. It
+is a Python script which accepts information about vendor and class namespace, version,
+image file, and associated URL, in order to generate and format a manifest both in JSON
+and CBOR. The resulting manifest follows the format specified in
+Section~\ref{ssec:manifest-format}, and features all required fields, although are some
+left blank. It is a bare-bones manifest containing only the required information for a
+singular, monolithic update. There are no dependencies or options specified.
 
 The manifest is a JSON map featuring the required elements shown in
 Figure~\ref{fig:manifest-format}. The elements are in the same order as in the figure, but

@@ -32,7 +32,7 @@ different protocols of the DTLS profile will be used. All communication to and f
 device is dependent on DTLS for asymmetric cryptography. The only exception is the
 enrollment procedure, which will require a pre-shared key, as discussed in
 Section~\ref{ssec:key-management}. The communication protocols in the non-constrained part
-of the architecture are suggestions and not part of the profile.
+of the architecture are suggestions, and not part of the profile.
 
 \begin{figure}[h]
     \caption[The various protocols used in the DTLS profile.]
@@ -55,10 +55,10 @@ Generating vendor and class IDs should be done so that devices get unique identi
 devices with the same names from different vendors do not clash. For this purpose,
 \textbf{UUIDs} can be used \parencite{rfc4122}. Version 3 and 5 of UUID are "name-based"
 versions meaning they operate in a given namespace. By using a registered domain name of
-the vendor, which is already guaranteed to be unique, as namespace a unique UUID can be
-generated for that vendor. By using the vendor UUID as the namespace for the class IDs,
-devices from different vendors can share names but still have different class IDs. A
-hierarchical namespace structure is suggested by SUIT.
+the vendor as namespace a unique UUID can be generated for that vendor. By using the
+vendor UUID as the namespace for the class IDs, devices from different vendors can share
+names but still have different class IDs. A hierarchical namespace structure is suggested
+by SUIT.
 
 Section 4.3 of the UUID specification states "Choose either MD5 or SHA-1 as the hash
 algorithm; If backward compatibility is not an issue, SHA-1 is preferred". This means
@@ -87,10 +87,7 @@ server.
 
 Figure~\ref{fig:oscore-profile} shows where in the constrained part of the architecture
 the different protocols of the OSCORE profile will be used. All communication between
-devices is dependent on OSCORE. The only exception is the enrollment procedure which will
-require a pre-shared key as discussed in Section~\ref{ssec:key-management}. The
-communication protocols in the non-constrained part of the architecture are suggestions,
-and not part of the profile. 
+devices is dependent on OSCORE with the exception of the enrollment procedure.
 
 \begin{figure}[t]
     \caption[The various protocols used in the OSCORE profile.]
@@ -149,7 +146,7 @@ using registered vendor domains, EST with its corresponding profile for enrollme
 ACE with its corresponding profile for authorization. Payloads are encoded and signed
 using CBOR and COSE for both approaches, ensuring integrity.
 
-With the proposed profiles, a prototype can be implemented and evaluated. Implementation
-of a prototype is the topic of the next section.
+With the proposed profiles, a prototype can be implemented and evaluated, which is the
+topic of the next section.
 
 \end{document}

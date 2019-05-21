@@ -99,9 +99,9 @@ their corresponding motivations from the viewpoint of the proposed architecture.
     \end{minipage} & \begin{minipage}[t]{0.53\columnwidth}\raggedright\strut
     This is an implementation specific-requirement, however the storage
     element of the manifest aids in achieving safe storage of a new image.
-    After a successful update, devices are to re-register at servers. No
-    acknowledgment means the server knows the update still must be applied,
-    thus an interrupted update can be redistributed.\strut
+    After a successful update, devices are to re-register at servers. Until 
+    the re-registration has occurred, the update might be redistributed. 
+    This means an interrupted update can be rectified.\strut
     \end{minipage}\tabularnewline
     \begin{minipage}[t]{0.41\columnwidth}\raggedright\strut
     Operate with a small bootloader\strut

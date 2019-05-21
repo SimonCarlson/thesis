@@ -19,7 +19,7 @@ Network protocols in IoT networks operate under different circumstances compared
 traditional computer networks. Whereas traditional networks enjoy high reliability, high
 throughput, and high computational performance, IoT networks are defined by their low
 power requirements, low reliability, and low computational performance on edge devices.
-This puts some constraints on the protocols used in, IoT as they must properly handle
+This puts some constraints on the protocols used in IoT, as they must properly handle
 these characteristics.
 
 One of the most widely used network protocol stacks today in traditional networks is based
@@ -29,9 +29,7 @@ however, poorly suited for IoT networks, as it is a connection based, stateful p
 which tries to ensure the guaranteed delivery of packets in the correct order. There is
 also advanced congestion control mechanisms in TCP which are hard to apply on unreliable
 low-bandwidth networks. IoT networks often utilize \gls{udp} as a transport protocol
-instead. UDP is also an IP-based protocol but is connectionless and less reliable than
-TCP, performing on a best-effort level instead. Despite being less reliable, UDP often
-performs better in IoT contexts.
+instead.
 
 As TLS is based on the same assumptions as TCP it is unsuitable for UDP networks. UDP
 networks still need confidentiality and integrity through some means and thus use
@@ -174,7 +172,7 @@ the server for a new update.
 easy to map to and from JSON while being more compact. It can be used to encode the most
 common data formats from Internet standards while being easy to parse, even for resource
 constrained systems. \gls{cose} defines some basic security services for CBOR objects such
-as encryption and signing \parencite{rfc8152}. COSE is also designed for use on
+as encryption and signing \parencite{rfc8152}. It is also designed for use on
 constrained devices, as CBOR would primarily be used on these devices.
 
 \subsection{Object Security for Constrained RESTful Environments}
@@ -310,8 +308,8 @@ imposed on the architecture by SUIT.
         Rollback attacks must be prevented\strut
         \end{minipage} & \begin{minipage}[t]{0.53\columnwidth}\raggedright\strut
         The manifest should contain metadata such as monotonically increasing
-        sequence numbers and best-before timestamps to avoid rollback
-        attacks.\strut
+        sequence numbers and best-before timestamps to avoid having devices roll back
+        to older, vulnerable versions.\strut
         \end{minipage}\tabularnewline
         \begin{minipage}[t]{0.41\columnwidth}\raggedright\strut
         High reliability\strut

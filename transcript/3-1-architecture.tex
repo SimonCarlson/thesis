@@ -137,9 +137,10 @@ the device POST vendor and class IDs and version to some registration endpoint.
 Furthermore, devices must be able to pull updates from the update server. This also
 requires some API the device can use for querying. The querying could be a GET request
 from the device, upon which the update server matches the profile of the device with
-available manifests. The update server should offload the device as much as possible when
-it comes to picking an update, as devices will typically have much tougher energy
-constraints and possess less information about updates than the update server.
+available manifests. The decision making about which manifest, and thus update, to send to
+the device should happen entirely on the update server. This is because the update server
+will have the complete information about available updates as well as more computational
+power to decide. This means all devices will request manifests from the same endpoint.
 
 Additionally, operators will be querying the update server for statuses of devices. This
 functionality can be more fleshed-out than the device API, as it interacts with a human
@@ -199,15 +200,11 @@ flexible architecture.
 Operators need a way of creating manifests in order to update devices. In order to create
 a manifest, they must be aware of which devices are going to be updated and which firmware
 versions they are using. This information is held by the update server in the form of
-device profiles. An operator can query the update server, selecting the devices of interest
-based on vendor or class ID, firmware version, or some other criterion. 
-
-As the manifest contains data difficult for humans to craft such as image hash digest and
-sequence numbers possibly in the form of timestamps, operators should be able to provide
-information such as manifest version, vendor and class IDs, firmware version, and URL to a
-program which then generates and encodes the manifest for them. The point is operators
-need help from the update server when deciding about which devices to update, and should
-be given help filling in the details of the manifest to ensure its correctness.
+device profiles. An operator can query the update server, selecting the devices of
+interest based on vendor or class ID, firmware version, or some other criterion. The
+operator should then be able to provide information such as manifest version, vendor and
+class IDs, firmware version, and URL to a program which then generates and encodes the
+manifest for them. 
 
 As with update servers, the essence of being an operator can be captured in a few points:
 
@@ -264,14 +261,19 @@ device communication is acceptable but should be carefully considered. If many k
 can be used on the same device, an implementer should consider the granularity of the key
 pairs' scope (i.e., should they be used per device, per service, or per application?).
 
-After applying updates, certificates might not be valid anymore. This is
-implementation-dependent and might not always be a problem, but the architecture is
-prepared for these situations. In the case an update breaks a certificate, the certificate
-cannot be used for communication, and thus the device cannot use it to re-enroll either.
-In this case, a new pre-shared key should be part of the update, so that the device can
-enroll as if it were factory-new. The process of issuing pre-shared keys might be difficult
-to automate, as the CA must be aware of which keys to accept, but it is needed to ensure
-the security of future device communication.
+After applying updates, certificates might not be valid anymore. If the certificate or its
+corresponding keys cannot be rolled over to the new version the certificate is no longer
+usable. The certificate is also used to verify the identity of the device holding it,
+something that will mutate after applying an update. If the device alters its behaviour or
+capabilities, maybe the certificate should no longer be valid for that device. This is
+dependent on implementation and interpretation of certificates but is worth considering.
+
+In the case an update invalidates a certificate, the certificate cannot be used for
+communication, and thus the device cannot use it to re-enroll either. In this case, a new
+pre-shared key should be part of the update, so that the device can enroll as if it were
+factory-new. The process of issuing pre-shared keys might be difficult to automate, as the
+CA must be aware of which keys to accept, but it is needed to ensure the security of
+future device communication.
 
 Certificates allow for secure communication via DTLS. The payloads however, both manifest
 and image, are also to be signed during the update procedure using some key. The keys can
@@ -292,15 +294,13 @@ When devices have enrolled and obtained a valid certificate, they must contact t
 respective update servers so the update servers can create profiles of the devices. The
 profiles describe through which protocols a device can be reached and which software
 versions the device is using. In order to achieve this, devices must first know which
-update servers to contact. This can be solved through shipping devices with a list of
-update servers. This list also acts as a whitelist of authorized update servers, and can
-later on be updated like any other software. Furthermore, the SUIT information model
-specification uses vendor and class IDs to verify that an update is intended for a
-specific device by matching the IDs. These IDs can be sent to an update server to tell it
-what kind of device is contacting it. The update server can infer a profile based on the
-IDs it is sent, or simply use the protocols the device chose to contact it with. The
-devices also need to be aware of how to register, for instance by sending a  POST request
-to a predetermined registration endpoint at an update server. 
+update servers to contact. This is solved by the whitelist of update servers. Furthermore,
+the SUIT information model specification uses vendor and class IDs to verify that an
+update is intended for a specific device by matching the IDs. These IDs can be sent to an
+update server to tell it what kind of device is contacting it. The update server can infer
+a profile based on the IDs it is sent, or simply use the protocols the device chose to
+contact it with. The devices also need to be aware of how to register, for instance by
+sending a  POST request to a predetermined registration endpoint at an update server. 
 
 There are possibilities regarding how the updating process is initiated. An operator can
 query the update server for the status of one or several devices, prepare an update for
@@ -377,9 +377,9 @@ already have well-developed support for authorization tokens. Additionally, usin
 between operators and update servers opens up opportunities for third-party vendors to
 more easily patch IoT networks, as they themselves can request tokens and be granted
 correct levels of access in the update architecture. Even in the case of the update server
-being a more capable embedded device, if it is powerful enough to act as an update server,
-then handling tokens should not be an issue, but a lightweight token variant can be used
-to alleviate some energy and memory constraints, if needed.
+being a more capable embedded device, powerful enough to act as an update server, then
+handling tokens should not be an issue. A lightweight token variant can be used to
+alleviate some energy and memory constraints, if needed.
 
 If used on the devices, the authorization token would have to be of a lightweight variant,
 but which variant is implementation-specific. Tokens will be sent with signed manifests

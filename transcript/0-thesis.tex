@@ -108,32 +108,18 @@
 \titlepage
 
 \begin{abstract}
-% TODO: Remove/rewrite parts repeated in introduction
-In recent years the general public has become increasingly aware of digital attacks and
-intrusions affecting their day-to-day lives as society becomes more connected. Security in
-the Internet of Things (IoT) is a essential and as the IoT is expected to grow rapidly,
-insecure devices can cause even more problems in the future. There is a need for secure
-software and firmware updates for IoT devices, as vulnerabilities must be patched. For
-many IoT devices this means patches must be applied over long distances and possibly over
-unreliable communication channels, as sending a technician to each and every device is
-unfeasible. 
-
-The thesis aims to investigate the question "How can the Software Updates for Internet of
-Things (SUIT) specification be applied to develop a technology agnostic and interoperable
-update architecture for heterogeneous networks of Internet of Things devices?" The thesis
-project studied the SUIT specifications to gain an understanding of what such an
-architecture must provide. Five high-level domains were identified and further defined: 1)
-roles of devices, servers, and operators, 2) key management, 3) device profiles, 4)
-authorization, and 5) update handling. Two profiles that instantiate the proposed
-architecture were defined and one of them implemented as a prototype. 
-
-The architecture was shown to fulfill the requirements SUIT imposes on the architecture
-and information model, while being flexible and extensible. The prototype was measured for
-energy consumption, code size, and communication overhead. The client occupied 91343 bytes
-and server 91643 bytes, including the operating system, on a Firefly device with 512 KB
-flash. Transferring image data was the largest source of energy consumption during an
-update procedure where the radio in receive mode accounted for up to 83\% of the total
-image transfer energy consumed in the client and 81\% on the server. The thesis found that
+As society becomes more digitalized, cyberattacks are increasingly common and severe.
+Security in the Internet of Things (IoT) is essential, and IoT devices must be updated to
+patch vulnerabilities. The thesis aims to investigate the question "How can the Software
+Updates for Internet of Things (SUIT) specification be applied to develop a
+technology-agnostic and interoperable update architecture for heterogeneous networks of
+Internet of Things devices?" The thesis project studied the SUIT specifications to gain an
+understanding of what such an architecture must provide. Five high-level domains were
+identified and further discussed: 1) roles of devices, servers, and operators, 2) key
+management, 3) device profiles, 4) authorization, and 5) update handling. The architecture
+was shown to fulfill the requirements SUIT imposes on the architecture and information
+model, while being flexible and extensible. A prototype was developed in the Contiki-NG
+operating system to evaluate the feasibility of the architecture. The thesis found that
 applying the proposed architecture to constrained systems is feasible and would enable
 updates in heterogeneous IoT networks.\\
 
@@ -144,38 +130,22 @@ updates in heterogeneous IoT networks.\\
 \begin{otherlanguage}{swedish}
     \begin{abstract}
         % TODO: Make sure it matches the English one
-        De senaste åren har allmänheten blivit mer informerad kring digitala attacker och
-        intrång som påverkar deras vardagliga liv då samhället blir mer och mer
-        uppkopplat. Säkerhet inom Internet of Things (IoT) är kritiskt och eftersom IoT
-        förväntas växa hastigt de kommande åren kan osäkrade enheter orsaka ännu större
-        skada i framtiden. Det finns ett behov för säkra mjukvaru- och
-        firmwareuppdateringar för IoT-enheter då sårbarheter måste lagas. För många
-        IoT-enheter innebär detta att uppdateringar måste appliceras över långa avstånd
-        och möjligtvis opålitliga nätverk då det vore orimligt att skicka en tekniker till
-        var och varje enhet. 
-        
-        Denna uppsats ämnar att undersöka frågan "Hur kan Software Updates for Internet of
-        Things (SUIT)-specifikationen appliceras för att utveckla en teknologiskt
-        agnostisk och kompatibel uppdateringsarkitektur för heterogena nätverk av Internet
-        of Things-enheter?". Uppsatsen studerade SUIT-specifikationen för att förstå vad
-        en sådan arkitektur måste erbjuda. Fem abstrakta domänområden identifierades och
-        definierades: 1) roller för enheter, updateringsservrar, och operatörer, 2)
+        I takt med att samhället blir digitaliserat blir digitala attacker vanligare och
+        får ökade konsekvenser. Säkerhet inom Internet of Things (IoT) är kritiskt och
+        IoT-enheter måste kunna uppdateras för att laga sårbarheter. Denna uppsats ämnar
+        att undersöka frågan "Hur kan Software Updates for Internet of Things
+        (SUIT)-specifikationen appliceras för att utveckla en teknologiskt agnostisk och
+        kompatibel uppdateringsarkitektur för heterogena nätverk av Internet of
+        Things-enheter?" Uppsatsen studerade SUIT-specifikationen för att förstå vad en
+        sådan arkitektur måste erbjuda. Fem abstrakta domänområden identifierades och
+        diskuterades: 1) roller för enheter, uppdateringsservrar, och operatörer, 2)
         nyckelhantering, 3) enhetsprofiler, 4) auktorisering, och 5) lokal
-        uppdateringshantering. Två profiler som instansierar den föreslagna arkitekturen
-        definierades och en av dem implementerades som en prototyp. 
-        
-        Arkitekturen visades uppfylla de krav SUIT ställer på en arkitektur och
-        informationsmodell samt var flexibel och kunde utökas. Prototypen utvärderades för
-        energikonsumption, kodstorlek, och kommunikations-overhead. Klienten använde sig
-        av 91343 bytes och servern av 91643 bytes, inklusive operativsystemet, på en
-        Firefly-enhet med 512 KB flash. Överföringen av avbildningar var den största
-        källan av energikonsumption under en uppdateringsprocedur där den mottagande
-        radion stod för upp till 83\% av den totala energin i klienten och up till 81\% på
-        servern. Uppsatsen fann att det är rimligt att applicera den föreslagna
-        arkitekturen på resursbegränsade enheter. Det skulle göra uppdateringar för
-        heterogena IoT-nätverk möjliga samtidigt som den minsta acceptabla säkerhetsnivån
-        upprätthålls, med möjligheter att skapa ett mer rigoröst system inom ramarna för
-        arkitekturen.\\
+        uppdateringshantering. Arkitekturen visades uppfylla de krav SUIT ställer på en
+        arkitektur och informationsmodell samt var flexibel och kunde utökas. En prototyp
+        utvecklades i Contiki-NG operativsystemet för att utvärdera genomförbarheten hos
+        arkitekturen. Uppsatsen fann att det är rimligt att applicera den föreslagna
+        arkitekturen på resursbegränsade enheter, vilket skulle möjliggöra uppdateringar
+        för heterogena IoT-nätverk.\\
 
         \noindent\nyckelord{IoT, industriell IoT, säkerhet, Contiki-NG, inbyggda system,
                             mjukvaruuppdateringar}

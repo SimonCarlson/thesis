@@ -5,13 +5,13 @@ This thesis has presented a software and firmware update architecture for IoT. T
 architecture is based on requirements developed by the IETF SUIT working group and aims to
 be interoperable and usable for constrained devices using state-of-the art security
 mechanisms such as asymmetric cryptography, certificates, and authorization tokens. The
-architecture defines the roles of devices, update servers, and operators, and discusses
-how these actors can authorize themselves, what tokens might be needed, and the operations
-of these actors, such as registering devices, and briefly considers local upgrade handling.
-Furthermore, the thesis discusses the device life cycle for new devices entering a network,
-being updated, and continuing their service for many years. Two different profiles for the
-architecture, one using DTLS and CoAP and the other OSCORE, were presented, and the
-DTLS/CoAP profile was implemented in a prototype with some restrictions.
+architecture defines the roles of devices, update servers, and operators. It also
+discusses key management, device profiles, and authorization. Local update handling is
+briefly discussed. Following this the thesis discusses the device life cycle for new
+devices entering a network, being updated, and continuing their service for many years.
+Two different profiles for the architecture, one using DTLS and CoAP and the other OSCORE,
+were presented, and the DTLS/CoAP profile was implemented in a prototype with some
+restrictions.
 
 The requirements from the SUIT architecture and information model specifications were
 evaluated against the proposed architecture. The requirements, with the exception of
@@ -31,7 +31,7 @@ reasoning was to provide a minimal manifest implementation, thus reducing size a
 complexity while allowing for custom implementations of new pre- and post-conditions,
 directives, and other information. The flexibility should provide more robustness, as the
 update mechanism can operate in a way that makes most sense in a specific deployment,
-while keeping the baseline manifest intact, thus ensuring the minimum level of security
+while keeping the baseline manifest intact. This ensures the minimum level of security
 sought for is reached. 
 
 With the qualitative results in mind, the proposed architecture is a way of applying the
@@ -54,9 +54,9 @@ devices is still feasible.
 
 Experiments on energy consumption found that receiving the image data makes up the vast
 majority of energy consumed during an update procedure. This is due to the register
-operations and sending and receiving of a manifest transfers uses, comparatively, very
-little data. Also, when the client parses the manifest, the operations are entirely local
-to the client, and do not use any expensive radio operations. During image transfer, the
+manifest resources transfers uses, comparatively, very little data, and CSMA being
+enabled. Also, when the client parses the manifest, the operations are entirely local to
+the client, and do not use any expensive radio operations. During image transfer, the
 largest source of energy consumption was the radio in receive mode which, for the client,
 was up to 83\% and server 81\% of total energy consumption during image transfer. The
 amount of time thus energy needed for the transfer scaled linearly with the size of the
@@ -77,12 +77,11 @@ reduce the amount of data sent, such as differential updates.
 \label{sec:security-considerations}
 
 \subsubsection{Timing of Updates}
-Despite being able to add timestamps in the manifest specifying a time of update it can
-prove difficult to install updates at the right moment. Timestamps are also unable to
-account for if processes are being interrupted or not. One might want to postpone updates
-until a certain process or thread is idle. Not having fine-grained controlled over when an
-update is installed is especially important for devices used in safety critical contexts,
-such as in factories.
+Despite being able to add timestamps in the manifest it can prove difficult to install
+updates at the right moment. Timestamps are also unable to account for if processes are
+being interrupted or not. One might want to postpone updates until a certain process or
+thread is idle. Not having fine-grained controlled over when an update is installed is
+especially important for devices used in safety critical contexts, such as in factories.
 
 \subsubsection{Redundant Devices}
 The architecture does not support scenarios where redundant devices are used to achieve
@@ -95,8 +94,7 @@ redundant devices would help safety-critical applications.
 The architecture does not account for physical threats, only threats that arise during
 wireless transport. The discussion in Section~\ref{ssec:upgrading} does not account for
 scenarios where the physical storage of devices is compromised. Implementers are advised
-to store manifest and image data in a way that makes sense for their own deployment,
-whether that is unencrypted, encrypted, or encrypted manifest with unencrypted image.
+to store manifest and image data in a way that makes sense for their own deployment.
 
 \subsubsection{Importance of the Certificate Authority}
 The certificate authority plays a central role in the architecture as everything is based
@@ -106,15 +104,13 @@ certificates and upholding the integrity of the CA is essential for the architec
 function.
 
 \subsubsection{Battery Draining Attacks}
-Battery draining attacks should be prevented due to devices keeping whitelists of
-operators and update servers, disallowing communication from other sources, in combination
-with certificates that can further prove their identity. Should an attacker be able to
-send messages to devices, the push model makes it so devices would accept and parse
-manifests in order to check if the update is valid or not. If large amounts of data in the
-form of manifests are sent to devices, their batteries can deplete quicker due to
-repetitive decryption and parsing. The issue stems from devices immediately responding to
-pushed update with performing calculations, which enables these kinds of attacks.
-
+Battery draining attacks should be prevented by the authorization measures presented in
+the architecture. Should an attacker be able to send messages to devices, the push model
+makes it so devices would accept and parse manifests in order to check if the update is
+valid or not. If large amounts of data in the form of manifests are sent to devices, their
+batteries can deplete quicker due to repetitive decryption and parsing. The issue stems
+from devices immediately responding to pushed update with performing calculations, which
+enables these kinds of attacks.
 
 \section{Future Work}
 \label{sec:future-work}
@@ -123,10 +119,9 @@ performing differential updates would be of importance. As the results showed, t
 source of energy consumption is the radio receiver during transfer of updates, largely
 because of the relatively large size of firmware images. By performing differential
 updates instead, the size of images can be reduced, and time to retrieve them and thus
-energy consumption will go down. Furthermore, developing a prototype using certificates
-instead of pre-shared DTLS keys, authorization tokens, and COSE signing instead of
-encryption would further aid the understanding of the architecture's requirements on
-devices and how feasible it is to use for less constrained devices concerning code size
-and energy consumption. 
+energy consumption will go down. Furthermore, developing a prototype using certificates,
+authorization tokens, and COSE signing would further aid the understanding of the
+architecture's requirements on devices and how feasible it is to use for constrained
+devices. 
 
 \end{document}
