@@ -299,8 +299,8 @@ specification uses vendor and class IDs to verify that an update is intended for
 specific device by matching the IDs. These IDs can be sent to an update server to tell it
 what kind of device is contacting it. The update server can infer a profile based on the
 IDs it is sent, or simply use the protocols the device chose to contact it with. The
-devices also need to be aware of how to register, for instance by POSTing to a
-predetermined registration endpoint at an update server. 
+devices also need to be aware of how to register, for instance by sending a  POST request
+to a predetermined registration endpoint at an update server. 
 
 There are possibilities regarding how the updating process is initiated. An operator can
 query the update server for the status of one or several devices, prepare an update for
@@ -582,10 +582,10 @@ the pull.
 
 In Figure~\ref{fig:smart-home}, a technician from a smart lightbulb vendor is updating a
 light bulb controller in a smart home. The technician requests a token and sends it
-together with the signed manifest and image to a home automation server living on the edge
-of the constrained network. The server requests a token of its own and pushes the updates
-to devices in its network. Both a light bulb controller, the intended target, and a
-thermostat controller receives the update. The thermostat controller is supposed to only
+together with the signed manifest and image to a home automation server situated on the
+edge of the constrained network. The server requests a token of its own and pushes the
+updates to devices in its network. Both a light bulb controller, the intended target, and
+a thermostat controller receives the update. The thermostat controller is supposed to only
 accept updates from the thermostat vendor, thus the light bulb vendor technician is
 unauthorized to perform this update. The thermostat controller rejects the update while
 the light bulb controller accepts it and updates itself.
@@ -600,7 +600,7 @@ the light bulb controller accepts it and updates itself.
     \includegraphics{images/use-case-smart-home.pdf}
 \end{figure}
 
-The last example shown in Figure~\ref{fig:industry} depicts an on-site devops engineer
+The last example shown in Figure~\ref{fig:industry} depicts an on-site DevOps engineer
 wanting to update a critical temperature sensor in an industry plant. The engineer first
 requests a token to send the signed manifest directly to the device and a token to send
 the signed image to the sensor update server. In this case, the update server is a more
@@ -614,9 +614,9 @@ proxy so the authorization server can help verifying the token. After the device
 received an answer, it can proceed with applying the update.
 
 \begin{figure}[t]
-    \caption[An on-site devops engineer updates a very constrained, critical temperature
+    \caption[An on-site DevOps engineer updates a very constrained, critical temperature
     sensor in an industry plant.]
-        {An on-site devops engineer updates a very constrained, critical temperature
+        {An on-site DevOps engineer updates a very constrained, critical temperature
                 sensor in an industry plant. The constrained sensor asks for introspection
                 data in order to verify the update server's token. This figure assumes the device is enrolled and registered.}
     \label{fig:industry}

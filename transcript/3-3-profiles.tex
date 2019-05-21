@@ -3,7 +3,7 @@
 \begin{document}
 \label{chap:profiles}
 The previous two sections proposed a technology-agnostic update architecture and a life
-cycle perspective for devices. It is time to show concrete incarnations of this
+cycle perspective for devices. This chapter will show concrete instantiations of this
 architecture using state of the art IoT protocols. This section is aimed at implementers
 needing to make decisions about how to implement the update architecture. This section
 will discuss the choice of image digest algorithm, vendor and class ID generation, payload
@@ -141,8 +141,8 @@ be used instead. OSCORE does not rely on a secure channel established by DTLS, b
 provides end-to-end security for CoAP messages using COSE. OSCORE is, unlike DTLS, not yet
 standardized, and in Contiki-NG there is, to the best of the author's knowledge, a fork
 with only a partial implementation of OSCORE, featuring only COSE encryption objects
-\parencite{contiki-oscore}. Profiles surrounding DTLS for EST-coaps and ACE are also
-closer to standardization than their OSCORE counterparts.
+\parencite{contiki-oscore}. DTLS-based EST and ACE profiles are also closer to
+standardization than their OSCORE counterparts.
 
 Both profiles use SHA-256 for calculating image digests, UUID5 for vendor and class IDs
 using registered vendor domains, EST with its corresponding profile for enrollment, and
