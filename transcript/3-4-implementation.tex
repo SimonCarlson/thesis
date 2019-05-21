@@ -183,6 +183,50 @@ class of device. The image callback decrypts and updates a SHA-256 context with 
 plaintext blockwise. After the transfer concludes, the checksum of the image data is
 calculated and compared to the one in the manifest.
 
+\subsection{Experimental Setup}
+\label{ssec:experimental-setup}
+In order to measure energy consumption an experiment was carried out. Contiki-NG provides
+a utility called Energest which can measure how much time, measured in ticks, is spent by
+a program \parencite{energest}. The measurement is divided into five categories: CPU, Low
+Power Mode, Deep Low Power Mode, Transmit, and Listen. CPU, Low Power Mode, and Deep Low
+Power Mode are related to the work of the processor while Transmit and Listen measures the
+radio. Each type can be measured independently by calling the function
+\texttt{energest\_type\_time(energest\_type\_t type)} where type is the category to
+measure. 
+
+For the experiment, the client measured the register callback, the manifest callback, the
+decoding and parsing of the manifest, and the image callback. The server measured the
+register resource, the manifest resource, and the image resource. The entire block
+transmission of the manifest and image resources were measured, and both client and server
+measure all five categories. How the measurements were taken is shown in
+Listing~\ref{lst:energest}.
+
+\begin{lstlisting}[language=manifest, caption={How to measure ticks in energest.}, label=lst:energest]
+    energest_flush();   // To update values
+    t1 = energest_type_time(ENERGEST_TYPE_TO_MEASURE);
+    // Do operations
+    energest_flush();   // To update values
+    t2 = energest_type_time(ENERGEST_TYPE_TO_MEASURE) - t1;
+\end{lstlisting}
+
+With the amount of ticks, the following formula was used to obtain energy consumption
+(measured in Joules)
+
+$$ Energy (J) = \frac{ticks}{ticks/second} * V * A $$
+
+Ticks per second is defined in the platform dependant \texttt{ENERGEST\_SECOND} macro.
+When gathering data about energy consumption, the client and server were flashed onto a
+Firefly board each and connected to a host laptop through USB. The Firefly board features
+an ARM Cortex-M3 with 512 KB flash and 32 KB RAM and supports IEEE 802.15.4 communication
+\parencite{firefly-datasheet}. All communication between client and server was wireless
+and data was printed out to a terminal via serial connection. 
+
+The amount of blocks sent by the image resource varied from 500, to 2000, to 4000 with ten
+runs per block size. The registration-and manifest-related operations were held constant,
+as the client always registers with the same information and the server always sends the
+same manifest. The registration-and-manifest-related operations thus produced thirty data
+points in total, while the image-related operations produced ten data points per block
+size.
 
 \subsection{Summary}
 \label{ssec:implementation-summary}
@@ -193,7 +237,7 @@ based on the pull model, meaning it is client initiated, and goes through the st
 registering, receiving a manifest, and receiving image data. It uses COSE encryption and
 pre-shared DTLS keys, as COSE signing and certificate support was, at the time, not
 available in Contiki-NG. It also does not use tokens, as it represents a monolithic update
-and not differential update. The next chapter will evaluate the architecture and prototype
-to see if it fulfills the goals of SUIT and is feasible to apply.
+and not differential update. The next chapter will present the evaluation results of the
+architecture and prototype.
 
 \end{document}
