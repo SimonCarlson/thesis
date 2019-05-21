@@ -113,7 +113,7 @@ To do:
   - [x] Swedish
 - [ ] Acknowledgements
 - [ ] Presentation material
-  - [ ] Slides
+  - [x] Slides
   - [ ] Notes
 - [x] Make tokens optional, update text accordingly
   - [x] Chapter 3
@@ -127,6 +127,6 @@ To do:
   - [x] Chap 4
   - [x] Chap 5
   - [x] Abstract
-- [ ] Consider how I report code size
+- [x] Consider how I report code size
   - [ ] Use ramprof/flashprof instead?
-- [ ] Layout
+- [x] Layout

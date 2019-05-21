@@ -1,3 +1,8 @@
+21/5-19:
+Revising the presentation even further. Got down to 21 minutes sharp but still speaking quickly. Removed part about number of certificates as it doesn't feel central.
+
+Addressed most of Sam's feedback in the report. Major parts left: decide what to doa bout EST-coaps and Contiki-NG in the background (thinking keep the first, drastically reduce the second). Standard deviations in results, should wait until after TSCH stuff has been (not) solved, after presentation. Consider more security implications (also after presentation and more feedback?)
+
 20/5-19:
 Got opposition report and feedback from Sam. Nice to have a native speaker correct the language. Some things are obvious must fix, such as proper delimitations of the work, removing some of the repeated content, and moving experimental setup into the implementation section. Others I'm not sure about. The work is based on SUIT as that is the entire premise of the thesis project (it has to start somewhere) and SUIT itself contains a lot of motivation around threats and issues concerning updates. I don't feel I would do a better job describing these things or that copying them into my thesis would add anything to it, hence explicitly mentioning these things are in SUIT.  I feel the security considerations mentioned are specific to my protocol/implementation, however I might find some more from SUIT. 
 
