@@ -1,3 +1,10 @@
+22/5-19:
+Gonna fix the rest of Sam's feedback after the presentation. Should print out his and get started with it after presentation as well.
+
+Adding small cues so I won't get lost when presenting.
+
+Practiced it again, 24 minutes now. Should I assume I have 25 minutes available and not 20? Should probably assume 20..
+
 21/5-19:
 Revising the presentation even further. Got down to 21 minutes sharp but still speaking quickly. Removed part about number of certificates as it doesn't feel central.
 
