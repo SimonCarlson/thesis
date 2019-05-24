@@ -62,7 +62,7 @@ Section~\ref{ssec:oscore} briefly introduces OSCORE. Lastly, sections \ref{ssec:
 and \ref{ssec:ace} briefly introduces the EST-coaps protocol and ACE framework, enabling
 asymmetric cryptography and authorization in an IoT context.
 
-\subsection{User Datagram Protocol}
+\subsection{User Datagram Protocol (UDP)}
 \label{ssec:udp}
 \acrfull{udp} is a stateless and asynchronous transfer protocol for IP \parencite{rfc768}.
 It does not provide any reliability mechanisms but is instead a best-effort protocol. It
@@ -76,7 +76,7 @@ guarantee the packets arrival. The best-effort approach of UDP is favorable in t
 situations, in addition to UDP being a lightweight protocol requiring a smaller memory
 footprint to implement.
 
-\subsection{Datagram Transport Layer Security}
+\subsection{Datagram Transport Layer Security (DTLS)}
 \label{ssec:dtls}
 \acrfull{dtls} is a protocol which adds confidentiality and integrity to datagram
 protocols like UDP \parencite{rfc6347}. The protocol is designed to prevent eavesdropping,
@@ -116,7 +116,7 @@ some modifications to the handshake header to make communication over UDP possib
 retransmission timers since the communication is unreliable. Otherwise the DTLS handshake
 is the same as the TLS handshake.
 
-\subsection{Constrained Application Protocol}
+\subsection{Constrained Application Protocol (CoAP)}
 \label{ssec:coap}
 \acrfull{coap} is an application layer protocol designed to be used by constrained devices
 over networks with low throughput and possibly high unreliability for machine-to-machine
@@ -165,7 +165,7 @@ notified by the server when a particular resource changes. This option can be us
 pull or hybrid update architecture, meaning the device does not have to continuously poll
 the server for a new update.
 
-\subsection{Concise Binary Object Representation and CBOR Object Signing}
+\subsection{Concise Binary Object Representation and CBOR Object Signing (CBOR and COSE)}
 \label{ssec:cbor-and-cose}
 \gls{cbor} aims to be an extensible data format providing very small code sizes
 \parencite{rfc7049}. It supports simple values as well as arrays and maps, meaning it is
@@ -175,7 +175,7 @@ constrained systems. \gls{cose} defines some basic security services for CBOR ob
 as encryption and signing \parencite{rfc8152}. It is also designed for use on
 constrained devices, as CBOR would primarily be used on these devices.
 
-\subsection{Object Security for Constrained RESTful Environments}
+\subsection{Object Security for Constrained RESTful Environments (OSCORE)}
 \label{ssec:oscore}
 \gls{oscore} is a way of protecting CoAP messages at the application level using COSE
 \parencite{oscore}. When using CoAP secured by DTLS, security is terminated at
@@ -200,7 +200,7 @@ and UDP instead of HTTP, TLS, and TCP, by making use of CoAP's block requests an
 responses to remedy the relatively large sizes of certificates. A corresponding EST
 profile for OSCORE is in development \parencite{est-oscore}.
 
-\subsection{Authorization and Authentication for Constrained Environments}
+\subsection{Authorization and Authentication for Constrained Environments (ACE)}
 \label{ssec:ace}
 \gls{ace} is a framework being standardized for authorization and authentication for IoT
 contexts, based on the OAuth 2.0 framework \parencite{ace}. ACE allows clients in a
@@ -226,7 +226,7 @@ standardized, it should prepare for different parties assuming different roles i
 context of updating devices. Using authorization tokens is a scalable and configurable way
 of achieving that.
 
-\section{Software Updates for Internet of Things}
+\section{Software Updates for Internet of Things (SUIT)}
 \label{sec:suit}
 The IETF \acrfull{suit} working group aims to define a firmware update solution for IoT
 devices that is interoperable and non-proprietary \parencite{suit}. The working group does
@@ -543,61 +543,15 @@ base on which to design a secure update mechanism for IoT.
 Contiki-NG is an open-source operating system for resource constrained IoT devices based
 on the Contiki operating system \parencite{contiki-ng-github, contiki-github}. Contiki-NG
 features an IPv6 network stack designed for unreliable, low-power IoT networks. There are
-many protocols implemented in the stack. This thesis will look at UDP and CoAP secured by
-DTLS. Beneath IPv6 Contiki-NG supports IEEE 802.15.4 with Time Slotted Channel Hopping
+many protocols implemented in the stack. Among these protocols are DTLS and CoAP
+implementations, which are of interest to the thesis \parencite{low-power-coap}. Beneath
+IPv6 Contiki-NG supports IEEE 802.15.4 with Time Slotted Channel Hopping
 \parencite{ieee-802.15.4}.
 
-The CoAP implementation in Contiki-NG is based on Erbium by Mattias Kovatsch and supports
-both unsecured (CoAP) and secured (CoAPs) communication \parencite{low-power-coap}. CoAPs
-uses a DTLS implementation called TinyDTLS which handles encryption and decryption of
-messages \parencite{tinydtls-github}.
-
-Contiki-NG has a process abstraction built on lightweight protothreads
-\parencite{protothreads}. Protothreads can be seen as a combination of threads and
-event-driven programming. Threads provide a way of running sequential programs
-concurrently, enabling the use of flow-control mechanisms. This, however, requires a
-thread-local stack which is too resource heavy on small IoT devices. Event-driven
-programming, on the other hand, does not require a thread-local stack, but programs are
-limited to computation as callbacks on event triggers, meaning sequential programs are
-more difficult to program. Protothreads combine these paradigms in a lightweight way,
-keeping the yield semantics of threads and stacklessness of event-driven programming. All
-protothreads in a system are run on the same stack, meaning each protothread has a very
-low memory overhead, and by providing a conditional blocking wait statement, protothreads
-can execute cooperatively.
-
-\begin{figure}
-    \caption[The state machine of Contiki threads.]
-        {The state machine of Contiki threads. Adapted from \parencite{contiki-multithreading}.}
-    \label{fig:state-machine}
-    \begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=5cm, semithick]
-        \node[initial,state] (A) {Ready};
-        \node[state] (C) [below right of=A] {Exited};
-        \node[state] (B) [above right of=C] {Running};
-    
-        \path (A) edge node {stop} (C)
-                  edge[bend left=15] node {exec} (B)
-              (B) edge[bend left=15] node {yield} (A)
-                  edge node {stop} (C);
-    \end{tikzpicture}
-\end{figure}
-
 Contiki-NGs execution model is event-based, meaning processes often yield execution until
-they are informed a certain event has taken place, upon which they can act.
-Figure~\ref{fig:state-machine} shows the states of the processes and their transitions.
-User-space processes are run in a cooperative manner while kernel-space processes can
-preempt user-space processes. Examples of events are timers expiring, a process being
-polled, or a network packet arriving.
-
-Contiki-NG provides two memory allocators in addition to using static memory. They are
-called \texttt{MEMB} and \texttt{HeapMem} and are semi-dynamic and dynamic, respectively.
-\texttt{MEMB} is a semi-dynamic allcator that allocates pools of static memory as arrays
-of constant-sized objects. After a memory pool has been declared, it is initialized, after
-which objects can be allocated memory from the pool. All objects allocated through the
-same pool have the same size. \texttt{HeapMem} solves the issue of dynamically allocating
-objects of varying sizes during runtime in Contiki-NG. It can be used on a variety of
-hardware platforms, something a standard C \texttt{malloc} implementation could struggle
-with. With \texttt{HeapMem}, memory can be reallocated and deallocated as if using a normal
-\texttt{malloc}.
+they are informed a certain event has taken place, upon which they can act. Concurrency is
+supported by the use of lightweight protothreads, which can be seen as a combination of
+threads and event-driver programming \parencite{protothreads}.
 
 \section{Summary}
 \label{sec:2-summary}
