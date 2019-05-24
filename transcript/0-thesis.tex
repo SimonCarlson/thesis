@@ -16,6 +16,7 @@
 \usepackage{hyperref} % For links in table of contents
 \usepackage{color} % For coloring links
 \usepackage[font=small]{caption} % Smaller captions
+\usepackage{pdfpages}
 
 \makeglossaries
 \newacronym{iot}{IoT}{Internet of Things}
@@ -89,7 +90,7 @@
     allcolors=black
 }
 
-\title{An Internet of Things Software and Firmware Update Architecture Based\\on the SUIT specification}
+\title{An Internet of Things Software and Firmware Update Architecture Based\\on the SUIT Specification}
 \alttitle{En Mjukvaru- och Firmwareuppdateringsarkitektur för Internet of Things Baserad på SUIT-specifikationen}
 \author{Simon Carlson}
 \email{scarlso@kth.se}
@@ -102,6 +103,7 @@
 
 
 \begin{document}
+\includepdf{cover-1.pdf}
 % Frontmatter includes the titlepage, abstracts and table-of-contents
 \frontmatter
 
@@ -231,5 +233,5 @@ Repository containing client and server update code, located in \texttt{examples
     }
 \end{lstlisting}
 
-
+\includepdf{cover-2.pdf}
 \end{document}
