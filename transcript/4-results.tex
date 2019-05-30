@@ -338,12 +338,13 @@ project configuration as the prototype. Its source code is found in
 Appendix~\ref{app:bare-bones}. By running the program \texttt{size} on the ELF-files the
 code sizes can be obtained, which are shown in Table~\ref{tab:code-size}.
 
-\begin{table}[!t]
+\begin{table}[h]
 \begin{tabular}{l c r r r l}
-text	&  data	 &  bss	 &  dec	 &  hex&filename\\
-69982	&  1772	 &11303	 &83057	 &14472&bare-bones.elf\\
-75956	&  1788	 &13599	 &91343	 &164cf&update-client.elf\\
-77924	&  1884	 &11835	 &91643	 &165fb&update-server.elf
+        text	&  data	 &  bss	 &  dec	 &  hex&filename\\
+        \hline
+        69982	&  1772	 &11303	 &83057	 &14472&bare-bones.elf\\
+        75956	&  1788	 &13599	 &91343	 &164cf&update-client.elf\\
+        77924	&  1884	 &11835	 &91643	 &165fb&update-server.elf
 \end{tabular}
 \caption{Code size for client and server prototypes.}
 \label{tab:code-size}
