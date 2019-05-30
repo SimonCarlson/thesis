@@ -1,0 +1,7 @@
+What methodologies did you consider? Did it change throughout your work? It was not clearly documented exactly which approach was chosen.
+
+Under what conditions does CRL compression outperform the other methods? By how much, is it quantifiable?
+
+Are there any ethical issues in certificate revovcation specific for IoT (confidentiality etc)?
+
+Why are Cuckoo filters not (easily) applicable for IoT?
