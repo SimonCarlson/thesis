@@ -97,7 +97,7 @@
 \kthsupervisor{Farhad Abtahi}
 \risesupervisor{Shahid Raza}
 \examiner{Elena Dubrova}
-\programme{Master in Information Technology}
+\programme{Master in Embedded Systems}
 \school{School of Computer Science and Communication}
 \date{\today}
 
@@ -131,7 +131,6 @@ updates in heterogeneous IoT networks.\\
 
 \begin{otherlanguage}{swedish}
     \begin{abstract}
-        % TODO: Make sure it matches the English one
         I takt med att samhället blir digitaliserat blir digitala attacker vanligare och
         får ökade konsekvenser. Säkerhet inom Internet of Things (IoT) är kritiskt och
         IoT-enheter måste kunna uppdateras för att laga sårbarheter. Denna uppsats ämnar
@@ -236,6 +235,40 @@ Repository containing client and server update code, located in \texttt{examples
     PROCESS_END();
     }
 \end{lstlisting}
+
+%\chapter{Standard Deviations}
+%Table~\ref{tab:deviations} shows the standard deviations of measurements in figures
+%\ref{fig:client-operations-energy}-\ref{fig:server-image-energy}.
+
+%\begin{table}[h]
+%\small
+%\begin{tabular}{l | c c c c}
+%    Measurement & CPU & LPM & TX & RX\\
+%    \hline\hline
+%    Client operations &&&&\\
+%    \hline
+%    Registration & 0.00004632148074 & 0.0000716225263 & 0.00006111165061 & 0.002411339236\\
+%    Manifest & 0.00004632148074 & 0.0001535282166 & 0.0004054953317 & 0.00516864187\\
+%    Decode and parse & 0.0000003631596218 & 0 & 0 & 0.0000006940594881\\
+%    \hline\hline
+%    Server operations &&&&\\
+%    \hline
+%    Register & 0.00002335727481 & 0 & 0 & 0.00003626876241\\
+%    Manifest & 0.00004097692291 & 0.0001278287866 & 0.000003716510666 & 0.004300987928\\
+%    \hline\hline
+%    Client image transfer &&&&\\
+%    \hline
+%    500 blocks & 0.000918334576 & 0.001208184762 & 0.001205785423 & 0.0405420135\\
+%    2000 blocks & 0.001986588496 & 0.001536797951 & 0.003752072953 & 0.05134885381\\
+%    4000 blocks & 0.002718812919 & 0.003600616008 & 0.001893914224 & 0.1207698144\\
+%    \hline\hline
+%    Server image transfer &&&&\\
+%    \hline
+%    500 blocks & 0.0004936030601 & 0.001204101027 & 0.001204101027 & 0.04004990673\\
+%    2000 blocks & 0.001653833922 & 0.001563795897 & 0.000868800205 & 0.05281899214\\
+%    4000 blocks & 0.002960744548 & 0.003574288841 & 0.0009382682704 & 0.1207197374\\
+%\end{tabular}
+%\end{table}
 
 \includepdf{cover-2.pdf}
 \end{document}

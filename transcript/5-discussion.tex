@@ -2,16 +2,15 @@
 
 \begin{document}
 This thesis has presented a software and firmware update architecture for IoT. The
-architecture is based on requirements developed by the IETF SUIT working group and aims to
-be interoperable and usable for constrained devices using state-of-the art security
-mechanisms such as asymmetric cryptography, certificates, and authorization tokens. The
-architecture defines the roles of devices, update servers, and operators. It also
-discusses key management, device profiles, and authorization. Local update handling is
-briefly discussed. Following this the thesis discusses the device life cycle for new
-devices entering a network, being updated, and continuing their service for many years.
-Two different profiles for the architecture, one using DTLS and CoAP and the other OSCORE,
+architecture is based on specifications developed by the IETF SUIT working group and aims
+to be interoperable and usable for constrained devices using state-of-the art security
+mechanisms. The architecture defines the roles of devices, update servers, and operators.
+It also discusses key management, device profiles, authorization, and briefly local update
+handling. Following this the thesis discusses the device life cycle for new devices
+entering a network, being updated, and continuing their service for many years. Two
+different profiles for the architecture, one using DTLS and CoAP and the other OSCORE,
 were presented, and the DTLS/CoAP profile was implemented in a prototype with some
-restrictions.
+limitations.
 
 The requirements from the SUIT architecture and information model specifications were
 evaluated against the proposed architecture. The requirements, with the exception of
@@ -53,25 +52,25 @@ for handling device profiles and manifests, but applying the architecture to con
 devices is still feasible.
 
 Experiments on energy consumption found that receiving the image data makes up the vast
-majority of energy consumed during an update procedure. This is due to the register
-manifest resources transfers uses, comparatively, very little data, and CSMA being
-enabled. Also, when the client parses the manifest, the operations are entirely local to
-the client, and do not use any expensive radio operations. During image transfer, the
-largest source of energy consumption was the radio in receive mode which, for the client,
-was up to 83\% and server 81\% of total energy consumption during image transfer. The
-amount of time thus energy needed for the transfer scaled linearly with the size of the
-data being sent, meaning opportunities to send less data are of importance when it comes
-to saving energy.
+majority of energy consumed during an update procedure. This is due to the register and
+manifest resources transferring, comparatively, very little data. Also, when the client
+parses the manifest, the operations are entirely local to the client, and do not use any
+expensive radio operations. During image transfer, the largest source of energy
+consumption was the radio in receive mode which, for the client, was up to 83\% and server
+81\% of total energy consumption during image transfer. Due to a bug in Contiki-NG, TSCH
+was not working with DTLS, and CSMA had to be used instead, increasing the radio listen
+times. The amount of time thus energy needed for the transfer scaled linearly with the
+size of the data being sent, meaning opportunities to send less data are of importance
+when it comes to saving energy.
 
 The architecture introduced some communication overhead on the application layer when
 sending both manifest and image data. When encrypting with COSE a 8-byte tag was added to
 the ciphertext for validation. In the case of the manifest this tag was added once as the
-manifest was small enough to be encrypted at once. For the much larger image data, which
-could not be encrypted all at once, each block was encrypted individually instead. This
-meant that each block introduced 8 bytes of tag for each 32 bytes of data sent in a CoAP
-block. By sending less data a smaller amount of blocks have to be transferred meaning less
-overhead is sent in total. This furthers the argument for exploring opportunities that
-reduce the amount of data sent, such as differential updates.
+manifest was small enough to be encrypted at once. For the much larger image data each
+block was encrypted individually instead. This meant that each block introduced 8 bytes of
+tag for each 32 bytes of data sent. By sending less data a smaller amount of blocks have
+to be transferred meaning less overhead is sent in total. This furthers the argument for
+exploring opportunities that reduce the amount of data sent, such as differential updates.
 
 \section{Security Considerations}
 \label{sec:security-considerations}
@@ -109,17 +108,16 @@ the architecture. Should an attacker be able to send messages to devices, the pu
 makes it so devices would accept and parse manifests in order to check if the update is
 valid or not. If large amounts of data in the form of manifests are sent to devices, their
 batteries can deplete quicker due to repetitive decryption and parsing. The issue stems
-from devices immediately responding to pushed update with performing calculations, which
-enables these kinds of attacks.
+from devices immediately responding to pushed update with performing calculations.
 
 \section{Future Work}
 \label{sec:future-work}
 Moving forward, research on preparing bootloaders for upgrades and safe boot as well as
-performing differential updates would be of importance. As the results showed, the largest
+performing differential updates is of importance. As the results showed, the largest
 source of energy consumption is the radio receiver during transfer of updates, largely
 because of the relatively large size of firmware images. By performing differential
 updates instead, the size of images can be reduced, and time to retrieve them and thus
-energy consumption will go down. Furthermore, developing a prototype using certificates,
+energy consumption will decrease. Furthermore, developing a prototype using certificates,
 authorization tokens, and COSE signing would further aid the understanding of the
 architecture's requirements on devices and how feasible it is to use for constrained
 devices. 
