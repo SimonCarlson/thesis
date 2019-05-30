@@ -4,12 +4,13 @@
 - [x] Summaries explain, in one sentence, what the next chapter is about
 - [x] Restructure repeated or unecessarily long paragraphs
 - [x] Shorten abstract?
-- [ ] Remove EST-coaps section
-- [ ] Shorten Contiki-NG section
+- [ ] ~~Remove EST-coaps section~~
+- [x] Shorten Contiki-NG section
 - [x] Revise section introductions and summaries
 - [x] Add no upgrading to scope
 - [x] Clarify why certificates might not be valid anymore
 - [x] Move experimental setup to implementation section
-- [ ] Standard deviations in results (maybe wait a bit to see if TSCH works)
-- [ ] Security implications? 
-  - [ ] "Threats facing the existing software update technologies, present in this solution"
+- [x] Standard deviations in results (maybe wait a bit to see if TSCH works)
+- [ ] ~~Security implications?~~ 
+  - [ ] ~~"Threats facing the existing software update technologies, present in this solution"~~
+

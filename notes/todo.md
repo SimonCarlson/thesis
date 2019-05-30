@@ -10,8 +10,8 @@ To do:
   - [x] Chapter 11.2, 11.3
   - [x] Chapter 13
 - [x] Reread and improve the introduction and background
-- [ ] Consider adding section about CBOR
-  - [ ] Talk to Niclas about state of CBOR in Contiki-NG
+- [ ] ~~Consider adding section about CBOR~~
+  - [ ] ~~Talk to Niclas about state of CBOR in Contiki-NG~~
 - [x] Consider how to integrate EST-coaps into the mechanism
   - [x] Read EST RFC
   - [x] Does it require anything from the application? <b>Pre-shared keys and CA certificate</b>.
@@ -19,12 +19,12 @@ To do:
   - [x] Further explain why it is needed (from SUIT)
 - [x] Fix presentation so that someone with no prior knowledge can understand what SUIT is
 - [x] Start looking at a minimal C manifest parser
-- [ ] JSON to CBOR converter
+- [ ] ~~JSON to CBOR converter~~
   - [x] Create script that accepts version, vendor, class, device, and image that generates all mandatory fields
   - [x] Let script derive version, vendor, class, and device from an existing JSON manifest
-  - [ ] Figure out how to sign it. If not EST, use whatever method for proof of concept
+  - [ ] ~~Figure out how to sign it. If not EST, use whatever method for proof of concept~~
   - [x] Validate correctness of mandatory fields (using cbor.me perhaps?)
-  - [ ] Figure out how to add options without making the entire thing clunky
+  - [x] Figure out how to add options without making the entire thing clunky
 - [x] Rewrite the introduction regarding device management (architecture not implementation)
   - [x] Further push understanding of standardisation - needs flexibility, details left to implementation
 - [x] Install libcoap
@@ -58,10 +58,10 @@ To do:
 - [x] New chapters (can be short):
   - [x] Chapter containing at least one profile (DTLS, OSCORE)
   - [x] Make the life cycle its own chapter
-- [ ] Read ACE, focus on:
-  - [ ] Scope
+- [x] Read ACE, focus on:
+  - [x] Scope
   - [x] Proof-of-possession
-  - [ ] Introspection
+  - [x] Introspection
 - [x] Ask Marco about citing his input on different tokens. <b>"Just discussion, no need to cite, put me in the acknowledgements"</b>
 - [x] Read a profile document to understand the scope of a profile
 - [x] Manifest of the architecture
@@ -74,7 +74,7 @@ To do:
   - [x] Is SUIT truly only for firmware? Do they also mean software as in applications? <b>" Firmware Image: The firmware image is a binary that may contain      the complete software of a device or a subset of it.  The firmware      image may consist of multiple images, if the device contains more      than one microcontroller.  The image may consist of a differential      update for performance reasons.  Firmware is the more universal      term.  Both terms are used in this document and are      interchangeable."</b>
 - [x] Find out which parts of SUIT needs to be covered in a profile
   - [x] Which hash should be used in the manifest?
-    - [ ] Can you hash with elliptic curve and get smaller digests?
+    - [x] Can you hash with elliptic curve and get smaller digests?
   - [x] What encodings should be used for payloads?
     - [x] CBOR
   - [x] What encryption should be used for payloads?
@@ -106,15 +106,15 @@ To do:
 - [x] Fix so that long table is not repeated in list of tables
 - [x] Conclusions
   - [x] Make sure it properly draws in the research question
-  - [ ] Add any extra security considerations you might think of
+  - [x] Add any extra security considerations you might think of
 - [x] Summary in 3.4
 - [x] Abstracts
   - [x] English
   - [x] Swedish
-- [ ] Acknowledgements
-- [ ] Presentation material
+- [x] Acknowledgements
+- [x] Presentation material
   - [x] Slides
-  - [ ] Notes
+  - [x] Notes
 - [x] Make tokens optional, update text accordingly
   - [x] Chapter 3
   - [x] Chapter 4?
@@ -128,5 +128,9 @@ To do:
   - [x] Chap 5
   - [x] Abstract
 - [x] Consider how I report code size
-  - [ ] Use ramprof/flashprof instead?
+  - [ ] ~~Use ramprof/flashprof instead?~~
 - [x] Layout
+- [x] Fix report
+- [ ] Decide on a git commit
+- [ ] README
+- [ ] Comments

@@ -5,4 +5,4 @@
   - [x] Information model
 - [x] Show measurements of packet drop rates, packet sizes, radio duty cycles, energy drain (quantitative evaluation)
   - [ ] ~~Include wireshark captures?~~
-- [ ] Other IoT security concerns outside of updates
+- [ ] ~~Other IoT security concerns outside of updates~~

@@ -1,3 +1,37 @@
+30/5-19:
+New graphs are in the thesis
+
+Should send final thesis to Elena, she can ask them to delay the publishing until later
+
+I think the thesis is done
+
+29/5-19:
+Made some graphs with error bars in matplotlib
+
+Joel asked for the outline, sent it to him
+
+28/5-19:
+Sam's opposition went well
+
+Meeting with Shahid, Joel, and Sam. Gonna help them carry on my work. Should prepare roll the repo back to a good point, make a README, and comment the code a bit
+
+27/5-19:
+:^)
+
+24/5-19:
+Finished Sam's opposition report and gave him a hard-copy of his report, annotated.
+
+Generated a cover with a TRITA number, split it up, and included it in my own tex source. Easier than I expected.
+
+Should speak to Shahid about way forward. Personally, I'm content with just finishing up whatever feedback I have left from Sam and submitting. He probably has more ideas though.
+
+Spoke to Shahid. For the thesis everything seems fine. Just fix the feedback, prepare the code so that someone (Sam) can get into it. He seems very opimistic about writing a paper though. I'm yet to decide about it.
+
+23/5-19:
+Had my presentation. It went well.
+
+Went through Sam's thesis. It's good, not much to complain about. Did not make a huge effort correcting the language since he is a native speaker and writes well. Gotta find some points, like 3, to bring up at the opposition. Thinking his choice of data structure (why not some other probabilistic data structure), conditions where compressed CRL outperform FCV, and something else..
+
 22/5-19:
 Gonna fix the rest of Sam's feedback after the presentation. Should print out his and get started with it after presentation as well.
 
@@ -5,10 +39,12 @@ Adding small cues so I won't get lost when presenting.
 
 Practiced it again, 24 minutes now. Should I assume I have 25 minutes available and not 20? Should probably assume 20..
 
+Practiced it again, 21 minutes. Felt better. Has to be good enough.
+
 21/5-19:
 Revising the presentation even further. Got down to 21 minutes sharp but still speaking quickly. Removed part about number of certificates as it doesn't feel central.
 
-Addressed most of Sam's feedback in the report. Major parts left: decide what to doa bout EST-coaps and Contiki-NG in the background (thinking keep the first, drastically reduce the second). Standard deviations in results, should wait until after TSCH stuff has been (not) solved, after presentation. Consider more security implications (also after presentation and more feedback?)
+Addressed most of Sam's feedback in the report. Major parts left: decide what to do about EST-coaps and Contiki-NG in the background (thinking keep the first, drastically reduce the second). Standard deviations in results, should wait until after TSCH stuff has been (not) solved, after presentation. Consider more security implications (also after presentation and more feedback?)
 
 20/5-19:
 Got opposition report and feedback from Sam. Nice to have a native speaker correct the language. Some things are obvious must fix, such as proper delimitations of the work, removing some of the repeated content, and moving experimental setup into the implementation section. Others I'm not sure about. The work is based on SUIT as that is the entire premise of the thesis project (it has to start somewhere) and SUIT itself contains a lot of motivation around threats and issues concerning updates. I don't feel I would do a better job describing these things or that copying them into my thesis would add anything to it, hence explicitly mentioning these things are in SUIT.  I feel the security considerations mentioned are specific to my protocol/implementation, however I might find some more from SUIT. 
