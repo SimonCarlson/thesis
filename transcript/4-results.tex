@@ -286,30 +286,31 @@ Figures \ref{fig:client-operations-energy} and \ref{fig:server-operations-energy
 average energy consumption for registration-and manifest-related operations for the client
 and server. Figures \ref{fig:client-image-energy} and \ref{fig:server-image-energy} shows
 average energy consumption for the client and server when encrypting, transferring, and
-decrypting image data per block size.
+decrypting image data per block size. Standard deviations are included as error bars for
+all measurements, but in most cases are too small to be visible.
 
 \begin{figure}[]
     \caption{Average energy consumption for client operations.}
     \label{fig:client-operations-energy}
-    \includegraphics[scale=0.65]{images/client-operations-energy.pdf}
+    \includegraphics[scale=0.77]{images/client-operations-energy.pdf}
 \end{figure}
 
 \begin{figure}[]
     \caption{Average energy consumption for server operations.}
     \label{fig:server-operations-energy}
-    \includegraphics[scale=0.65]{images/server-operations-energy.pdf}
+    \includegraphics[scale=0.77]{images/server-operations-energy.pdf}
 \end{figure}
 
 \begin{figure}[]
     \caption{Average energy consumption for client during image transfer.}
     \label{fig:client-image-energy}
-    \includegraphics[scale=0.65]{images/client-image-energy.pdf}
+    \includegraphics[scale=0.77]{images/client-image-energy.pdf}
 \end{figure}
 
 \begin{figure}[]
     \caption{Average energy consumption for server during image transfer.}
     \label{fig:server-image-energy}
-    \includegraphics[scale=0.65]{images/server-image-energy.pdf}
+    \includegraphics[scale=0.77]{images/server-image-energy.pdf}
 \end{figure}
 
 \newpage    % Force new page so previous graphs appear in order
@@ -320,7 +321,7 @@ at the application layer as a consequence of using COSE encryption. Each CoAP bl
 the server during image transfer contains 32 bytes of data, of which 8 is a tag used to
 validate the ciphertext. Figure~\ref{fig:communication-overhead} shows this disparity.
 
-\begin{figure}[h!]
+\begin{figure}[t]
     \caption{Bytes transferred vs actual data sent measured in bytes at the application layer.}
     \label{fig:communication-overhead}
     \includegraphics[scale=0.65]{images/communication-overhead.pdf}
