@@ -324,7 +324,7 @@ validate the ciphertext. Figure~\ref{fig:communication-overhead} shows this disp
 \begin{figure}[t]
     \caption{Bytes transferred vs actual data sent measured in bytes at the application layer.}
     \label{fig:communication-overhead}
-    \includegraphics[scale=0.65]{images/communication-overhead.pdf}
+    \includegraphics[scale=0.77]{images/communication-overhead.pdf}
 \end{figure}
 
 \subsection{Code Size}
@@ -334,9 +334,9 @@ energest measurements removed, and no other Contiki-NG modules included except C
 point of reference, a bare-bones example was also created. The bare-bones example only
 contains the necessary imports to Contiki-NG and its CoAP engine and declares a process
 with no code in it. It is the smallest runnable example for Firefly devices using the same
-project configuration as the other source files. Its source code is found in
-Appendix~\ref{app:bare-bones}. By running the tool \texttt{arm-none-eabi-size} on the
-ELF-files the code size can be obtained, which is shown in Table~\ref{tab:code-size}.
+project configuration as the prototype. Its source code is found in
+Appendix~\ref{app:bare-bones}. By running the program \texttt{size} on the ELF-files the
+code sizes can be obtained, which are shown in Table~\ref{tab:code-size}.
 
 \begin{table}[!t]
 \begin{tabular}{l c r r r l}
