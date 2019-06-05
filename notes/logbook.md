@@ -1,3 +1,17 @@
+5/6-19:
+Meeting with Sam and Joel to discuss the way forward for them.
+
+Left the keycard, Firefly devices, dissertation, and sniffer at RISE.
+
+Submitted my final draft and active participation signatures, and thanked Shahid and Farhad
+
+I did it!
+
+31/5-19:
+Rolled back the repo to a better commit
+
+Changed the README, added comments
+
 30/5-19:
 New graphs are in the thesis
 
